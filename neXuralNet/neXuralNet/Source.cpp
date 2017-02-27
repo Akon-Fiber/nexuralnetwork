@@ -5,9 +5,27 @@
 #include <opencv2\core\core.hpp>
 #include <opencv2\highgui\highgui.hpp>
 
-int main() {
-	nexural::Network net("E:\\RESEARCH\\neXuralNet\\neXuralNet\\network.json");
-	cv::Mat sourceImage = cv::imread("e:\\POZE\\Avatare\\suit.jpg");
-	net.Run(sourceImage);
+#include <boost/filesystem/operations.hpp>
+#include <boost/filesystem/path.hpp>
+
+int main(int argc, char* argv[]) {
+	try {
+		boost::filesystem::path full_path(boost::filesystem::initial_path<boost::filesystem::path>());
+		full_path = boost::filesystem::system_complete(boost::filesystem::path(argv[0]));
+		std::string configFilePath = full_path.parent_path().string() + "\\network.json";
+
+		nexural::Network net(configFilePath);
+		cv::Mat sourceImage = cv::imread(full_path.parent_path().parent_path().parent_path().parent_path().string() + "\\TestImages\\cat_640.png");
+		net.Run(sourceImage);
+	}
+	catch (std::exception stdEx) {
+		std::cout << stdEx.what() << std::endl;
+	}
+	catch (cv::Exception cvEx) {
+		std::cout << cvEx.what() << std::endl;
+	}
+	catch (...) {
+		std::cout << "Something unexpected happened while running the network!" << std::endl;
+	}
 	return 0;
 }

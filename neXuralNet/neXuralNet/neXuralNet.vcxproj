@@ -79,6 +79,9 @@
       <PreprocessorDefinitions>_CRT_SECURE_NO_WARNINGS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
     </ClCompile>
     <Link />
+    <PostBuildEvent>
+      <Command>xcopy /c /y "$(SolutionDir)ConfigFiles\network.json" "$(SolutionDir)$(PlatformTarget)\$(Configuration)\"</Command>
+    </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <ClCompile>
@@ -88,6 +91,9 @@
       <PreprocessorDefinitions>_CRT_SECURE_NO_WARNINGS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
     </ClCompile>
     <Link />
+    <PostBuildEvent>
+      <Command>xcopy /c /y "$(SolutionDir)ConfigFiles\network.json" "$(SolutionDir)$(PlatformTarget)\$(Configuration)\"</Command>
+    </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <ClCompile>
@@ -102,6 +108,9 @@
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
     </Link>
+    <PostBuildEvent>
+      <Command>xcopy /c /y "$(SolutionDir)ConfigFiles\network.json" "$(SolutionDir)$(PlatformTarget)\$(Configuration)\"</Command>
+    </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <ClCompile>
@@ -116,6 +125,9 @@
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
     </Link>
+    <PostBuildEvent>
+      <Command>xcopy /c /y "$(SolutionDir)ConfigFiles\network.json" "$(SolutionDir)$(PlatformTarget)\$(Configuration)\"</Command>
+    </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="activation_functions.h" />
@@ -149,6 +161,8 @@
     <Import Project="..\packages\boost.1.63.0.0\build\native\boost.targets" Condition="Exists('..\packages\boost.1.63.0.0\build\native\boost.targets')" />
     <Import Project="..\packages\OpenCV_VS2015_3.2.0_WithContribs.1.0.1\build\native\OpenCV_VS2015_3.2.0_WithContribs.targets" Condition="Exists('..\packages\OpenCV_VS2015_3.2.0_WithContribs.1.0.1\build\native\OpenCV_VS2015_3.2.0_WithContribs.targets')" />
     <Import Project="..\packages\RapidJson.1.1.0.0\build\native\RapidJson.targets" Condition="Exists('..\packages\RapidJson.1.1.0.0\build\native\RapidJson.targets')" />
+    <Import Project="..\packages\boost_filesystem-vc140.1.63.0.0\build\native\boost_filesystem-vc140.targets" Condition="Exists('..\packages\boost_filesystem-vc140.1.63.0.0\build\native\boost_filesystem-vc140.targets')" />
+    <Import Project="..\packages\boost_system-vc140.1.63.0.0\build\native\boost_system-vc140.targets" Condition="Exists('..\packages\boost_system-vc140.1.63.0.0\build\native\boost_system-vc140.targets')" />
   </ImportGroup>
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
     <PropertyGroup>
@@ -159,5 +173,7 @@
     <Error Condition="!Exists('..\packages\OpenCV_VS2015_3.2.0_WithContribs.1.0.1\build\native\OpenCV_VS2015_3.2.0_WithContribs.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\OpenCV_VS2015_3.2.0_WithContribs.1.0.1\build\native\OpenCV_VS2015_3.2.0_WithContribs.targets'))" />
     <Error Condition="!Exists('..\packages\RapidJson.1.1.0.0\build\native\RapidJson.props')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\RapidJson.1.1.0.0\build\native\RapidJson.props'))" />
     <Error Condition="!Exists('..\packages\RapidJson.1.1.0.0\build\native\RapidJson.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\RapidJson.1.1.0.0\build\native\RapidJson.targets'))" />
+    <Error Condition="!Exists('..\packages\boost_filesystem-vc140.1.63.0.0\build\native\boost_filesystem-vc140.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\boost_filesystem-vc140.1.63.0.0\build\native\boost_filesystem-vc140.targets'))" />
+    <Error Condition="!Exists('..\packages\boost_system-vc140.1.63.0.0\build\native\boost_system-vc140.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\boost_system-vc140.1.63.0.0\build\native\boost_system-vc140.targets'))" />
   </Target>
 </Project>
