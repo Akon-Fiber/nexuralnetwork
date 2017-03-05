@@ -22,8 +22,8 @@ namespace nexural {
 		}
 
 		void LoadImage(const cv::Mat& sourceImage) {
-			if(sourceImage.channels() == 3){
-				//TODO throw exception
+			if(sourceImage.channels() != 3){
+				throw std::runtime_error("BGR image must have 3 channels! Error details: " + std::to_string(__LINE__) + " " + __FUNCTION__);
 			}
 
 			_outputData.Resize(1, sourceImage.channels(), sourceImage.rows, sourceImage.cols);
@@ -43,9 +43,6 @@ namespace nexural {
 				}
 			}
 
-			for (int i = 0; i < _outputData.Size(); i++) {
-				std::cout << _outputData[i] << std::endl;
-			}
 		}
 
 		Tensor* GetOutput() {

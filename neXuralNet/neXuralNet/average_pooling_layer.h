@@ -13,7 +13,8 @@ namespace nexural {
 	class AveragePoolingLayer : public ComputationalBaseLayer {
 	public:
 		AveragePoolingLayer(LayerParams &layerParams) : ComputationalBaseLayer(layerParams) {
-
+			_kernel_width = parser::ParseLong(_layerParams, "kernel_width");
+			_kernel_height = parser::ParseLong(_layerParams, "kernel_height");
 		}
 
 		~AveragePoolingLayer() {
@@ -21,31 +22,45 @@ namespace nexural {
 		}
 		
 		virtual void Setup() {
-
-			_outputData.Resize(1, 1, parser::ParseLong(_layerParams, "kernel_width"), parser::ParseLong(_layerParams, "kernel_height"));
+			//_outputData.Resize(1, 1, parser::ParseLong(_layerParams, "kernel_width"), );
 		}
 		
 		virtual void FeedForward(const Tensor& inputData) {
-			_outputData.Resize(inputData.GetNumSamples(), inputData.GetK(), inputData.GetNR(), inputData.GetNC());
+			long outNR = inputData.GetNR() / _kernel_height + (inputData.GetNR() % _kernel_height == 0 ? 0 : 1);
+			long outNC = inputData.GetNC() / _kernel_width + (inputData.GetNC() % _kernel_width == 0 ? 0 : 1);
 
-			for (long numSamples = 0; numSamples < _outputData.GetNumSamples(); numSamples++)
+			_outputData.Resize(inputData.GetNumSamples(), inputData.GetK(), outNR, outNC);
+
+			for (long numSamples = 0; numSamples < inputData.GetNumSamples(); numSamples++)
 			{
-				for (long k = 0; k < _outputData.GetK(); k++) {
-					for (long nr = 0; nr < _outputData.GetNR(); nr++)
+				for (long k = 0; k < inputData.GetK(); k++)
+				{
+					outNR = 0;
+					for (long nr = 0; nr < inputData.GetNR(); nr += _kernel_height)
 					{
-						for (long nc = 0; nc < _outputData.GetNC(); nc++)
+						outNC = 0;
+						for (long nc = 0; nc < inputData.GetNC(); nc += _kernel_width)
 						{
-							_outputData[(((numSamples * _outputData.GetK()) + k) * _outputData.GetNR() + nr) * _outputData.GetNC() + nc] =
-								inputData[(((numSamples * _outputData.GetK()) + k) * _outputData.GetNR() + nr) * _outputData.GetNC() + nc] - 2;
+							long khLimit = _kernel_height - (nr == (inputData.GetNR() - (inputData.GetNR() % _kernel_height)) ? _kernel_height - inputData.GetNR() % _kernel_height : 0);
+							long kwLimit = _kernel_width - (nc == (inputData.GetNC() - (inputData.GetNC() % _kernel_width)) ? _kernel_width - inputData.GetNC() % _kernel_width : 0);
+							
+							float sum = 0;
+
+							for (long kh = 0; kh < khLimit; kh++)
+							{
+								for (long kw = 0; kw < kwLimit; kw++)
+								{
+									float value = inputData[(((numSamples * inputData.GetK()) + k) * inputData.GetNR() + (nr + kh)) * inputData.GetNC() + (nc + kw)];
+									sum += value;
+								}
+							}
+							_outputData[(((numSamples * _outputData.GetK()) + k) * _outputData.GetNR() + outNR) * _outputData.GetNC() + outNC] = sum / (khLimit * kwLimit);
+							outNC++;
 						}
+						outNR++;
 					}
 				}
 			}
-
-
-			/*for (int i = 0; i < _outputData.Size(); i++) {
-				std::cout << _outputData[i] << std::endl;
-			}*/
 
 		}
 
@@ -59,7 +74,9 @@ namespace nexural {
 
 
 	private:
-		
+		long _kernel_width;
+		long _kernel_height;
+
 	};
 
 }

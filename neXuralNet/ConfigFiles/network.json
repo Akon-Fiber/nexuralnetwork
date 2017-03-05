@@ -1,17 +1,16 @@
 {
-"NetworkLayers" : [
-	{
-        "type": "average_pooling",
-		"params": {
-			"kernel_width" : "2",
-			"kernel_height" : "2"
-		}
-    }
-],
-"NetworkSettings" : {
-	"epochs" : "10",
-	"sas" : "as"
-}
+	"NetworkLayers" : [
+		{
+	        "type": "average_pooling",
+			"params": {
+				"kernel_width" : "3",
+				"kernel_height" : "2"
+			}
+	    }
+	],
+	"NetworkSettings" : {
+		"epochs" : "10"
+	}
 }
 
 	

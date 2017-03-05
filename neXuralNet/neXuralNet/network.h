@@ -55,6 +55,11 @@ namespace nexural {
 				_computationalNetworkLyers[i]->FeedForward(*internalNetData);
 				internalNetData = _computationalNetworkLyers[i]->GetOutput();	
 			}
+
+			for (int i = 0; i < internalNetData->Size(); i++) {
+				std::cout << (*(&(*internalNetData)))[i] << std::endl;
+			}
+
 			/*
 			_lossNetworkLayer->FeedForward(internalNetData);
 			Tensor result = _lossNetworkLayer->GetOutput();
