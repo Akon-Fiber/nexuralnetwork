@@ -7,8 +7,8 @@
 #include <random>
 #include <opencv2/core/core.hpp>
 
-#ifndef MAVNET_UTILITY_UTILS_H
-#define MAVNET_UTILITY_UTILS_H
+#ifndef _NEXURALNET_UTILITY_UTILS_H
+#define _NEXURALNET_UTILITY_UTILS_H
 
 namespace nexural {
 

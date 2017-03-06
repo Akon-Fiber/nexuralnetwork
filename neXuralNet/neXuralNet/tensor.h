@@ -4,6 +4,7 @@
 #define _NEXURALNET_DATA_TYPES_TENSOR_H
 
 #include <memory>
+#include "data_types.h"
 
 namespace nexural {
 
@@ -34,7 +35,8 @@ namespace nexural {
 		Tensor& operator=(Tensor&& item) = delete;
 		~Tensor();
 
-		void Resize(long numSamples_, long k_, long nr_, long nc_);
+		void Resize(const long numSamples_, const long k_, const long nr_, const long nc_);
+		void Resize(const LayerShape& layerShape);
 
 		const float operator [](long i) const { return _host.get()[i]; }
 		float & operator [](long i) { return _host.get()[i]; }
@@ -45,6 +47,8 @@ namespace nexural {
 		long GetNR() const { return _nr; }
 		long GetNC() const { return _nc; }
 		size_t Size() const { return _size; }
+
+		LayerShape GetShape();
 
 	private:
 		std::shared_ptr<float> _host;

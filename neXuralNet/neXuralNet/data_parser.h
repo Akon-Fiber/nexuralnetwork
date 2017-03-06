@@ -9,8 +9,8 @@
 #include "exceptions.h"
 #include "utils.h"
 
-#ifndef MAVNET_UTILITY_DATA_PARSER_H
-#define MAVNET_UTILITY_DATA_PARSER_H
+#ifndef _NEXURALNET_UTILITY_DATA_PARSER_H
+#define _NEXURALNET_UTILITY_DATA_PARSER_H
 
 namespace nexural {
 

@@ -4,8 +4,8 @@
 #include "computational_base_layer.h"
 #include "data_parser.h"
 
-#ifndef MAVNET_DNN_LAYERS_CONVOLUTIONAL_LAYER
-#define MAVNET_DNN_LAYERS_CONVOLUTIONAL_LAYER
+#ifndef _NEXURALNET_DNN_LAYERS_CONVOLUTIONAL_LAYER
+#define _NEXURALNET_DNN_LAYERS_CONVOLUTIONAL_LAYER
 
 namespace nexural {
 

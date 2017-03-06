@@ -9,25 +9,32 @@
 
 #include "computational_base_layer.h"
 #include "average_pooling_layer.h"
+#include "max_pooling_layer.h"
+#include "relu_layer.h"
 //#include "loss_base_layer.h"
 
 #include "input_layer.h"
 
-#ifndef MAVNET_DNN_NETWORK_NETWORK
-#define MAVNET_DNN_NETWORK_NETWORK
+#ifndef _NEXURALNET_DNN_NETWORK_NETWORK
+#define _NEXURALNET_DNN_NETWORK_NETWORK
 
 namespace nexural {
 
+	template <typename INPUT_LAYER_TYPE, typename INPUT_LAYER_DATA_TYPE>
 	class Network {
 		typedef std::vector<ComputationalBaseLayerPtr> ComputationalNetworkLayers;
 		//typedef LossBaseLayerPtr LossNetworkLayer;
 
 	public:
+		Network() = delete;
+
 		Network(const std::string jsonFilePath) {
 			NetworkReader netParser(jsonFilePath);
 			netParser.loadNetwork(*this);
+
+			LayerShape prevLayerShape = _inputNetworkLayer.GetOutputShape();
 			for (int i = 0; i < this->_computationalNetworkLyers.size(); i++) {
-				_computationalNetworkLyers[i]->Setup();
+				_computationalNetworkLyers[i]->Setup(prevLayerShape);
 			}
 			//_lossNetworkLayer.reset(new LossBaseLayer());
 		}
@@ -36,8 +43,8 @@ namespace nexural {
 
 		}
 
-		void SetInputSettings() {
-
+		void InitInputLayer(LayerParams &layerParams) {
+			_inputNetworkLayer.Init(layerParams);
 		}
 
 		//void SetLossLayer(LossBaseLayerPtr layer) {
@@ -48,22 +55,18 @@ namespace nexural {
 			_computationalNetworkLyers.push_back(layer);
 		}
 
-		void Run(const cv::Mat& inputData) {
-			_inputNetworkLayer.LoadImage(inputData);
+		void Run(INPUT_LAYER_DATA_TYPE inputData) {
+			_inputNetworkLayer.LoadData(inputData);
 			Tensor *internalNetData = _inputNetworkLayer.GetOutput();
 			for (int i = 0; i < this->_computationalNetworkLyers.size(); i++) {
 				_computationalNetworkLyers[i]->FeedForward(*internalNetData);
 				internalNetData = _computationalNetworkLyers[i]->GetOutput();	
 			}
 
+			// TODO: Delete this 
 			for (int i = 0; i < internalNetData->Size(); i++) {
 				std::cout << (*(&(*internalNetData)))[i] << std::endl;
 			}
-
-			/*
-			_lossNetworkLayer->FeedForward(internalNetData);
-			Tensor result = _lossNetworkLayer->GetOutput();
-			*/
 		}
 
 		void Train() {
@@ -92,7 +95,7 @@ namespace nexural {
 			}
 
 			void loadNetwork(Network &net) {
-				if (!_document.HasMember("NetworkLayers")) { 
+				if (!_document.HasMember("NetworkLayers")) {
 					throw std::runtime_error("NetworkLayers member is missing from the JSON file!");
 				}
 
@@ -117,12 +120,18 @@ namespace nexural {
 					}
 
 					if (type_member == "input") {
-						
-					} else if (type_member == "convolutional") {
-						//net.add_computational_layer(ComputationalBaseLayerPtr(new nexural::ConvolutionalLayer(layerParams)));
-					} else if (type_member == "average_pooling") {
+						net.InitInputLayer(layerParams);
+					}
+					else if (type_member == "max_pooling") {
+						net.AddComputationalLayer(ComputationalBaseLayerPtr(new nexural::MaxPoolingLayer(layerParams)));
+					}
+					else if (type_member == "average_pooling") {
 						net.AddComputationalLayer(ComputationalBaseLayerPtr(new nexural::AveragePoolingLayer(layerParams)));
-					} else if (type_member == "full_connected") {
+					}
+					else if (type_member == "relu") {
+						net.AddComputationalLayer(ComputationalBaseLayerPtr(new nexural::ReluLayer(layerParams)));
+					}
+					else if (type_member == "full_connected") {
 
 					}
 				}
@@ -135,8 +144,8 @@ namespace nexural {
 
 	private:
 		ComputationalNetworkLayers _computationalNetworkLyers;
-		//LossNetworkLayer _lossNetworkLayer;
-		InputOpenCVBGRImage _inputNetworkLayer;
+		//LOSSLAYER _lossNetworkLayer;
+		INPUT_LAYER_TYPE _inputNetworkLayer;
 	};
 }
 #endif

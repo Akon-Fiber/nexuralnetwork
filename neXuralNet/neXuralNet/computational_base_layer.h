@@ -1,7 +1,7 @@
 // Copyright (C) 2016 Alexandru-Valentin Musat (alexandruvalentinmusat@gmail.com)
 
-#ifndef MAVNET_DNN_LAYERS_BASE_LAYER
-#define MAVNET_DNN_LAYERS_BASE_LAYER
+#ifndef _NEXURALNET_DNN_LAYERS_COMPUTATIONAL_BASE_LAYER
+#define _NEXURALNET_DNN_LAYERS_COMPUTATIONAL_BASE_LAYER
 
 #include "memory"
 
@@ -42,10 +42,11 @@ namespace nexural {
 		}
 
 	protected:
+		LayerShape _inputShape;
+		LayerShape _outputShape;
 		Tensor _outputData;
 		Tensor _layerErrors;
 		LayerParams _layerParams;
-
 	};
 	typedef std::shared_ptr<ComputationalBaseLayer> ComputationalBaseLayerPtr;
 }

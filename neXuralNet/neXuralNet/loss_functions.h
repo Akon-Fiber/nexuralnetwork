@@ -7,8 +7,8 @@
 #include "tensor.h"
 
 
-#ifndef MAVNET_DNN_LOSS_LOSS_FUNCTIONS
-#define MAVNET_DNN_LOSS_LOSS_FUNCTIONS
+#ifndef _NEXURALNET_DNN_LOSS_LOSS_FUNCTIONS
+#define _NEXURALNET_DNN_LOSS_LOSS_FUNCTIONS
 
 namespace nexural {
 

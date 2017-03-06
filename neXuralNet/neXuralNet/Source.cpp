@@ -4,6 +4,7 @@
 #include "input_layer.h"
 #include <opencv2\core\core.hpp>
 #include <opencv2\highgui\highgui.hpp>
+#include "input_layer.h"
 
 #include <boost/filesystem/operations.hpp>
 #include <boost/filesystem/path.hpp>
@@ -14,8 +15,8 @@ int main(int argc, char* argv[]) {
 		full_path = boost::filesystem::system_complete(boost::filesystem::path(argv[0]));
 		std::string configFilePath = full_path.parent_path().string() + "\\network.json";
 
-		nexural::Network net(configFilePath);
-		cv::Mat sourceImage = cv::imread(full_path.parent_path().parent_path().parent_path().parent_path().string() + "\\TestImages\\cat_640.png");
+		nexural::Network<nexural::OpenCV3ChannelsImageLayer, cv::Mat> net(configFilePath);
+		cv::Mat sourceImage = cv::imread(full_path.parent_path().parent_path().parent_path().parent_path().string() + "\\TestImages\\cat_8_gray.jpg");
 		net.Run(sourceImage);
 	}
 	catch (std::exception stdEx) {

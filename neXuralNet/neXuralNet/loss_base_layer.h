@@ -1,7 +1,7 @@
 // Copyright (C) 2016 Alexandru-Valentin Musat (alexandruvalentinmusat@gmail.com)
 
-#ifndef MAVNET_DNN_LOSS_BASE_LAYER
-#define MAVNET_DNN_LOSS_BASE_LAYER
+#ifndef _NEXURALNET_DNN_LOSS_BASE_LAYER
+#define _NEXURALNET_DNN_LOSS_BASE_LAYER
 
 #include <map>
 #include "memory"

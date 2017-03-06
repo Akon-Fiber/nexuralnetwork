@@ -1,7 +1,21 @@
 {
 	"NetworkLayers" : [
 		{
+	        "type": "input",
+			"params": {
+				"input_width" : "8",
+				"input_height" : "8"
+			}
+	    },
+	    {
 	        "type": "average_pooling",
+			"params": {
+				"kernel_width" : "3",
+				"kernel_height" : "2"
+			}
+	    },
+	    {
+	        "type": "max_pooling",
 			"params": {
 				"kernel_width" : "3",
 				"kernel_height" : "2"

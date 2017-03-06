@@ -1,7 +1,7 @@
 // Copyright (C) 2016 Alexandru-Valentin Musat (alexandruvalentinmusat@gmail.com)
 
-#ifndef MAVNET_DNN_I_LOSS_LAYER
-#define MAVNET_DNN_I_LOSS_LAYER
+#ifndef _NEXURALNET_DNN_I_LOSS_LAYER
+#define _NEXURALNET_DNN_I_LOSS_LAYER
 
 #include "tensor.h"
 #include "result_loss_base.h"

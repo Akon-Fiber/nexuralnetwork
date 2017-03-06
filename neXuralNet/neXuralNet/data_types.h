@@ -3,8 +3,8 @@
 #include <vector>
 #include <map>
 
-#ifndef MAVNET_UTILITY_DATA_TYPES
-#define MAVNET_UTILITY_DATA_TYPES
+#ifndef _NEXURALNET_UTILITY_DATA_TYPES
+#define _NEXURALNET_UTILITY_DATA_TYPES
 
 namespace nexural {
 
@@ -23,15 +23,22 @@ namespace nexural {
 			_nr(nr),
 			_nc(nc) { }
 
+		void Resize(long numSamples, long k, long nr, long nc) {
+			_numSamples = numSamples;
+			_k = k;
+			_nr =nr;
+			_nc = nc;
+		}
+
 		void SetNumSamples(long numSamples) { _numSamples = numSamples; }
 		void SetK(long k) { _k = k; }
 		void SetNR(long nr) { _nr = nr; }
 		void SetNC(long nc) { _nc = nc; }
 
-		long GetNumSamples() { return _numSamples; }
-		long GetK() { return _k; }
-		long GetNR() { return _nr; }
-		long GetNC() { return _nc; }
+		long GetNumSamples() const { return _numSamples; }
+		long GetK() const { return _k; }
+		long GetNR() const { return _nr; }
+		long GetNC() const { return _nc; }
 
 	private:
 		long _numSamples;

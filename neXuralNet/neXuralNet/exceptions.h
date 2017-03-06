@@ -4,8 +4,8 @@
 #include <string>
 #include <boost/preprocessor.hpp>
 
-#ifndef MAVNET_UTILITY_EXCEPTIONS_H
-#define MAVNET_UTILITY_EXCEPTIONS_H
+#ifndef _NEXURALNET_UTILITY_EXCEPTIONS_H
+#define _NEXURALNET_UTILITY_EXCEPTIONS_H
 
 namespace nexural {
 
@@ -61,56 +61,15 @@ namespace nexural {
 		STR_ENUM(
 			ExceptionType,
 			(EmptyImage)
-			(EmptyMask)
-			(EmptyTemplateCrop)
 			(EmptyParams)
 			(EmptyParamValue)
 			(NoInputs)
 			(ParamNotFound)
 			(ParamParseException)
-			(InvalidSigma)
-			(InvalidVectorIndex)
-			(InvalidImageDataType)
-			(InvalidImageNbOfChannels)
-			(InvalidClipLimit)
-			(InvalidPercentage)
-			(InvalidConversionCode)
-			(InvalidRectangle)
-			(InvalidHysteresisThresh)
-			(InvalidApertureSize)
-			(InvalidSize)
-			(InvalidLevel)
-			(InvalidApproxPrecision)
-			(InvalidDownsize)
-			(InvalidScalar)
-			(InvalidLength)
-			(InvalidAngleStep)
-			(InvalidThickness)
-			(InvalidRatio)
-			(InvalidDelta)
-			(InvalidMorphType)
-			(InvalidMorphShape)
-			(InvalidIterationsNb)
-			(ImagesNotSameNbOfChannels)
-			(ImagesNotSameSize)
-			(ImagesNotSameDepth)
-			(InvalidSuperpixelsNb)
-			(InvalidLevelsNb)
-			(InvalidThreshold)
-			(InvalidAdaptiveMethod)
-			(InvalidImgDimension)
-			(BlobsDiffFeaturesDimension)
-			(EmptyCriteriaList)
-			(CriteriaValuesNotSameSize)
-			(EmptyBlobCollection)
-			(InvalidClustNb)
-			(NoConsideredFeatures)
-			(InvalidBlob)
-			(InvalidInputData)
 		)
 
 			/*ExceptionType exception = strToEnum<ExceptionType>("EmptyImage");
-			std::string exception_str = enumToStr(exception); */
+			std::string exceptionStr = enumToStr(exception); */
 	}
 }
 
