@@ -41,6 +41,10 @@ namespace nexural {
 			return &_layerErrors;
 		}
 
+		LayerShape GetOutputShape() {
+			return _outputShape;
+		}
+
 	protected:
 		LayerShape _inputShape;
 		LayerShape _outputShape;

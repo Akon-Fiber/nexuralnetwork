@@ -21,7 +21,8 @@ namespace nexural {
 		}
 
 		virtual void Setup(LayerShape& prevLayerShape) {
-			_outputData.Resize(prevLayerShape.GetNumSamples(), prevLayerShape.GetK(), prevLayerShape.GetNR(), prevLayerShape.GetNC());
+			_outputShape.Resize(prevLayerShape.GetNumSamples(), prevLayerShape.GetK(), prevLayerShape.GetNR(), prevLayerShape.GetNC());
+			_outputData.Resize(_outputShape);
 		}
 
 		virtual void FeedForward(const Tensor& inputData) {

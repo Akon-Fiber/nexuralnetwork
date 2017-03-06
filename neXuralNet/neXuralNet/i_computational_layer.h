@@ -16,6 +16,7 @@ namespace nexural {
 		virtual void Update() = 0;
 		virtual Tensor* GetOutput() = 0;
 		virtual Tensor* GetLayerErrors() = 0;
+		virtual LayerShape GetOutputShape() = 0;
 	};
 
 }

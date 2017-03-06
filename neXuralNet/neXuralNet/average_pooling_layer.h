@@ -22,10 +22,11 @@ namespace nexural {
 		}
 		
 		virtual void Setup(LayerShape& prevLayerShape) {
-			long outNR = prevLayerShape.GetNR() / _kernel_height + (prevLayerShape.GetNR() % _kernel_height == 0 ? 0 : 1);
-			long outNC = prevLayerShape.GetNC() / _kernel_width + (prevLayerShape.GetNC() % _kernel_width == 0 ? 0 : 1);
+			_outputShape.Resize(prevLayerShape.GetNumSamples(), prevLayerShape.GetK(),
+				(prevLayerShape.GetNR() / _kernel_height + (prevLayerShape.GetNR() % _kernel_height == 0 ? 0 : 1)),
+				(prevLayerShape.GetNC() / _kernel_width + (prevLayerShape.GetNC() % _kernel_width == 0 ? 0 : 1)));
 
-			_outputData.Resize(prevLayerShape.GetNumSamples(), prevLayerShape.GetK(), outNR, outNC);
+			_outputData.Resize(_outputShape);
 		}
 		
 		virtual void FeedForward(const Tensor& inputData) {

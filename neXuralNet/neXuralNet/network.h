@@ -35,6 +35,7 @@ namespace nexural {
 			LayerShape prevLayerShape = _inputNetworkLayer.GetOutputShape();
 			for (int i = 0; i < this->_computationalNetworkLyers.size(); i++) {
 				_computationalNetworkLyers[i]->Setup(prevLayerShape);
+				prevLayerShape = _computationalNetworkLyers[i]->GetOutputShape();
 			}
 			//_lossNetworkLayer.reset(new LossBaseLayer());
 		}

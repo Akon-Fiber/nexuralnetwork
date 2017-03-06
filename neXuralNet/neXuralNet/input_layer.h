@@ -24,7 +24,8 @@ namespace nexural {
 			long nr = parser::ParseLong(layerParams, "input_height");
 			long nc = parser::ParseLong(layerParams, "input_width");
 			_inputShape.Resize(1, 3, nr, nc);
-			_outputData.Resize(1, 3, nr, nc);
+			_outputShape.Resize(1, 3, nr, nc);
+			_outputData.Resize(_outputShape);
 		}
 
 		void LoadData(const cv::Mat& sourceImage) {
