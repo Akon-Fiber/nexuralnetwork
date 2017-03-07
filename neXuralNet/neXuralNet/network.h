@@ -1,6 +1,24 @@
-// Copyright (C) 2016 Alexandru-Valentin Musat (alexandruvalentinmusat@gmail.com)
+/* Copyright (C) 2016-2017 Alexandru-Valentin Musat (alexandruvalentinmusat@gmail.com)
 
-#include <cstdio>
+Permission is hereby granted, free of charge, to any person obtaining
+a copy of this software and associated documentation files (the "Software"),
+to deal in the Software without restriction, including without limitation
+the rights to use, copy, modify, merge, publish, distribute, sublicense,
+and/or sell copies of the Software, and to permit persons to whom the Software
+is furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in
+all copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND,
+EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES
+OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT.
+IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY
+CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT,
+TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE
+OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+*/
+
 #include <vector>
 #include <memory>
 #include <string>
@@ -8,15 +26,8 @@
 #include "rapidjson/document.h"
 
 #include "input_layers.h"
-#include "computational_base_layer.h"
-#include "loss_base_layer.h"
-
-#include "average_pooling_layer.h"
-#include "max_pooling_layer.h"
-#include "relu_layer.h"
-#include "dropout_layer.h"
-
-#include "test_loss_layer.h"
+#include "computational_layers.h"
+#include "loss_layers.h"
 
 #ifndef _NEXURALNET_DNN_NETWORK_NETWORK
 #define _NEXURALNET_DNN_NETWORK_NETWORK
@@ -51,8 +62,8 @@ namespace nexural {
 		}
 
 		void SetLossLayer(const std::string lossLayerType, LayerParams &layerParams) {
-			if("testloss") {
-				_lossNetworkLayer.reset(new TestLossLayer(layerParams));
+			if("mse") {
+				_lossNetworkLayer.reset(new MSELossLayer(layerParams));
 			}
 		}
 
@@ -112,24 +123,24 @@ namespace nexural {
 
 				const rapidjson::Value& networkLayers = _document["NetworkLayers"];
 
-				if (!networkLayers.HasMember("InputSettings")) {
-					throw std::runtime_error("InputSettings member is missing from the JSON file!");
+				if (!networkLayers.HasMember("InputLayerSettings")) {
+					throw std::runtime_error("InputLayerSettings member is missing from the JSON file!");
 				}
 
 				if (!networkLayers.HasMember("ComputationalLayers")) {
 					throw std::runtime_error("ComputationalLayers member is missing from the JSON file!");
 				}
 
-				if (!networkLayers.HasMember("LossSettings")) {
-					throw std::runtime_error("LossSettings member is missing from the JSON file!");
+				if (!networkLayers.HasMember("LossLayerSettings")) {
+					throw std::runtime_error("LossLayerSettings member is missing from the JSON file!");
 				}
 
-				if (!_document.HasMember("NetworkSettings")) {
-					throw std::runtime_error("NetworkSettings member is missing from the JSON file!");
+				if (!_document.HasMember("TrainerSettings")) {
+					throw std::runtime_error("TrainerSettings member is missing from the JSON file!");
 				}
 
 				// Input layer setup
-				const rapidjson::Value& inputSettings = networkLayers["InputSettings"];
+				const rapidjson::Value& inputSettings = networkLayers["InputLayerSettings"];
 				LayerParams inputLayerParams;
 				for (rapidjson::Value::ConstMemberIterator iter = inputSettings.MemberBegin(); iter != inputSettings.MemberEnd(); ++iter) {
 					inputLayerParams.insert(std::pair<std::string, std::string>(iter->name.GetString(), iter->value.GetString()));
@@ -175,7 +186,7 @@ namespace nexural {
 				}
 
 				// Loss layer setup
-				const rapidjson::Value& lossSettings = networkLayers["LossSettings"];
+				const rapidjson::Value& lossSettings = networkLayers["LossLayerSettings"];
 				LayerParams lossLayerParams;
 				std::string lossLayerType = lossSettings["type"].GetString();
 				const rapidjson::Value& lossSettingsParams = lossSettings["params"];

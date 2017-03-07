@@ -22,9 +22,6 @@
     <Filter Include="Source Files\dnn\network">
       <UniqueIdentifier>{fed4c924-1580-4221-ae07-5f71e3115165}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Source Files\dnn\activations">
-      <UniqueIdentifier>{b440e342-7f12-461b-af04-f4e0680a1cf8}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Source Files\dnn\solvers">
       <UniqueIdentifier>{f740a641-193f-4920-8087-a889dc7e9fb8}</UniqueIdentifier>
     </Filter>
@@ -49,9 +46,6 @@
     <Filter Include="Source Files\dnn\layers\computational_layers\common">
       <UniqueIdentifier>{1df6cd77-0533-41c3-ba52-9c6420283be8}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Source Files\dnn\layers\loss_layers\loss">
-      <UniqueIdentifier>{1a417985-f6a7-433e-8f71-7f3bf4067bdf}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Source Files\dnn\layers\common">
       <UniqueIdentifier>{39d1d055-3996-47d9-9a51-84b332b01ca6}</UniqueIdentifier>
     </Filter>
@@ -59,12 +53,6 @@
   <ItemGroup>
     <ClInclude Include="network.h">
       <Filter>Source Files\dnn\network</Filter>
-    </ClInclude>
-    <ClInclude Include="activation_functions.h">
-      <Filter>Source Files\dnn\activations</Filter>
-    </ClInclude>
-    <ClInclude Include="loss_functions.h">
-      <Filter>Source Files\dnn\layers\loss_layers\loss</Filter>
     </ClInclude>
     <ClInclude Include="data_parser.h">
       <Filter>Source Files\utility</Filter>
@@ -120,11 +108,20 @@
     <ClInclude Include="input_layers.h">
       <Filter>Source Files\dnn\layers\input_layers</Filter>
     </ClInclude>
-    <ClInclude Include="test_loss_layer.h">
-      <Filter>Source Files\dnn\layers\loss_layers</Filter>
-    </ClInclude>
     <ClInclude Include="i_layer.h">
       <Filter>Source Files\dnn\layers\common</Filter>
+    </ClInclude>
+    <ClInclude Include="computational_layers.h">
+      <Filter>Source Files\dnn\layers\computational_layers</Filter>
+    </ClInclude>
+    <ClInclude Include="loss_layers.h">
+      <Filter>Source Files\dnn\layers\loss_layers</Filter>
+    </ClInclude>
+    <ClInclude Include="loss_functions.h">
+      <Filter>Source Files\dnn\layers\loss_layers\common</Filter>
+    </ClInclude>
+    <ClInclude Include="mse_loss_layer.h">
+      <Filter>Source Files\dnn\layers\loss_layers</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

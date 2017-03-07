@@ -1,6 +1,24 @@
-// Copyright (C) 2016 Alexandru-Valentin Musat (alexandruvalentinmusat@gmail.com)
+/* Copyright (C) 2016-2017 Alexandru-Valentin Musat (alexandruvalentinmusat@gmail.com)
 
-#include <map>
+Permission is hereby granted, free of charge, to any person obtaining
+a copy of this software and associated documentation files (the "Software"),
+to deal in the Software without restriction, including without limitation
+the rights to use, copy, modify, merge, publish, distribute, sublicense,
+and/or sell copies of the Software, and to permit persons to whom the Software
+is furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in
+all copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND,
+EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES
+OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT.
+IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY
+CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT,
+TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE
+OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+*/
+
 #include "computational_base_layer.h"
 #include "data_parser.h"
 
@@ -9,70 +27,6 @@
 
 namespace nexural {
 
-	//class ConvolutionalLayer : public ComputationalBaseLayer {
-	//public:
-	//	ConvolutionalLayer(std::map<std::string, std::string> &layerParams, LayerShape input_shape) {
-	//		_input_shape.width = input_shape.width;
-	//		_input_shape.height = input_shape.height;
-
-	//		_n_output_maps = parser::ParseInt(layerParams, "number_output_maps");
-	//		_maps_width = parser::ParseInt(layerParams, "map_height");
-	//		_maps_height = parser::ParseInt(layerParams, "map_height");
-
-	//		_maps_width_stride = parser::ParseInt(layerParams, "map_width_stride");
-	//		_maps_height_stride = parser::ParseInt(layerParams, "map_height_stride");
-
-	//		_output_shape.width = input_shape.width - _maps_width + 1;
-	//		_output_shape.height = input_shape.height - _maps_height + 1;
-
-	//		for (int i = 0; i < _n_output_maps; i++) {
-	//			Tensor t;
-	//			//utils::generate_random_weights(_maps_width, _maps_height, 1, t);
-	//			//_maps.push_back(t);
-	//		}
-	//		
-	//	}
-
-	//	~ConvolutionalLayer() {
-	//		
-	//	}
-	//	
-	//	virtual void Setup() {
-	//	
-	//	}
-	//	
-	//	virtual void FeedForward(Tensor inputData) {
-	//		_convolve(inputData, _maps);
-	//	}
-
-	//	virtual void BackPropagate(Tensor layerErrors) {
-	//	
-	//	}
-
-	//	virtual void Update() {
-
-	//	}
-
-
-	//private:
-	//	void _convolve(Tensor& data, Tensor& maps) {
-
-	//	}
-
-	//private:
-	//	float _l2_decay;
-	//	int _n_output_maps;
-	//	Tensor _maps;
-	//	int _maps_width;
-	//	int _maps_height;
-	//	int _maps_width_stride;
-	//	int _maps_height_stride;
-	//	LayerShape _input_shape;
-	//	LayerShape _output_shape;
-
-
-
-	//};
 
 }
 #endif

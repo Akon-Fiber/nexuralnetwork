@@ -130,8 +130,8 @@
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClInclude Include="activation_functions.h" />
     <ClInclude Include="average_pooling_layer.h" />
+    <ClInclude Include="computational_layers.h" />
     <ClInclude Include="convolutional_layer.h" />
     <ClInclude Include="data_parser.h" />
     <ClInclude Include="data_types.h" />
@@ -145,7 +145,8 @@
     <ClInclude Include="i_loss_layer.h" />
     <ClInclude Include="loss_base_layer.h" />
     <ClInclude Include="loss_functions.h" />
-    <ClInclude Include="test_loss_layer.h" />
+    <ClInclude Include="loss_layers.h" />
+    <ClInclude Include="mse_loss_layer.h" />
     <ClInclude Include="max_pooling_layer.h" />
     <ClInclude Include="network.h" />
     <ClInclude Include="opencv_bgr_input_layer.h" />

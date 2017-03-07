@@ -19,62 +19,51 @@ TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE
 OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 */
 
-#include "i_layer.h"
-#include "i_computational_layer.h"
+#include "loss_base_layer.h"
+#include "data_parser.h"
 
-#ifndef _NEXURALNET_DNN_LAYERS_COMPUTATIONAL_BASE_LAYER
-#define _NEXURALNET_DNN_LAYERS_COMPUTATIONAL_BASE_LAYER
+#ifndef _NEXURALNET_DNN_LAYERS_LOSS_LAYER
+#define _NEXURALNET_DNN_LAYERS_LOSS_LAYER
 
 namespace nexural {
-	class ComputationalBaseLayer : public ILayer, IComputationalLayer {
+	class MSELossLayer : public LossBaseLayer {
 	public:
-		ComputationalBaseLayer() { 
-		
+		MSELossLayer(const LayerParams& layerParams) : LossBaseLayer(layerParams) {
+
 		}
 
-		ComputationalBaseLayer(const LayerParams &layerParams) {
-			_layerParams = layerParams;
-		}
+		~MSELossLayer() {
 
-		virtual ~ComputationalBaseLayer() { 
-		
 		}
 
 		virtual void Setup(const LayerShape& prevLayerShape) {
-
+			_inputShape.Resize(prevLayerShape.GetNumSamples(), prevLayerShape.GetK(), prevLayerShape.GetNR(), prevLayerShape.GetNC());
+			_outputShape.Resize(prevLayerShape.GetNumSamples(), prevLayerShape.GetK(), prevLayerShape.GetNR(), prevLayerShape.GetNC());
+			_outputData.Resize(_outputShape);
 		}
 
 		virtual void FeedForward(const Tensor& inputData) {
+			for (long numSamples = 0; numSamples < inputData.GetNumSamples(); numSamples++)
+			{
+				for (long k = 0; k < inputData.GetK(); k++)
+				{
+					for (long nr = 0; nr < inputData.GetNR(); nr++)
+					{
+						for (long nc = 0; nc < inputData.GetNC(); nc++)
+						{
+							_outputData[(((numSamples * _outputData.GetK()) + k) * _outputData.GetNR() + nr) * _outputData.GetNC() + nc] = inputData[(((numSamples * inputData.GetK()) + k) * inputData.GetNR() + nr) * inputData.GetNC() + nc];
+						}
+					}
+				}
+			}
+		}
+
+		virtual void CalculateError() {
 
 		}
 
-		virtual Tensor* GetOutput() {
-			return &_outputData;
-		}
+	private:
 
-		virtual Tensor* GetLayerErrors() {
-			return &_layerErrors;
-		}
-
-		LayerShape GetOutputShape() {
-			return _outputShape;
-		}
-
-		virtual void BackPropagate(const Tensor& layerErrors) {
-
-		}
-
-		virtual void SetupLayerForTraining() {
-			_layerErrors.Resize(_inputShape);
-		}
-
-	protected:
-		LayerParams _layerParams;
-		LayerShape _inputShape;
-		LayerShape _outputShape;
-		Tensor _outputData;
-		Tensor _layerErrors;
 	};
-	typedef std::shared_ptr<ComputationalBaseLayer> ComputationalBaseLayerPtr;
 }
-#endif 
+#endif

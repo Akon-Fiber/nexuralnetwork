@@ -19,16 +19,4 @@ TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE
 OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 */
 
-#include "tensor.h"
-
-#ifndef _NEXURALNET_DNN_I_LOSS_LAYER
-#define _NEXURALNET_DNN_I_LOSS_LAYER
-
-namespace nexural {
-	class ILossLayer {
-	public:
-		virtual ~ILossLayer() { }
-		virtual void CalculateError() = 0;
-	};
-}
-#endif
+#include "mse_loss_layer.h"

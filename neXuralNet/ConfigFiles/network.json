@@ -1,6 +1,6 @@
 {
 	"NetworkLayers" : {
-		"InputSettings": {
+		"InputLayerSettings": {
 			"input_width" : "8",
 			"input_height" : "8"
 		},
@@ -26,16 +26,16 @@
 				}
 		    }
 		],
-		"LossSettings": {
-			"type" : "testloss",
+		"LossLayerSettings": {
+			"type" : "mse",
 			"params": {
 			
 			}
 		}
 	}
 	,
-	"NetworkSettings" : {
-		"epochs" : "10"
+	"TrainerSettings" : {
+		"max_epochs" : "10000"
 	}
 }
 
