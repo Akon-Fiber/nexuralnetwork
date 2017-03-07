@@ -13,7 +13,6 @@
 #define _NEXURALNET_UTILITY_DATA_PARSER_H
 
 namespace nexural {
-
 	namespace parser
 	{
 		static int ParseInt(std::map<std::string, std::string> &map, std::string key)
@@ -117,7 +116,7 @@ namespace nexural {
 				throw std::runtime_error(key + " " + enumToStr(mav_exception::EmptyParamValue));
 			}
 
-			std::vector<std::string> tokens = utils::tokenize_string(map[key], ",");
+			std::vector<std::string> tokens = Utils::TokenizeString(map[key], ",");
 			return tokens;
 		}
 
@@ -131,7 +130,7 @@ namespace nexural {
 			}
 
 
-			std::vector<std::string> tokens = utils::tokenize_string(map[key], ",");
+			std::vector<std::string> tokens = Utils::TokenizeString(map[key], ",");
 
 			int tokens_cnt = (int)tokens.size();
 			std::vector<float> result(tokens_cnt);
@@ -172,7 +171,7 @@ namespace nexural {
 			}
 
 			cv::Scalar thresh(channels_nb);
-			std::vector<std::string> tokens = utils::tokenize_string(map[key], ",");
+			std::vector<std::string> tokens = Utils::TokenizeString(map[key], ",");
 
 			bool safely_parsed = true;
 
@@ -200,6 +199,4 @@ namespace nexural {
 		}
 	}
 }
-
 #endif
-

@@ -5,17 +5,17 @@
 
 #include "memory"
 
+#include "i_layer.h"
 #include "i_computational_layer.h"
 #include "data_types.h"
 #include "tensor.h"
 
 namespace nexural {
-
-	class ComputationalBaseLayer : public IComputationalLayer {
+	class ComputationalBaseLayer : public ILayer, IComputationalLayer {
 	public:
 		ComputationalBaseLayer() { }
 
-		ComputationalBaseLayer(LayerParams &layerParams) {
+		ComputationalBaseLayer(const LayerParams &layerParams) {
 			_layerParams = layerParams;
 		}
 

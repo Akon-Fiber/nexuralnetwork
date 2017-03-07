@@ -6,15 +6,14 @@
 #include <math.h> 
 #include <random>
 #include <opencv2/core/core.hpp>
+#include "tensor.h"
 
 #ifndef _NEXURALNET_UTILITY_UTILS_H
 #define _NEXURALNET_UTILITY_UTILS_H
 
 namespace nexural {
-
-	namespace utils {
-
-		static void generate_random_weights(int m, int n, int k, std::vector<float> &vec) {
+	namespace Utils {
+		static void GenerateRandomWeights(int m, int n, int k, std::vector<float> &vec) {
 			//int size = m * n * k;
 			//float min = 0 - std::sqrt(1 / size);
 			//float max = std::sqrt(1 / size);
@@ -31,7 +30,26 @@ namespace nexural {
 			//std::generate(vec.begin(), vec.end(), []() { return distribution(generator); });
 		}
 
-		static std::vector<std::string> tokenize_string(const std::string& str, const std::string& delimiters)
+		static void RandomBinomialDistribution(Tensor& tensor) {
+			std::default_random_engine generator;
+			std::binomial_distribution<int> distribution(1, 0.5);
+
+			for (long numSamples = 0; numSamples < tensor.GetNumSamples(); numSamples++)
+			{
+				for (long k = 0; k < tensor.GetK(); k++)
+				{
+					for (long nr = 0; nr < tensor.GetNR(); nr++)
+					{
+						for (long nc = 0; nc < tensor.GetNC(); nc++)
+						{
+							tensor[(((numSamples * tensor.GetK()) + k) * tensor.GetNR() + nr) * tensor.GetNC() + nc] = distribution(generator);
+						}
+					}
+				}
+			}
+		}
+
+		static std::vector<std::string> TokenizeString(const std::string& str, const std::string& delimiters)
 		{
 			std::vector<std::string> tokens;
 			// Skip delimiters at beginning.
@@ -51,5 +69,4 @@ namespace nexural {
 		}
 	}
 }
-
 #endif

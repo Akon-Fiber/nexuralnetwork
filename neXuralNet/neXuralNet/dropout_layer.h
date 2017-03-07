@@ -1,21 +1,22 @@
 // Copyright (C) 2016 Alexandru-Valentin Musat (alexandruvalentinmusat@gmail.com)
 
-#ifndef _NEXURALNET_DNN_LAYERS_RELU_LAYER
-#define _NEXURALNET_DNN_LAYERS_RELU_LAYER
+#ifndef _NEXURALNET_DNN_LAYERS_DROPOUT_LAYER
+#define _NEXURALNET_DNN_LAYERS_DROPOUT_LAYER
 
 #include "data_types.h"
 #include "computational_base_layer.h"
 #include "data_parser.h"
 #include <iostream>
+#include "utils.h"
 
 namespace nexural {
-	class ReluLayer : public ComputationalBaseLayer {
+	class DropoutLayer : public ComputationalBaseLayer {
 	public:
-		ReluLayer(const LayerParams &layerParams) : ComputationalBaseLayer(layerParams) {
+		DropoutLayer(const LayerParams &layerParams) : ComputationalBaseLayer(layerParams) {
 
 		}
 
-		~ReluLayer() {
+		~DropoutLayer() {
 
 		}
 
@@ -23,9 +24,11 @@ namespace nexural {
 			_inputShape.Resize(prevLayerShape);
 			_outputShape.Resize(prevLayerShape);
 			_outputData.Resize(_outputShape);
+			_dropoutIndexes.Resize(prevLayerShape);
 		}
 
 		virtual void FeedForward(const Tensor& inputData) {
+			Utils::RandomBinomialDistribution(_dropoutIndexes);
 
 			for (long numSamples = 0; numSamples < inputData.GetNumSamples(); numSamples++)
 			{
@@ -36,23 +39,15 @@ namespace nexural {
 						for (long nc = 0; nc < inputData.GetNC(); nc++)
 						{
 							float value = inputData[(((numSamples * inputData.GetK()) + k) * inputData.GetNR() + nr) * inputData.GetNC() + nc];
-
-							if(value < 0){
-								_outputData[(((numSamples * _outputData.GetK()) + k) * _outputData.GetNR() + nr) * _outputData.GetNC() + nc] = value * 0.0;
-							} else {
-								_outputData[(((numSamples * _outputData.GetK()) + k) * _outputData.GetNR() + nr) * _outputData.GetNC() + nc] = value;
-							}
-
+							int drop = _dropoutIndexes[(((numSamples * inputData.GetK()) + k) * inputData.GetNR() + nr) * inputData.GetNC() + nc];
+							_outputData[(((numSamples * _outputData.GetK()) + k) * _outputData.GetNR() + nr) * _outputData.GetNC() + nc] = value * drop;
 						}
 					}
 				}
 			}
-
 		}
 
 		virtual void BackPropagate(const Tensor& layerErrors) {
-			_layerErrors.Resize(layerErrors.GetNumSamples(), layerErrors.GetK(), layerErrors.GetNR(), layerErrors.GetNC());
-
 			for (long numSamples = 0; numSamples < layerErrors.GetNumSamples(); numSamples++)
 			{
 				for (long k = 0; k < layerErrors.GetK(); k++)
@@ -62,14 +57,8 @@ namespace nexural {
 						for (long nc = 0; nc < layerErrors.GetNC(); nc++)
 						{
 							float error = layerErrors[(((numSamples * layerErrors.GetK()) + k) * layerErrors.GetNR() + nr) * layerErrors.GetNC() + nc];
-
-							if (error < 0) {
-								_layerErrors[(((numSamples * _layerErrors.GetK()) + k) * _layerErrors.GetNR() + nr) * _layerErrors.GetNC() + nc] = error * 0.0;
-							}
-							else {
-								_layerErrors[(((numSamples * _layerErrors.GetK()) + k) * _layerErrors.GetNR() + nr) * _layerErrors.GetNC() + nc] = error;
-							}
-
+							int drop = _dropoutIndexes[(((numSamples * layerErrors.GetK()) + k) * layerErrors.GetNR() + nr) * layerErrors.GetNC() + nc];
+							_layerErrors[(((numSamples * _layerErrors.GetK()) + k) * _layerErrors.GetNR() + nr) * _layerErrors.GetNC() + nc] = error * drop;
 						}
 					}
 				}
@@ -80,9 +69,8 @@ namespace nexural {
 
 		}
 
-
 	private:
-
+		Tensor _dropoutIndexes;
 	};
 }
 #endif

@@ -8,7 +8,6 @@
 #define _NEXURALNET_UTILITY_EXCEPTIONS_H
 
 namespace nexural {
-
 #define X_STR_ENUM_TOSTRING_CASE(r, data, elem)                                 \
     case elem : return BOOST_PP_STRINGIZE(elem);
 
@@ -72,6 +71,4 @@ namespace nexural {
 			std::string exceptionStr = enumToStr(exception); */
 	}
 }
-
 #endif
-

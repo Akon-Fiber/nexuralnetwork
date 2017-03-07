@@ -7,7 +7,6 @@
 #include "data_types.h"
 
 namespace nexural {
-
 	class Tensor {
 		/*!
 		WHAT THIS OBJECT REPRESENTS

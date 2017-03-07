@@ -6,30 +6,58 @@
 #include <map>
 #include "memory"
 
+#include "i_layer.h"
 #include "i_loss_layer.h"
 #include "tensor.h"
 #include "data_types.h"
 
 namespace nexural {
-
-	class LossBaseLayer : public ILossLayer {
+	class LossBaseLayer : public ILayer, ILossLayer {
 	public:
-		LossBaseLayer() { }
-		LossBaseLayer(std::map<std::string, std::string> &layerParams) { }
-		virtual ~LossBaseLayer() { }
-
-		virtual void FeedForward(const Tensor& inputData) { }
-
-		virtual Tensor& GetOutput() {
-			return _outputData;
+		LossBaseLayer() { 
+		
 		}
 
-		virtual LossResultBasePtr GetResultType() {
-			return NULL;
+		LossBaseLayer(const LayerParams& layerParams) { 
+			_layerParams = layerParams;
+		}
+
+		virtual ~LossBaseLayer() { 
+		
+		}
+
+		virtual void Setup(LayerShape& prevLayerShape) {
+
+		}
+
+		virtual void FeedForward(const Tensor& inputData) {
+		
+		}
+
+		Tensor* GetOutput() {
+			return &_outputData;
+		}
+
+
+		virtual Tensor* GetLayerErrors() {
+			return &_layerErrors;
+		}
+
+		LayerShape GetOutputShape() {
+			return _outputShape;
+		}
+
+		virtual void CalculateError() {
+
 		}
 
 	protected:
+		LayerShape _inputShape;
+		LayerShape _outputShape;
 		Tensor _outputData;
+		Tensor _layerErrors;
+		LayerParams _layerParams;
+
 	};
 	typedef std::shared_ptr<LossBaseLayer> LossBaseLayerPtr;
 }

@@ -7,27 +7,40 @@
 #define _NEXURALNET_UTILITY_DATA_TYPES
 
 namespace nexural {
-
 	typedef std::map<std::string, std::string> LayerParams;
 
 	struct LayerShape {
-		LayerShape::LayerShape() :
+		LayerShape() :
 			_numSamples(0),
 			_k(0),
 			_nr(0),
 			_nc(0) { }
 
-		LayerShape::LayerShape(long numSamples, long k, long nr, long nc) :
+		LayerShape(long numSamples, long k, long nr, long nc) :
 			_numSamples(numSamples),
 			_k(k),
 			_nr(nr),
 			_nc(nc) { }
+
+		LayerShape(const LayerShape &other) {
+			this->Resize(other.GetNumSamples(), other.GetK(), other.GetNR(), other.GetNC());
+		}
+
+		LayerShape& operator=(const LayerShape other)
+		{
+			this->Resize(other.GetNumSamples(), other.GetK(), other.GetNR(), other.GetNC());
+			return *this;
+		}
 
 		void Resize(long numSamples, long k, long nr, long nc) {
 			_numSamples = numSamples;
 			_k = k;
 			_nr =nr;
 			_nc = nc;
+		}
+
+		void Resize(const LayerShape &other) {
+			this->Resize(other.GetNumSamples(), other.GetK(), other.GetNR(), other.GetNC());
 		}
 
 		void SetNumSamples(long numSamples) { _numSamples = numSamples; }
@@ -46,6 +59,5 @@ namespace nexural {
 		long _nr;
 		long _nc;
 	};
-
 }
 #endif

@@ -60,5 +60,4 @@ namespace nexural {
 	LayerShape Tensor::GetShape() {
 		return LayerShape(_numSamples, _k, _nr, _nc);
 	}
-
 }

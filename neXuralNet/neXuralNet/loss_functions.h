@@ -11,7 +11,6 @@
 #define _NEXURALNET_DNN_LOSS_LOSS_FUNCTIONS
 
 namespace nexural {
-
 	// mean-squared-error loss function for regression
 	class mse {
 	public:
@@ -153,6 +152,5 @@ namespace nexural {
 	//		return d;
 	//	}
 	//};
-
 }
 #endif

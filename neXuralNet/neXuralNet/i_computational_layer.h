@@ -6,18 +6,11 @@
 #include "tensor.h"
 
 namespace nexural {
-
 	class IComputationalLayer {
 	public:
 		virtual ~IComputationalLayer() { }
-		virtual void Setup(LayerShape& prevLayerShape) = 0;
-		virtual void FeedForward(const Tensor& inputData) = 0;
 		virtual void BackPropagate(const Tensor& layerErrors) = 0;
 		virtual void Update() = 0;
-		virtual Tensor* GetOutput() = 0;
-		virtual Tensor* GetLayerErrors() = 0;
-		virtual LayerShape GetOutputShape() = 0;
 	};
-
 }
 #endif

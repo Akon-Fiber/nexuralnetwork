@@ -135,19 +135,22 @@
     <ClInclude Include="convolutional_layer.h" />
     <ClInclude Include="data_parser.h" />
     <ClInclude Include="data_types.h" />
+    <ClInclude Include="dropout_layer.h" />
     <ClInclude Include="exceptions.h" />
     <ClInclude Include="fully_connected_layer.h" />
     <ClInclude Include="computational_base_layer.h" />
     <ClInclude Include="i_computational_layer.h" />
-    <ClInclude Include="input_layer.h" />
+    <ClInclude Include="input_layers.h" />
+    <ClInclude Include="i_layer.h" />
     <ClInclude Include="i_loss_layer.h" />
     <ClInclude Include="loss_base_layer.h" />
     <ClInclude Include="loss_functions.h" />
-    <ClInclude Include="loss_layer.h" />
+    <ClInclude Include="test_loss_layer.h" />
     <ClInclude Include="max_pooling_layer.h" />
     <ClInclude Include="network.h" />
+    <ClInclude Include="opencv_bgr_input_layer.h" />
+    <ClInclude Include="opencv_gray_input_layer.h" />
     <ClInclude Include="relu_layer.h" />
-    <ClInclude Include="result_loss_base.h" />
     <ClInclude Include="tensor.h" />
     <ClInclude Include="utils.h" />
   </ItemGroup>
