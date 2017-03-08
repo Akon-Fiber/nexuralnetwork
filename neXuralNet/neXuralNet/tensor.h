@@ -66,7 +66,7 @@ namespace nexural {
 		long GetNC() const { return _nc; }
 		size_t Size() const { return _size; }
 
-		LayerShape GetShape();
+		LayerShape GetShape() const;
 
 	private:
 		std::shared_ptr<float> _host;

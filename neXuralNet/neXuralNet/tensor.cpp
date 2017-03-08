@@ -76,7 +76,7 @@ namespace nexural {
 	}
 
 
-	LayerShape Tensor::GetShape() {
+	LayerShape Tensor::GetShape() const {
 		return LayerShape(_numSamples, _k, _nr, _nc);
 	}
 }

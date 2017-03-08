@@ -31,23 +31,24 @@ namespace nexural {
 	// mean-squared-error loss function for regression
 	class mse {
 	public:
-		static float f(const Tensor& y, const Tensor& t) {
-			assert(y.Size() == t.Size());
+		static float f(const Tensor& predictedData, const Tensor& targetData) {
+			assert(predictedData.Size() == targetData.Size());
 			float_t d = 0.0;
 
-			for (long i = 0; i < y.Size(); ++i)
-				d += (y[i] - t[i]) * (y[i] - t[i]);
+			for (long i = 0; i < predictedData.Size(); ++i)
+				d += (predictedData[i] - targetData[i]) * (predictedData[i] - targetData[i]);
 
-			return d / y.Size();
+			return d / predictedData.Size();
 		}
 
-		static Tensor* df(const Tensor& y, const Tensor& t) {
-			assert(y.Size() == t.Size());
-			Tensor d(t.Size());
-			float_t factor = float_t(2) / static_cast<float_t>(t.Size());
+		static Tensor* df(const Tensor& predictedData, const Tensor& targetData) {
+			assert(predictedData.Size() == targetData.Size());
+			Tensor d;
+			d.Resize(targetData.GetShape());
+			float_t factor = float_t(2) / static_cast<float_t>(targetData.Size());
 
-			for (long i = 0; i < y.Size(); ++i)
-				d[i] = factor * (y[i] - t[i]);
+			for (long i = 0; i < predictedData.Size(); ++i)
+				d[i] = factor * (predictedData[i] - targetData[i]);
 
 			return &d;
 		}

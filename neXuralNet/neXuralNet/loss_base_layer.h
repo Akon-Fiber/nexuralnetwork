@@ -49,7 +49,7 @@ namespace nexural {
 		}
 
 		Tensor* GetOutput() {
-			return &_outputData;
+			return &_predictedData;
 		}
 
 
@@ -69,7 +69,7 @@ namespace nexural {
 		LayerParams _layerParams;
 		LayerShape _inputShape;
 		LayerShape _outputShape;
-		Tensor _outputData;
+		Tensor _predictedData;
 		Tensor _layerErrors;
 	};
 	typedef std::shared_ptr<LossBaseLayer> LossBaseLayerPtr;
