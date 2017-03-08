@@ -53,6 +53,13 @@ namespace nexural {
 		Tensor& operator=(Tensor&& item) = delete;
 		~Tensor();
 
+		typedef float* iterator;
+		typedef const float* const_iterator;
+		iterator       begin() { return  _host.get(); }
+		const_iterator begin() const { return  _host.get(); }
+		iterator       end() { return  _host.get() + _size; }
+		const_iterator end() const { return  _host.get() + _size; }
+
 		void Resize(const long numSamples_, const long k_, const long nr_, const long nc_);
 		void Resize(const LayerShape& layerShape);
 
@@ -64,7 +71,7 @@ namespace nexural {
 		long GetK() const { return _k; }
 		long GetNR() const { return _nr; }
 		long GetNC() const { return _nc; }
-		size_t Size() const { return _size; }
+		long Size() const { return _size; }
 
 		LayerShape GetShape() const;
 

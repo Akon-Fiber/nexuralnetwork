@@ -180,8 +180,8 @@ namespace nexural {
 					else if (type_member == "dropout") {
 						net.AddComputationalLayer(ComputationalBaseLayerPtr(new nexural::DropoutLayer(layerParams)));
 					}
-					else if (type_member == "full_connected") {
-
+					else if (type_member == "fully_connected") {
+						net.AddComputationalLayer(ComputationalBaseLayerPtr(new nexural::FullyConnectedLayer(layerParams)));
 					}
 				}
 

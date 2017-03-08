@@ -62,6 +62,8 @@ namespace nexural {
 			this->Resize(other.GetNumSamples(), other.GetK(), other.GetNR(), other.GetNC());
 		}
 
+		long Size() const { return _numSamples * _k * _nr * _nc; }
+
 		void SetNumSamples(long numSamples) { _numSamples = numSamples; }
 		void SetK(long k) { _k = k; }
 		void SetNR(long nr) { _nr = nr; }

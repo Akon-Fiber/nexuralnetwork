@@ -26,7 +26,43 @@ OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 #define _NEXURALNET_DNN_LAYERS_CONVOLUTIONAL_LAYER
 
 namespace nexural {
+	class ConvolutionalLayer : public ComputationalBaseLayer {
+	public:
+		ConvolutionalLayer(const LayerParams &layerParams) : ComputationalBaseLayer(layerParams) {
+			_kernel_width = parser::ParseLong(_layerParams, "kernel_width");
+			_kernel_height = parser::ParseLong(_layerParams, "kernel_height");
+			_padding_width = parser::ParseLong(_layerParams, "padding_width");
+			_padding_height = parser::ParseLong(_layerParams, "padding_height");
+			_stride_width = parser::ParseLong(_layerParams, "stride_width");
+			_stride_height = parser::ParseLong(_layerParams, "stride_height");
+		}
 
+		~ConvolutionalLayer() {
 
+		}
+
+		virtual void Setup(const LayerShape& prevLayerShape) {
+			_inputShape.Resize(prevLayerShape);
+			_outputShape.Resize(prevLayerShape);
+			_outputData.Resize(_outputShape);
+		}
+
+		virtual void FeedForward(const Tensor& inputData) {
+
+		}
+
+		virtual void BackPropagate(const Tensor& layerErrors) {
+
+		}
+
+	private:
+		Tensor _weights;
+		long _kernel_width;
+		long _kernel_height;
+		long _padding_width;
+		long _padding_height;
+		long _stride_width;
+		long _stride_height;
+	};
 }
 #endif

@@ -23,3 +23,5 @@ OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 #include "max_pooling_layer.h"
 #include "relu_layer.h"
 #include "dropout_layer.h"
+#include "convolutional_layer.h"
+#include "fully_connected_layer.h"

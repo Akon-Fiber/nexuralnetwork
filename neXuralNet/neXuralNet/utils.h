@@ -32,21 +32,11 @@ OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
 namespace nexural {
 	namespace Utils {
-		static void GenerateRandomWeights(int m, int n, int k, std::vector<float> &vec) {
-			//int size = m * n * k;
-			//float min = 0 - std::sqrt(1 / size);
-			//float max = std::sqrt(1 / size);
-			//using value_type = float;
-			//// We use static in order to instantiate the random engine
-			//// and the distribution once only.
-			//// It may provoke some thread-safety issues.
-			//static std::uniform_int_distribution<value_type> distribution(
-			//	std::numeric_limits<value_type>::min(),
-			//	std::numeric_limits<value_type>::max());
-			//static std::default_random_engine generator;
-
-			//std::vector<value_type> vec(size);
-			//std::generate(vec.begin(), vec.end(), []() { return distribution(generator); });
+		static void GenerateRandomWeights(Tensor& tensor) {
+			std::random_device rd;
+			std::mt19937 gen(rd());
+			std::uniform_real_distribution<> dis(-1, 1);
+			std::generate(tensor.begin(), tensor.end(), [&]() { return dis(gen); });
 		}
 
 		static void RandomBinomialDistribution(Tensor& tensor) {

@@ -26,7 +26,35 @@ OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 #define _NEXURALNET_DNN_LAYERS_FULLY_CONNECTED_LAYER
 
 namespace nexural {
+	class FullyConnectedLayer : public ComputationalBaseLayer {
+	public:
+		FullyConnectedLayer(const LayerParams &layerParams) : ComputationalBaseLayer(layerParams) {
+			_numberOfNeurons = parser::ParseLong(_layerParams, "neurons");
+		}
 
+		~FullyConnectedLayer() {
 
+		}
+
+		virtual void Setup(const LayerShape& prevLayerShape) {
+			_inputShape.Resize(prevLayerShape);
+			_outputShape.Resize(1, 1, 1, _numberOfNeurons);
+			_outputData.Resize(_outputShape);
+			_weights.Resize(1, 1, _numberOfNeurons, _inputShape.Size());
+			Utils::GenerateRandomWeights(_weights);
+		}
+
+		virtual void FeedForward(const Tensor& inputData) {
+
+		}
+
+		virtual void BackPropagate(const Tensor& layerErrors) {
+
+		}
+
+	private:
+		Tensor _weights;
+		long _numberOfNeurons;
+	};
 }
 #endif
