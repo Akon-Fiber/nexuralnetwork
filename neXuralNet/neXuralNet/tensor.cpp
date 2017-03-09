@@ -42,6 +42,16 @@ namespace nexural {
 		_host.reset(new float[_size], std::default_delete<float[]>());
 	}
 
+	void Tensor::AliasTensor(const Tensor& tensor) {
+		//_host.reset(tensor._host.get(), std::default_delete<float[]>()); // this will create a new tensor from the old one
+		_host = tensor._host;
+		_numSamples = tensor._numSamples;
+		_k = tensor._k;
+		_nr = tensor._nr;
+		_nc = tensor._nc;
+		_size = _numSamples * _k * _nr * _nc;
+	}
+
 	Tensor::~Tensor() { 
 	}
 
@@ -75,6 +85,33 @@ namespace nexural {
 		}
 	}
 
+	void Tensor::Reshape(const long numSamples_, const long k_, const long nr_, const long nc_) {
+		long newSize = numSamples_ * k_ * nr_ * nc_;
+
+		if (newSize != _size) {
+			throw std::runtime_error("Can't reshape the tensor");
+		}
+		
+		_numSamples = numSamples_;
+		_k = k_;
+		_nr = nr_;
+		_nc = nc_;
+		_size = _numSamples * _k * _nr * _nc;
+	}
+
+	void Tensor::Reshape(const LayerShape& layerShape) {
+		long newSize = layerShape.GetNumSamples() * layerShape.GetK() * layerShape.GetNR() * layerShape.GetNC();
+
+		if (newSize != _size) {
+			throw std::runtime_error("Can't reshape the tensor");
+		}
+
+		_numSamples = layerShape.GetNumSamples();
+		_k = layerShape.GetK();
+		_nr = layerShape.GetNR();
+		_nc = layerShape.GetNC();
+		_size = _numSamples * _k * _nr * _nc;
+	}
 
 	LayerShape Tensor::GetShape() const {
 		return LayerShape(_numSamples, _k, _nr, _nc);

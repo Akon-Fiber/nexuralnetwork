@@ -30,10 +30,10 @@ namespace nexural {
 		/*!
 		WHAT THIS OBJECT REPRESENTS
 		This object represents a 4D array of float values, all stored contiguously
-		in memory.  
+		in memory.
 
 		Finally, the convention is to interpret the tensor as a set of num_samples()
-		3D arrays (images), each of dimension k() (channels) by nr() (rows) by nc() (columns).  
+		3D arrays (images), each of dimension k() (channels) by nr() (rows) by nc() (columns).
 		Also, while this class does not specify a memory layout, the convention is to
 		assume that indexing into an element at coordinates (sample,k,nr,nc) can be
 		accomplished via:
@@ -62,9 +62,13 @@ namespace nexural {
 
 		void Resize(const long numSamples_, const long k_, const long nr_, const long nc_);
 		void Resize(const LayerShape& layerShape);
+		void Reshape(const long numSamples_, const long k_, const long nr_, const long nc_);
+		void Reshape(const LayerShape& layerShape);
 
 		const float operator [](long i) const { return _host.get()[i]; }
 		float & operator [](long i) { return _host.get()[i]; }
+
+		void AliasTensor(const Tensor& tensor);
 		//float * operator [](int i) { return _host.get() + i; }
 
 		long GetNumSamples() const { return _numSamples; }

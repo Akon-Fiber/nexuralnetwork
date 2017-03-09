@@ -29,7 +29,7 @@ namespace nexural {
 	class FullyConnectedLayer : public ComputationalBaseLayer {
 	public:
 		FullyConnectedLayer(const LayerParams &layerParams) : ComputationalBaseLayer(layerParams) {
-			_numberOfNeurons = parser::ParseLong(_layerParams, "neurons");
+			_numOutputNeurons = parser::ParseLong(_layerParams, "neurons");
 		}
 
 		~FullyConnectedLayer() {
@@ -38,14 +38,18 @@ namespace nexural {
 
 		virtual void Setup(const LayerShape& prevLayerShape) {
 			_inputShape.Resize(prevLayerShape);
-			_outputShape.Resize(_inputShape.GetNumSamples(), 1, 1, _numberOfNeurons);
+			_outputShape.Resize(_inputShape.GetNumSamples(), 1, 1, _numOutputNeurons);
 			_outputData.Resize(_outputShape);
+			//TODO: delete this when implement the training
+			_weights.Resize(_inputShape.GetNumSamples(), 1, _numOutputNeurons, (_inputShape.GetK() * _inputShape.GetNR() * _inputShape.GetNC()));
+			Utils::GenerateRandomWeights(_weights);
 		}
 
 		virtual void FeedForward(const Tensor& inputData) {
+			_internalInputData.AliasTensor(inputData);
 			for (long numSamples = 0; numSamples < inputData.GetNumSamples(); numSamples++)
 			{
-				for (long n = 0; n < _numberOfNeurons; n++) 
+				for (long n = 0; n < _numOutputNeurons; n++)
 				{
 					float neuronCalculatedValue = 0;
 					for (long k = 0; k < inputData.GetK(); k++)
@@ -55,6 +59,7 @@ namespace nexural {
 							for (long nc = 0; nc < inputData.GetNC(); nc++)
 							{
 								float inputValue = inputData[(((numSamples * inputData.GetK()) + k) * inputData.GetNR() + nr) * inputData.GetNC() + nc];
+								float testInputValue = _internalInputData[(((numSamples * _internalInputData.GetK()) + k) * _internalInputData.GetNR() + nr) * _internalInputData.GetNC() + nc];
 								float weightValue = _weights[(numSamples * _weights.GetNR() + n) * _weights.GetNC() + ((k * inputData.GetNR() + nr) * inputData.GetNC() + nc)];
 								neuronCalculatedValue += inputValue * weightValue;
 							}
@@ -67,23 +72,26 @@ namespace nexural {
 
 		virtual void SetupLayerForTraining() {
 			_layerErrors.Resize(_inputShape);
-			_weights.Resize(_inputShape.GetNumSamples(), 1, _numberOfNeurons, (_inputShape.GetK() * _inputShape.GetNR() * _inputShape.GetNC()));
-			Utils::GenerateRandomWeights(_weights);
+			//_weights.Resize(_inputShape.GetNumSamples(), 1, _numberOfNeurons, (_inputShape.GetK() * _inputShape.GetNR() * _inputShape.GetNC()));
+			//Utils::GenerateRandomWeights(_weights);
 			//_dWeights.Resize();
 		}
 
 		virtual void BackPropagate(const Tensor& prevLayerErrors) {
-			// Calculate gradient wrt. weights
-			_dWeights; // inputData
-
-			// Calculate gradient wrt. input
-			_layerErrors; // _weights * prevLayerErrors
+			// Calculate gradient wrt. weights ( _internalInputData * prevLayerErrors)
+			for (long int i = 0; i < _dWeights.Size(); i++) {
+				_dWeights[i] = _internalInputData[i] * prevLayerErrors[i];
+			}
+			
+			// Calculate gradient wrt. input (_weights * prevLayerErrors)
+			_layerErrors; 
 		}
 
 	private:
+		Tensor _internalInputData;
 		Tensor _weights;
 		Tensor _dWeights;
-		long _numberOfNeurons;
+		long _numOutputNeurons;
 	};
 }
 #endif
