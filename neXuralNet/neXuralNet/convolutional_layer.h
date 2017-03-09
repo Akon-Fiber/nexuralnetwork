@@ -35,6 +35,8 @@ namespace nexural {
 			_padding_height = parser::ParseLong(_layerParams, "padding_height");
 			_stride_width = parser::ParseLong(_layerParams, "stride_width");
 			_stride_height = parser::ParseLong(_layerParams, "stride_height");
+			_num_of_filters = parser::ParseLong(_layerParams, "num_of_filters");
+			_has_bias = parser::ParseBool(_layerParams, "has_bias");
 		}
 
 		~ConvolutionalLayer() {
@@ -43,26 +45,42 @@ namespace nexural {
 
 		virtual void Setup(const LayerShape& prevLayerShape) {
 			_inputShape.Resize(prevLayerShape);
-			_outputShape.Resize(prevLayerShape);
+			_outputShape.Resize(_inputShape.GetNumSamples(), _num_of_filters, 
+				(((_inputShape.GetNR() - _kernel_height - (2 * _padding_height)) / _stride_height)  + 1), 
+				(((_inputShape.GetNC() - _kernel_width - (2 * _padding_width)) / _stride_width) + 1));
 			_outputData.Resize(_outputShape);
+			_weights.Resize(_num_of_filters, _inputShape.GetK(), _kernel_height, _kernel_width);
+			Utils::GenerateRandomWeights(_weights);
+			if (_has_bias) {
+				_biases.Resize(1, 1, 1, _num_of_filters);
+			}
 		}
 
 		virtual void FeedForward(const Tensor& inputData) {
 
 		}
 
-		virtual void BackPropagate(const Tensor& layerErrors) {
+		virtual void SetupLayerForTraining() {
+			_layerErrors.Resize(_inputShape);
+		}
+
+		virtual void BackPropagate(const Tensor& prevLayerErrors) {
 
 		}
 
 	private:
 		Tensor _weights;
+		Tensor _biases;
+		Tensor _gradient;
+		Tensor _delta;
+		long _num_of_filters;
 		long _kernel_width;
 		long _kernel_height;
 		long _padding_width;
 		long _padding_height;
 		long _stride_width;
 		long _stride_height;
+		bool _has_bias;
 	};
 }
 #endif

@@ -28,7 +28,7 @@ namespace nexural {
 	class IComputationalLayer {
 	public:
 		virtual ~IComputationalLayer() { }
-		virtual void BackPropagate(const Tensor& layerErrors) = 0;
+		virtual void BackPropagate(const Tensor& prevLayerErrors) = 0;
 		virtual void SetupLayerForTraining() = 0;
 	};
 }

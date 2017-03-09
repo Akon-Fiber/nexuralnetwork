@@ -1,45 +1,14 @@
 {
 	"NetworkLayers" : {
 		"InputLayerSettings": {
-			"input_width" : "8",
-			"input_height" : "8"
+			"input_width" : "3",
+			"input_height" : "3"
 		},
 		"ComputationalLayers" : [
 		    {
-		        "type": "average_pooling",
-				"params": {
-					"kernel_width" : "2",
-					"kernel_height" : "2"
-				}
-		    },
-		    {
-		        "type": "max_pooling",
-				"params": {
-					"kernel_width" : "3",
-					"kernel_height" : "2"
-				}
-		    },
-		    {
-		        "type": "convolutional",
-				"params": {
-					"kernel_width" : "2",
-					"kernel_height" : "2",
-					"padding_width" : "2",
-					"padding_height" : "2",
-					"stride_width" : "2",
-					"stride_height" : "2"
-				}
-		    },
-		    {
-		        "type": "dropout",
-				"params": {
-
-				}
-		    },
-		    {
 		        "type": "fully_connected",
 				"params": {
-					"neurons" : "10"
+					"neurons" : "2"
 				}
 		    }
 		],

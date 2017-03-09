@@ -35,7 +35,7 @@ int main(int argc, char* argv[]) {
 		std::string configFilePath = full_path.parent_path().string() + "\\network.json";
 
 		nexural::Network<nexural::OpenCVBGRImageLayer, cv::Mat> net(configFilePath);
-		cv::Mat sourceImage = cv::imread(full_path.parent_path().parent_path().parent_path().parent_path().string() + "\\TestImages\\cat_8_gray.jpg");
+		cv::Mat sourceImage = cv::imread(full_path.parent_path().parent_path().parent_path().parent_path().string() + "\\TestImages\\cat_3.png");
 		net.Run(sourceImage);
 	}
 	catch (std::exception stdEx) {

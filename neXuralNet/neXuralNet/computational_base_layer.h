@@ -60,12 +60,12 @@ namespace nexural {
 			return _outputShape;
 		}
 
-		virtual void BackPropagate(const Tensor& layerErrors) {
+		virtual void BackPropagate(const Tensor& prevLayerErrors) {
 
 		}
 
 		virtual void SetupLayerForTraining() {
-			_layerErrors.Resize(_inputShape);
+			
 		}
 
 	protected:

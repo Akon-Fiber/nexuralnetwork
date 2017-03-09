@@ -79,7 +79,11 @@ namespace nexural {
 			}
 		}
 
-		virtual void BackPropagate(const Tensor& layerErrors) {
+		virtual void SetupLayerForTraining() {
+			_layerErrors.Resize(_inputShape);
+		}
+
+		virtual void BackPropagate(const Tensor& prevLayerErrors) {
 			for (long numSamples = 0; numSamples < _layerErrors.GetNumSamples(); numSamples++)
 			{
 				for (long k = 0; k < _layerErrors.GetK(); k++)
@@ -93,7 +97,7 @@ namespace nexural {
 							long khLimit = _kernel_height - (nr == (_layerErrors.GetNR() - (_layerErrors.GetNR() % _kernel_height)) ? _kernel_height - _layerErrors.GetNR() % _kernel_height : 0);
 							long kwLimit = _kernel_width - (nc == (_layerErrors.GetNC() - (_layerErrors.GetNC() % _kernel_width)) ? _kernel_width - _layerErrors.GetNC() % _kernel_width : 0);
 
-							float error = layerErrors[(((numSamples * layerErrors.GetK()) + k) * layerErrors.GetNR() + outNR) * layerErrors.GetNC() + outNC] / (khLimit * kwLimit);
+							float error = prevLayerErrors[(((numSamples * prevLayerErrors.GetK()) + k) * prevLayerErrors.GetNR() + outNR) * prevLayerErrors.GetNC() + outNC] / (khLimit * kwLimit);
 
 							for (long kh = 0; kh < khLimit; kh++)
 							{

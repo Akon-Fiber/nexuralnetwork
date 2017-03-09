@@ -67,18 +67,22 @@ namespace nexural {
 
 		}
 
-		virtual void BackPropagate(const Tensor& layerErrors) {
-			_layerErrors.Resize(layerErrors.GetNumSamples(), layerErrors.GetK(), layerErrors.GetNR(), layerErrors.GetNC());
+		virtual void SetupLayerForTraining() {
+			_layerErrors.Resize(_inputShape);
+		}
 
-			for (long numSamples = 0; numSamples < layerErrors.GetNumSamples(); numSamples++)
+		virtual void BackPropagate(const Tensor& prevLayerErrors) {
+			_layerErrors.Resize(prevLayerErrors.GetNumSamples(), prevLayerErrors.GetK(), prevLayerErrors.GetNR(), prevLayerErrors.GetNC());
+
+			for (long numSamples = 0; numSamples < _layerErrors.GetNumSamples(); numSamples++)
 			{
-				for (long k = 0; k < layerErrors.GetK(); k++)
+				for (long k = 0; k < _layerErrors.GetK(); k++)
 				{
-					for (long nr = 0; nr < layerErrors.GetNR(); nr++)
+					for (long nr = 0; nr < _layerErrors.GetNR(); nr++)
 					{
-						for (long nc = 0; nc < layerErrors.GetNC(); nc++)
+						for (long nc = 0; nc < _layerErrors.GetNC(); nc++)
 						{
-							float error = layerErrors[(((numSamples * layerErrors.GetK()) + k) * layerErrors.GetNR() + nr) * layerErrors.GetNC() + nc];
+							float error = prevLayerErrors[(((numSamples * prevLayerErrors.GetK()) + k) * prevLayerErrors.GetNR() + nr) * prevLayerErrors.GetNC() + nc];
 
 							if (error < 0) {
 								_layerErrors[(((numSamples * _layerErrors.GetK()) + k) * _layerErrors.GetNR() + nr) * _layerErrors.GetNC() + nc] = error * 0.0;
