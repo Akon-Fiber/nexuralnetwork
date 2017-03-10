@@ -29,12 +29,14 @@ OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 #include "computational_layers.h"
 #include "loss_layers.h"
 
+#include "data_to_tensor_converter.h"
+
 #ifndef _NEXURALNET_DNN_NETWORK_NETWORK
 #define _NEXURALNET_DNN_NETWORK_NETWORK
 
 namespace nexural {
-	template <typename INPUT_LAYER_TYPE, typename INPUT_LAYER_DATA_TYPE>
 	class Network {
+		typedef InputBaseLayerPtr InputNetworkLayer;
 		typedef std::vector<ComputationalBaseLayerPtr> ComputationalNetworkLayers;
 		typedef LossBaseLayerPtr LossNetworkLayer;
 
@@ -45,7 +47,7 @@ namespace nexural {
 			NetworkReader netParser(jsonFilePath);
 			netParser.loadNetwork(*this);
 
-			LayerShape prevLayerShape = _inputNetworkLayer.GetOutputShape();
+			LayerShape prevLayerShape = _inputNetworkLayer->GetOutputShape();
 			for (int i = 0; i < this->_computationalNetworkLyers.size(); i++) {
 				_computationalNetworkLyers[i]->Setup(prevLayerShape);
 				prevLayerShape = _computationalNetworkLyers[i]->GetOutputShape();
@@ -57,31 +59,27 @@ namespace nexural {
 
 		}
 
-		void InitInputLayer(const LayerParams &layerParams) {
-			_inputNetworkLayer.Init(layerParams);
+		void SetInputLayer(InputBaseLayerPtr inputLayer) {
+			_inputNetworkLayer = inputLayer;
 		}
 
-		void SetLossLayer(const std::string lossLayerType, LayerParams &layerParams) {
-			if("mse") {
-				_lossNetworkLayer.reset(new MSELossLayer(layerParams));
-			}
+		void AddComputationalLayer(ComputationalBaseLayerPtr computationalLayer) {
+			_computationalNetworkLyers.push_back(computationalLayer);
 		}
 
-		void AddComputationalLayer(ComputationalBaseLayerPtr layer) {
-			_computationalNetworkLyers.push_back(layer);
+		void SetLossLayer(LossBaseLayerPtr lossLayer) {
+			_lossNetworkLayer = lossLayer;
 		}
 
-		void Run(INPUT_LAYER_DATA_TYPE inputData) {
-			_inputNetworkLayer.LoadData(inputData);
-			Tensor *internalNetData = _inputNetworkLayer.GetOutput();
+		void Run(Tensor& inputData) {
+			_inputNetworkLayer->LoadData(inputData);
+			Tensor *internalNetData = _inputNetworkLayer->GetOutput();
 
-			// Computational layers
 			for (int i = 0; i < this->_computationalNetworkLyers.size(); i++) {
 				_computationalNetworkLyers[i]->FeedForward(*internalNetData);
 				internalNetData = _computationalNetworkLyers[i]->GetOutput();	
 			}
 			
-			// Loss layers
 			_lossNetworkLayer->FeedForward(*internalNetData);
 			internalNetData = _lossNetworkLayer->GetOutput();
 
@@ -92,7 +90,7 @@ namespace nexural {
 		}
 
 		void Train() {
-
+			
 		}
 
 	private:
@@ -118,40 +116,18 @@ namespace nexural {
 
 			void loadNetwork(Network &net) {
 				if (!_document.HasMember("NetworkLayers")) {
-					throw std::runtime_error("InputSettings member is missing from the JSON file!");
-				}
-
-				const rapidjson::Value& networkLayers = _document["NetworkLayers"];
-
-				if (!networkLayers.HasMember("InputLayerSettings")) {
-					throw std::runtime_error("InputLayerSettings member is missing from the JSON file!");
-				}
-
-				if (!networkLayers.HasMember("ComputationalLayers")) {
-					throw std::runtime_error("ComputationalLayers member is missing from the JSON file!");
-				}
-
-				if (!networkLayers.HasMember("LossLayerSettings")) {
-					throw std::runtime_error("LossLayerSettings member is missing from the JSON file!");
+					throw std::runtime_error("NetworkLayers member is missing from the JSON file!");
 				}
 
 				if (!_document.HasMember("TrainerSettings")) {
 					throw std::runtime_error("TrainerSettings member is missing from the JSON file!");
 				}
 
-				// Input layer setup
-				const rapidjson::Value& inputSettings = networkLayers["InputLayerSettings"];
-				LayerParams inputLayerParams;
-				for (rapidjson::Value::ConstMemberIterator iter = inputSettings.MemberBegin(); iter != inputSettings.MemberEnd(); ++iter) {
-					inputLayerParams.insert(std::pair<std::string, std::string>(iter->name.GetString(), iter->value.GetString()));
-				}
-				net.InitInputLayer(inputLayerParams);
+				const rapidjson::Value& networkLayers = _document["NetworkLayers"];
 
-				// Computational layers setup
-				const rapidjson::Value& netLayers = networkLayers["ComputationalLayers"];
-				for (rapidjson::SizeType i = 0; i < netLayers.Size(); i++)
+				for (rapidjson::SizeType i = 0; i < networkLayers.Size(); i++)
 				{
-					const rapidjson::Value& currentLayer = netLayers[i];
+					const rapidjson::Value& currentLayer = networkLayers[i];
 
 					if (!currentLayer.HasMember("type")) {
 						throw std::runtime_error("type member is missing from the JSON file!");
@@ -162,15 +138,21 @@ namespace nexural {
 
 					LayerParams layerParams;
 					std::string type_member = currentLayer["type"].GetString();
-					const rapidjson::Value& params_member = currentLayer["params"];
+					const rapidjson::Value& paramsMember = currentLayer["params"];
 
-					for (rapidjson::Value::ConstMemberIterator iter = params_member.MemberBegin(); iter != params_member.MemberEnd(); ++iter) {
+					for (rapidjson::Value::ConstMemberIterator iter = paramsMember.MemberBegin(); iter != paramsMember.MemberEnd(); ++iter) {
 						layerParams.insert(std::pair<std::string, std::string>(iter->name.GetString(), iter->value.GetString()));
 					}
 
-					if (type_member == "max_pooling") {
-						net.AddComputationalLayer(ComputationalBaseLayerPtr(new nexural::MaxPoolingLayer(layerParams)));
+					if (type_member == "bgr_image_input") {
+						net.SetInputLayer(InputBaseLayerPtr(new nexural::BGRImageInputLayer(layerParams)));
 					}
+					else if (type_member == "gray_image_input") {
+						net.SetInputLayer(InputBaseLayerPtr(new nexural::GrayImageInputLayer(layerParams)));
+					}
+				    else if (type_member == "max_pooling") {
+					net.AddComputationalLayer(ComputationalBaseLayerPtr(new nexural::MaxPoolingLayer(layerParams)));
+				    }
 					else if (type_member == "average_pooling") {
 						net.AddComputationalLayer(ComputationalBaseLayerPtr(new nexural::AveragePoolingLayer(layerParams)));
 					}
@@ -183,17 +165,10 @@ namespace nexural {
 					else if (type_member == "fully_connected") {
 						net.AddComputationalLayer(ComputationalBaseLayerPtr(new nexural::FullyConnectedLayer(layerParams)));
 					}
+					else if (type_member == "mse") {
+						net.SetLossLayer(LossBaseLayerPtr(new nexural::MSELossLayer(layerParams)));
+					}
 				}
-
-				// Loss layer setup
-				const rapidjson::Value& lossSettings = networkLayers["LossLayerSettings"];
-				LayerParams lossLayerParams;
-				std::string lossLayerType = lossSettings["type"].GetString();
-				const rapidjson::Value& lossSettingsParams = lossSettings["params"];
-				for (rapidjson::Value::ConstMemberIterator iter = lossSettingsParams.MemberBegin(); iter != lossSettingsParams.MemberEnd(); ++iter) {
-					lossLayerParams.insert(std::pair<std::string, std::string>(iter->name.GetString(), iter->value.GetString()));
-				}
-				net.SetLossLayer(lossLayerType, inputLayerParams);
 			}
 
 		private:
@@ -202,9 +177,9 @@ namespace nexural {
 		};
 
 	private:
+		InputNetworkLayer _inputNetworkLayer;
 		ComputationalNetworkLayers _computationalNetworkLyers;
 		LossNetworkLayer _lossNetworkLayer;
-		INPUT_LAYER_TYPE _inputNetworkLayer;
 	};
 }
 #endif

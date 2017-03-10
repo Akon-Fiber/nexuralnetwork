@@ -51,10 +51,21 @@ namespace nexural {
 			return *this;
 		}
 
+		bool operator==(const LayerShape& other) {
+			return (this->_numSamples == other._numSamples &&
+				this->_k == other._k && 
+				this->_nr == other._nr && 
+				this->_nc == other._nc);
+		}
+
+		bool operator!=(const LayerShape& other) {
+			return !(*this == other);
+		}
+
 		void Resize(long numSamples, long k, long nr, long nc) {
 			_numSamples = numSamples;
 			_k = k;
-			_nr =nr;
+			_nr = nr;
 			_nc = nc;
 		}
 

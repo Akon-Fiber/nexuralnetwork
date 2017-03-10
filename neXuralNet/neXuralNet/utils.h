@@ -51,7 +51,7 @@ namespace nexural {
 					{
 						for (long nc = 0; nc < tensor.GetNC(); nc++)
 						{
-							tensor[(((numSamples * tensor.GetK()) + k) * tensor.GetNR() + nr) * tensor.GetNC() + nc] = distribution(generator);
+							tensor[(((numSamples * tensor.GetK()) + k) * tensor.GetNR() + nr) * tensor.GetNC() + nc] = (float)distribution(generator);
 						}
 					}
 				}

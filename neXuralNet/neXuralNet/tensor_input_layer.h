@@ -20,15 +20,32 @@ OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 */
 
 #include "tensor.h"
+#include "data_parser.h"
+#include "input_base_class.h"
 
-#ifndef _NEXURALNET_DNN_I_COMPUTATIONAL_LAYER
-#define _NEXURALNET_DNN_I_COMPUTATIONAL_LAYER
+#ifndef _NEXURALNET_DNN_LAYERS_TENSOR_INPUT_LAYER
+#define _NEXURALNET_DNN_LAYERS_GRAY_IMAGE_INPUT_LAYER
 
 namespace nexural {
-	class IComputationalLayer {
+	class TensorInputLayer : public InputBaseLayer {
 	public:
-		virtual ~IComputationalLayer() { }
-		virtual void BackPropagate(const Tensor& prevLayerErrors) = 0;
+		TensorInputLayer(const LayerParams &layerParams) : InputBaseLayer(layerParams) {
+
+		}
+
+		~TensorInputLayer() {
+
+		}
+
+		void LoadData(const Tensor& inputTensor) {
+			_inputShape.Resize(inputTensor.GetShape());
+			_outputShape.Resize(_inputShape);
+			_outputData.Resize(_outputShape);
+			_outputData.ShareTensor(inputTensor);
+		}
+
+	private:
+
 	};
 }
 #endif

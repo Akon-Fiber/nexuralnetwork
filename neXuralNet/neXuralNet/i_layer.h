@@ -33,6 +33,7 @@ namespace nexural {
 		virtual Tensor* GetOutput() = 0;
 		virtual Tensor* GetLayerErrors() = 0;
 		virtual LayerShape GetOutputShape() = 0;
+		virtual void SetupLayerForTraining() = 0;
 	};
 }
 #endif

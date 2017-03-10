@@ -38,33 +38,16 @@ namespace nexural {
 
 		virtual void Setup(const LayerShape& prevLayerShape) {
 			_inputShape.Resize(prevLayerShape);
-			_outputShape.Resize(prevLayerShape);
+			_outputShape.Resize(_inputShape);
 			_outputData.Resize(_outputShape);
 		}
 
 		virtual void FeedForward(const Tensor& inputData) {
-
-			for (long numSamples = 0; numSamples < inputData.GetNumSamples(); numSamples++)
+			for (long i = 0; i < inputData.Size(); i++)
 			{
-				for (long k = 0; k < inputData.GetK(); k++)
-				{
-					for (long nr = 0; nr < inputData.GetNR(); nr++)
-					{
-						for (long nc = 0; nc < inputData.GetNC(); nc++)
-						{
-							float value = inputData[(((numSamples * inputData.GetK()) + k) * inputData.GetNR() + nr) * inputData.GetNC() + nc];
-
-							if(value < 0){
-								_outputData[(((numSamples * _outputData.GetK()) + k) * _outputData.GetNR() + nr) * _outputData.GetNC() + nc] = value * 0.0;
-							} else {
-								_outputData[(((numSamples * _outputData.GetK()) + k) * _outputData.GetNR() + nr) * _outputData.GetNC() + nc] = value;
-							}
-
-						}
-					}
-				}
+				float value = inputData[i];
+				_outputData[i] = value < 0 ? (float)0.0 : value;
 			}
-
 		}
 
 		virtual void SetupLayerForTraining() {
@@ -72,28 +55,10 @@ namespace nexural {
 		}
 
 		virtual void BackPropagate(const Tensor& prevLayerErrors) {
-			_layerErrors.Resize(prevLayerErrors.GetNumSamples(), prevLayerErrors.GetK(), prevLayerErrors.GetNR(), prevLayerErrors.GetNC());
-
-			for (long numSamples = 0; numSamples < _layerErrors.GetNumSamples(); numSamples++)
+			for (long i = 0; i < _layerErrors.Size(); i++)
 			{
-				for (long k = 0; k < _layerErrors.GetK(); k++)
-				{
-					for (long nr = 0; nr < _layerErrors.GetNR(); nr++)
-					{
-						for (long nc = 0; nc < _layerErrors.GetNC(); nc++)
-						{
-							float error = prevLayerErrors[(((numSamples * prevLayerErrors.GetK()) + k) * prevLayerErrors.GetNR() + nr) * prevLayerErrors.GetNC() + nc];
-
-							if (error < 0) {
-								_layerErrors[(((numSamples * _layerErrors.GetK()) + k) * _layerErrors.GetNR() + nr) * _layerErrors.GetNC() + nc] = error * 0.0;
-							}
-							else {
-								_layerErrors[(((numSamples * _layerErrors.GetK()) + k) * _layerErrors.GetNR() + nr) * _layerErrors.GetNC() + nc] = error;
-							}
-
-						}
-					}
-				}
+				float error = prevLayerErrors[i];
+				_layerErrors[i] = error < 0 ? (float)0.0 : error;
 			}
 		}
 

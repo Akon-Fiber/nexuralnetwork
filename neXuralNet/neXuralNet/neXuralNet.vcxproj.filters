@@ -22,9 +22,6 @@
     <Filter Include="Source Files\dnn\network">
       <UniqueIdentifier>{fed4c924-1580-4221-ae07-5f71e3115165}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Source Files\dnn\solvers">
-      <UniqueIdentifier>{f740a641-193f-4920-8087-a889dc7e9fb8}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Source Files\utility">
       <UniqueIdentifier>{321790c1-1838-4790-87f8-57f0f914ab1e}</UniqueIdentifier>
     </Filter>
@@ -48,6 +45,9 @@
     </Filter>
     <Filter Include="Source Files\dnn\layers\common">
       <UniqueIdentifier>{39d1d055-3996-47d9-9a51-84b332b01ca6}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\dnn\layers\input_layers\common">
+      <UniqueIdentifier>{cdb643bb-4b25-4377-a191-81a38ae28f86}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -99,12 +99,6 @@
     <ClInclude Include="dropout_layer.h">
       <Filter>Source Files\dnn\layers\computational_layers</Filter>
     </ClInclude>
-    <ClInclude Include="opencv_gray_input_layer.h">
-      <Filter>Source Files\dnn\layers\input_layers</Filter>
-    </ClInclude>
-    <ClInclude Include="opencv_bgr_input_layer.h">
-      <Filter>Source Files\dnn\layers\input_layers</Filter>
-    </ClInclude>
     <ClInclude Include="input_layers.h">
       <Filter>Source Files\dnn\layers\input_layers</Filter>
     </ClInclude>
@@ -122,6 +116,24 @@
     </ClInclude>
     <ClInclude Include="mse_loss_layer.h">
       <Filter>Source Files\dnn\layers\loss_layers</Filter>
+    </ClInclude>
+    <ClInclude Include="data_to_tensor_converter.h">
+      <Filter>Source Files\utility</Filter>
+    </ClInclude>
+    <ClInclude Include="i_input_layer.h">
+      <Filter>Source Files\dnn\layers\input_layers\common</Filter>
+    </ClInclude>
+    <ClInclude Include="input_base_class.h">
+      <Filter>Source Files\dnn\layers\input_layers\common</Filter>
+    </ClInclude>
+    <ClInclude Include="bgr_image_input_layer.h">
+      <Filter>Source Files\dnn\layers\input_layers</Filter>
+    </ClInclude>
+    <ClInclude Include="gray_image_input_layer.h">
+      <Filter>Source Files\dnn\layers\input_layers</Filter>
+    </ClInclude>
+    <ClInclude Include="tensor_input_layer.h">
+      <Filter>Source Files\dnn\layers\input_layers</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

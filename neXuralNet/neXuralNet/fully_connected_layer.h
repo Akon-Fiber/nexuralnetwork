@@ -46,7 +46,7 @@ namespace nexural {
 		}
 
 		virtual void FeedForward(const Tensor& inputData) {
-			_internalInputData.AliasTensor(inputData);
+			_internalInputData.ShareTensor(inputData);
 			for (long numSamples = 0; numSamples < inputData.GetNumSamples(); numSamples++)
 			{
 				for (long n = 0; n < _numOutputNeurons; n++)

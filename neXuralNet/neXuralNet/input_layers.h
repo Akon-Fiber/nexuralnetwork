@@ -19,5 +19,5 @@ TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE
 OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 */
 
-#include "opencv_bgr_input_layer.h"
-#include "opencv_gray_input_layer.h"
+#include "bgr_image_input_layer.h"
+#include "gray_image_input_layer.h"

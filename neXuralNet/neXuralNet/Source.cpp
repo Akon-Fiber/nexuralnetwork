@@ -33,10 +33,13 @@ int main(int argc, char* argv[]) {
 		boost::filesystem::path full_path(boost::filesystem::initial_path<boost::filesystem::path>());
 		full_path = boost::filesystem::system_complete(boost::filesystem::path(argv[0]));
 		std::string configFilePath = full_path.parent_path().string() + "\\network.json";
-
-		nexural::Network<nexural::OpenCVBGRImageLayer, cv::Mat> net(configFilePath);
 		cv::Mat sourceImage = cv::imread(full_path.parent_path().parent_path().parent_path().parent_path().string() + "\\TestImages\\cat_3.png");
-		net.Run(sourceImage);
+
+		nexural::Tensor inputImageData, testTensor, testTensor2, testTensor3, testTensor4, testTensor5;
+		nexural::Network net(configFilePath);
+		nexural::DataToTensorConverter::Convert(sourceImage, inputImageData);
+
+		net.Run(inputImageData);
 	}
 	catch (std::exception stdEx) {
 		std::cout << stdEx.what() << std::endl;

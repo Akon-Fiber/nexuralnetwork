@@ -19,16 +19,34 @@ TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE
 OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 */
 
+#include <opencv2\core\core.hpp>
 #include "tensor.h"
+#include "data_parser.h"
 
-#ifndef _NEXURALNET_DNN_I_COMPUTATIONAL_LAYER
-#define _NEXURALNET_DNN_I_COMPUTATIONAL_LAYER
+#ifndef _NEXURALNET_UTILITY_DATA_TO_TENSOR_CONVERTER
+#define _NEXURALNET_UTILITY_DATA_TO_TENSOR_CONVERTER
 
 namespace nexural {
-	class IComputationalLayer {
+	class DataToTensorConverter {
 	public:
-		virtual ~IComputationalLayer() { }
-		virtual void BackPropagate(const Tensor& prevLayerErrors) = 0;
+		static void Convert(const cv::Mat& sourceImage, Tensor& outputData) {
+			outputData.Resize(1, sourceImage.channels(), sourceImage.rows, sourceImage.cols);
+
+			for (long numSamples = 0; numSamples < outputData.GetNumSamples(); numSamples++)
+			{
+				for (long nr = 0; nr < outputData.GetNR(); nr++)
+				{
+					for (long nc = 0; nc < outputData.GetNC(); nc++)
+					{
+						cv::Vec3b intensity = sourceImage.at<cv::Vec3b>(nr, nc);
+						for (long k = 0; k < outputData.GetK(); k++) {
+							uchar col = intensity.val[k];
+							outputData[(((numSamples * outputData.GetK()) + k) * outputData.GetNR() + nr) * outputData.GetNC() + nc] = col;
+						}
+					}
+				}
+			}
+		}
 	};
 }
 #endif

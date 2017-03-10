@@ -19,16 +19,40 @@ TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE
 OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 */
 
-#include "tensor.h"
+#include "i_input_layer.h"
 
-#ifndef _NEXURALNET_DNN_I_COMPUTATIONAL_LAYER
-#define _NEXURALNET_DNN_I_COMPUTATIONAL_LAYER
+#ifndef _NEXURALNET_DNN_LAYERS_INPUT_BASE_LAYER
+#define _NEXURALNET_DNN_LAYERS_INPUT_BASE_LAYER
 
 namespace nexural {
-	class IComputationalLayer {
+	class InputBaseLayer : public IInputLayer {
 	public:
-		virtual ~IComputationalLayer() { }
-		virtual void BackPropagate(const Tensor& prevLayerErrors) = 0;
+		InputBaseLayer() {
+
+		}
+
+		InputBaseLayer(const LayerParams &layerParams) {
+			_layerParams = layerParams;
+		}
+
+		virtual ~InputBaseLayer() {
+
+		}
+
+		virtual Tensor* GetOutput() {
+			return &_outputData;
+		}
+
+		virtual LayerShape GetOutputShape() {
+			return _outputShape;
+		}
+
+	protected:
+		LayerParams _layerParams;
+		LayerShape _inputShape;
+		LayerShape _outputShape;
+		Tensor _outputData;
 	};
+	typedef std::shared_ptr<InputBaseLayer> InputBaseLayerPtr;
 }
-#endif
+#endif 

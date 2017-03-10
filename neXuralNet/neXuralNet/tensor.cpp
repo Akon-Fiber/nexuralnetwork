@@ -42,14 +42,31 @@ namespace nexural {
 		_host.reset(new float[_size], std::default_delete<float[]>());
 	}
 
-	void Tensor::AliasTensor(const Tensor& tensor) {
-		//_host.reset(tensor._host.get(), std::default_delete<float[]>()); // this will create a new tensor from the old one
-		_host = tensor._host;
-		_numSamples = tensor._numSamples;
-		_k = tensor._k;
-		_nr = tensor._nr;
-		_nc = tensor._nc;
-		_size = _numSamples * _k * _nr * _nc;
+	void Tensor::ShareTensor(const Tensor& tensor) {
+		if (this != &tensor) {
+			_host = tensor._host;
+			_numSamples = tensor._numSamples;
+			_k = tensor._k;
+			_nr = tensor._nr;
+			_nc = tensor._nc;
+			_size = _numSamples * _k * _nr * _nc;
+		}
+	}
+
+	void Tensor::Clone(const Tensor& tensor) {
+		if (this != &tensor) {
+			_host.reset(new float[tensor._size], std::default_delete<float[]>());
+
+			for (int i = 0; i < tensor._size; i++) {
+				_host.get()[i] = tensor[i];
+			}
+
+			_numSamples = tensor._numSamples;
+			_k = tensor._k;
+			_nr = tensor._nr;
+			_nc = tensor._nc;
+			_size = tensor._size;
+		}
 	}
 
 	Tensor::~Tensor() { 
@@ -111,6 +128,10 @@ namespace nexural {
 		_nr = layerShape.GetNR();
 		_nc = layerShape.GetNC();
 		_size = _numSamples * _k * _nr * _nc;
+	}
+
+	void Tensor::Reset() {
+		this->Resize(0, 0, 0, 0);
 	}
 
 	LayerShape Tensor::GetShape() const {

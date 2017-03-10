@@ -19,27 +19,16 @@ TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE
 OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 */
 
-#include <opencv2\core\core.hpp>
-#include "tensor.h"
-#include "data_types.h"
 #include "data_parser.h"
+#include "input_base_class.h"
 
-#ifndef _NEXURALNET_DNN_LAYERS_OPENCV_BGR_INPUT_LAYER
-#define _NEXURALNET_DNN_LAYERS_OPENCV_BGR_INPUT_LAYER
+#ifndef _NEXURALNET_DNN_LAYERS_BGR_IMAGE_INPUT_LAYER
+#define _NEXURALNET_DNN_LAYERS_BGR_IMAGE_INPUT_LAYER
 
 namespace nexural {
-	class OpenCVBGRImageLayer {
+	class BGRImageInputLayer : public InputBaseLayer {
 	public:
-		OpenCVBGRImageLayer() {
-
-		}
-
-		~OpenCVBGRImageLayer() {
-
-		}
-
-		void Init(const LayerParams &layerParams) {
-			_layerParams = layerParams;
+		BGRImageInputLayer(const LayerParams &layerParams) : InputBaseLayer(layerParams) {
 			long nr = parser::ParseLong(_layerParams, "input_height");
 			long nc = parser::ParseLong(_layerParams, "input_width");
 			_inputShape.Resize(1, 3, nr, nc);
@@ -47,43 +36,19 @@ namespace nexural {
 			_outputData.Resize(_outputShape);
 		}
 
-		void LoadData(const cv::Mat& sourceImage) {
-			if (sourceImage.channels() != 3) {
-				throw std::runtime_error("BGR image must have 3 channels! Error details: " + std::to_string(__LINE__) + " " + __FUNCTION__);
-			}
-
-			// TODO: Add shape comparison between _outputData and soureImage
-
-			for (long numSamples = 0; numSamples < _outputData.GetNumSamples(); numSamples++)
-			{
-				for (long nr = 0; nr < _outputData.GetNR(); nr++)
-				{
-					for (long nc = 0; nc < _outputData.GetNC(); nc++)
-					{
-						cv::Vec3b intensity = sourceImage.at<cv::Vec3b>(nr, nc);
-						for (long k = 0; k < _outputData.GetK(); k++) {
-							uchar col = intensity.val[k];
-							_outputData[(((numSamples * _outputData.GetK()) + k) * _outputData.GetNR() + nr) * _outputData.GetNC() + nc] = col;
-						}
-					}
-				}
-			}
+		~BGRImageInputLayer() {
 
 		}
 
-		Tensor* GetOutput() {
-			return &_outputData;
-		}
-
-		LayerShape GetOutputShape() {
-			return _outputShape;
+		void LoadData(const Tensor& inputTensor) {
+			if (inputTensor.GetShape() != _outputData.GetShape()) {
+				throw std::runtime_error("The input image is not of the same size as the layer!");
+			}
+			_outputData.ShareTensor(inputTensor);
 		}
 
 	private:
-		LayerShape _inputShape;
-		LayerShape _outputShape;
-		Tensor _outputData;
-		LayerParams _layerParams;
+
 	};
 }
 #endif

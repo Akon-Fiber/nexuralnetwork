@@ -39,28 +39,19 @@ namespace nexural {
 
 		virtual void Setup(const LayerShape& prevLayerShape) {
 			_inputShape.Resize(prevLayerShape);
-			_outputShape.Resize(prevLayerShape);
+			_outputShape.Resize(_inputShape);
 			_outputData.Resize(_outputShape);
-			_dropoutIndexes.Resize(prevLayerShape);
+			_dropoutIndexes.Resize(_outputShape);
 		}
 
 		virtual void FeedForward(const Tensor& inputData) {
 			Utils::RandomBinomialDistribution(_dropoutIndexes);
 
-			for (long numSamples = 0; numSamples < inputData.GetNumSamples(); numSamples++)
+			for (long i = 0; i < inputData.Size(); i++)
 			{
-				for (long k = 0; k < inputData.GetK(); k++)
-				{
-					for (long nr = 0; nr < inputData.GetNR(); nr++)
-					{
-						for (long nc = 0; nc < inputData.GetNC(); nc++)
-						{
-							float value = inputData[(((numSamples * inputData.GetK()) + k) * inputData.GetNR() + nr) * inputData.GetNC() + nc];
-							int drop = _dropoutIndexes[(((numSamples * inputData.GetK()) + k) * inputData.GetNR() + nr) * inputData.GetNC() + nc];
-							_outputData[(((numSamples * _outputData.GetK()) + k) * _outputData.GetNR() + nr) * _outputData.GetNC() + nc] = value * drop;
-						}
-					}
-				}
+				float value = inputData[i];
+				float drop = _dropoutIndexes[i];
+				_outputData[i] = value * drop;
 			}
 		}
 
@@ -69,20 +60,11 @@ namespace nexural {
 		}
 
 		virtual void BackPropagate(const Tensor& prevLayerErrors) {
-			for (long numSamples = 0; numSamples < _layerErrors.GetNumSamples(); numSamples++)
+			for (long i = 0; i < _layerErrors.Size(); i++)
 			{
-				for (long k = 0; k < _layerErrors.GetK(); k++)
-				{
-					for (long nr = 0; nr < _layerErrors.GetNR(); nr++)
-					{
-						for (long nc = 0; nc < _layerErrors.GetNC(); nc++)
-						{
-							float error = prevLayerErrors[(((numSamples * prevLayerErrors.GetK()) + k) * prevLayerErrors.GetNR() + nr) * prevLayerErrors.GetNC() + nc];
-							int drop = _dropoutIndexes[(((numSamples * _dropoutIndexes.GetK()) + k) * _dropoutIndexes.GetNR() + nr) * _dropoutIndexes.GetNC() + nc];
-							_layerErrors[(((numSamples * _layerErrors.GetK()) + k) * _layerErrors.GetNR() + nr) * _layerErrors.GetNC() + nc] = error * drop;
-						}
-					}
-				}
+				float error = prevLayerErrors[i];
+				float drop = _dropoutIndexes[i];
+				_layerErrors[i] = error * drop;
 			}
 		}
 

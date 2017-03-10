@@ -68,8 +68,9 @@ namespace nexural {
 		const float operator [](long i) const { return _host.get()[i]; }
 		float & operator [](long i) { return _host.get()[i]; }
 
-		void AliasTensor(const Tensor& tensor);
-		//float * operator [](int i) { return _host.get() + i; }
+		void ShareTensor(const Tensor& tensor);
+		void Clone(const Tensor& tensor);
+		void Reset();
 
 		long GetNumSamples() const { return _numSamples; }
 		long GetK() const { return _k; }

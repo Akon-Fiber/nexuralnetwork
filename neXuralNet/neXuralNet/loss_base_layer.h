@@ -40,29 +40,16 @@ namespace nexural {
 		
 		}
 
-		virtual void Setup(const LayerShape& prevLayerShape) {
-
-		}
-
-		virtual void FeedForward(const Tensor& inputData) {
-		
-		}
-
-		Tensor* GetOutput() {
+		virtual Tensor* GetOutput() {
 			return &_predictedData;
 		}
-
 
 		virtual Tensor* GetLayerErrors() {
 			return &_layerErrors;
 		}
 
-		LayerShape GetOutputShape() {
+		virtual LayerShape GetOutputShape() {
 			return _outputShape;
-		}
-
-		virtual void CalculateError() {
-
 		}
 
 	protected:

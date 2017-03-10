@@ -21,14 +21,16 @@ OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
 #include "tensor.h"
 
-#ifndef _NEXURALNET_DNN_I_COMPUTATIONAL_LAYER
-#define _NEXURALNET_DNN_I_COMPUTATIONAL_LAYER
+#ifndef _NEXURALNET_DNN_I_INPUT_LAYER
+#define _NEXURALNET_DNN_I_INPUT_LAYER
 
 namespace nexural {
-	class IComputationalLayer {
+	class IInputLayer {
 	public:
-		virtual ~IComputationalLayer() { }
-		virtual void BackPropagate(const Tensor& prevLayerErrors) = 0;
+		virtual ~IInputLayer() { }
+		virtual void LoadData(const Tensor& inputTensor) = 0;
+		virtual Tensor* GetOutput() = 0;
+		virtual LayerShape GetOutputShape() = 0;
 	};
 }
 #endif

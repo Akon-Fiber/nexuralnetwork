@@ -58,6 +58,10 @@ namespace nexural {
 			}
 		}
 
+		virtual void SetupLayerForTraining() {
+
+		}
+
 		virtual void CalculateError() {
 
 		}
