@@ -40,7 +40,6 @@ namespace nexural {
 			_inputShape.Resize(prevLayerShape);
 			_outputShape.Resize(_inputShape.GetNumSamples(), 1, 1, _numOutputNeurons);
 			_outputData.Resize(_outputShape);
-			//TODO: delete this when implement the training
 			_weights.Resize(_inputShape.GetNumSamples(), 1, _numOutputNeurons, (_inputShape.GetK() * _inputShape.GetNR() * _inputShape.GetNC()));
 			Utils::GenerateRandomWeights(_weights);
 		}
@@ -72,19 +71,49 @@ namespace nexural {
 
 		virtual void SetupLayerForTraining() {
 			_layerErrors.Resize(_inputShape);
-			//_weights.Resize(_inputShape.GetNumSamples(), 1, _numberOfNeurons, (_inputShape.GetK() * _inputShape.GetNR() * _inputShape.GetNC()));
-			//Utils::GenerateRandomWeights(_weights);
-			//_dWeights.Resize();
+			_dWeights.Resize(_weights.GetShape());
 		}
 
 		virtual void BackPropagate(const Tensor& prevLayerErrors) {
 			// Calculate gradient wrt. weights ( _internalInputData * prevLayerErrors)
-			for (long int i = 0; i < _dWeights.Size(); i++) {
-				_dWeights[i] = _internalInputData[i] * prevLayerErrors[i];
+			for (long numSamples = 0; numSamples < _dWeights.GetNumSamples(); numSamples++)
+			{
+				for (long n = 0; n < _numOutputNeurons; n++)
+				{
+					float error = prevLayerErrors[numSamples * prevLayerErrors.GetNC() + n];
+					for (long k = 0; k < _dWeights.GetK(); k++)
+					{
+						for (long nr = 0; nr < _dWeights.GetNR(); nr++)
+						{
+							for (long nc = 0; nc < _dWeights.GetNC(); nc++)
+							{
+								float value = _internalInputData[(((numSamples * _internalInputData.GetK()) + k) * _internalInputData.GetNR() + nr) * _internalInputData.GetNC() + nc];
+								_dWeights[(((numSamples * _dWeights.GetK()) + k) * _dWeights.GetNR() + nr) * _dWeights.GetNC() + nc] = value * error;
+							}
+						}
+					}
+				}
 			}
-			
+
 			// Calculate gradient wrt. input (_weights * prevLayerErrors)
-			_layerErrors; 
+			for (long numSamples = 0; numSamples < _dWeights.GetNumSamples(); numSamples++)
+			{
+				for (long n = 0; n < _numOutputNeurons; n++)
+				{
+					float error = prevLayerErrors[numSamples * prevLayerErrors.GetNC() + n];
+					for (long k = 0; k < _dWeights.GetK(); k++)
+					{
+						for (long nr = 0; nr < _dWeights.GetNR(); nr++)
+						{
+							for (long nc = 0; nc < _dWeights.GetNC(); nc++)
+							{
+								float value = _weights[(((numSamples * _weights.GetK()) + k) * _weights.GetNR() + nr) * _weights.GetNC() + nc];
+								_layerErrors[(((numSamples * _layerErrors.GetK()) + k) * _layerErrors.GetNR() + nr) * _layerErrors.GetNC() + nc] = value * error;
+							}
+						}
+					}
+				}
+			}
 		}
 
 	private:

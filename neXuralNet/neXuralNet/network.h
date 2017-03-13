@@ -36,6 +36,7 @@ OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
 namespace nexural {
 	class Network {
+		friend class NetTrainer;
 		typedef InputBaseLayerPtr InputNetworkLayer;
 		typedef std::vector<ComputationalBaseLayerPtr> ComputationalNetworkLayers;
 		typedef LossBaseLayerPtr LossNetworkLayer;
@@ -48,7 +49,7 @@ namespace nexural {
 			netParser.loadNetwork(*this);
 
 			LayerShape prevLayerShape = _inputNetworkLayer->GetOutputShape();
-			for (int i = 0; i < this->_computationalNetworkLyers.size(); i++) {
+			for (int i = 0; i < _computationalNetworkLyers.size(); i++) {
 				_computationalNetworkLyers[i]->Setup(prevLayerShape);
 				prevLayerShape = _computationalNetworkLyers[i]->GetOutputShape();
 			}
@@ -57,18 +58,6 @@ namespace nexural {
 
 		~Network() {
 
-		}
-
-		void SetInputLayer(InputBaseLayerPtr inputLayer) {
-			_inputNetworkLayer = inputLayer;
-		}
-
-		void AddComputationalLayer(ComputationalBaseLayerPtr computationalLayer) {
-			_computationalNetworkLyers.push_back(computationalLayer);
-		}
-
-		void SetLossLayer(LossBaseLayerPtr lossLayer) {
-			_lossNetworkLayer = lossLayer;
 		}
 
 		void Run(Tensor& inputData) {
@@ -89,14 +78,20 @@ namespace nexural {
 			}
 		}
 
-		void Train() {
-			
+	private:
+		void SetInputLayer(InputBaseLayerPtr inputLayer) {
+			_inputNetworkLayer = inputLayer;
 		}
 
-	private:
+		void AddComputationalLayer(ComputationalBaseLayerPtr computationalLayer) {
+			_computationalNetworkLyers.push_back(computationalLayer);
+		}
+
+		void SetLossLayer(LossBaseLayerPtr lossLayer) {
+			_lossNetworkLayer = lossLayer;
+		}
 
 		class NetworkReader {
-
 		public:
 			NetworkReader(const std::string jsonFilePath) {
 				_fp = fopen(jsonFilePath.c_str(), "rb");
@@ -180,6 +175,34 @@ namespace nexural {
 		InputNetworkLayer _inputNetworkLayer;
 		ComputationalNetworkLayers _computationalNetworkLyers;
 		LossNetworkLayer _lossNetworkLayer;
+	};
+
+	class NetTrainer {
+	public:
+		NetTrainer() : _learningRate(0.001), _weightDecay(0.001) { }
+
+		NetTrainer(const float learningRate, const float weightDecay) :
+		_learningRate(learningRate), _weightDecay(weightDecay) { }
+
+		~NetTrainer() {
+
+		}
+
+		void Train(Network& net) {
+			InitLayersForTraining(net);
+		}
+
+	private:
+		void InitLayersForTraining(Network& net) {
+			for (int i = 0; i < net._computationalNetworkLyers.size(); i++) {
+				net._computationalNetworkLyers[i]->SetupLayerForTraining();
+			}
+			net._lossNetworkLayer->SetupLayerForTraining();
+		}
+
+	private:
+		float _learningRate;
+		float _weightDecay;
 	};
 }
 #endif
