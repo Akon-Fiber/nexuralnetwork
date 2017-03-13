@@ -113,6 +113,21 @@ namespace nexural {
 		this->Resize(0, 0, 0, 0);
 	}
 
+	void Tensor::GetSample(const Tensor& tensor, const int i) {
+		Resize(1, tensor._k, tensor._nr, tensor._nc);
+
+		for (long k = 0; k < tensor.GetK(); k++)
+		{
+			for (long nr = 0; nr < tensor.GetNR(); nr++)
+			{
+				for (long nc = 0; nc < tensor.GetNC(); nc++)
+				{
+					_host.get()[(((tensor.GetK()) + k) * tensor.GetNR() + nr) * tensor.GetNC() + nc] = tensor[(((i * tensor.GetK()) + k) * tensor.GetNR() + nr) * tensor.GetNC() + nc];
+				}
+			}
+		}
+	}
+
 	LayerShape Tensor::GetShape() const {
 		return LayerShape(_numSamples, _k, _nr, _nc);
 	}

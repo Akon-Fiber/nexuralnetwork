@@ -26,7 +26,7 @@ OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 #define _NEXURALNET_DNN_LOSS_BASE_LAYER
 
 namespace nexural {
-	class LossBaseLayer : public ILayer, ILossLayer {
+	class LossBaseLayer : public ILayer, public ILossLayer {
 	public:
 		LossBaseLayer() { 
 		
@@ -41,7 +41,7 @@ namespace nexural {
 		}
 
 		virtual Tensor* GetOutput() {
-			return &_predictedData;
+			return &_outputData;
 		}
 
 		virtual Tensor* GetLayerErrors() {
@@ -56,7 +56,7 @@ namespace nexural {
 		LayerParams _layerParams;
 		LayerShape _inputShape;
 		LayerShape _outputShape;
-		Tensor _predictedData;
+		Tensor _outputData;
 		Tensor _layerErrors;
 	};
 	typedef std::shared_ptr<LossBaseLayer> LossBaseLayerPtr;

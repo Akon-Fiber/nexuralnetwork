@@ -78,6 +78,8 @@ namespace nexural {
 		long GetNC() const { return _nc; }
 		long Size() const { return _size; }
 
+		void GetSample(const Tensor& tensor, const int i);
+
 		LayerShape GetShape() const;
 
 	private:

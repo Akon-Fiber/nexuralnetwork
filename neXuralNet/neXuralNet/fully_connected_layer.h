@@ -118,8 +118,6 @@ namespace nexural {
 
 	private:
 		Tensor _internalInputData;
-		Tensor _weights;
-		Tensor _dWeights;
 		long _numOutputNeurons;
 	};
 }

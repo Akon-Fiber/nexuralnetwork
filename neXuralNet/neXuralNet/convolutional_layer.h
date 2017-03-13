@@ -69,10 +69,7 @@ namespace nexural {
 		}
 
 	private:
-		Tensor _weights;
 		Tensor _biases;
-		Tensor _gradient;
-		Tensor _delta;
 		long _num_of_filters;
 		long _kernel_width;
 		long _kernel_height;

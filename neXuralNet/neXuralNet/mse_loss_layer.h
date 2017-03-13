@@ -39,7 +39,7 @@ namespace nexural {
 		virtual void Setup(const LayerShape& prevLayerShape) {
 			_inputShape.Resize(prevLayerShape.GetNumSamples(), prevLayerShape.GetK(), prevLayerShape.GetNR(), prevLayerShape.GetNC());
 			_outputShape.Resize(prevLayerShape.GetNumSamples(), prevLayerShape.GetK(), prevLayerShape.GetNR(), prevLayerShape.GetNC());
-			_predictedData.Resize(_outputShape);
+			_outputData.Resize(_outputShape);
 		}
 
 		virtual void FeedForward(const Tensor& inputData) {
@@ -51,7 +51,7 @@ namespace nexural {
 					{
 						for (long nc = 0; nc < inputData.GetNC(); nc++)
 						{
-							_predictedData[(((numSamples * _predictedData.GetK()) + k) * _predictedData.GetNR() + nr) * _predictedData.GetNC() + nc] = inputData[(((numSamples * inputData.GetK()) + k) * inputData.GetNR() + nr) * inputData.GetNC() + nc];
+							_outputData[(((numSamples * _outputData.GetK()) + k) * _outputData.GetNR() + nr) * _outputData.GetNC() + nc] = inputData[(((numSamples * inputData.GetK()) + k) * inputData.GetNR() + nr) * inputData.GetNC() + nc];
 						}
 					}
 				}
@@ -59,10 +59,10 @@ namespace nexural {
 		}
 
 		virtual void SetupLayerForTraining() {
-
+			_layerErrors.Resize(_inputShape);
 		}
 
-		virtual void CalculateError() {
+		virtual void CalculateError(Tensor& targetData) {
 
 		}
 

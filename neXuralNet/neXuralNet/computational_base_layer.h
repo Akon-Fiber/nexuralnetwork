@@ -26,7 +26,7 @@ OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 #define _NEXURALNET_DNN_LAYERS_COMPUTATIONAL_BASE_LAYER
 
 namespace nexural {
-	class ComputationalBaseLayer : public ILayer, IComputationalLayer {
+	class ComputationalBaseLayer : public ILayer, public IComputationalLayer {
 	public:
 		ComputationalBaseLayer() { 
 		
@@ -52,12 +52,22 @@ namespace nexural {
 			return _outputShape;
 		}
 
+		virtual Tensor* GetLayerWeights() {
+			return &_weights;
+		}
+
+		virtual Tensor* GetLayerDWeights() {
+			return &_dWeights;
+		}
+
 	protected:
 		LayerParams _layerParams;
 		LayerShape _inputShape;
 		LayerShape _outputShape;
 		Tensor _outputData;
 		Tensor _layerErrors;
+		Tensor _weights;
+		Tensor _dWeights;
 	};
 	typedef std::shared_ptr<ComputationalBaseLayer> ComputationalBaseLayerPtr;
 }
