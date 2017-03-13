@@ -72,9 +72,6 @@
     <ClInclude Include="fully_connected_layer.h">
       <Filter>Source Files\dnn\layers\computational_layers</Filter>
     </ClInclude>
-    <ClInclude Include="tensor.h">
-      <Filter>Source Files\data_types</Filter>
-    </ClInclude>
     <ClInclude Include="data_types.h">
       <Filter>Source Files\data_types</Filter>
     </ClInclude>
@@ -134,6 +131,9 @@
     </ClInclude>
     <ClInclude Include="tensor_input_layer.h">
       <Filter>Source Files\dnn\layers\input_layers</Filter>
+    </ClInclude>
+    <ClInclude Include="tensor.h">
+      <Filter>Source Files\dnn</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

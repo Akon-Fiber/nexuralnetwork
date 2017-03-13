@@ -72,6 +72,7 @@ namespace nexural {
 		virtual void SetupLayerForTraining() {
 			_layerErrors.Resize(_inputShape);
 			_dWeights.Resize(_weights.GetShape());
+			_dWeights.Fill(0.0);
 		}
 
 		virtual void BackPropagate(const Tensor& prevLayerErrors) {

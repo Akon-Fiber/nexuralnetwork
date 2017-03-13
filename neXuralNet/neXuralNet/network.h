@@ -200,7 +200,7 @@ namespace nexural {
 
 			// Feedforward
 			for (int i = 0; i < trainingData.GetNumSamples(); i++) {
-				inputData.GetSample(trainingData, i);
+				inputData.GetBatch(trainingData, i);
 				net._inputNetworkLayer->LoadData(inputData);
 				Tensor *internalNetData = net._inputNetworkLayer->GetOutput();
 

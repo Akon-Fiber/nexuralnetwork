@@ -113,18 +113,31 @@ namespace nexural {
 		this->Resize(0, 0, 0, 0);
 	}
 
-	void Tensor::GetSample(const Tensor& tensor, const int i) {
-		Resize(1, tensor._k, tensor._nr, tensor._nc);
+	void Tensor::Fill(const float value) {
+		for (int i = 0; i < _size; i++) {
+			_host.get()[i] = value;
+		}
+	}
 
-		for (long k = 0; k < tensor.GetK(); k++)
-		{
-			for (long nr = 0; nr < tensor.GetNR(); nr++)
+	void Tensor::GetBatch(const Tensor& tensor, const long startIndex, const long batchSize) {
+		Resize(batchSize, tensor._k, tensor._nr, tensor._nc);
+
+		long numSampleUpper = (startIndex + batchSize) < tensor._numSamples ? (startIndex + batchSize) : tensor._numSamples;
+		long newNumSample = 0;
+
+		for (long numSample = startIndex; numSample < numSampleUpper; numSample++) {
+			for (long k = 0; k < tensor._k; k++)
 			{
-				for (long nc = 0; nc < tensor.GetNC(); nc++)
+				for (long nr = 0; nr < tensor._nr; nr++)
 				{
-					_host.get()[(((tensor.GetK()) + k) * tensor.GetNR() + nr) * tensor.GetNC() + nc] = tensor[(((i * tensor.GetK()) + k) * tensor.GetNR() + nr) * tensor.GetNC() + nc];
+					for (long nc = 0; nc < tensor._nc; nc++)
+					{
+						_host.get()[(((newNumSample * tensor._k) + k) * tensor._nr + nr) * tensor._nc + nc] =
+							tensor[(((numSample * tensor._k) + k) * tensor._nr + nr) * tensor._nc + nc];
+					}
 				}
 			}
+			newNumSample++;
 		}
 	}
 

@@ -46,12 +46,12 @@ namespace nexural {
 	public:
 		Tensor();
 		Tensor(long numSamples_, long k_, long nr_, long nc_);
-		explicit Tensor(const Tensor& t) = delete;
-		explicit Tensor(Tensor&& t) = delete;
-
-		Tensor& operator=(const Tensor&) = delete;
-		Tensor& operator=(Tensor&& item) = delete;
 		~Tensor();
+
+		explicit Tensor(const Tensor& tensor) = delete;
+		explicit Tensor(Tensor&& tensor) = delete;
+		Tensor& operator=(const Tensor& tensor) = delete;
+		Tensor& operator=(Tensor&& tensor) = delete;
 
 		typedef float* iterator;
 		typedef const float* const_iterator;
@@ -65,7 +65,7 @@ namespace nexural {
 		void Reshape(const long numSamples_, const long k_, const long nr_, const long nc_);
 		void Reshape(const LayerShape& layerShape);
 
-		const float operator [](long i) const { return _host.get()[i]; }
+		const float & operator [](long i) const { return _host.get()[i]; }
 		float & operator [](long i) { return _host.get()[i]; }
 
 		void ShareTensor(const Tensor& tensor);
@@ -78,8 +78,8 @@ namespace nexural {
 		long GetNC() const { return _nc; }
 		long Size() const { return _size; }
 
-		void GetSample(const Tensor& tensor, const int i);
-
+		void Fill(const float value);
+		void GetBatch(const Tensor& tensor, const long startIndex, const long batchSize = 1);
 		LayerShape GetShape() const;
 
 	private:
