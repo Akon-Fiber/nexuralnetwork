@@ -38,6 +38,11 @@ namespace nexural {
 
 		virtual void Setup(const LayerShape& prevLayerShape) {
 			_inputShape.Resize(prevLayerShape.GetNumSamples(), prevLayerShape.GetK(), prevLayerShape.GetNR(), prevLayerShape.GetNC());
+			
+			if (prevLayerShape.GetK() != 1) {
+				throw std::runtime_error("");
+			}
+
 			_outputShape.Resize(prevLayerShape.GetNumSamples(), prevLayerShape.GetK(), prevLayerShape.GetNR(), prevLayerShape.GetNC());
 			_outputData.Resize(_outputShape);
 		}
@@ -63,7 +68,33 @@ namespace nexural {
 		}
 
 		virtual void CalculateError(Tensor& targetData) {
+			_layerErrors.Fill(0);
+			float n = static_cast<float>(_outputData.GetNumSamples());
+			float factor = float(2) / n;
 
+			// Maybe move this validation
+			if (_outputData.GetK() ) {
+				throw std::runtime_error("");
+			}
+
+			for (long numSamples = 0; numSamples < _outputData.GetNumSamples(); numSamples++)
+			{
+				for (long k = 0; k < _outputData.GetK(); k++)
+				{
+					for (long nr = 0; nr < _outputData.GetNR(); nr++)
+					{
+						for (long nc = 0; nc < _outputData.GetNC(); nc++)
+						{
+							float error = targetData[(((numSamples * _outputData.GetK()) + k) * _outputData.GetNR() + nr) * _outputData.GetNC() + nc] - 
+								_outputData[(((numSamples * _outputData.GetK()) + k) * _outputData.GetNR() + nr) * _outputData.GetNC() + nc];
+
+
+							_layerErrors[(((numSamples * _outputData.GetK()) + k) * _outputData.GetNR() + nr) * _outputData.GetNC() + nc] += error;
+						}
+					}
+				}
+
+			}
 		}
 
 	private:
