@@ -28,68 +28,33 @@ OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 #include "input_layers.h"
 #include "computational_layers.h"
 #include "loss_layers.h"
-
 #include "data_to_tensor_converter.h"
+#include "network_trainer.h"
 
 #ifndef _NEXURALNET_DNN_NETWORK_NETWORK
 #define _NEXURALNET_DNN_NETWORK_NETWORK
 
 namespace nexural {
+
 	class Network {
-		friend class NetTrainer;
+		friend class NetworkTrainer;
 		typedef InputBaseLayerPtr InputNetworkLayer;
 		typedef std::vector<ComputationalBaseLayerPtr> ComputationalNetworkLayers;
 		typedef LossBaseLayerPtr LossNetworkLayer;
 
 	public:
 		Network() = delete;
+		Network(const std::string jsonFilePath);
+		~Network();
 
-		Network(const std::string jsonFilePath) {
-			NetworkReader netParser(jsonFilePath);
-			netParser.loadNetwork(*this);
-
-			LayerShape prevLayerShape = _inputNetworkLayer->GetOutputShape();
-			for (int i = 0; i < _computationalNetworkLyers.size(); i++) {
-				_computationalNetworkLyers[i]->Setup(prevLayerShape);
-				prevLayerShape = _computationalNetworkLyers[i]->GetOutputShape();
-			}
-			_lossNetworkLayer->Setup(prevLayerShape);
-		}
-
-		~Network() {
-
-		}
-
-		void Run(Tensor& inputData) {
-			_inputNetworkLayer->LoadData(inputData);
-			Tensor *internalNetData = _inputNetworkLayer->GetOutput();
-
-			for (int i = 0; i < _computationalNetworkLyers.size(); i++) {
-				_computationalNetworkLyers[i]->FeedForward(*internalNetData);
-				internalNetData = _computationalNetworkLyers[i]->GetOutput();	
-			}
-			
-			_lossNetworkLayer->FeedForward(*internalNetData);
-			internalNetData = _lossNetworkLayer->GetOutput();
-
-			// TODO: Delete this 
-			for (int i = 0; i < internalNetData->Size(); i++) {
-				std::cout << (*(&(*internalNetData)))[i] << std::endl;
-			}
-		}
+		void Run(Tensor& inputData);
 
 	private:
-		void SetInputLayer(InputBaseLayerPtr inputLayer) {
-			_inputNetworkLayer = inputLayer;
-		}
+		void SetInputLayer(InputBaseLayerPtr inputLayer);
 
-		void AddComputationalLayer(ComputationalBaseLayerPtr computationalLayer) {
-			_computationalNetworkLyers.push_back(computationalLayer);
-		}
+		void AddComputationalLayer(ComputationalBaseLayerPtr computationalLayer);
 
-		void SetLossLayer(LossBaseLayerPtr lossLayer) {
-			_lossNetworkLayer = lossLayer;
-		}
+		void SetLossLayer(LossBaseLayerPtr lossLayer);
 
 		class NetworkReader {
 		public:
@@ -145,9 +110,9 @@ namespace nexural {
 					else if (type_member == "gray_image_input") {
 						net.SetInputLayer(InputBaseLayerPtr(new nexural::GrayImageInputLayer(layerParams)));
 					}
-				    else if (type_member == "max_pooling") {
-					net.AddComputationalLayer(ComputationalBaseLayerPtr(new nexural::MaxPoolingLayer(layerParams)));
-				    }
+					else if (type_member == "max_pooling") {
+						net.AddComputationalLayer(ComputationalBaseLayerPtr(new nexural::MaxPoolingLayer(layerParams)));
+					}
 					else if (type_member == "average_pooling") {
 						net.AddComputationalLayer(ComputationalBaseLayerPtr(new nexural::AveragePoolingLayer(layerParams)));
 					}
@@ -175,71 +140,6 @@ namespace nexural {
 		InputNetworkLayer _inputNetworkLayer;
 		ComputationalNetworkLayers _computationalNetworkLyers;
 		LossNetworkLayer _lossNetworkLayer;
-	};
-
-	class NetTrainer {
-	public:
-		NetTrainer() : 
-			_learningRate(0.001),
-			_weightDecay(0.001),
-			_maxNumEpochs(10000){ }
-
-		NetTrainer(const float learningRate, const float weightDecay, const long maxNumEpochs) :
-			_learningRate(learningRate), 
-			_weightDecay(weightDecay),
-			_maxNumEpochs(maxNumEpochs){ }
-
-		~NetTrainer() {
-
-		}
-
-		void Train(Network& net, Tensor& trainingData, Tensor& targetData) {
-			InitLayersForTraining(net);
-			Tensor inputData;
-			Tensor *error;
-
-			// Feedforward
-			for (int i = 0; i < trainingData.GetNumSamples(); i++) {
-				inputData.GetBatch(trainingData, i);
-				net._inputNetworkLayer->LoadData(inputData);
-				Tensor *internalNetData = net._inputNetworkLayer->GetOutput();
-
-				for (int i = 0; i < net._computationalNetworkLyers.size(); i++) {
-					net._computationalNetworkLyers[i]->FeedForward(*internalNetData);
-					internalNetData = net._computationalNetworkLyers[i]->GetOutput();
-				}
-
-				net._lossNetworkLayer->FeedForward(*internalNetData);
-			}
-
-			// Calculate the error
-			net._lossNetworkLayer->CalculateError(targetData);
-			error = net._lossNetworkLayer->GetLayerErrors();
-
-			// Backpropagate
-			for (int i = net._computationalNetworkLyers.size(); i > 0; i--) {
-				net._computationalNetworkLyers[i]->BackPropagate(*error);
-				error = net._computationalNetworkLyers[i]->GetLayerErrors();
-
-				// Update the weights
-
-
-			}
-
-		}
-
-	private:
-		void InitLayersForTraining(Network& net) {
-			for (int i = 0; i < net._computationalNetworkLyers.size(); i++) {
-				net._computationalNetworkLyers[i]->SetupLayerForTraining();
-			}
-			net._lossNetworkLayer->SetupLayerForTraining();
-		}
-
-	private:
-		float _learningRate;
-		float _weightDecay;
-		long _maxNumEpochs;
 	};
 }
 #endif

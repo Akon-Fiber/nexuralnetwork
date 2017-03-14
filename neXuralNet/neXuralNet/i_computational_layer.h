@@ -30,7 +30,9 @@ namespace nexural {
 		virtual ~IComputationalLayer() { }
 		virtual void BackPropagate(const Tensor& prevLayerErrors) = 0;
 		virtual Tensor* GetLayerWeights() = 0;
-		virtual Tensor* GetLayerDWeights() = 0;
+		virtual Tensor* GetLayerDWeights() = 0; 
+		virtual Tensor* GetLayerBiases() = 0;
+		virtual Tensor* GetLayerDBiases() = 0;
 	};
 }
 #endif

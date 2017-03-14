@@ -30,6 +30,7 @@ namespace nexural {
 	public:
 		FullyConnectedLayer(const LayerParams &layerParams) : ComputationalBaseLayer(layerParams) {
 			_numOutputNeurons = parser::ParseLong(_layerParams, "neurons");
+			_has_bias = parser::ParseBool(_layerParams, "has_bias");
 		}
 
 		~FullyConnectedLayer() {
@@ -40,8 +41,12 @@ namespace nexural {
 			_inputShape.Resize(prevLayerShape);
 			_outputShape.Resize(_inputShape.GetNumSamples(), 1, 1, _numOutputNeurons);
 			_outputData.Resize(_outputShape);
-			_weights.Resize(_inputShape.GetNumSamples(), 1, _numOutputNeurons, (_inputShape.GetK() * _inputShape.GetNR() * _inputShape.GetNC()));
-			Utils::GenerateRandomWeights(_weights);
+			_weights.Resize(1, 1, _numOutputNeurons, (_inputShape.GetK() * _inputShape.GetNR() * _inputShape.GetNC()));
+			_weights.FillRandom();
+			if (_has_bias) {
+				_biases.Resize(1, 1, 1, _numOutputNeurons);
+				_biases.FillRandom();
+			}
 		}
 
 		virtual void FeedForward(const Tensor& inputData) {
@@ -59,12 +64,16 @@ namespace nexural {
 							{
 								float inputValue = inputData[(((numSamples * inputData.GetK()) + k) * inputData.GetNR() + nr) * inputData.GetNC() + nc];
 								float testInputValue = _internalInputData[(((numSamples * _internalInputData.GetK()) + k) * _internalInputData.GetNR() + nr) * _internalInputData.GetNC() + nc];
-								float weightValue = _weights[(numSamples * _weights.GetNR() + n) * _weights.GetNC() + ((k * inputData.GetNR() + nr) * inputData.GetNC() + nc)];
+								float weightValue = _weights[(_weights.GetNR() + n) * _weights.GetNC() + ((k * inputData.GetNR() + nr) * inputData.GetNC() + nc)];
 								neuronCalculatedValue += inputValue * weightValue;
 							}
 						}
 					}
-					_outputData[numSamples * inputData.GetNC() + n] = neuronCalculatedValue;
+					if (_has_bias) {
+						_outputData[numSamples * inputData.GetNC() + n] = neuronCalculatedValue + _biases[n];
+					} else {
+						_outputData[numSamples * inputData.GetNC() + n] = neuronCalculatedValue;
+					}
 				}
 			}
 		}
@@ -73,6 +82,8 @@ namespace nexural {
 			_layerErrors.Resize(_inputShape);
 			_dWeights.Resize(_weights.GetShape());
 			_dWeights.Fill(0.0);
+			_dBiases.Resize(_biases.GetShape());
+			_dBiases.Fill(0.0);
 		}
 
 		virtual void BackPropagate(const Tensor& prevLayerErrors) {
@@ -89,7 +100,7 @@ namespace nexural {
 							for (long nc = 0; nc < _dWeights.GetNC(); nc++)
 							{
 								float value = _internalInputData[(((numSamples * _internalInputData.GetK()) + k) * _internalInputData.GetNR() + nr) * _internalInputData.GetNC() + nc];
-								_dWeights[(((numSamples * _dWeights.GetK()) + k) * _dWeights.GetNR() + nr) * _dWeights.GetNC() + nc] = value * error;
+								_dWeights[(((numSamples * _dWeights.GetK()) + k) * _dWeights.GetNR() + nr) * _dWeights.GetNC() + nc] += value * error;
 							}
 						}
 					}
@@ -108,7 +119,7 @@ namespace nexural {
 						{
 							for (long nc = 0; nc < _dWeights.GetNC(); nc++)
 							{
-								float value = _weights[(((numSamples * _weights.GetK()) + k) * _weights.GetNR() + nr) * _weights.GetNC() + nc];
+								float value = _weights[(((_weights.GetK()) + k) * _weights.GetNR() + nr) * _weights.GetNC() + nc];
 								_layerErrors[(((numSamples * _layerErrors.GetK()) + k) * _layerErrors.GetNR() + nr) * _layerErrors.GetNC() + nc] = value * error;
 							}
 						}
@@ -120,6 +131,7 @@ namespace nexural {
 	private:
 		Tensor _internalInputData;
 		long _numOutputNeurons;
+		bool _has_bias;
 	};
 }
 #endif

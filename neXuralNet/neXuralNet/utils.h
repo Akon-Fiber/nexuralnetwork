@@ -32,13 +32,6 @@ OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
 namespace nexural {
 	namespace Utils {
-		static void GenerateRandomWeights(Tensor& tensor) {
-			std::random_device rd;
-			std::mt19937 gen(rd());
-			std::uniform_real_distribution<> dis(-1, 1);
-			std::generate(tensor.begin(), tensor.end(), [&]() { return dis(gen); });
-		}
-
 		static void RandomBinomialDistribution(Tensor& tensor) {
 			std::default_random_engine generator;
 			std::binomial_distribution<int> distribution(1, 0.5);

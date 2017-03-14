@@ -20,6 +20,8 @@ OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 */
 
 #include "tensor.h"
+#include <algorithm>
+#include <random>
 
 namespace nexural {
 	Tensor::Tensor() : 
@@ -117,6 +119,13 @@ namespace nexural {
 		for (int i = 0; i < _size; i++) {
 			_host.get()[i] = value;
 		}
+	}
+
+	void Tensor::FillRandom() {
+		std::random_device rd;
+		std::mt19937 gen(rd());
+		std::uniform_real_distribution<> dis(-1, 1);
+		std::generate(begin(), end(), [&]() { return dis(gen); });
 	}
 
 	void Tensor::GetBatch(const Tensor& tensor, const long startIndex, const long batchSize) {

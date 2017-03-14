@@ -50,7 +50,7 @@ namespace nexural {
 				(((_inputShape.GetNC() - _kernel_width - (2 * _padding_width)) / _stride_width) + 1));
 			_outputData.Resize(_outputShape);
 			_weights.Resize(_num_of_filters, _inputShape.GetK(), _kernel_height, _kernel_width);
-			Utils::GenerateRandomWeights(_weights);
+			_weights.FillRandom();
 			if (_has_bias) {
 				_biases.Resize(1, 1, 1, _num_of_filters);
 			}
@@ -69,7 +69,6 @@ namespace nexural {
 		}
 
 	private:
-		Tensor _biases;
 		long _num_of_filters;
 		long _kernel_width;
 		long _kernel_height;

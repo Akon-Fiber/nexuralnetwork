@@ -49,6 +49,12 @@
     <Filter Include="Source Files\dnn\layers\input_layers\common">
       <UniqueIdentifier>{cdb643bb-4b25-4377-a191-81a38ae28f86}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source Files\dnn\solvers">
+      <UniqueIdentifier>{9b1387ce-be3f-40e2-be1d-a2b10ed1dc77}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\dnn\solvers\common">
+      <UniqueIdentifier>{dffe9103-880c-48ae-a8c5-074dbd82eb6b}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="network.h">
@@ -135,6 +141,24 @@
     <ClInclude Include="tensor.h">
       <Filter>Source Files\dnn</Filter>
     </ClInclude>
+    <ClInclude Include="network_trainer.h">
+      <Filter>Source Files\dnn\network</Filter>
+    </ClInclude>
+    <ClInclude Include="i_solver.h">
+      <Filter>Source Files\dnn\solvers\common</Filter>
+    </ClInclude>
+    <ClInclude Include="base_solver.h">
+      <Filter>Source Files\dnn\solvers\common</Filter>
+    </ClInclude>
+    <ClInclude Include="momentum.h">
+      <Filter>Source Files\dnn\solvers\common</Filter>
+    </ClInclude>
+    <ClInclude Include="sgd.h">
+      <Filter>Source Files\dnn\solvers\common</Filter>
+    </ClInclude>
+    <ClInclude Include="solvers.h">
+      <Filter>Source Files\dnn\solvers</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Source.cpp">
@@ -142,6 +166,12 @@
     </ClCompile>
     <ClCompile Include="tensor.cpp">
       <Filter>Source Files\data_types</Filter>
+    </ClCompile>
+    <ClCompile Include="network.cpp">
+      <Filter>Source Files\dnn\network</Filter>
+    </ClCompile>
+    <ClCompile Include="network_trainer.cpp">
+      <Filter>Source Files\dnn\network</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

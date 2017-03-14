@@ -19,34 +19,16 @@ TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE
 OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 */
 
-#include <iostream>
+#include "tensor.h"
 
-#include <opencv2\core\core.hpp>
-#include <opencv2\highgui\highgui.hpp>
-#include <boost/filesystem/operations.hpp>
-#include <boost/filesystem/path.hpp>
+#ifndef _NEXURALNET_DNN_I_SOLVER
+#define _NEXURALNET_DNN_I_SOLVER
 
-#include "network.h"
-
-int main(int argc, char* argv[]) {
-	try {
-		boost::filesystem::path full_path(boost::filesystem::initial_path<boost::filesystem::path>());
-		full_path = boost::filesystem::system_complete(boost::filesystem::path(argv[0]));
-		std::string configFilePath = full_path.parent_path().string() + "\\network.json";
-		cv::Mat sourceImage = cv::imread(full_path.parent_path().parent_path().parent_path().parent_path().string() + "\\TestImages\\cat_3.png");
-
-		nexural::Tensor inputImageData;
-		nexural::Network net(configFilePath);
-		nexural::DataToTensorConverter::Convert(sourceImage, inputImageData);
-		net.Run(inputImageData);
-
-		nexural::NetworkTrainer sss;
-	}
-	catch (std::exception stdEx) {
-		std::cout << stdEx.what() << std::endl;
-	}
-	catch (...) {
-		std::cout << "Something unexpected happened while running the network!" << std::endl;
-	}
-	return 0;
+namespace nexural {
+	class ISolver {
+	public:
+		virtual ~ISolver() { }
+		virtual void Update(Tensor& weights, const Tensor& dWeights) = 0;
+	};
 }
+#endif

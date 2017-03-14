@@ -19,66 +19,30 @@ TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE
 OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 */
 
-#include "i_layer.h"
-#include "i_computational_layer.h"
+#include "i_solver.h"
 
-#ifndef _NEXURALNET_DNN_LAYERS_COMPUTATIONAL_BASE_LAYER
-#define _NEXURALNET_DNN_LAYERS_COMPUTATIONAL_BASE_LAYER
+#ifndef _NEXURALNET_DNN_BASE_SOLVER
+#define _NEXURALNET_DNN_BASE_SOLVER
 
 namespace nexural {
-	class ComputationalBaseLayer : public ILayer, public IComputationalLayer {
+	class BaseSolver : public ISolver {
 	public:
-		ComputationalBaseLayer() { 
-		
+		BaseSolver() {
+
 		}
 
-		ComputationalBaseLayer(const LayerParams &layerParams) {
-			_layerParams = layerParams;
+		virtual ~BaseSolver() {
+
 		}
 
-		virtual ~ComputationalBaseLayer() { 
-		
-		}
+		virtual void Update(Tensor& weights, const Tensor& dWeights) {
 
-		virtual Tensor* GetOutput() {
-			return &_outputData;
-		}
-
-		virtual Tensor* GetLayerErrors() {
-			return &_layerErrors;
-		}
-
-		virtual LayerShape GetOutputShape() {
-			return _outputShape;
-		}
-
-		virtual Tensor* GetLayerWeights() {
-			return &_weights;
-		}
-
-		virtual Tensor* GetLayerDWeights() {
-			return &_dWeights;
-		}
-
-		virtual Tensor* GetLayerBiases() {
-			return &_biases;
-		}
-
-		virtual Tensor* GetLayerDBiases() {
-			return &_dBiases;
 		}
 
 	protected:
-		LayerParams _layerParams;
-		LayerShape _inputShape;
-		LayerShape _outputShape;
-		Tensor _outputData;
-		Tensor _layerErrors;
-		Tensor _weights;
-		Tensor _dWeights;
-		Tensor _biases;
-		Tensor _dBiases;
+		float _learningRate;
+		float _weightDecay;
 	};
-	typedef std::shared_ptr<ComputationalBaseLayer> ComputationalBaseLayerPtr;
+	typedef std::shared_ptr<BaseSolver> BaseSolverPtr;
 }
 #endif 

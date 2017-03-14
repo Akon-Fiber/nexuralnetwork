@@ -17,7 +17,8 @@
 		{
 		    "type": "fully_connected",
 			"params": {
-				"neurons" : "2"
+				"neurons" : "2",
+				"has_bias" : "false"
 			}	
 	    },
 	    {

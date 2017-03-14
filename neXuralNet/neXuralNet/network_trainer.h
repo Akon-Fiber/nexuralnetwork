@@ -19,34 +19,40 @@ TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE
 OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 */
 
-#include <iostream>
+#include "tensor.h"
+#include "solvers.h"
 
-#include <opencv2\core\core.hpp>
-#include <opencv2\highgui\highgui.hpp>
-#include <boost/filesystem/operations.hpp>
-#include <boost/filesystem/path.hpp>
+#ifndef _NEXURALNET_DNN_NETWORK_NETWORK_TRAINNER
+#define _NEXURALNET_DNN_NETWORK_NETWORK_TRAINNER
 
-#include "network.h"
+namespace nexural {
+	// Forward declaration
+	class Network;
 
-int main(int argc, char* argv[]) {
-	try {
-		boost::filesystem::path full_path(boost::filesystem::initial_path<boost::filesystem::path>());
-		full_path = boost::filesystem::system_complete(boost::filesystem::path(argv[0]));
-		std::string configFilePath = full_path.parent_path().string() + "\\network.json";
-		cv::Mat sourceImage = cv::imread(full_path.parent_path().parent_path().parent_path().parent_path().string() + "\\TestImages\\cat_3.png");
+	class NetworkTrainer {
+		typedef BaseSolverPtr NetSolver;
 
-		nexural::Tensor inputImageData;
-		nexural::Network net(configFilePath);
-		nexural::DataToTensorConverter::Convert(sourceImage, inputImageData);
-		net.Run(inputImageData);
+	public:
+		NetworkTrainer() :
+			_maxNumEpochs(10000),
+			_minLearningRate(0.00001),
+			_miniBatchSize(1),
+			_solver(std::make_shared<BaseSolver>(Momentum()))
+		{ };
 
-		nexural::NetworkTrainer sss;
-	}
-	catch (std::exception stdEx) {
-		std::cout << stdEx.what() << std::endl;
-	}
-	catch (...) {
-		std::cout << "Something unexpected happened while running the network!" << std::endl;
-	}
-	return 0;
+		~NetworkTrainer();
+
+		void Train(Network& net, Tensor& trainingData, Tensor& targetData);
+
+	private:
+		void InitLayersForTraining(Network& net);
+		void ResetLayersGradients(Network& net);
+
+	private:
+		long _maxNumEpochs; 
+		float _minLearningRate;
+		float _miniBatchSize;
+		NetSolver _solver;
+	};
 }
+#endif

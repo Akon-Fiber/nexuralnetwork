@@ -131,6 +131,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="average_pooling_layer.h" />
+    <ClInclude Include="base_solver.h" />
     <ClInclude Include="computational_layers.h" />
     <ClInclude Include="convolutional_layer.h" />
     <ClInclude Include="data_parser.h" />
@@ -145,21 +146,28 @@
     <ClInclude Include="i_input_layer.h" />
     <ClInclude Include="i_layer.h" />
     <ClInclude Include="i_loss_layer.h" />
+    <ClInclude Include="i_solver.h" />
     <ClInclude Include="loss_base_layer.h" />
     <ClInclude Include="loss_functions.h" />
     <ClInclude Include="loss_layers.h" />
+    <ClInclude Include="momentum.h" />
     <ClInclude Include="mse_loss_layer.h" />
     <ClInclude Include="max_pooling_layer.h" />
     <ClInclude Include="network.h" />
     <ClInclude Include="bgr_image_input_layer.h" />
     <ClInclude Include="data_to_tensor_converter.h" />
     <ClInclude Include="gray_image_input_layer.h" />
+    <ClInclude Include="network_trainer.h" />
     <ClInclude Include="relu_layer.h" />
+    <ClInclude Include="sgd.h" />
+    <ClInclude Include="solvers.h" />
     <ClInclude Include="tensor.h" />
     <ClInclude Include="tensor_input_layer.h" />
     <ClInclude Include="utils.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="network.cpp" />
+    <ClCompile Include="network_trainer.cpp" />
     <ClCompile Include="Source.cpp" />
     <ClCompile Include="tensor.cpp" />
   </ItemGroup>

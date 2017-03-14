@@ -19,66 +19,38 @@ TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE
 OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 */
 
-#include "i_layer.h"
-#include "i_computational_layer.h"
+#include "base_solver.h"
 
-#ifndef _NEXURALNET_DNN_LAYERS_COMPUTATIONAL_BASE_LAYER
-#define _NEXURALNET_DNN_LAYERS_COMPUTATIONAL_BASE_LAYER
+#ifndef _NEXURALNET_DNN_SOLVERS_MOMENTUM
+#define _NEXURALNET_DNN_SOLVERS_MOMENTUM
 
 namespace nexural {
-	class ComputationalBaseLayer : public ILayer, public IComputationalLayer {
+	class Momentum : public BaseSolver {
 	public:
-		ComputationalBaseLayer() { 
-		
+		Momentum() : BaseSolver(), 
+			_mu(0.9) { }
+
+		~Momentum() {
+
 		}
 
-		ComputationalBaseLayer(const LayerParams &layerParams) {
-			_layerParams = layerParams;
+		virtual void Update(Tensor& weights, const Tensor& dWeights) {
+			// float_t V = mu * V - learning_rate * (dW[i] + W[i] * weight_decay);
+			// W[i] += V;
+
+			// Classical momentum :
+			// vW(t + 1) = momentum*Vw(t) - learning_rate*gradient_F(W(t))
+			//	W(t + 1) = W(t) + vW(t + 1)
+
+			/*float v;
+			for (int i = 0; i < weights.Size(); i++) {
+				v = _mu * v - _learningRate * dWeights[i];
+				weights[i] = weights[i] + v;
+			}*/
 		}
 
-		virtual ~ComputationalBaseLayer() { 
-		
-		}
-
-		virtual Tensor* GetOutput() {
-			return &_outputData;
-		}
-
-		virtual Tensor* GetLayerErrors() {
-			return &_layerErrors;
-		}
-
-		virtual LayerShape GetOutputShape() {
-			return _outputShape;
-		}
-
-		virtual Tensor* GetLayerWeights() {
-			return &_weights;
-		}
-
-		virtual Tensor* GetLayerDWeights() {
-			return &_dWeights;
-		}
-
-		virtual Tensor* GetLayerBiases() {
-			return &_biases;
-		}
-
-		virtual Tensor* GetLayerDBiases() {
-			return &_dBiases;
-		}
-
-	protected:
-		LayerParams _layerParams;
-		LayerShape _inputShape;
-		LayerShape _outputShape;
-		Tensor _outputData;
-		Tensor _layerErrors;
-		Tensor _weights;
-		Tensor _dWeights;
-		Tensor _biases;
-		Tensor _dBiases;
+	private:
+		float _mu;
 	};
-	typedef std::shared_ptr<ComputationalBaseLayer> ComputationalBaseLayerPtr;
 }
-#endif 
+#endif
