@@ -135,6 +135,7 @@
     <ClInclude Include="computational_layers.h" />
     <ClInclude Include="convolutional_layer.h" />
     <ClInclude Include="data_parser.h" />
+    <ClInclude Include="data_reader.h" />
     <ClInclude Include="data_types.h" />
     <ClInclude Include="dropout_layer.h" />
     <ClInclude Include="exceptions.h" />

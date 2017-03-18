@@ -91,5 +91,7 @@ namespace nexural {
 		long _nc;
 		long _size;
 	};
+
+	typedef std::vector<Tensor> TensorCollection;
 }
 #endif

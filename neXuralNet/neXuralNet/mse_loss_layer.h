@@ -37,7 +37,7 @@ namespace nexural {
 		}
 
 		virtual void Setup(const LayerShape& prevLayerShape) {
-			if (prevLayerShape.GetK() != 1 || prevLayerShape.GetNR != 1) {
+			if (prevLayerShape.GetK() != 1 || prevLayerShape.GetNR() != 1) {
 				throw std::runtime_error("");
 			}
 			_inputShape.Resize(prevLayerShape.GetNumSamples(), 1, 1, prevLayerShape.GetNC());

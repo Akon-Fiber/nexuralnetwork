@@ -35,14 +35,14 @@ namespace nexural {
 	public:
 		NetworkTrainer() :
 			_maxNumEpochs(10000),
-			_minLearningRate(0.00001),
+			_minLearningRate(0.00001f),
 			_miniBatchSize(1),
 			_solver(std::make_shared<BaseSolver>(Momentum()))
 		{ };
 
 		~NetworkTrainer();
 
-		void Train(Network& net, Tensor& trainingData, Tensor& targetData);
+		void Train(Network& net, Tensor& trainingData, Tensor& targetData, const long batchSize = 1);
 
 	private:
 		void InitLayersForTraining(Network& net);

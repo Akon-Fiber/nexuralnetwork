@@ -28,40 +28,41 @@ namespace nexural {
 
 	}
 
-	void NetworkTrainer::Train(Network& net, Tensor& trainingData, Tensor& targetData) {
+	void NetworkTrainer::Train(Network& net, Tensor& trainingData, Tensor& targetData, const long batchSize) {
 		InitLayersForTraining(net);
 		Tensor input, target;
 		Tensor *error, *weights, *dWeights;
 
-		// Feedforward
-		for (int i = 0; i < trainingData.GetNumSamples(); i++) {
-			input.GetBatch(trainingData, i);
+		for (int i = 0; i < trainingData.GetNumSamples(); i += batchSize) {
+			input.GetBatch(trainingData, i, batchSize);
+			target.GetBatch(targetData, i, batchSize);
+
 			net._inputNetworkLayer->LoadData(input);
 			Tensor *internalNetData = net._inputNetworkLayer->GetOutput();
 
+			// Feedforward the error
 			for (int i = 0; i < net._computationalNetworkLyers.size(); i++) {
 				net._computationalNetworkLyers[i]->FeedForward(*internalNetData);
 				internalNetData = net._computationalNetworkLyers[i]->GetOutput();
 			}
 			net._lossNetworkLayer->FeedForward(*internalNetData);
-		}
 
-		// Calculate the total error
-		//target.GetBatch(targetData, i);
-		net._lossNetworkLayer->CalculateError(targetData);
-		error = net._lossNetworkLayer->GetLayerErrors();
+			// Calculate the total error
+			net._lossNetworkLayer->CalculateError(targetData);
+			error = net._lossNetworkLayer->GetLayerErrors();
 
-		// Backpropagate
-		for (int i = net._computationalNetworkLyers.size(); i > 0; i--) {
-			net._computationalNetworkLyers[i]->BackPropagate(*error);
-			error = net._computationalNetworkLyers[i]->GetLayerErrors();
-		}
+			// Backpropagate the error
+			for (size_t i = net._computationalNetworkLyers.size(); i > 0; i--) {
+				net._computationalNetworkLyers[i]->BackPropagate(*error);
+				error = net._computationalNetworkLyers[i]->GetLayerErrors();
+			}
 
-		// Update the weights
-		for (int i = net._computationalNetworkLyers.size(); i > 0; i--) {
-			weights = net._computationalNetworkLyers[i]->GetLayerWeights();
-			dWeights = net._computationalNetworkLyers[i]->GetLayerDWeights();
-			_solver->Update(*weights, *dWeights);
+			// Update the weights
+			for (size_t i = net._computationalNetworkLyers.size(); i > 0; i--) {
+				weights = net._computationalNetworkLyers[i]->GetLayerWeights();
+				dWeights = net._computationalNetworkLyers[i]->GetLayerDWeights();
+				_solver->Update(*weights, *dWeights);
+			}
 		}
 	}
 

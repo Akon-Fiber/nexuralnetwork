@@ -28,7 +28,7 @@ namespace nexural {
 	class Momentum : public BaseSolver {
 	public:
 		Momentum() : BaseSolver(), 
-			_mu(0.9) { }
+			_mu(0.9f) { }
 
 		~Momentum() {
 

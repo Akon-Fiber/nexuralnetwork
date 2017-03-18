@@ -159,6 +159,9 @@
     <ClInclude Include="tensor.h">
       <Filter>Source Files\data_types</Filter>
     </ClInclude>
+    <ClInclude Include="data_reader.h">
+      <Filter>Source Files\utility</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Source.cpp">

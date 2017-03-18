@@ -20,30 +20,33 @@ OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 */
 
 #include <opencv2\core\core.hpp>
-#include "tensor.h"
-#include "data_parser.h"
+#include <opencv2\highgui\highgui.hpp>
 
-#ifndef _NEXURALNET_UTILITY_DATA_TO_TENSOR_CONVERTER
-#define _NEXURALNET_UTILITY_DATA_TO_TENSOR_CONVERTER
+#include "tensor.h"
+#include "data_to_tensor_converter.h"
+
+#ifndef _NEXURALNET_UTILITY_READER_H
+#define _NEXURALNET_UTILITY_READER_H
 
 namespace nexural {
-	class DataToTensorConverter {
+	class DataReader {
 	public:
-		static void Convert(const cv::Mat& sourceImage, Tensor& outputData) {
-			outputData.Resize(1, sourceImage.channels(), sourceImage.rows, sourceImage.cols);
+		enum class ReadImageType {
+			COLOR,
+			GRAY
+		};
+	
+		static void ReadImagesFromDirectory(const std::string directoryPath, TensorCollection& tensorCollection, ReadImageType imagesType = ReadImageType::COLOR) {
+			auto readType = imagesType == ReadImageType::COLOR ? cv::IMREAD_COLOR : cv::IMREAD_GRAYSCALE;
+			std::vector<cv::String> fn;
+			cv::glob("/home/images/*.png", fn, false);
 
-			for (long nr = 0; nr < outputData.GetNR(); nr++)
-			{
-				for (long nc = 0; nc < outputData.GetNC(); nc++)
-				{
-					cv::Vec3b intensity = sourceImage.at<cv::Vec3b>(nr, nc);
-					for (long k = 0; k < outputData.GetK(); k++) {
-						uchar col = intensity.val[k];
-						outputData[((outputData.GetK() + k) * outputData.GetNR() + nr) * outputData.GetNC() + nc] = col;
-					}
-				}
+			for (long i = 0; i < fn.size(); i++) {
+				cv::Mat image = cv::imread(fn[i], readType);
+				Tensor tensor;
+				DataToTensorConverter::Convert(image, tensor);
+				tensorCollection.push_back(tensor);
 			}
-
 		}
 	};
 }
