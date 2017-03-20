@@ -21,3 +21,4 @@ OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
 #include "bgr_image_input_layer.h"
 #include "gray_image_input_layer.h"
+#include "tensor_input_layer.h"

@@ -177,10 +177,6 @@
     <None Include="..\ConfigFiles\network.json" />
     <None Include="packages.config" />
   </ItemGroup>
-  <ItemGroup>
-    <Text Include="..\ConfigFiles\TrainingData\xor\inputData.txt" />
-    <Text Include="..\ConfigFiles\TrainingData\xor\target.txt" />
-  </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
     <Import Project="..\packages\boost.1.63.0.0\build\native\boost.targets" Condition="Exists('..\packages\boost.1.63.0.0\build\native\boost.targets')" />

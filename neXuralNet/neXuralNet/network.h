@@ -30,6 +30,7 @@ OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 #include "loss_layers.h"
 #include "data_to_tensor_converter.h"
 #include "network_trainer.h"
+#include "data_reader.h"
 
 #ifndef _NEXURALNET_DNN_NETWORK_NETWORK
 #define _NEXURALNET_DNN_NETWORK_NETWORK
@@ -109,6 +110,9 @@ namespace nexural {
 					}
 					else if (type_member == "gray_image_input") {
 						net.SetInputLayer(InputBaseLayerPtr(new nexural::GrayImageInputLayer(layerParams)));
+					}
+					else if (type_member == "tensor_input") {
+						net.SetInputLayer(InputBaseLayerPtr(new nexural::TensorInputLayer(layerParams)));
 					}
 					else if (type_member == "max_pooling") {
 						net.AddComputationalLayer(ComputationalBaseLayerPtr(new nexural::MaxPoolingLayer(layerParams)));

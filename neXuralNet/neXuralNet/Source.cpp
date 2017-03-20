@@ -30,17 +30,25 @@ OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
 int main(int argc, char* argv[]) {
 	try {
+		nexural::Tensor inputData, trainingData, targetData, inputImageData;
 		boost::filesystem::path full_path(boost::filesystem::initial_path<boost::filesystem::path>());
 		full_path = boost::filesystem::system_complete(boost::filesystem::path(argv[0]));
 		std::string configFilePath = full_path.parent_path().string() + "\\network.json";
-		cv::Mat sourceImage = cv::imread(full_path.parent_path().parent_path().parent_path().parent_path().string() + "\\TestImages\\cat_3.png");
+		//cv::Mat sourceImage = cv::imread(full_path.parent_path().parent_path().parent_path().parent_path().string() + "\\TestingData\\cat_3.png");
+		// nexural::DataToTensorConverter::Convert(sourceImage, inputImageData);
 
-		nexural::Tensor inputImageData;
+		std::string trainingDataPath = full_path.parent_path().parent_path().parent_path().parent_path().string() + "\\TrainingData\\xor\\trainingData.txt";
+		std::string targetDataPath = full_path.parent_path().parent_path().parent_path().parent_path().string() + "\\TrainingData\\xor\\targetData.txt";
+		std::string inputDataPath = full_path.parent_path().parent_path().parent_path().parent_path().string() + "\\TestingData\\xor_inputData.txt";
+
+		nexural::DataReader::ReadTensorFromFile(trainingDataPath, trainingData);
+		nexural::DataReader::ReadTensorFromFile(targetDataPath, targetData);
+		nexural::DataReader::ReadTensorFromFile(inputDataPath, inputData);
+
 		nexural::Network net(configFilePath);
-		nexural::DataToTensorConverter::Convert(sourceImage, inputImageData);
-		net.Run(inputImageData);
-
-		nexural::NetworkTrainer sss;
+		nexural::NetworkTrainer netTrainer;
+		netTrainer.Train(net, trainingData, targetData);
+		//net.Run(inputImageData);
 	}
 	catch (std::exception stdEx) {
 		std::cout << stdEx.what() << std::endl;
