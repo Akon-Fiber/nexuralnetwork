@@ -68,6 +68,10 @@ namespace nexural {
 			return &_dBiases;
 		}
 
+		virtual bool HasBias() {
+			return _hasBias;
+		}
+
 	protected:
 		LayerParams _layerParams;
 		LayerShape _inputShape;
@@ -78,6 +82,7 @@ namespace nexural {
 		Tensor _dWeights;
 		Tensor _biases;
 		Tensor _dBiases;
+		bool _hasBias;
 	};
 	typedef std::shared_ptr<ComputationalBaseLayer> ComputationalBaseLayerPtr;
 }

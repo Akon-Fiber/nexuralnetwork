@@ -1,59 +1,71 @@
 {
-	"NetworkLayers" :   [
-		{
-		    "type": "bgr_image_input",
-			"params": {
-				"input_width" : "3",
-				"input_height" : "3"
-			}
-		},
-		{
-		 	"type": "average_pooling",
-			"params": {
-				"kernel_width" : "2",
-				"kernel_height" : "2"
-			}
-		},
-		{
-		    "type": "max_pooling",
-			"params": {
-				"kernel_width" : "3",
-				"kernel_height" : "2"
-			}
-		},
-	    {
-		    "type": "convolutional",
-			"params": {
-				"num_of_filters" : "5",
-				"kernel_width" : "2",
-				"kernel_height" : "2",
-				"padding_width" : "2",
-				"padding_height" : "2",
-				"stride_width" : "2",
-				"stride_height" : "2",
-				"has_bias" : "false"
-			}
-		},
-		{
-		   "type": "dropout",
-			"params": {
+  "NetworkLayers": [
+    {
+      "type": "bgr_image_input",
+      "params": {
+        "input_width": "3",
+        "input_height": "3"
+      }
+    },
+    {
+      "type": "average_pooling",
+      "params": {
+        "kernel_width": "2",
+        "kernel_height": "2"
+      }
+    },
+    {
+      "type": "max_pooling",
+      "params": {
+        "kernel_width": "3",
+        "kernel_height": "2"
+      }
+    },
+    {
+      "type": "convolutional",
+      "params": {
+        "num_of_filters": "5",
+        "kernel_width": "2",
+        "kernel_height": "2",
+        "padding_width": "2",
+        "padding_height": "2",
+        "stride_width": "2",
+        "stride_height": "2",
+        "has_bias": "false"
+      }
+    },
+    {
+      "type": "relu",
+      "params": {
 
-			}
-		},
-		{
-		    "type": "fully_connected",
-			"params": {
-				"neurons" : "10",
-				"has_bias" : "false"
-			}
-		},
-		{
-		    "type": "mse",
-			"params": {
-				
-			}	
-	    }
-	],
+      }
+    },
+    {
+      "type": "dropout",
+      "params": {
+
+      }
+    },
+    {
+      "type": "fully_connected",
+      "params": {
+        "neurons": "10",
+        "has_bias": "false"
+      }
+    },
+    {
+      "type": "relu",
+      "params": {
+
+      }
+    },
+    {
+      "type": "mse",
+      "params": {
+
+      }
+    }
+  ],
 	"TrainerSettings" : {
 		"max_epochs" : "10000"
 	}

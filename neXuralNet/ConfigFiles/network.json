@@ -1,34 +1,46 @@
 {
-	"NetworkLayers" : [
-		{
-		    "type": "bgr_image_input",
-			"params": {
-				"input_width" : "3",
-				"input_height" : "3"
-			}
-		},
-		{
-		    "type": "max_pooling",
-			"params": {
-				"kernel_width" : "1",
-				"kernel_height" : "1"
-			}
-		},
-		{
-		    "type": "fully_connected",
-			"params": {
-				"neurons" : "2",
-				"has_bias" : "false"
-			}	
-	    },
-	    {
-		    "type": "mse",
-			"params": {
+  "NetworkLayers": [
+    {
+      "type": "bgr_image_input",
+      "params": {
+        "input_width": "3",
+        "input_height": "3"
+      }
+    },
+    {
+      "type": "fully_connected",
+      "params": {
+        "neurons": "3",
+        "has_bias": "false"
+      }
+    },
+    {
+      "type": "relu",
+      "params": {
 
-			}	
-	    }
-	],
-	"TrainerSettings" : {
-		"max_epochs" : "10000"
-	}
+      }
+    },  
+    {
+      "type": "fully_connected",
+      "params": {
+        "neurons": "1",
+        "has_bias": "false"
+      }
+    },
+    {
+      "type": "relu",
+      "params": {
+
+      }
+    },
+    {
+      "type": "mse",
+      "params": {
+
+      }
+    }
+  ],
+  "TrainerSettings": {
+    "max_epochs": "10000"
+  }
 }

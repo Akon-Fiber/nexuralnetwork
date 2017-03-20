@@ -55,6 +55,15 @@
     <Filter Include="Source Files\dnn\solvers\common">
       <UniqueIdentifier>{dffe9103-880c-48ae-a8c5-074dbd82eb6b}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Configs">
+      <UniqueIdentifier>{0f0e1cd2-3099-48fb-81cf-8084cf412274}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="TestData">
+      <UniqueIdentifier>{65c0b26f-ab17-41ea-bab9-654fca6aaa24}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="TestData\xor">
+      <UniqueIdentifier>{31b93a7f-33d5-46ab-87fc-2abacd1e1105}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="network.h">
@@ -147,9 +156,6 @@
     <ClInclude Include="base_solver.h">
       <Filter>Source Files\dnn\solvers\common</Filter>
     </ClInclude>
-    <ClInclude Include="momentum.h">
-      <Filter>Source Files\dnn\solvers\common</Filter>
-    </ClInclude>
     <ClInclude Include="sgd.h">
       <Filter>Source Files\dnn\solvers\common</Filter>
     </ClInclude>
@@ -161,6 +167,9 @@
     </ClInclude>
     <ClInclude Include="data_reader.h">
       <Filter>Source Files\utility</Filter>
+    </ClInclude>
+    <ClInclude Include="sgd_momentum.h">
+      <Filter>Source Files\dnn\solvers\common</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -179,5 +188,19 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
+    <None Include="..\ConfigFiles\network.json">
+      <Filter>Configs</Filter>
+    </None>
+    <None Include="..\ConfigFiles\network-full.json">
+      <Filter>Configs</Filter>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <Text Include="..\ConfigFiles\TrainingData\xor\inputData.txt">
+      <Filter>TestData\xor</Filter>
+    </Text>
+    <Text Include="..\ConfigFiles\TrainingData\xor\target.txt">
+      <Filter>TestData\xor</Filter>
+    </Text>
   </ItemGroup>
 </Project>

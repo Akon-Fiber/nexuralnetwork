@@ -25,16 +25,16 @@ OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 #define _NEXURALNET_DNN_SOLVERS_MOMENTUM
 
 namespace nexural {
-	class Momentum : public BaseSolver {
+	class SGDMomentum : public BaseSolver {
 	public:
-		Momentum() : BaseSolver(), 
+		SGDMomentum() : BaseSolver(),
 			_mu(0.9f) { }
 
-		~Momentum() {
+		~SGDMomentum() {
 
 		}
 
-		virtual void Update(Tensor& weights, const Tensor& dWeights) {
+		virtual void UpdateWeights(Tensor& weights, const Tensor& dWeights) {
 			// float_t V = mu * V - learning_rate * (dW[i] + W[i] * weight_decay);
 			// W[i] += V;
 
@@ -47,6 +47,10 @@ namespace nexural {
 				v = _mu * v - _learningRate * dWeights[i];
 				weights[i] = weights[i] + v;
 			}*/
+		}
+
+		virtual void UpdateBiases(Tensor& baises, const Tensor& dBiases) {
+
 		}
 
 	private:

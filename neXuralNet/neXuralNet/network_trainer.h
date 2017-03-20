@@ -26,7 +26,6 @@ OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 #define _NEXURALNET_DNN_NETWORK_NETWORK_TRAINNER
 
 namespace nexural {
-	// Forward declaration
 	class Network;
 
 	class NetworkTrainer {
@@ -35,9 +34,10 @@ namespace nexural {
 	public:
 		NetworkTrainer() :
 			_maxNumEpochs(10000),
-			_minLearningRate(0.00001f),
-			_miniBatchSize(1),
-			_solver(std::make_shared<BaseSolver>(Momentum()))
+			_minErrorThreshold(0.00001f),
+			_batchSize(1),
+			_maxNumEpochsWithoutProgress(100),
+			_solver(new SGD())
 		{ };
 
 		~NetworkTrainer();
@@ -50,8 +50,9 @@ namespace nexural {
 
 	private:
 		long _maxNumEpochs; 
-		float _minLearningRate;
-		float _miniBatchSize;
+		long _maxNumEpochsWithoutProgress;
+		float _minErrorThreshold;
+		float _batchSize;
 		NetSolver _solver;
 	};
 }

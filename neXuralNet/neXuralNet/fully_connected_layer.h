@@ -30,7 +30,7 @@ namespace nexural {
 	public:
 		FullyConnectedLayer(const LayerParams &layerParams) : ComputationalBaseLayer(layerParams) {
 			_numOutputNeurons = parser::ParseLong(_layerParams, "neurons");
-			_has_bias = parser::ParseBool(_layerParams, "has_bias");
+			_hasBias = parser::ParseBool(_layerParams, "has_bias");
 		}
 
 		~FullyConnectedLayer() {
@@ -43,7 +43,7 @@ namespace nexural {
 			_outputData.Resize(_outputShape);
 			_weights.Resize(1, 1, _numOutputNeurons, (_inputShape.GetK() * _inputShape.GetNR() * _inputShape.GetNC()));
 			_weights.FillRandom();
-			if (_has_bias) {
+			if (_hasBias) {
 				_biases.Resize(1, 1, 1, _numOutputNeurons);
 				_biases.FillRandom();
 			}
@@ -69,7 +69,7 @@ namespace nexural {
 							}
 						}
 					}
-					if (_has_bias) {
+					if (_hasBias) {
 						_outputData[numSamples * inputData.GetNC() + n] = neuronCalculatedValue + _biases[n];
 					} else {
 						_outputData[numSamples * inputData.GetNC() + n] = neuronCalculatedValue;
@@ -81,18 +81,28 @@ namespace nexural {
 		virtual void SetupLayerForTraining() {
 			_layerErrors.Resize(_inputShape);
 			_dWeights.Resize(_weights.GetShape());
-			_dWeights.Fill(0.0);
-			_dBiases.Resize(_biases.GetShape());
-			_dBiases.Fill(0.0);
+			if (_hasBias) {
+				_dBiases.Resize(_biases.GetShape());
+			}
 		}
 
 		virtual void BackPropagate(const Tensor& prevLayerErrors) {
+			_dWeights.Fill(0.0);
+			if (_hasBias) {
+				_dBiases.Fill(0.0);
+			}
+
 			// Calculate gradient wrt. weights ( _internalInputData * prevLayerErrors)
+			// Calculate gradient wrt. biases ( 1 * prevLayerErrors)
 			for (long numSamples = 0; numSamples < _dWeights.GetNumSamples(); numSamples++)
 			{
 				for (long n = 0; n < _numOutputNeurons; n++)
 				{
 					float error = prevLayerErrors[numSamples * prevLayerErrors.GetNC() + n];
+					if (_hasBias) {
+						_dBiases[numSamples * prevLayerErrors.GetNC() + n] += error;
+					}
+
 					for (long k = 0; k < _dWeights.GetK(); k++)
 					{
 						for (long nr = 0; nr < _dWeights.GetNR(); nr++)
@@ -131,7 +141,6 @@ namespace nexural {
 	private:
 		Tensor _internalInputData;
 		long _numOutputNeurons;
-		bool _has_bias;
 	};
 }
 #endif

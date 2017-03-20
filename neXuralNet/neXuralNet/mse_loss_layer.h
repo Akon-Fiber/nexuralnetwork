@@ -65,28 +65,47 @@ namespace nexural {
 			_layerErrors.Resize(_inputShape);
 		}
 
-		virtual void CalculateError(Tensor& targetData) {
-			_layerErrors.Fill(0);
+		virtual void CalculateError(const Tensor& targetData) {
+			if (_outputData.GetShape() != targetData.GetShape()) {
+				throw std::runtime_error("The output and target data should have the same size!");
+			}
+			
 			float n = static_cast<float>(_outputData.GetNumSamples());
 			float factor = float(2) / n;
 			
-			if(_outputData.GetShape() != targetData.GetShape()) {
-				throw std::runtime_error("The output and target data should have the same size!");
-			}
-
-			for (long numSamples = 0; numSamples < _outputData.GetNumSamples(); numSamples++)
+			for (long numSamples = 0; numSamples < n; numSamples++)
 			{
 				for (long nc = 0; nc < _outputData.GetNC(); nc++)
 				{
-					float error = targetData[numSamples * _outputData.GetNC() + nc] -
-						_outputData[numSamples * _outputData.GetNC() + nc];
-					error /= factor;
+					float error = factor * (_outputData[numSamples * _outputData.GetNC() + nc] -
+						targetData[numSamples * _outputData.GetNC() + nc]);
 					
-					//_layerErrors[(((numSamples * _outputData.GetK()) + k) * _outputData.GetNR() + nr) * _outputData.GetNC() + nc] += error;
+					_layerErrors[numSamples * _outputData.GetNC() + nc] = error;
 				}
-
-
 			}
+		}
+
+		virtual void CalculateTotalError(const Tensor& targetData) {
+			if (_outputData.GetShape() != targetData.GetShape()) {
+				throw std::runtime_error("The output and target data should have the same size!");
+			}
+
+			float n = static_cast<float>(_outputData.GetNumSamples());
+			float totalError = 0;
+
+			for (long numSamples = 0; numSamples < n; numSamples++)
+			{
+				for (long nc = 0; nc < _outputData.GetNC(); nc++)
+				{
+					float error = ((_outputData[numSamples * _outputData.GetNC() + nc] -
+						targetData[numSamples * _outputData.GetNC() + nc]) *
+						(_outputData[numSamples * _outputData.GetNC() + nc] -
+							targetData[numSamples * _outputData.GetNC() + nc])) / n;
+
+					totalError += error;
+				}
+			}
+			_totalError = totalError;
 		}
 
 	private:

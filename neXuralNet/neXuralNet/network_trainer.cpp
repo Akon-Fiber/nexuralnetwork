@@ -32,37 +32,54 @@ namespace nexural {
 		InitLayersForTraining(net);
 		Tensor input, target;
 		Tensor *error, *weights, *dWeights;
+		float currentError = 0;
+		bool doTraining = true;
+		long iter = 0;
 
-		for (int i = 0; i < trainingData.GetNumSamples(); i += batchSize) {
-			input.GetBatch(trainingData, i, batchSize);
-			target.GetBatch(targetData, i, batchSize);
+		while (doTraining) {
+			for (int i = 0; i < trainingData.GetNumSamples(); i += batchSize) {
+				input.GetBatch(trainingData, i, batchSize);
+				target.GetBatch(targetData, i, batchSize);
 
-			net._inputNetworkLayer->LoadData(input);
-			Tensor *internalNetData = net._inputNetworkLayer->GetOutput();
+				net._inputNetworkLayer->LoadData(input);
+				Tensor *internalNetData = net._inputNetworkLayer->GetOutput();
 
-			// Feedforward the error
-			for (int i = 0; i < net._computationalNetworkLyers.size(); i++) {
-				net._computationalNetworkLyers[i]->FeedForward(*internalNetData);
-				internalNetData = net._computationalNetworkLyers[i]->GetOutput();
+				// Feedforward the error
+				for (int i = 0; i < net._computationalNetworkLyers.size(); i++) {
+					net._computationalNetworkLyers[i]->FeedForward(*internalNetData);
+					internalNetData = net._computationalNetworkLyers[i]->GetOutput();
+				}
+				net._lossNetworkLayer->FeedForward(*internalNetData);
+
+				// Calculate the total error
+				net._lossNetworkLayer->CalculateError(targetData);
+				net._lossNetworkLayer->CalculateTotalError(targetData);
+				error = net._lossNetworkLayer->GetLayerErrors();
+				currentError = net._lossNetworkLayer->GetTotalError();
+
+				if (currentError <= _minErrorThreshold) {
+					doTraining = false;
+				}
+
+				// Backpropagate the error
+				for (size_t i = net._computationalNetworkLyers.size(); i > 0; i--) {
+					net._computationalNetworkLyers[i]->BackPropagate(*error);
+					error = net._computationalNetworkLyers[i]->GetLayerErrors();
+				}
+
+				// Update the weights
+				for (size_t i = net._computationalNetworkLyers.size(); i > 0; i--) {
+					weights = net._computationalNetworkLyers[i]->GetLayerWeights();
+					dWeights = net._computationalNetworkLyers[i]->GetLayerDWeights();
+					_solver->UpdateWeights(*weights, *dWeights);
+				}
 			}
-			net._lossNetworkLayer->FeedForward(*internalNetData);
-
-			// Calculate the total error
-			net._lossNetworkLayer->CalculateError(targetData);
-			error = net._lossNetworkLayer->GetLayerErrors();
-
-			// Backpropagate the error
-			for (size_t i = net._computationalNetworkLyers.size(); i > 0; i--) {
-				net._computationalNetworkLyers[i]->BackPropagate(*error);
-				error = net._computationalNetworkLyers[i]->GetLayerErrors();
-			}
-
-			// Update the weights
-			for (size_t i = net._computationalNetworkLyers.size(); i > 0; i--) {
-				weights = net._computationalNetworkLyers[i]->GetLayerWeights();
-				dWeights = net._computationalNetworkLyers[i]->GetLayerDWeights();
-				_solver->Update(*weights, *dWeights);
-			}
+		}
+		if (iter++ == _maxNumEpochs) {
+			doTraining =  false;
+		}
+		else {
+			iter++;
 		}
 	}
 

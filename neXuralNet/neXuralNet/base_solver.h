@@ -19,6 +19,7 @@ TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE
 OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 */
 
+#include <memory>
 #include "i_solver.h"
 
 #ifndef _NEXURALNET_DNN_BASE_SOLVER
@@ -35,8 +36,8 @@ namespace nexural {
 
 		}
 
-		virtual void Update(Tensor& weights, const Tensor& dWeights) {
-
+		virtual void UpdateLearningRate(const float scaleFactor) {
+			_learningRate *= scaleFactor;
 		}
 
 	protected:

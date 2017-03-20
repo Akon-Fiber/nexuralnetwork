@@ -21,6 +21,8 @@ OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
 #include <opencv2\core\core.hpp>
 #include <opencv2\highgui\highgui.hpp>
+#include <fstream>
+#include <string>
 
 #include "tensor.h"
 #include "data_to_tensor_converter.h"
@@ -48,6 +50,41 @@ namespace nexural {
 				tensorCollection.push_back(tensor);
 			}
 		}
+
+		static void ReadTensorFromFile(const std::string filePath, Tensor& tensor) {
+			std::ifstream myFile;            
+			myFile.open(filePath);
+
+			if (!myFile.is_open())  
+			{
+				throw std::runtime_error("Can't open file!");
+			}
+
+			std::string temp;
+			long index = 0, numSamples, k, nr, nc;
+
+			std::getline(myFile, temp);
+			std::stringstream ss(temp);
+			ss >> numSamples;
+			ss >> k;
+			ss >> nr;
+			ss >> nc;
+			tensor.Resize(numSamples, k, nr, nc);
+
+			while (std::getline(myFile, temp))
+			{
+				float value;
+				int k = 0;
+				std::stringstream ss(temp);
+
+				while (ss >> value)
+				{
+					tensor[index] = value;
+					index++;
+				}
+			}
+		}
+
 	};
 }
 #endif

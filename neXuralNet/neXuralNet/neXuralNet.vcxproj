@@ -151,7 +151,7 @@
     <ClInclude Include="loss_base_layer.h" />
     <ClInclude Include="loss_functions.h" />
     <ClInclude Include="loss_layers.h" />
-    <ClInclude Include="momentum.h" />
+    <ClInclude Include="sgd_momentum.h" />
     <ClInclude Include="mse_loss_layer.h" />
     <ClInclude Include="max_pooling_layer.h" />
     <ClInclude Include="network.h" />
@@ -173,7 +173,13 @@
     <ClCompile Include="tensor.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="..\ConfigFiles\network-full.json" />
+    <None Include="..\ConfigFiles\network.json" />
     <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <Text Include="..\ConfigFiles\TrainingData\xor\inputData.txt" />
+    <Text Include="..\ConfigFiles\TrainingData\xor\target.txt" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
