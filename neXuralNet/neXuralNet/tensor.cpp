@@ -128,6 +128,12 @@ namespace nexural {
 		std::generate(begin(), end(), [&]() { return dis(gen); });
 	}
 
+	void Tensor::FillRandomBinomialDistribution() {
+		std::default_random_engine gen;
+		std::binomial_distribution<int> dis(1, 0.5);
+		std::generate(begin(), end(), [&]() { return dis(gen); });
+	}
+
 	void Tensor::GetBatch(const Tensor& tensor, const long startIndex, const long batchSize) {
 		Resize(batchSize, tensor._k, tensor._nr, tensor._nc);
 

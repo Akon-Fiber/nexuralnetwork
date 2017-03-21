@@ -45,7 +45,7 @@ namespace nexural {
 		}
 
 		virtual void FeedForward(const Tensor& inputData) {
-			Utils::RandomBinomialDistribution(_dropoutIndexes);
+			_dropoutIndexes.FillRandomBinomialDistribution();
 
 			for (long i = 0; i < inputData.Size(); i++)
 			{

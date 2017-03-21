@@ -30,7 +30,8 @@ namespace nexural {
 	public:
 		FullyConnectedLayer(const LayerParams &layerParams) : ComputationalBaseLayer(layerParams) {
 			_numOutputNeurons = parser::ParseLong(_layerParams, "neurons");
-			_hasBias = parser::ParseBool(_layerParams, "has_bias");
+			_hasWeights = true;
+			_hasBias = true;
 		}
 
 		~FullyConnectedLayer() {
@@ -42,11 +43,9 @@ namespace nexural {
 			_outputShape.Resize(_inputShape.GetNumSamples(), 1, 1, _numOutputNeurons);
 			_outputData.Resize(_outputShape);
 			_weights.Resize(1, 1, _numOutputNeurons, (_inputShape.GetK() * _inputShape.GetNR() * _inputShape.GetNC()));
+			_biases.Resize(1, 1, 1, _numOutputNeurons);
 			_weights.FillRandom();
-			if (_hasBias) {
-				_biases.Resize(1, 1, 1, _numOutputNeurons);
-				_biases.FillRandom();
-			}
+			_biases.FillRandom();
 		}
 
 		virtual void FeedForward(const Tensor& inputData) {
@@ -64,16 +63,12 @@ namespace nexural {
 							{
 								float inputValue = inputData[(((numSamples * inputData.GetK()) + k) * inputData.GetNR() + nr) * inputData.GetNC() + nc];
 								float testInputValue = _internalInputData[(((numSamples * _internalInputData.GetK()) + k) * _internalInputData.GetNR() + nr) * _internalInputData.GetNC() + nc];
-								float weightValue = _weights[(_weights.GetNR() + n) * _weights.GetNC() + ((k * inputData.GetNR() + nr) * inputData.GetNC() + nc)];
+								float weightValue = _weights[(((1 * 1) + 0) * _weights.GetNR() + n) * _weights.GetNC() + (k * nr * nc)];
 								neuronCalculatedValue += inputValue * weightValue;
 							}
 						}
 					}
-					if (_hasBias) {
-						_outputData[numSamples * inputData.GetNC() + n] = neuronCalculatedValue + _biases[n];
-					} else {
-						_outputData[numSamples * inputData.GetNC() + n] = neuronCalculatedValue;
-					}
+					_outputData[numSamples * inputData.GetNC() + n] = neuronCalculatedValue + _biases[n];
 				}
 			}
 		}
@@ -81,16 +76,12 @@ namespace nexural {
 		virtual void SetupLayerForTraining() {
 			_layerErrors.Resize(_inputShape);
 			_dWeights.Resize(_weights.GetShape());
-			if (_hasBias) {
-				_dBiases.Resize(_biases.GetShape());
-			}
+			_dBiases.Resize(_biases.GetShape());
 		}
 
 		virtual void BackPropagate(const Tensor& prevLayerErrors) {
 			_dWeights.Fill(0.0);
-			if (_hasBias) {
-				_dBiases.Fill(0.0);
-			}
+			_dBiases.Fill(0.0);
 
 			// Calculate gradient wrt. weights ( _internalInputData * prevLayerErrors)
 			// Calculate gradient wrt. biases ( 1 * prevLayerErrors)

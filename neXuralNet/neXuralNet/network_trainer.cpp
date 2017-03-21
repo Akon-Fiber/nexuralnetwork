@@ -52,13 +52,14 @@ namespace nexural {
 				net._lossNetworkLayer->FeedForward(*internalNetData);
 
 				// Calculate the total error
-				net._lossNetworkLayer->CalculateError(targetData);
-				net._lossNetworkLayer->CalculateTotalError(targetData);
+				net._lossNetworkLayer->CalculateError(target);
+				net._lossNetworkLayer->CalculateTotalError(target);
 				error = net._lossNetworkLayer->GetLayerErrors();
 				currentError = net._lossNetworkLayer->GetTotalError();
 
 				if (currentError <= _minErrorThreshold) {
 					doTraining = false;
+					break;
 				}
 
 				// Backpropagate the error

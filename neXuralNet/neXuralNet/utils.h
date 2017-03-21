@@ -32,25 +32,6 @@ OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
 namespace nexural {
 	namespace Utils {
-		static void RandomBinomialDistribution(Tensor& tensor) {
-			std::default_random_engine generator;
-			std::binomial_distribution<int> distribution(1, 0.5);
-
-			for (long numSamples = 0; numSamples < tensor.GetNumSamples(); numSamples++)
-			{
-				for (long k = 0; k < tensor.GetK(); k++)
-				{
-					for (long nr = 0; nr < tensor.GetNR(); nr++)
-					{
-						for (long nc = 0; nc < tensor.GetNC(); nc++)
-						{
-							tensor[(((numSamples * tensor.GetK()) + k) * tensor.GetNR() + nr) * tensor.GetNC() + nc] = (float)distribution(generator);
-						}
-					}
-				}
-			}
-		}
-
 		static std::vector<std::string> TokenizeString(const std::string& str, const std::string& delimiters)
 		{
 			std::vector<std::string> tokens;

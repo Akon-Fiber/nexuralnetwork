@@ -138,7 +138,6 @@
     <ClInclude Include="data_reader.h" />
     <ClInclude Include="data_types.h" />
     <ClInclude Include="dropout_layer.h" />
-    <ClInclude Include="exceptions.h" />
     <ClInclude Include="fully_connected_layer.h" />
     <ClInclude Include="computational_base_layer.h" />
     <ClInclude Include="input_base_class.h" />

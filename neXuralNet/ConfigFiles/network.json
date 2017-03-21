@@ -3,15 +3,16 @@
     {
       "type": "tensor_input",
       "params": {
-        "input_width": "1",
-        "input_height": "2"
+        "num_samples": "1",
+        "k": "1",
+        "nr": "1",
+        "nc": "2"
       }
     },
     {
       "type": "fully_connected",
       "params": {
-        "neurons": "3",
-        "has_bias": "false"
+        "neurons": "4"
       }
     },
     {
@@ -23,8 +24,7 @@
     {
       "type": "fully_connected",
       "params": {
-        "neurons": "1",
-        "has_bias": "false"
+        "neurons": "1"
       }
     },
     {

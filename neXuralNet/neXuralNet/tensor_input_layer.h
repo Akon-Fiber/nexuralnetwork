@@ -30,7 +30,13 @@ namespace nexural {
 	class TensorInputLayer : public InputBaseLayer {
 	public:
 		TensorInputLayer(const LayerParams &layerParams) : InputBaseLayer(layerParams) {
-
+			long numSamples = parser::ParseLong(_layerParams, "num_samples");
+			long k = parser::ParseLong(_layerParams, "k");
+			long nr = parser::ParseLong(_layerParams, "nr");
+			long nc = parser::ParseLong(_layerParams, "nc");
+			_inputShape.Resize(numSamples, k, nr, nc);
+			_outputShape.Resize(_inputShape);
+			_outputData.Resize(_outputShape);
 		}
 
 		~TensorInputLayer() {
@@ -38,9 +44,9 @@ namespace nexural {
 		}
 
 		void LoadData(const Tensor& inputTensor) {
-			_inputShape.Resize(inputTensor.GetShape());
-			_outputShape.Resize(_inputShape);
-			_outputData.Resize(_outputShape);
+			if (inputTensor.GetShape() != _outputData.GetShape()) {
+				throw std::runtime_error("The input tensor is not of the same size as the layer!");
+			}
 			_outputData.ShareTensor(inputTensor);
 		}
 

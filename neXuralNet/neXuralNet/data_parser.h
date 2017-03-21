@@ -25,7 +25,6 @@ OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 #include <sstream>
 #include <iterator>
 #include <stdexcept>
-#include "exceptions.h"
 #include "utils.h"
 
 #ifndef _NEXURALNET_UTILITY_DATA_PARSER_H
@@ -37,10 +36,10 @@ namespace nexural {
 		static int ParseInt(std::map<std::string, std::string> &map, std::string key)
 		{
 			if (map.find(key) == map.end())
-				throw std::runtime_error(key + " " + enumToStr(mav_exception::ParamNotFound));
+				throw std::runtime_error("The key was not found!");
 
 			if (map[key].empty()) {
-				throw std::runtime_error(key + " " + enumToStr(mav_exception::EmptyParamValue));
+				throw std::runtime_error("Empty key value!");
 			}
 
 			int value = -1;
@@ -50,7 +49,7 @@ namespace nexural {
 			}
 			catch (...)
 			{
-				throw std::runtime_error(key + " " + enumToStr(mav_exception::ParamParseException));
+				throw std::runtime_error("Error while parsing!");
 			}
 
 			return value;
@@ -59,10 +58,10 @@ namespace nexural {
 		static int ParseLong(std::map<std::string, std::string> &map, std::string key)
 		{
 			if (map.find(key) == map.end())
-				throw std::runtime_error(key + " " + enumToStr(mav_exception::ParamNotFound));
+				throw std::runtime_error("The key was not found!");
 
 			if (map[key].empty()) {
-				throw std::runtime_error(key + " " + enumToStr(mav_exception::EmptyParamValue));
+				throw std::runtime_error("Empty key value!");
 			}
 
 			int value = -1;
@@ -72,7 +71,7 @@ namespace nexural {
 			}
 			catch (...)
 			{
-				throw std::runtime_error(key + " " + enumToStr(mav_exception::ParamParseException));
+				throw std::runtime_error("Error while parsing!");
 			}
 
 			return value;
@@ -81,10 +80,10 @@ namespace nexural {
 		static float ParseFloat(std::map<std::string, std::string> &map, std::string key)
 		{
 			if (map.find(key) == map.end())
-				throw std::runtime_error(key + " " + enumToStr(mav_exception::ParamNotFound));
+				throw std::runtime_error("The key was not found!");
 
 			if (map[key].empty()) {
-				throw std::runtime_error(key + " " + enumToStr(mav_exception::EmptyParamValue));
+				throw std::runtime_error("Empty key value!");
 			}
 
 			float value = -1;
@@ -94,7 +93,7 @@ namespace nexural {
 			}
 			catch (...)
 			{
-				throw std::runtime_error(key + " " + enumToStr(mav_exception::ParamParseException));
+				throw std::runtime_error("Error while parsing!");
 			}
 
 			return value;
@@ -103,10 +102,10 @@ namespace nexural {
 		static bool ParseBool(std::map<std::string, std::string> &map, std::string key)
 		{
 			if (map.find(key) == map.end())
-				throw std::runtime_error(key + " " + enumToStr(mav_exception::ParamNotFound));
+				throw std::runtime_error("The key was not found!");
 
 			if (map[key].empty()) {
-				throw std::runtime_error(key + " " + enumToStr(mav_exception::EmptyParamValue));
+				throw std::runtime_error("Empty key value!");
 			}
 
 			return map[key] == "1" || map[key] == "true";
@@ -115,10 +114,10 @@ namespace nexural {
 		static std::string ParseString(std::map<std::string, std::string> &map, std::string key)
 		{
 			if (map.find(key) == map.end())
-				throw std::runtime_error(key + " " + enumToStr(mav_exception::ParamNotFound));
+				throw std::runtime_error("The key was not found!");
 
 			if (map[key].empty()) {
-				throw std::runtime_error(key + " " + enumToStr(mav_exception::EmptyParamValue));
+				throw std::runtime_error("Empty key value!");
 			}
 
 			std::string value = map[key];
@@ -129,10 +128,10 @@ namespace nexural {
 		static std::vector<std::string> ParseStrVector(std::map<std::string, std::string> &map, std::string key)
 		{
 			if (map.find(key) == map.end())
-				throw std::runtime_error(key + " " + enumToStr(mav_exception::ParamNotFound));
+				throw std::runtime_error("The key was not found!");
 
 			if (map[key].empty()) {
-				throw std::runtime_error(key + " " + enumToStr(mav_exception::EmptyParamValue));
+				throw std::runtime_error("Empty key value!");
 			}
 
 			std::vector<std::string> tokens = Utils::TokenizeString(map[key], ",");
@@ -142,10 +141,10 @@ namespace nexural {
 		static std::vector<float> ParseFltVector(std::map<std::string, std::string> &map, std::string key)
 		{
 			if (map.find(key) == map.end())
-				throw std::runtime_error(key + " " + enumToStr(mav_exception::ParamNotFound));
+				throw std::runtime_error("The key was not found!");
 
 			if (map[key].empty()) {
-				throw std::runtime_error(key + " " + enumToStr(mav_exception::EmptyParamValue));
+				throw std::runtime_error("Empty key value!");
 			}
 
 
@@ -173,7 +172,7 @@ namespace nexural {
 			}
 
 			if (!safely_parsed) {
-				throw std::runtime_error(key + " " + enumToStr(mav_exception::ParamParseException));
+				throw std::runtime_error("Error while parsing!");
 			}
 
 			return result;
@@ -183,10 +182,10 @@ namespace nexural {
 		static cv::Scalar ParseScalar(std::map<std::string, std::string> &map, std::string key, int channels_nb)
 		{
 			if (map.find(key) == map.end())
-				throw std::runtime_error(key + " " + enumToStr(mav_exception::ParamNotFound));
+				throw std::runtime_error("The key was not found!");
 
 			if (map[key].empty()) {
-				throw std::runtime_error(key + " " + enumToStr(mav_exception::EmptyParamValue));
+				throw std::runtime_error("Empty key value!");
 			}
 
 			cv::Scalar thresh(channels_nb);
@@ -211,7 +210,7 @@ namespace nexural {
 			}
 
 			if (!safely_parsed) {
-				throw std::runtime_error(key + " " + enumToStr(mav_exception::ParamParseException));
+				throw std::runtime_error("Error while parsing!");
 			}
 
 			return thresh;
