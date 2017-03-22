@@ -53,6 +53,7 @@ namespace nexural {
 		internalNetData = _lossNetworkLayer->GetOutput();
 
 		// TODO: Delete this 
+		std::cout << "Result: " << std::endl;
 		for (int i = 0; i < internalNetData->Size(); i++) {
 			std::cout << (*(&(*internalNetData)))[i] << std::endl;
 		}

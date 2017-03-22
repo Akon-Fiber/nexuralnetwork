@@ -34,7 +34,7 @@ namespace nexural {
 		virtual Tensor* GetLayerBiases() = 0;
 		virtual Tensor* GetLayerDBiases() = 0;
 		virtual bool HasWeights() = 0;
-		virtual bool HasBias() = 0;
+		virtual bool HasBiases() = 0;
 	};
 }
 #endif

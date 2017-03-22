@@ -29,7 +29,7 @@ namespace nexural {
 	class BaseSolver : public ISolver {
 	public:
 		BaseSolver() {
-
+			_learningRate = 0.01f;
 		}
 
 		virtual ~BaseSolver() {

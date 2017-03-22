@@ -35,7 +35,7 @@ namespace nexural {
 		ComputationalBaseLayer(const LayerParams &layerParams) {
 			_layerParams = layerParams;
 			_hasWeights = false;
-			_hasBias = false;
+			_hasBiases = false;
 		}
 
 		virtual ~ComputationalBaseLayer() { 
@@ -74,8 +74,8 @@ namespace nexural {
 			return _hasWeights;
 		}
 
-		virtual bool HasBias() {
-			return _hasBias;
+		virtual bool HasBiases() {
+			return _hasBiases;
 		}
 
 	protected:
@@ -89,7 +89,7 @@ namespace nexural {
 		Tensor _biases;
 		Tensor _dBiases;
 		bool _hasWeights;
-		bool _hasBias;
+		bool _hasBiases;
 	};
 	typedef std::shared_ptr<ComputationalBaseLayer> ComputationalBaseLayerPtr;
 }

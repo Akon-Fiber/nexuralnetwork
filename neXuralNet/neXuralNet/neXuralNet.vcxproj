@@ -130,6 +130,8 @@
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="and_gate_with_relu.h" />
+    <ClInclude Include="and_gate_with_tanh.h" />
     <ClInclude Include="average_pooling_layer.h" />
     <ClInclude Include="base_solver.h" />
     <ClInclude Include="computational_layers.h" />
@@ -140,6 +142,7 @@
     <ClInclude Include="dropout_layer.h" />
     <ClInclude Include="fully_connected_layer.h" />
     <ClInclude Include="computational_base_layer.h" />
+    <ClInclude Include="generate_test_data.h" />
     <ClInclude Include="input_base_class.h" />
     <ClInclude Include="i_computational_layer.h" />
     <ClInclude Include="input_layers.h" />
@@ -150,6 +153,8 @@
     <ClInclude Include="loss_base_layer.h" />
     <ClInclude Include="loss_functions.h" />
     <ClInclude Include="loss_layers.h" />
+    <ClInclude Include="leaky_relu_layer.h" />
+    <ClInclude Include="rmse_loss_layer.h" />
     <ClInclude Include="sgd_momentum.h" />
     <ClInclude Include="mse_loss_layer.h" />
     <ClInclude Include="max_pooling_layer.h" />
@@ -161,14 +166,17 @@
     <ClInclude Include="relu_layer.h" />
     <ClInclude Include="sgd.h" />
     <ClInclude Include="solvers.h" />
+    <ClInclude Include="tanh_layerh.h" />
     <ClInclude Include="tensor.h" />
     <ClInclude Include="tensor_input_layer.h" />
+    <ClInclude Include="trainer_options.h" />
     <ClInclude Include="utils.h" />
+    <ClInclude Include="xor_gate_with_relu.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="main_tests.cpp" />
     <ClCompile Include="network.cpp" />
     <ClCompile Include="network_trainer.cpp" />
-    <ClCompile Include="Source.cpp" />
     <ClCompile Include="tensor.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -178,22 +186,16 @@
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
-    <Import Project="..\packages\boost.1.63.0.0\build\native\boost.targets" Condition="Exists('..\packages\boost.1.63.0.0\build\native\boost.targets')" />
     <Import Project="..\packages\OpenCV_VS2015_3.2.0_WithContribs.1.0.1\build\native\OpenCV_VS2015_3.2.0_WithContribs.targets" Condition="Exists('..\packages\OpenCV_VS2015_3.2.0_WithContribs.1.0.1\build\native\OpenCV_VS2015_3.2.0_WithContribs.targets')" />
     <Import Project="..\packages\RapidJson.1.1.0.0\build\native\RapidJson.targets" Condition="Exists('..\packages\RapidJson.1.1.0.0\build\native\RapidJson.targets')" />
-    <Import Project="..\packages\boost_filesystem-vc140.1.63.0.0\build\native\boost_filesystem-vc140.targets" Condition="Exists('..\packages\boost_filesystem-vc140.1.63.0.0\build\native\boost_filesystem-vc140.targets')" />
-    <Import Project="..\packages\boost_system-vc140.1.63.0.0\build\native\boost_system-vc140.targets" Condition="Exists('..\packages\boost_system-vc140.1.63.0.0\build\native\boost_system-vc140.targets')" />
   </ImportGroup>
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
     <PropertyGroup>
       <ErrorText>This project references NuGet package(s) that are missing on this computer. Use NuGet Package Restore to download them.  For more information, see http://go.microsoft.com/fwlink/?LinkID=322105. The missing file is {0}.</ErrorText>
     </PropertyGroup>
-    <Error Condition="!Exists('..\packages\boost.1.63.0.0\build\native\boost.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\boost.1.63.0.0\build\native\boost.targets'))" />
     <Error Condition="!Exists('..\packages\OpenCV_VS2015_3.2.0_WithContribs.1.0.1\build\native\OpenCV_VS2015_3.2.0_WithContribs.props')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\OpenCV_VS2015_3.2.0_WithContribs.1.0.1\build\native\OpenCV_VS2015_3.2.0_WithContribs.props'))" />
     <Error Condition="!Exists('..\packages\OpenCV_VS2015_3.2.0_WithContribs.1.0.1\build\native\OpenCV_VS2015_3.2.0_WithContribs.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\OpenCV_VS2015_3.2.0_WithContribs.1.0.1\build\native\OpenCV_VS2015_3.2.0_WithContribs.targets'))" />
     <Error Condition="!Exists('..\packages\RapidJson.1.1.0.0\build\native\RapidJson.props')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\RapidJson.1.1.0.0\build\native\RapidJson.props'))" />
     <Error Condition="!Exists('..\packages\RapidJson.1.1.0.0\build\native\RapidJson.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\RapidJson.1.1.0.0\build\native\RapidJson.targets'))" />
-    <Error Condition="!Exists('..\packages\boost_filesystem-vc140.1.63.0.0\build\native\boost_filesystem-vc140.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\boost_filesystem-vc140.1.63.0.0\build\native\boost_filesystem-vc140.targets'))" />
-    <Error Condition="!Exists('..\packages\boost_system-vc140.1.63.0.0\build\native\boost_system-vc140.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\boost_system-vc140.1.63.0.0\build\native\boost_system-vc140.targets'))" />
   </Target>
 </Project>

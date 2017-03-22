@@ -45,6 +45,11 @@ namespace nexural {
 
 	public:
 		Network() = delete;
+		explicit Network(const Network& network) = delete;
+		explicit Network(Network&& network) = delete;
+		Network& operator=(const Network& network) = delete;
+		Network& operator=(Network&& network) = delete;
+
 		Network(const std::string jsonFilePath);
 		~Network();
 
@@ -123,6 +128,12 @@ namespace nexural {
 					else if (type_member == "relu") {
 						net.AddComputationalLayer(ComputationalBaseLayerPtr(new nexural::ReluLayer(layerParams)));
 					}
+					else if (type_member == "leaky_relu") {
+						net.AddComputationalLayer(ComputationalBaseLayerPtr(new nexural::LeakyReluLayer(layerParams)));
+					}
+					else if (type_member == "tanh") {
+						net.AddComputationalLayer(ComputationalBaseLayerPtr(new nexural::TanHLayer(layerParams)));
+					}
 					else if (type_member == "dropout") {
 						net.AddComputationalLayer(ComputationalBaseLayerPtr(new nexural::DropoutLayer(layerParams)));
 					}
@@ -131,6 +142,9 @@ namespace nexural {
 					}
 					else if (type_member == "mse") {
 						net.SetLossLayer(LossBaseLayerPtr(new nexural::MSELossLayer(layerParams)));
+					}
+					else if (type_member == "rmse") {
+						net.SetLossLayer(LossBaseLayerPtr(new nexural::RMSELossLayer(layerParams)));
 					}
 				}
 			}

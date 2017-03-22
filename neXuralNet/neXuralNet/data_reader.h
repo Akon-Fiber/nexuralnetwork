@@ -39,50 +39,45 @@ namespace nexural {
 		};
 	
 		static void ReadImagesFromDirectory(const std::string directoryPath, TensorCollection& tensorCollection, ReadImageType imagesType = ReadImageType::COLOR) {
-			auto readType = imagesType == ReadImageType::COLOR ? cv::IMREAD_COLOR : cv::IMREAD_GRAYSCALE;
-			std::vector<cv::String> fn;
-			cv::glob("/home/images/*.png", fn, false);
+			//auto readType = imagesType == ReadImageType::COLOR ? cv::IMREAD_COLOR : cv::IMREAD_GRAYSCALE;
+			//std::vector<cv::String> fn;
+			//cv::glob("/home/images/*.png", fn, false);
 
-			for (long i = 0; i < fn.size(); i++) {
-				//cv::Mat image = cv::imread(fn[i], readType);
-				//Tensor tensor;
-				//DataToTensorConverter::Convert(image, tensor);
-				//tensorCollection.push_back(tensor);
-			}
+			//for (long i = 0; i < fn.size(); i++) {
+			//	//cv::Mat image = cv::imread(fn[i], readType);
+			//	//Tensor tensor;
+			//	//DataToTensorConverter::Convert(image, tensor);
+			//	//tensorCollection.push_back(tensor);
+			//}
 		}
 
 		static void ReadTensorFromFile(const std::string filePath, Tensor& tensor) {
-			std::ifstream myFile;            
-			myFile.open(filePath);
-
-			if (!myFile.is_open())  
-			{
+			std::ifstream file(filePath, std::ios::binary);
+			if (file.fail()) {
 				throw std::runtime_error("Can't open file!");
 			}
 
-			std::string temp;
 			long index = 0, numSamples, k, nr, nc;
-
-			std::getline(myFile, temp);
-			std::stringstream ss(temp);
-			ss >> numSamples;
-			ss >> k;
-			ss >> nr;
-			ss >> nc;
+			file >> numSamples;
+			file >> k;
+			file >> nr;
+			file >> nc;
 			tensor.Resize(numSamples, k, nr, nc);
+			long size = tensor.Size() - 1;
 
-			while (std::getline(myFile, temp))
+			while (!file.eof())
 			{
 				float value;
-				int k = 0;
-				std::stringstream ss(temp);
-
-				while (ss >> value)
-				{
-					tensor[index] = value;
+				file >> value;
+				tensor[index] = value;
+				if (size == index) {
+					break;
+				}
+				else {
 					index++;
 				}
 			}
+			file.close();
 		}
 
 	};

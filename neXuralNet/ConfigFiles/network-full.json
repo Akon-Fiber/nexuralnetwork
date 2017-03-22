@@ -1,7 +1,23 @@
 {
   "NetworkLayers": [
     {
+     "type": "tensor_input",
+      "params": {
+        "num_samples": "1",
+        "k": "1",
+        "nr": "1",
+        "nc": "2"
+      }
+    },
+    {
       "type": "bgr_image_input",
+      "params": {
+        "input_width": "3",
+        "input_height": "3"
+      }
+    },
+    {
+      "type": "gray_image_input",
       "params": {
         "input_width": "3",
         "input_height": "3"
@@ -41,6 +57,18 @@
       }
     },
     {
+      "type": "leaky_relu",
+      "params": {
+
+      }
+    },  
+    {
+      "type": "tanh",
+      "params": {
+
+      }
+    },  
+    {
       "type": "dropout",
       "params": {
 
@@ -60,6 +88,12 @@
     },
     {
       "type": "mse",
+      "params": {
+
+      }
+    },
+    {
+      "type": "rmse",
       "params": {
 
       }

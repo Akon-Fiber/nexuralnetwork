@@ -22,17 +22,17 @@ OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 #include "loss_base_layer.h"
 #include "data_parser.h"
 
-#ifndef _NEXURALNET_DNN_LAYERS_MSE_LOSS_LAYER
-#define _NEXURALNET_DNN_LAYERS_MSE_LOSS_LAYER
+#ifndef _NEXURALNET_DNN_LAYERS_RMSE_LOSS_LAYER
+#define _NEXURALNET_DNN_LAYERS_RMSE_LOSS_LAYER
 
 namespace nexural {
-	class MSELossLayer : public LossBaseLayer {
+	class RMSELossLayer : public LossBaseLayer {
 	public:
-		MSELossLayer(const LayerParams& layerParams) : LossBaseLayer(layerParams) {
+		RMSELossLayer(const LayerParams& layerParams) : LossBaseLayer(layerParams) {
 
 		}
 
-		~MSELossLayer() {
+		~RMSELossLayer() {
 
 		}
 
@@ -70,17 +70,17 @@ namespace nexural {
 			if (_outputData.GetShape() != targetData.GetShape()) {
 				throw std::runtime_error("The output and target data should have the same size!");
 			}
-			
+
 			float n = static_cast<float>(_outputData.GetNumSamples());
 			float factor = float(2) / n;
-			
+
 			for (long numSamples = 0; numSamples < n; numSamples++)
 			{
 				for (long nc = 0; nc < _outputData.GetNC(); nc++)
 				{
-					float error = factor * (_outputData[numSamples * _outputData.GetNC() + nc] -
+					float error = (_outputData[numSamples * _outputData.GetNC() + nc] -
 						targetData[numSamples * _outputData.GetNC() + nc]);
-					
+
 					_layerErrors[numSamples * _outputData.GetNC() + nc] = error;
 				}
 			}

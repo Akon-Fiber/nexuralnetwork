@@ -22,6 +22,8 @@ OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 #include "average_pooling_layer.h"
 #include "max_pooling_layer.h"
 #include "relu_layer.h"
+#include "leaky_relu_layer.h"
+#include "tanh_layerh.h"
 #include "dropout_layer.h"
 #include "convolutional_layer.h"
 #include "fully_connected_layer.h"

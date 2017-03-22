@@ -21,6 +21,7 @@ OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
 #include "computational_base_layer.h"
 #include "data_parser.h"
+#include <iostream>
 
 #ifndef _NEXURALNET_DNN_LAYERS_FULLY_CONNECTED_LAYER
 #define _NEXURALNET_DNN_LAYERS_FULLY_CONNECTED_LAYER
@@ -31,7 +32,7 @@ namespace nexural {
 		FullyConnectedLayer(const LayerParams &layerParams) : ComputationalBaseLayer(layerParams) {
 			_numOutputNeurons = parser::ParseLong(_layerParams, "neurons");
 			_hasWeights = true;
-			_hasBias = true;
+			_hasBiases = true;
 		}
 
 		~FullyConnectedLayer() {
@@ -46,6 +47,17 @@ namespace nexural {
 			_biases.Resize(1, 1, 1, _numOutputNeurons);
 			_weights.FillRandom();
 			_biases.FillRandom();
+
+			std::cout << "++++++++++++++++++++++++++++++++++++++++" << std::endl;
+			std::cout << "Weights: " << std::endl;
+			for (int i = 0; i < _weights.Size(); i++) {
+				std::cout << _weights[i] << std::endl;
+			}
+			std::cout << "Biases: " << std::endl;
+			for (int i = 0; i < _biases.Size(); i++) {
+				std::cout << _biases[i] << std::endl;
+			}
+			std::cout << "++++++++++++++++++++++++++++++++++++++++" << std::endl;
 		}
 
 		virtual void FeedForward(const Tensor& inputData) {
@@ -62,9 +74,10 @@ namespace nexural {
 							for (long nc = 0; nc < inputData.GetNC(); nc++)
 							{
 								float inputValue = inputData[(((numSamples * inputData.GetK()) + k) * inputData.GetNR() + nr) * inputData.GetNC() + nc];
-								float testInputValue = _internalInputData[(((numSamples * _internalInputData.GetK()) + k) * _internalInputData.GetNR() + nr) * _internalInputData.GetNC() + nc];
-								float weightValue = _weights[(((1 * 1) + 0) * _weights.GetNR() + n) * _weights.GetNC() + (k * nr * nc)];
-								neuronCalculatedValue += inputValue * weightValue;
+								
+								long indx = (n * _weights.GetNC() + ((k * inputData.GetNR() + nr) * inputData.GetNC() + nc));
+								float weightValue = _weights[indx];
+								neuronCalculatedValue += (inputValue * weightValue);
 							}
 						}
 					}
@@ -83,44 +96,44 @@ namespace nexural {
 			_dWeights.Fill(0.0);
 			_dBiases.Fill(0.0);
 
-			// Calculate gradient wrt. weights ( _internalInputData * prevLayerErrors)
-			// Calculate gradient wrt. biases ( 1 * prevLayerErrors)
-			for (long numSamples = 0; numSamples < _dWeights.GetNumSamples(); numSamples++)
+			// Calculate gradient wrt. weights: (_internalInputData * prevLayerErrors)
+			// Calculate gradient wrt. biases: (1 * prevLayerErrors)
+			for (long numSamples = 0; numSamples < _internalInputData.GetNumSamples(); numSamples++)
 			{
 				for (long n = 0; n < _numOutputNeurons; n++)
 				{
 					float error = prevLayerErrors[numSamples * prevLayerErrors.GetNC() + n];
-					if (_hasBias) {
-						_dBiases[numSamples * prevLayerErrors.GetNC() + n] += error;
-					}
+					_dBiases[numSamples * prevLayerErrors.GetNC() + n] += error;
 
-					for (long k = 0; k < _dWeights.GetK(); k++)
+					for (long k = 0; k < _internalInputData.GetK(); k++)
 					{
-						for (long nr = 0; nr < _dWeights.GetNR(); nr++)
+						for (long nr = 0; nr < _internalInputData.GetNR(); nr++)
 						{
-							for (long nc = 0; nc < _dWeights.GetNC(); nc++)
+							for (long nc = 0; nc < _internalInputData.GetNC(); nc++)
 							{
 								float value = _internalInputData[(((numSamples * _internalInputData.GetK()) + k) * _internalInputData.GetNR() + nr) * _internalInputData.GetNC() + nc];
-								_dWeights[(((numSamples * _dWeights.GetK()) + k) * _dWeights.GetNR() + nr) * _dWeights.GetNC() + nc] += value * error;
+								long indx = (n * _dWeights.GetNC() + ((k * _internalInputData.GetNR() + nr) * _internalInputData.GetNC() + nc));
+								_dWeights[indx] += (value * error);
 							}
 						}
 					}
 				}
 			}
 
-			// Calculate gradient wrt. input (_weights * prevLayerErrors)
-			for (long numSamples = 0; numSamples < _dWeights.GetNumSamples(); numSamples++)
+			// Calculate gradient wrt. input: (_weights * prevLayerErrors)
+			for (long numSamples = 0; numSamples < _layerErrors.GetNumSamples(); numSamples++)
 			{
 				for (long n = 0; n < _numOutputNeurons; n++)
 				{
 					float error = prevLayerErrors[numSamples * prevLayerErrors.GetNC() + n];
-					for (long k = 0; k < _dWeights.GetK(); k++)
+					for (long k = 0; k < _layerErrors.GetK(); k++)
 					{
-						for (long nr = 0; nr < _dWeights.GetNR(); nr++)
+						for (long nr = 0; nr < _layerErrors.GetNR(); nr++)
 						{
-							for (long nc = 0; nc < _dWeights.GetNC(); nc++)
+							for (long nc = 0; nc < _layerErrors.GetNC(); nc++)
 							{
-								float value = _weights[(((_weights.GetK()) + k) * _weights.GetNR() + nr) * _weights.GetNC() + nc];
+								long indx = (n * _dWeights.GetNC() + ((k * _internalInputData.GetNR() + nr) * _internalInputData.GetNC() + nc));
+								float value = _weights[indx];
 								_layerErrors[(((numSamples * _layerErrors.GetK()) + k) * _layerErrors.GetNR() + nr) * _layerErrors.GetNC() + nc] = value * error;
 							}
 						}

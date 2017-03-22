@@ -36,7 +36,7 @@ namespace nexural {
 			_stride_width = parser::ParseLong(_layerParams, "stride_width");
 			_stride_height = parser::ParseLong(_layerParams, "stride_height");
 			_num_of_filters = parser::ParseLong(_layerParams, "num_of_filters");
-			_hasBias = parser::ParseBool(_layerParams, "has_bias");
+			_hasBiases = parser::ParseBool(_layerParams, "has_bias");
 		}
 
 		~ConvolutionalLayer() {
@@ -51,7 +51,7 @@ namespace nexural {
 			_outputData.Resize(_outputShape);
 			_weights.Resize(_num_of_filters, _inputShape.GetK(), _kernel_height, _kernel_width);
 			_weights.FillRandom();
-			if (_hasBias) {
+			if (_hasBiases) {
 				_biases.Resize(1, 1, 1, _num_of_filters);
 			}
 		}

@@ -19,43 +19,24 @@ TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE
 OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 */
 
-#include "tensor.h"
-#include "solvers.h"
 
-#ifndef _NEXURALNET_DNN_NETWORK_NETWORK_TRAINNER
-#define _NEXURALNET_DNN_NETWORK_NETWORK_TRAINNER
+#ifndef _NEXURALNET_DNN_NETWORK_TRAINER_OPTIONS
+#define _NEXURALNET_DNN_NETWORK_TRAINER_OPTIONS
 
 namespace nexural {
-	class Network;
-
-	class NetworkTrainer {
-		typedef BaseSolverPtr NetSolver;
-
+	struct TrainerOptions {
 	public:
-		NetworkTrainer() :
-			_maxNumEpochs(10),
-			_minErrorThreshold(0.0001f),
-			_batchSize(1),
-			_maxNumEpochsWithoutProgress(100),
-			_solver(new SGD())
-		{ };
+		TrainerOptions() = delete;
+		explicit TrainerOptions(const TrainerOptions& network) = delete;
+		explicit TrainerOptions(TrainerOptions&& network) = delete;
+		TrainerOptions& operator=(const TrainerOptions& network) = delete;
+		TrainerOptions& operator=(TrainerOptions&& network) = delete;
 
-		~NetworkTrainer();
-
-		void Train(Network& net, Tensor& trainingData, Tensor& targetData, const long batchSize = 1);
+		//TrainerOptions() { };
+		~TrainerOptions() { };
 
 	private:
-		void InitLayersForTraining(Network& net);
-		void ResetLayersGradients(Network& net);
-
-	private:
-		long _maxNumEpochs; 
-		long _maxNumEpochsWithoutProgress;
-		float _minErrorThreshold;
-		float _batchSize;
-		Tensor _input;
-		Tensor _target;
-		NetSolver _solver;
+		
 	};
 }
 #endif

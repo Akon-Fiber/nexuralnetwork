@@ -72,6 +72,7 @@ namespace nexural {
 	}
 
 	Tensor::~Tensor() { 
+
 	}
 
 	void Tensor::Resize(const long numSamples_, const long k_, const long nr_, const long nc_) {
@@ -124,7 +125,7 @@ namespace nexural {
 	void Tensor::FillRandom() {
 		std::random_device rd;
 		std::mt19937 gen(rd());
-		std::uniform_real_distribution<> dis(-1, 1);
+		std::uniform_real_distribution<> dis(0, 1);
 		std::generate(begin(), end(), [&]() { return dis(gen); });
 	}
 

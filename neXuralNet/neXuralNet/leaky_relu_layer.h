@@ -19,43 +19,53 @@ TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE
 OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 */
 
-#include "tensor.h"
-#include "solvers.h"
+#include "computational_base_layer.h"
+#include "data_parser.h"
 
-#ifndef _NEXURALNET_DNN_NETWORK_NETWORK_TRAINNER
-#define _NEXURALNET_DNN_NETWORK_NETWORK_TRAINNER
+#ifndef _NEXURALNET_DNN_LAYERS_LEAKY_RELU_LAYER
+#define _NEXURALNET_DNN_LAYERS_LEAKY_RELU_LAYER
 
 namespace nexural {
-	class Network;
-
-	class NetworkTrainer {
-		typedef BaseSolverPtr NetSolver;
-
+	class LeakyReluLayer : public ComputationalBaseLayer {
 	public:
-		NetworkTrainer() :
-			_maxNumEpochs(10),
-			_minErrorThreshold(0.0001f),
-			_batchSize(1),
-			_maxNumEpochsWithoutProgress(100),
-			_solver(new SGD())
-		{ };
+		LeakyReluLayer(const LayerParams &layerParams) : ComputationalBaseLayer(layerParams) {
 
-		~NetworkTrainer();
+		}
 
-		void Train(Network& net, Tensor& trainingData, Tensor& targetData, const long batchSize = 1);
+		~LeakyReluLayer() {
+
+		}
+
+		virtual void Setup(const LayerShape& prevLayerShape) {
+			_inputShape.Resize(prevLayerShape);
+			_outputShape.Resize(_inputShape);
+			_outputData.Resize(_outputShape);
+		}
+
+		virtual void FeedForward(const Tensor& inputData) {
+			_internalInputData.ShareTensor(inputData);
+			for (long i = 0; i < inputData.Size(); i++)
+			{
+				float value = inputData[i];
+				_outputData[i] = value < 0 ? (float)0.01 * value : value;
+			}
+		}
+
+		virtual void SetupLayerForTraining() {
+			_layerErrors.Resize(_inputShape);
+		}
+
+		virtual void BackPropagate(const Tensor& prevLayerErrors) {
+			for (long i = 0; i < _internalInputData.Size(); i++)
+			{
+				float error = prevLayerErrors[i];
+				float value = _internalInputData[i];
+				_layerErrors[i] = value < 0 ? (float)0.01 * error : error;
+			}
+		}
 
 	private:
-		void InitLayersForTraining(Network& net);
-		void ResetLayersGradients(Network& net);
-
-	private:
-		long _maxNumEpochs; 
-		long _maxNumEpochsWithoutProgress;
-		float _minErrorThreshold;
-		float _batchSize;
-		Tensor _input;
-		Tensor _target;
-		NetSolver _solver;
+		Tensor _internalInputData;
 	};
 }
 #endif

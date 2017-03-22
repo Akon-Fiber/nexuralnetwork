@@ -24,7 +24,7 @@ OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 #include "input_base_class.h"
 
 #ifndef _NEXURALNET_DNN_LAYERS_TENSOR_INPUT_LAYER
-#define _NEXURALNET_DNN_LAYERS_GRAY_IMAGE_INPUT_LAYER
+#define _NEXURALNET_DNN_LAYERS_TENSOR_INPUT_LAYER
 
 namespace nexural {
 	class TensorInputLayer : public InputBaseLayer {
