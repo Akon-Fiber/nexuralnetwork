@@ -162,9 +162,6 @@
     <ClInclude Include="leaky_relu_layer.h">
       <Filter>Source Files\dnn\layers\computational_layers</Filter>
     </ClInclude>
-    <ClInclude Include="trainer_options.h">
-      <Filter>Source Files\dnn\network</Filter>
-    </ClInclude>
     <ClInclude Include="tanh_layerh.h">
       <Filter>Source Files\dnn\layers\computational_layers</Filter>
     </ClInclude>
@@ -188,6 +185,9 @@
     </ClInclude>
     <ClInclude Include="xor_gate_with_relu.h">
       <Filter>Tests</Filter>
+    </ClInclude>
+    <ClInclude Include="config_reader.h">
+      <Filter>Source Files\dnn\network</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

@@ -25,8 +25,40 @@ OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
 namespace nexural {
 
+	NetworkTrainer::NetworkTrainer() :
+		_maxNumEpochs(10),
+		_maxNumEpochsWithoutProgress(100),
+		_minErrorThreshold(0.0001f),
+		_batchSize(1),
+		_solver(new SGD()),
+		_beVerbose(true)
+	{ };
+
+	NetworkTrainer::NetworkTrainer(const std::string trainerConfigPath) {
+		InitTrainer(trainerConfigPath);
+	}
+
 	NetworkTrainer::~NetworkTrainer() {
 
+	}
+
+	void NetworkTrainer::InitTrainer(const std::string trainerConfigPath) {
+		TrainerSettings trainerSettings;
+		ConfigReader::DecodeTrainerCongif(trainerConfigPath, trainerSettings);
+
+		_maxNumEpochs = parser::ParseInt(trainerSettings, "max_num_epochs");
+		_maxNumEpochsWithoutProgress = parser::ParseInt(trainerSettings, "max_num_epochs_without_progress");
+		_minErrorThreshold = parser::ParseFloat(trainerSettings, "min_error_threshold");
+		_batchSize = parser::ParseInt(trainerSettings, "batch_size");
+		_beVerbose = parser::ParseBool(trainerSettings, "be_verbose");
+
+		std::string selectedSolver = parser::ParseString(trainerSettings, "solver");
+		// TODO: Check if memory is correctly deallocated
+		if (selectedSolver == "sgd") {
+			_solver.reset(new SGD());
+		} else if (selectedSolver == "sgd_momentum") {
+			_solver.reset(new SGDMomentum());
+		}
 	}
 
 	void NetworkTrainer::Train(Network& net, Tensor& trainingData, Tensor& targetData, const long batchSize) {
@@ -101,9 +133,4 @@ namespace nexural {
 		}
 		net._lossNetworkLayer->SetupLayerForTraining();
 	}
-
-	void NetworkTrainer::ResetLayersGradients(Network& net) {
-
-	}
-
 }

@@ -150,6 +150,7 @@
     <ClInclude Include="i_layer.h" />
     <ClInclude Include="i_loss_layer.h" />
     <ClInclude Include="i_solver.h" />
+    <ClInclude Include="config_reader.h" />
     <ClInclude Include="loss_base_layer.h" />
     <ClInclude Include="loss_functions.h" />
     <ClInclude Include="loss_layers.h" />
@@ -169,7 +170,6 @@
     <ClInclude Include="tanh_layerh.h" />
     <ClInclude Include="tensor.h" />
     <ClInclude Include="tensor_input_layer.h" />
-    <ClInclude Include="trainer_options.h" />
     <ClInclude Include="utils.h" />
     <ClInclude Include="xor_gate_with_relu.h" />
   </ItemGroup>

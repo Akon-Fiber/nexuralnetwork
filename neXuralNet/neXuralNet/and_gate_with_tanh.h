@@ -25,14 +25,14 @@ OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 void Test_AND_Gate_With_TanH() {
 	nexural::Tensor inputData, trainingData, targetData;
 
-	std::string configFilePath = "d:\\RESEARCH\\neXuralNetwork\\data\\and_tanh\\network.json";
+	std::string networkConfigPath = "d:\\RESEARCH\\neXuralNetwork\\data\\and_tanh\\network.json";
 	std::string trainingDataPath = "d:\\RESEARCH\\neXuralNetwork\\data\\and_tanh\\trainingData.txt";
 	std::string targetDataPath = "d:\\RESEARCH\\neXuralNetwork\\data\\and_tanh\\targetData.txt";
 
 	nexural::DataReader::ReadTensorFromFile(trainingDataPath, trainingData);
 	nexural::DataReader::ReadTensorFromFile(targetDataPath, targetData);
 
-	nexural::Network net(configFilePath);
+	nexural::Network net(networkConfigPath);
 	nexural::NetworkTrainer netTrainer;
 	netTrainer.Train(net, trainingData, targetData);
 

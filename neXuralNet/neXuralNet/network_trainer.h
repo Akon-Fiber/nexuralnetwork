@@ -32,21 +32,15 @@ namespace nexural {
 		typedef BaseSolverPtr NetSolver;
 
 	public:
-		NetworkTrainer() :
-			_maxNumEpochs(10),
-			_minErrorThreshold(0.0001f),
-			_batchSize(1),
-			_maxNumEpochsWithoutProgress(100),
-			_solver(new SGD())
-		{ };
-
+		NetworkTrainer();
+		NetworkTrainer(const std::string trainerConfigPath);
 		~NetworkTrainer();
 
 		void Train(Network& net, Tensor& trainingData, Tensor& targetData, const long batchSize = 1);
 
 	private:
+		void InitTrainer(const std::string trainerConfigPath);
 		void InitLayersForTraining(Network& net);
-		void ResetLayersGradients(Network& net);
 
 	private:
 		long _maxNumEpochs; 
@@ -56,6 +50,7 @@ namespace nexural {
 		Tensor _input;
 		Tensor _target;
 		NetSolver _solver;
+		bool _beVerbose;
 	};
 }
 #endif

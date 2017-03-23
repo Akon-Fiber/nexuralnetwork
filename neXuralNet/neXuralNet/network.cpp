@@ -23,10 +23,8 @@ OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 #include <iostream>
 
 namespace nexural {
-
 	Network::Network(const std::string jsonFilePath) {
-		NetworkReader netParser(jsonFilePath);
-		netParser.loadNetwork(*this);
+		InitNetwork(jsonFilePath);
 
 		LayerShape prevLayerShape = _inputNetworkLayer->GetOutputShape();
 		for (int i = 0; i < _computationalNetworkLyers.size(); i++) {
@@ -59,7 +57,6 @@ namespace nexural {
 		}
 	}
 
-
 	void Network::SetInputLayer(InputBaseLayerPtr inputLayer) {
 		_inputNetworkLayer = inputLayer;
 	}
@@ -72,6 +69,51 @@ namespace nexural {
 		_lossNetworkLayer = lossLayer;
 	}
 
+	void Network::InitNetwork(const std::string networkConfigPath) {
+		NetworkLayers networkLayers;
+		ConfigReader::DecodeNetCongif(networkConfigPath, networkLayers);
 
+		for (int i = 0; i < networkLayers.size(); i++) {
+			std::string type_member = networkLayers[i].layerType;
+			LayerParams layerParams = networkLayers[i].layerParams;
+
+			if (type_member == "bgr_image_input") {
+				SetInputLayer(InputBaseLayerPtr(new nexural::BGRImageInputLayer(layerParams)));
+			}
+			else if (type_member == "gray_image_input") {
+				SetInputLayer(InputBaseLayerPtr(new nexural::GrayImageInputLayer(layerParams)));
+			}
+			else if (type_member == "tensor_input") {
+				SetInputLayer(InputBaseLayerPtr(new nexural::TensorInputLayer(layerParams)));
+			}
+			else if (type_member == "max_pooling") {
+				AddComputationalLayer(ComputationalBaseLayerPtr(new nexural::MaxPoolingLayer(layerParams)));
+			}
+			else if (type_member == "average_pooling") {
+				AddComputationalLayer(ComputationalBaseLayerPtr(new nexural::AveragePoolingLayer(layerParams)));
+			}
+			else if (type_member == "relu") {
+				AddComputationalLayer(ComputationalBaseLayerPtr(new nexural::ReluLayer(layerParams)));
+			}
+			else if (type_member == "leaky_relu") {
+				AddComputationalLayer(ComputationalBaseLayerPtr(new nexural::LeakyReluLayer(layerParams)));
+			}
+			else if (type_member == "tanh") {
+				AddComputationalLayer(ComputationalBaseLayerPtr(new nexural::TanHLayer(layerParams)));
+			}
+			else if (type_member == "dropout") {
+				AddComputationalLayer(ComputationalBaseLayerPtr(new nexural::DropoutLayer(layerParams)));
+			}
+			else if (type_member == "fully_connected") {
+				AddComputationalLayer(ComputationalBaseLayerPtr(new nexural::FullyConnectedLayer(layerParams)));
+			}
+			else if (type_member == "mse") {
+				SetLossLayer(LossBaseLayerPtr(new nexural::MSELossLayer(layerParams)));
+			}
+			else if (type_member == "rmse") {
+				SetLossLayer(LossBaseLayerPtr(new nexural::RMSELossLayer(layerParams)));
+			}
+		}
+	}
 }
 

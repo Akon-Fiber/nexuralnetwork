@@ -25,15 +25,16 @@ OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 void Test_XOR_Gate_With_RELU() {
 	nexural::Tensor inputData, trainingData, targetData;
 
-	std::string configFilePath = "d:\\RESEARCH\\neXuralNetwork\\data\\xor_relu\\network.json";
+	std::string networkConfigPath = "d:\\RESEARCH\\neXuralNetwork\\data\\xor_relu\\network.json";
+	std::string trainerConfigPath = "d:\\RESEARCH\\neXuralNetwork\\data\\xor_relu\\trainer.json";
 	std::string trainingDataPath = "d:\\RESEARCH\\neXuralNetwork\\data\\xor_relu\\trainingData.txt";
 	std::string targetDataPath = "d:\\RESEARCH\\neXuralNetwork\\data\\xor_relu\\targetData.txt";
 
 	nexural::DataReader::ReadTensorFromFile(trainingDataPath, trainingData);
 	nexural::DataReader::ReadTensorFromFile(targetDataPath, targetData);
 
-	nexural::Network net(configFilePath);
-	nexural::NetworkTrainer netTrainer;
+	nexural::Network net(networkConfigPath);
+	nexural::NetworkTrainer netTrainer(trainerConfigPath);
 	netTrainer.Train(net, trainingData, targetData);
 
 	std::cout << "Test the trained network: " << std::endl;
