@@ -47,11 +47,10 @@ namespace nexural {
 		Tensor();
 		Tensor(long numSamples_, long k_, long nr_, long nc_);
 		~Tensor();
-
-		explicit Tensor(const Tensor& tensor) = delete;
-		explicit Tensor(Tensor&& tensor) = delete;
-		Tensor& operator=(const Tensor& tensor) = delete;
-		Tensor& operator=(Tensor&& tensor) = delete;
+		explicit Tensor(const Tensor& tensor);
+		Tensor& operator=(const Tensor& tensor);
+		explicit Tensor(Tensor&& tensor);
+		Tensor& operator=(Tensor&& tensor);
 
 		typedef float* iterator;
 		typedef const float* const_iterator;

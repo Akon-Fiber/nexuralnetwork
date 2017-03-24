@@ -28,8 +28,8 @@ namespace nexural {
 	class ISolver {
 	public:
 		virtual ~ISolver() { }
-		virtual void UpdateWeights(Tensor& weights, const Tensor& dWeights) = 0;
-		virtual void UpdateBiases(Tensor& baises, const Tensor& dBiases) = 0;
+		virtual void UpdateWeights(Tensor& weights, const Tensor& dWeights, const std::string& layerID) = 0;
+		virtual void UpdateBiases(Tensor& baises, const Tensor& dBiases, const std::string& layerID) = 0;
 		virtual void UpdateLearningRate(const float scaleFactor) = 0;
 	};
 }

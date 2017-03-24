@@ -26,6 +26,7 @@ void Test_AND_Gate_With_RELU() {
 	nexural::Tensor inputData, trainingData, targetData;
 
 	std::string networkConfigPath = "d:\\RESEARCH\\neXuralNetwork\\data\\and_relu\\network.json";
+	std::string trainerConfigPath = "d:\\RESEARCH\\neXuralNetwork\\data\\and_relu\\trainer.json";
 	std::string trainingDataPath = "d:\\RESEARCH\\neXuralNetwork\\data\\and_relu\\trainingData.txt";
 	std::string targetDataPath = "d:\\RESEARCH\\neXuralNetwork\\data\\and_relu\\targetData.txt";
 
@@ -33,7 +34,7 @@ void Test_AND_Gate_With_RELU() {
 	nexural::DataReader::ReadTensorFromFile(targetDataPath, targetData);
 
 	nexural::Network net(networkConfigPath);
-	nexural::NetworkTrainer netTrainer;
+	nexural::NetworkTrainer netTrainer(trainerConfigPath);
 	netTrainer.Train(net, trainingData, targetData);
 
 	std::cout << "Test the trained network: " << std::endl;

@@ -33,19 +33,19 @@ namespace nexural {
 
 	public:
 		NetworkTrainer();
-		NetworkTrainer(const std::string trainerConfigPath);
+		NetworkTrainer(const std::string& trainerConfigPath);
 		~NetworkTrainer();
 
 		void Train(Network& net, Tensor& trainingData, Tensor& targetData, const long batchSize = 1);
 
 	private:
-		void InitTrainer(const std::string trainerConfigPath);
+		void InitTrainer(const std::string& trainerConfigPath);
 		void InitLayersForTraining(Network& net);
 
 	private:
 		long _maxNumEpochs; 
-		long _maxNumEpochsWithoutProgress;
-		float _minErrorThreshold;
+		long _maxIterationsWithoutProgress;
+		float _minLearningRateThreshold;
 		long _batchSize;
 		Tensor _input;
 		Tensor _target;

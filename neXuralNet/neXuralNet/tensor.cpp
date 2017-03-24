@@ -44,6 +44,38 @@ namespace nexural {
 		_host.reset(new float[_size], std::default_delete<float[]>());
 	}
 
+	Tensor::Tensor(const Tensor& tensor) {
+		this->Clone(tensor);
+	}
+
+	Tensor& Tensor::operator=(const Tensor& tensor) {
+		this->Clone(tensor);
+		return *this;
+	}
+
+	Tensor::Tensor(Tensor&& tensor) {
+		if (this != &tensor) {
+			_host.swap(tensor._host);
+			std::swap(_numSamples, tensor._numSamples);
+			std::swap(_k, tensor._k);
+			std::swap(_nr, tensor._nr);
+			std::swap(_nc, tensor._nc);
+			std::swap(_size, tensor._size);
+		}
+	}
+
+	Tensor& Tensor::operator=(Tensor&& tensor) {
+		if (this != &tensor) {
+			_host.swap(tensor._host);
+			std::swap(_numSamples, tensor._numSamples);
+			std::swap(_k, tensor._k);
+			std::swap(_nr, tensor._nr);
+			std::swap(_nc, tensor._nc);
+			std::swap(_size, tensor._size);
+		}
+		return *this;
+	}
+
 	void Tensor::ShareTensor(const Tensor& tensor) {
 		if (this != &tensor) {
 			_host = tensor._host;

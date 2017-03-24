@@ -33,13 +33,13 @@ namespace nexural {
 
 		}
 		
-		virtual void UpdateWeights(Tensor& weights, const Tensor& dWeights) {
+		virtual void UpdateWeights(Tensor& weights, const Tensor& dWeights, const std::string& layerID) {
 			for (int i = 0; i < weights.Size(); i++) {
 				weights[i] -= _learningRate * dWeights[i];
 			}
 		}
 
-		virtual void UpdateBiases(Tensor& baises, const Tensor& dBiases) {
+		virtual void UpdateBiases(Tensor& baises, const Tensor& dBiases, const std::string& layerID) {
 			for (int i = 0; i < baises.Size(); i++) {
 				baises[i] -= _learningRate * dBiases[i];
 			}

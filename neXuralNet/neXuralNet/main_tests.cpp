@@ -40,36 +40,27 @@ void Menu() {
 	std::cout << "| 3 - Random data for AND gate" << std::endl;
 	std::cout << "| 4 - Random data for XOR gate" << std::endl;
 	std::cout << "| 5 - XOR gate with RELU" << std::endl;
-	std::cout << "| 6 - Test the serializer" << std::endl;
 	std::cout << "--------------------------------------------------------" << std::endl << std::endl;
 }
 
-void TestSerializer() {
-	nexural::Tensor weightsIn, weightsOut, biasesIn, biasesOut;
-	weightsIn.Resize(1, 1, 1, 2);
-	weightsIn[0] = 0.0000000000000005f;
-	weightsIn[1] = 2;
+void Test() {
+	nexural::Tensor tens1, tens2, tens3, tens4, tens5, tens6, tens7;
+	tens1.Resize(2, 3, 1, 2);
+	tens1.Fill(7);
 
-	biasesIn.Resize(2, 1, 1, 2);
-	biasesIn[0] = 0.00030033005f;
-	biasesIn[1] = 22.322f;
-	biasesIn[2] = 0.435f;
-	biasesIn[3] = 22.77f;
-	
-	std::string serializationTest;
-	//nexural::DataSerializer::Load("D:\\testadd.json", serializationTest);
+	tens2 = tens1;
+	tens2[0] = 5;
+	tens3 = tens2;
+	tens4 = std::move(tens3);
+	tens4[0] = 12;
+	tens5.ShareTensor(tens4);
+	tens6 = tens5;
+	tens7 = std::move(tens6);
+	tens5.Reset();
+	tens6.Reset();
 
-	nexural::DataSerializer::AddParentNode("layer1", serializationTest);
-	nexural::DataSerializer::SerializeTensor(weightsIn, "layer1", "weights", serializationTest);
-	nexural::DataSerializer::DeserializeTensor(weightsOut, "layer1", "weights", serializationTest);
-	nexural::DataSerializer::SerializeTensor(biasesIn, "layer1", "biases", serializationTest);
-	nexural::DataSerializer::DeserializeTensor(biasesOut, "layer1", "biases", serializationTest);
-	nexural::DataSerializer::Save("D:\\testadd.json", serializationTest);
 
-	/*std::cout << tensor3.Size() << std::endl;
-	for (int i = 0; i < tensor3.Size(); i++) {
-		std::cout << tensor3[i] << std::endl;
-	}*/
+
 }
 
 void DoTests(const int option) {
@@ -90,7 +81,7 @@ void DoTests(const int option) {
 		Test_XOR_Gate_With_RELU();
 		break;
 	case 6:
-		TestSerializer();
+		Test();
 		break;
 	default:
 		break;

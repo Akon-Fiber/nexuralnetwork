@@ -27,14 +27,14 @@ namespace nexural {
 
 	NetworkTrainer::NetworkTrainer() :
 		_maxNumEpochs(10),
-		_maxNumEpochsWithoutProgress(100),
-		_minErrorThreshold(0.0001f),
+		_maxIterationsWithoutProgress(100),
+		_minLearningRateThreshold(0.00001f),
 		_batchSize(1),
 		_solver(new SGD()),
 		_beVerbose(true)
 	{ };
 
-	NetworkTrainer::NetworkTrainer(const std::string trainerConfigPath) {
+	NetworkTrainer::NetworkTrainer(const std::string& trainerConfigPath) {
 		InitTrainer(trainerConfigPath);
 	}
 
@@ -42,18 +42,17 @@ namespace nexural {
 
 	}
 
-	void NetworkTrainer::InitTrainer(const std::string trainerConfigPath) {
+	void NetworkTrainer::InitTrainer(const std::string& trainerConfigPath) {
 		TrainerSettings trainerSettings;
 		ConfigReader::DecodeTrainerCongif(trainerConfigPath, trainerSettings);
 
 		_maxNumEpochs = parser::ParseInt(trainerSettings, "max_num_epochs");
-		_maxNumEpochsWithoutProgress = parser::ParseInt(trainerSettings, "max_num_epochs_without_progress");
-		_minErrorThreshold = parser::ParseFloat(trainerSettings, "min_error_threshold");
+		_maxIterationsWithoutProgress = parser::ParseInt(trainerSettings, "max_num_iterations_without_progress");
+		_minLearningRateThreshold = parser::ParseFloat(trainerSettings, "min_learning_rate_threshold");
 		_batchSize = parser::ParseInt(trainerSettings, "batch_size");
 		_beVerbose = parser::ParseBool(trainerSettings, "be_verbose");
-
 		std::string selectedSolver = parser::ParseString(trainerSettings, "solver");
-		// TODO: Check if memory is correctly deallocated
+
 		if (selectedSolver == "sgd") {
 			_solver.reset(new SGD());
 		} else if (selectedSolver == "sgd_momentum") {
@@ -62,17 +61,20 @@ namespace nexural {
 	}
 
 	void NetworkTrainer::Train(Network& net, Tensor& trainingData, Tensor& targetData, const long batchSize) {
+		std::cout << "The engine is initializing the network for the training process." << std::endl << std::endl;
 		InitLayersForTraining(net);
+		float prevError = std::numeric_limits<float>::max();
 		float currentError = 0;
 		bool doTraining = true;
 		long currentEpoch = 0;
+		long stepsWithoutAnyProgress = 0;
 
+		std::cout << "Training started:" << std::endl;
 		while (doTraining) {
 			Tensor *error, *weights, *dWeights, *biases, *dBiases;
-			//std::cout << "Current epoch: " << currentEpoch << std::endl << std::endl;
+			std::cout << "Epoch: " << currentEpoch << std::endl << std::endl;
 			long trainingDataIter = trainingData.GetNumSamples();
 			for (int batchIndex = 0; batchIndex < trainingDataIter; batchIndex += batchSize) {
-				//std::cout << "Iter: " << batchIndex << std::endl;
 				_input.GetBatch(trainingData, batchIndex, batchSize);
 				_target.GetBatch(targetData, batchIndex, batchSize);
 
@@ -92,12 +94,16 @@ namespace nexural {
 				net._lossNetworkLayer->CalculateTotalError(_target);
 				error = net._lossNetworkLayer->GetLayerErrors();
 				currentError = net._lossNetworkLayer->GetTotalError();
-				//std::cout << "Total error: " << currentError << std::endl;
-				//std::cout << "-------------------------------" << currentError << std::endl << std::endl;
 
-				if (currentError <= _minErrorThreshold) {
-					//doTraining = false;
-					//break;
+				if (prevError == currentError) {
+					stepsWithoutAnyProgress++;
+					if (stepsWithoutAnyProgress == _maxIterationsWithoutProgress) {
+						doTraining = false;
+						break;
+					}
+				}
+				else {
+					stepsWithoutAnyProgress = 0;
 				}
 
 				// Backpropagate the error
@@ -111,12 +117,12 @@ namespace nexural {
 					if ((*it)->HasWeights()) {
 						weights = (*it)->GetLayerWeights();
 						dWeights = (*it)->GetLayerDWeights();
-						_solver->UpdateWeights(*weights, *dWeights);
+						_solver->UpdateWeights(*weights, *dWeights, (*it)->GetLayerID());
 					}
 					if ((*it)->HasBiases()) {
 						biases = (*it)->GetLayerBiases();
 						dBiases = (*it)->GetLayerDBiases();
-						_solver->UpdateWeights(*biases, *dBiases);
+						_solver->UpdateWeights(*biases, *dBiases, (*it)->GetLayerID());
 					}
 				}
 			}

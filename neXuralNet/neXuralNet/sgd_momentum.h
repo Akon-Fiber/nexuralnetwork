@@ -34,27 +34,50 @@ namespace nexural {
 
 		}
 
-		virtual void UpdateWeights(Tensor& weights, const Tensor& dWeights) {
-			// float_t V = mu * V - learning_rate * (dW[i] + W[i] * weight_decay);
-			// W[i] += V;
+		virtual void UpdateWeights(Tensor& weights, const Tensor& dWeights, const std::string& layerID) {
+			Tensor v;
+			auto search = _weightsVelocity.find(layerID);
 
-			// Classical momentum :
-			// vW(t + 1) = momentum*Vw(t) - learning_rate*gradient_F(W(t))
-			//	W(t + 1) = W(t) + vW(t + 1)
-
-			/*float v;
+			if (search != _weightsVelocity.end()) {
+				v.ShareTensor(search->second);
+			}
+			else {
+				v.Resize(weights.GetShape());
+				v.Fill(0);
+				_weightsVelocity.insert(std::pair<std::string, Tensor>(layerID, std::ref(v)));
+			}
+			
+			// TODO: Add weight_decay.
+			// Formula: V = mu * V - learning_rate * (dW + W * weight_decay);
 			for (int i = 0; i < weights.Size(); i++) {
-				v = _mu * v - _learningRate * dWeights[i];
-				weights[i] = weights[i] + v;
-			}*/
+				v[i] = _mu * v[i] + _learningRate * dWeights[i];
+				weights[i] -= v[i];
+			}
 		}
 
-		virtual void UpdateBiases(Tensor& baises, const Tensor& dBiases) {
+		virtual void UpdateBiases(Tensor& baises, const Tensor& dBiases, const std::string& layerID) {
+			Tensor v;
+			auto search = _biasesVelocity.find(layerID);
 
+			if (search != _biasesVelocity.end()) {
+				v.ShareTensor(search->second);
+			}
+			else {
+				v.Resize(baises.GetShape());
+				v.Fill(0);
+				_biasesVelocity.insert(std::pair<std::string, Tensor>(layerID, std::ref(v)));
+			}
+
+			for (int i = 0; i < baises.Size(); i++) {
+				v[i] = _mu * v[i] + _learningRate * dBiases[i];
+				baises[i] -= v[i];
+			}
 		}
 
 	private:
 		float _mu;
+		std::map<std::string, Tensor> _weightsVelocity;
+		std::map<std::string, Tensor> _biasesVelocity;
 	};
 }
 #endif
