@@ -36,10 +36,11 @@ namespace nexural {
 
 		}
 
-		virtual void Setup(const LayerShape& prevLayerShape) {
+		virtual void Setup(const LayerShape& prevLayerShape, const int layerIndex) {
 			_inputShape.Resize(prevLayerShape);
 			_outputShape.Resize(_inputShape);
 			_outputData.Resize(_outputShape);
+			_layerID = "tanh_layerh" + std::to_string(layerIndex);
 		}
 
 		virtual void FeedForward(const Tensor& inputData) {
@@ -62,6 +63,14 @@ namespace nexural {
 				float value = _internalInputData[i];
 				_layerErrors[i] = static_cast<float>(error * (1.0 - std::tanh(value) * std::tanh(value)));
 			}
+		}
+
+		virtual void Serialize(std::string& data) {
+
+		}
+
+		virtual void Deserialize(const std::string& data) {
+
 		}
 
 	private:

@@ -25,7 +25,6 @@ OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 #include <string>
 
 #include "tensor.h"
-#include "data_to_tensor_converter.h"
 
 #ifndef _NEXURALNET_UTILITY_DATA_READER_H
 #define _NEXURALNET_UTILITY_DATA_READER_H
@@ -51,6 +50,7 @@ namespace nexural {
 			//}
 		}
 
+		// TODO: Change it with a class that supports RAII
 		static void ReadTensorFromFile(const std::string filePath, Tensor& tensor) {
 			std::ifstream file(filePath, std::ios::binary);
 			if (file.fail()) {

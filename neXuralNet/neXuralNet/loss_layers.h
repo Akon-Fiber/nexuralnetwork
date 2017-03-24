@@ -20,4 +20,3 @@ OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 */
 
 #include "mse_loss_layer.h"
-#include "rmse_loss_layer.h"

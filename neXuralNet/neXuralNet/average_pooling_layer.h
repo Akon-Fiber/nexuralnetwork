@@ -37,13 +37,14 @@ namespace nexural {
 			
 		}
 		
-		virtual void Setup(const LayerShape& prevLayerShape) {
+		virtual void Setup(const LayerShape& prevLayerShape, const int layerIndex) {
 			_inputShape.Resize(prevLayerShape);
 			_outputShape.Resize(prevLayerShape.GetNumSamples(), prevLayerShape.GetK(),
 				(prevLayerShape.GetNR() / _kernel_height + (prevLayerShape.GetNR() % _kernel_height == 0 ? 0 : 1)),
 				(prevLayerShape.GetNC() / _kernel_width + (prevLayerShape.GetNC() % _kernel_width == 0 ? 0 : 1)));
 
 			_outputData.Resize(_outputShape);
+			_layerID = "average_pooling_layer" + std::to_string(layerIndex);
 		}
 		
 		virtual void FeedForward(const Tensor& inputData) {
@@ -112,6 +113,14 @@ namespace nexural {
 					}
 				}
 			}
+		}
+
+		virtual void Serialize(std::string& data) {
+		
+		}
+
+		virtual void Deserialize(const std::string& data) {
+
 		}
 
 	private:

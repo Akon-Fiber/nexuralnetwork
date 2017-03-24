@@ -24,7 +24,7 @@ OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 #include "input_layers.h"
 #include "computational_layers.h"
 #include "loss_layers.h"
-#include "data_to_tensor_converter.h"
+#include "utils.h"
 #include "network_trainer.h"
 #include "data_reader.h"
 #include "config_reader.h"
@@ -49,6 +49,8 @@ namespace nexural {
 		~Network();
 
 		void Run(Tensor& inputData);
+		void Serialize(const std::string& dataPath);
+		void Deserialize(const std::string& dataPath);
 
 	private:
 		void SetInputLayer(InputBaseLayerPtr inputLayer);

@@ -36,6 +36,8 @@ void Test_XOR_Gate_With_RELU() {
 	nexural::Network net(networkConfigPath);
 	nexural::NetworkTrainer netTrainer(trainerConfigPath);
 	netTrainer.Train(net, trainingData, targetData);
+	//net.Serialize("D:\\netsave.json");
+	//net.Deserialize("D:\\netsave.json");
 
 	std::cout << "Test the trained network: " << std::endl;
 	inputData.Resize(1, 1, 1, 2);

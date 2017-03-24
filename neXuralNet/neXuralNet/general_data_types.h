@@ -19,32 +19,14 @@ TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE
 OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 */
 
-#include <opencv2\core\core.hpp>
-#include "tensor.h"
-#include "data_parser.h"
+#include <vector>
+#include <map>
 
-#ifndef _NEXURALNET_UTILITY_DATA_TO_TENSOR_CONVERTER
-#define _NEXURALNET_UTILITY_DATA_TO_TENSOR_CONVERTER
+#ifndef _NEXURALNET_DATA_TYPES_GENERAL_DATA_TYPES_H
+#define _NEXURALNET_DATA_TYPES_GENERAL_DATA_TYPES_H
 
 namespace nexural {
-	class DataToTensorConverter {
-	public:
-		static void Convert(const cv::Mat& sourceImage, Tensor& outputData) {
-			outputData.Resize(1, sourceImage.channels(), sourceImage.rows, sourceImage.cols);
-
-			for (long nr = 0; nr < outputData.GetNR(); nr++)
-			{
-				for (long nc = 0; nc < outputData.GetNC(); nc++)
-				{
-					cv::Vec3b intensity = sourceImage.at<cv::Vec3b>(nr, nc);
-					for (long k = 0; k < outputData.GetK(); k++) {
-						uchar col = intensity.val[k];
-						outputData[((outputData.GetK() + k) * outputData.GetNR() + nr) * outputData.GetNC() + nc] = col;
-					}
-				}
-			}
-
-		}
-	};
+	typedef std::map<std::string, std::string> LayerParams;
+	typedef std::map<std::string, std::string> TrainerSettings;
 }
 #endif

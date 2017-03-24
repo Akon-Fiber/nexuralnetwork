@@ -28,6 +28,7 @@ namespace nexural {
 	class ILossLayer {
 	public:
 		virtual ~ILossLayer() { }
+		virtual void Setup(const LayerShape& prevLayerShape) = 0;
 		virtual void CalculateError(const Tensor& targetData) = 0;
 		virtual void CalculateTotalError(const Tensor& targetData) = 0;
 		virtual const float GetTotalError() = 0;

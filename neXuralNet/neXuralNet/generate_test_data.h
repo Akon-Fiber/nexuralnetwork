@@ -21,6 +21,8 @@ OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
 #include <iostream>
 #include <fstream>
+#include <algorithm>
+#include <random>
 #include "network.h"
 
 enum class TestDataType {

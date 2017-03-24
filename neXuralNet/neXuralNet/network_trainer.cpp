@@ -69,10 +69,10 @@ namespace nexural {
 
 		while (doTraining) {
 			Tensor *error, *weights, *dWeights, *biases, *dBiases;
-			std::cout << "Current epoch: " << currentEpoch << std::endl << std::endl;
+			//std::cout << "Current epoch: " << currentEpoch << std::endl << std::endl;
 			long trainingDataIter = trainingData.GetNumSamples();
 			for (int batchIndex = 0; batchIndex < trainingDataIter; batchIndex += batchSize) {
-				std::cout << "Iter: " << batchIndex << std::endl;
+				//std::cout << "Iter: " << batchIndex << std::endl;
 				_input.GetBatch(trainingData, batchIndex, batchSize);
 				_target.GetBatch(targetData, batchIndex, batchSize);
 
@@ -92,8 +92,8 @@ namespace nexural {
 				net._lossNetworkLayer->CalculateTotalError(_target);
 				error = net._lossNetworkLayer->GetLayerErrors();
 				currentError = net._lossNetworkLayer->GetTotalError();
-				std::cout << "Total error: " << currentError << std::endl;
-				std::cout << "-------------------------------" << currentError << std::endl << std::endl;
+				//std::cout << "Total error: " << currentError << std::endl;
+				//std::cout << "-------------------------------" << currentError << std::endl << std::endl;
 
 				if (currentError <= _minErrorThreshold) {
 					//doTraining = false;

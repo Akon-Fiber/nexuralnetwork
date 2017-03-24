@@ -21,10 +21,7 @@ OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
 #include <vector>
 #include <string>
-#include <algorithm>
-#include <math.h> 
-#include <random>
-#include <opencv2/core/core.hpp>
+#include <opencv2\core\core.hpp>
 #include "tensor.h"
 
 #ifndef _NEXURALNET_UTILITY_UTILS_H
@@ -32,8 +29,23 @@ OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
 namespace nexural {
 	namespace Utils {
-		static std::vector<std::string> TokenizeString(const std::string& str, const std::string& delimiters)
-		{
+		static void ConvertToTensor(const cv::Mat& sourceImage, Tensor& outputData) {
+			outputData.Resize(1, sourceImage.channels(), sourceImage.rows, sourceImage.cols);
+
+			for (long nr = 0; nr < outputData.GetNR(); nr++)
+			{
+				for (long nc = 0; nc < outputData.GetNC(); nc++)
+				{
+					cv::Vec3b intensity = sourceImage.at<cv::Vec3b>(nr, nc);
+					for (long k = 0; k < outputData.GetK(); k++) {
+						uchar col = intensity.val[k];
+						outputData[((outputData.GetK() + k) * outputData.GetNR() + nr) * outputData.GetNC() + nc] = col;
+					}
+				}
+			}
+		}
+
+		static std::vector<std::string> TokenizeString(const std::string& str, const std::string& delimiters) {
 			std::vector<std::string> tokens;
 			// Skip delimiters at beginning.
 			std::string::size_type lastPos = str.find_first_not_of(delimiters, 0);

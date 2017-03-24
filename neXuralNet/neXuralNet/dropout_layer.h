@@ -37,11 +37,12 @@ namespace nexural {
 
 		}
 
-		virtual void Setup(const LayerShape& prevLayerShape) {
+		virtual void Setup(const LayerShape& prevLayerShape, const int layerIndex) {
 			_inputShape.Resize(prevLayerShape);
 			_outputShape.Resize(_inputShape);
 			_outputData.Resize(_outputShape);
 			_dropoutIndexes.Resize(_outputShape);
+			_layerID = "dropout_layer" + std::to_string(layerIndex);
 		}
 
 		virtual void FeedForward(const Tensor& inputData) {
@@ -66,6 +67,14 @@ namespace nexural {
 				float drop = _dropoutIndexes[i];
 				_layerErrors[i] = error * drop;
 			}
+		}
+
+		virtual void Serialize(std::string& data) {
+
+		}
+
+		virtual void Deserialize(const std::string& data) {
+
 		}
 
 	private:

@@ -28,6 +28,9 @@ OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 #include "xor_gate_with_relu.h"
 #include "generate_test_data.h"
 
+#include "tensor.h"
+#include "data_serializer.h"
+
 void Menu() {
 	std::cout << "--------------------------MENU--------------------------" << std::endl;
 	std::cout << "| Available options:" << std::endl;
@@ -37,7 +40,36 @@ void Menu() {
 	std::cout << "| 3 - Random data for AND gate" << std::endl;
 	std::cout << "| 4 - Random data for XOR gate" << std::endl;
 	std::cout << "| 5 - XOR gate with RELU" << std::endl;
+	std::cout << "| 6 - Test the serializer" << std::endl;
 	std::cout << "--------------------------------------------------------" << std::endl << std::endl;
+}
+
+void TestSerializer() {
+	nexural::Tensor weightsIn, weightsOut, biasesIn, biasesOut;
+	weightsIn.Resize(1, 1, 1, 2);
+	weightsIn[0] = 0.0000000000000005f;
+	weightsIn[1] = 2;
+
+	biasesIn.Resize(2, 1, 1, 2);
+	biasesIn[0] = 0.00030033005f;
+	biasesIn[1] = 22.322f;
+	biasesIn[2] = 0.435f;
+	biasesIn[3] = 22.77f;
+	
+	std::string serializationTest;
+	//nexural::DataSerializer::Load("D:\\testadd.json", serializationTest);
+
+	nexural::DataSerializer::AddParentNode("layer1", serializationTest);
+	nexural::DataSerializer::SerializeTensor(weightsIn, "layer1", "weights", serializationTest);
+	nexural::DataSerializer::DeserializeTensor(weightsOut, "layer1", "weights", serializationTest);
+	nexural::DataSerializer::SerializeTensor(biasesIn, "layer1", "biases", serializationTest);
+	nexural::DataSerializer::DeserializeTensor(biasesOut, "layer1", "biases", serializationTest);
+	nexural::DataSerializer::Save("D:\\testadd.json", serializationTest);
+
+	/*std::cout << tensor3.Size() << std::endl;
+	for (int i = 0; i < tensor3.Size(); i++) {
+		std::cout << tensor3[i] << std::endl;
+	}*/
 }
 
 void DoTests(const int option) {
@@ -57,14 +89,17 @@ void DoTests(const int option) {
 	case 5:
 		Test_XOR_Gate_With_RELU();
 		break;
+	case 6:
+		TestSerializer();
+		break;
 	default:
 		break;
 	}
 }
 
 int main(int argc, char* argv[]) {
-	std::cout.setf(std::ios::fixed, std::ios::floatfield);
-	std::cout.setf(std::ios::showpoint);
+	//std::cout.setf(std::ios::fixed, std::ios::floatfield);
+	//std::cout.setf(std::ios::showpoint);
 	try {
 		int option = 1;
 		while (option != 0) {

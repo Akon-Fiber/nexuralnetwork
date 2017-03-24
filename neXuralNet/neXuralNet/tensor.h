@@ -20,7 +20,7 @@ OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 */
 
 #include <memory>
-#include "data_types.h"
+#include "layer_shape.h"
 
 #ifndef _NEXURALNET_DATA_TYPES_TENSOR_H
 #define _NEXURALNET_DATA_TYPES_TENSOR_H

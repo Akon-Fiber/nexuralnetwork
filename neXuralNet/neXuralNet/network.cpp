@@ -19,8 +19,8 @@ TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE
 OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 */
 
-#include "network.h"
 #include <iostream>
+#include "network.h"
 
 namespace nexural {
 	Network::Network(const std::string jsonFilePath) {
@@ -28,7 +28,7 @@ namespace nexural {
 
 		LayerShape prevLayerShape = _inputNetworkLayer->GetOutputShape();
 		for (int i = 0; i < _computationalNetworkLyers.size(); i++) {
-			_computationalNetworkLyers[i]->Setup(prevLayerShape);
+			_computationalNetworkLyers[i]->Setup(prevLayerShape, i);
 			prevLayerShape = _computationalNetworkLyers[i]->GetOutputShape();
 		}
 		_lossNetworkLayer->Setup(prevLayerShape);
@@ -70,12 +70,12 @@ namespace nexural {
 	}
 
 	void Network::InitNetwork(const std::string networkConfigPath) {
-		NetworkLayers networkLayers;
-		ConfigReader::DecodeNetCongif(networkConfigPath, networkLayers);
+		LayerSettingsCollection layerSettingsCollection;
+		ConfigReader::DecodeNetCongif(networkConfigPath, layerSettingsCollection);
 
-		for (int i = 0; i < networkLayers.size(); i++) {
-			std::string type_member = networkLayers[i].layerType;
-			LayerParams layerParams = networkLayers[i].layerParams;
+		for (int i = 0; i < layerSettingsCollection.size(); i++) {
+			std::string type_member = layerSettingsCollection[i].layerType;
+			LayerParams layerParams = layerSettingsCollection[i].layerParams;
 
 			if (type_member == "bgr_image_input") {
 				SetInputLayer(InputBaseLayerPtr(new nexural::BGRImageInputLayer(layerParams)));
@@ -110,9 +110,22 @@ namespace nexural {
 			else if (type_member == "mse") {
 				SetLossLayer(LossBaseLayerPtr(new nexural::MSELossLayer(layerParams)));
 			}
-			else if (type_member == "rmse") {
-				SetLossLayer(LossBaseLayerPtr(new nexural::RMSELossLayer(layerParams)));
-			}
+		}
+	}
+
+	void Network::Serialize(const std::string& dataPath) {
+		std::string data;
+		for (int i = 0; i < _computationalNetworkLyers.size(); i++) {
+			_computationalNetworkLyers[i]->Serialize(data);
+		}
+		DataSerializer::Save(dataPath, data);
+	}
+	
+	void Network::Deserialize(const std::string& dataPath) {
+		std::string data;
+		DataSerializer::Load(dataPath, data);
+		for (int i = 0; i < _computationalNetworkLyers.size(); i++) {
+			_computationalNetworkLyers[i]->Deserialize(data);
 		}
 	}
 }

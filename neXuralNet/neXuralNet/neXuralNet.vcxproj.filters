@@ -5,10 +5,6 @@
       <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
       <Extensions>cpp;c;cc;cxx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
     </Filter>
-    <Filter Include="Header Files">
-      <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
-      <Extensions>h;hh;hpp;hxx;hm;inl;inc;xsd</Extensions>
-    </Filter>
     <Filter Include="Resource Files">
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
@@ -61,6 +57,9 @@
     <Filter Include="Tests">
       <UniqueIdentifier>{e5ecc299-c488-463b-a59a-1d5d6bc215e9}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source Files\utility\json_utility">
+      <UniqueIdentifier>{f0206211-1372-46ad-8cfc-f2d9a7bc8e2a}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="network.h">
@@ -77,9 +76,6 @@
     </ClInclude>
     <ClInclude Include="fully_connected_layer.h">
       <Filter>Source Files\dnn\layers\computational_layers</Filter>
-    </ClInclude>
-    <ClInclude Include="data_types.h">
-      <Filter>Source Files\data_types</Filter>
     </ClInclude>
     <ClInclude Include="i_loss_layer.h">
       <Filter>Source Files\dnn\layers\loss_layers\common</Filter>
@@ -150,23 +146,11 @@
     <ClInclude Include="tensor.h">
       <Filter>Source Files\data_types</Filter>
     </ClInclude>
-    <ClInclude Include="data_parser.h">
-      <Filter>Source Files\data_types</Filter>
-    </ClInclude>
-    <ClInclude Include="data_reader.h">
-      <Filter>Source Files\data_types</Filter>
-    </ClInclude>
-    <ClInclude Include="data_to_tensor_converter.h">
-      <Filter>Source Files\data_types</Filter>
-    </ClInclude>
     <ClInclude Include="leaky_relu_layer.h">
       <Filter>Source Files\dnn\layers\computational_layers</Filter>
     </ClInclude>
     <ClInclude Include="tanh_layerh.h">
       <Filter>Source Files\dnn\layers\computational_layers</Filter>
-    </ClInclude>
-    <ClInclude Include="rmse_loss_layer.h">
-      <Filter>Source Files\dnn\layers\loss_layers</Filter>
     </ClInclude>
     <ClInclude Include="sgd.h">
       <Filter>Source Files\dnn\solvers</Filter>
@@ -186,8 +170,35 @@
     <ClInclude Include="xor_gate_with_relu.h">
       <Filter>Tests</Filter>
     </ClInclude>
+    <ClInclude Include="data_parser.h">
+      <Filter>Source Files\utility</Filter>
+    </ClInclude>
+    <ClInclude Include="data_reader.h">
+      <Filter>Source Files\utility</Filter>
+    </ClInclude>
     <ClInclude Include="config_reader.h">
-      <Filter>Source Files\dnn\network</Filter>
+      <Filter>Source Files\utility</Filter>
+    </ClInclude>
+    <ClInclude Include="json_engine_reader.h">
+      <Filter>Source Files\utility\json_utility</Filter>
+    </ClInclude>
+    <ClInclude Include="json_config_reader.h">
+      <Filter>Source Files\utility\json_utility</Filter>
+    </ClInclude>
+    <ClInclude Include="layer_shape.h">
+      <Filter>Source Files\data_types</Filter>
+    </ClInclude>
+    <ClInclude Include="general_data_types.h">
+      <Filter>Source Files\data_types</Filter>
+    </ClInclude>
+    <ClInclude Include="json_data_serializer.h">
+      <Filter>Source Files\utility\json_utility</Filter>
+    </ClInclude>
+    <ClInclude Include="data_serializer.h">
+      <Filter>Source Files\utility</Filter>
+    </ClInclude>
+    <ClInclude Include="layer_settings.h">
+      <Filter>Source Files\data_types</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

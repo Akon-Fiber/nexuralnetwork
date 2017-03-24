@@ -36,10 +36,11 @@ namespace nexural {
 
 		}
 
-		virtual void Setup(const LayerShape& prevLayerShape) {
+		virtual void Setup(const LayerShape& prevLayerShape, const int layerIndex) {
 			_inputShape.Resize(prevLayerShape);
 			_outputShape.Resize(_inputShape);
 			_outputData.Resize(_outputShape);
+			_layerID = "relu_layer" + std::to_string(layerIndex);
 		}
 
 		virtual void FeedForward(const Tensor& inputData) {
@@ -62,6 +63,14 @@ namespace nexural {
 				float value = _internalInputData[i];
 				_layerErrors[i] = value < 0 ? (float)0.0 : error;
 			}
+		}
+
+		virtual void Serialize(std::string& data) {
+
+		}
+
+		virtual void Deserialize(const std::string& data) {
+
 		}
 
 	private:

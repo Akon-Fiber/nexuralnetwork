@@ -43,7 +43,7 @@ namespace nexural {
 
 		}
 
-		virtual void Setup(const LayerShape& prevLayerShape) {
+		virtual void Setup(const LayerShape& prevLayerShape, const int layerIndex) {
 			_inputShape.Resize(prevLayerShape);
 			_outputShape.Resize(_inputShape.GetNumSamples(), _num_of_filters, 
 				(((_inputShape.GetNR() - _kernel_height - (2 * _padding_height)) / _stride_height)  + 1), 
@@ -54,6 +54,7 @@ namespace nexural {
 			if (_hasBiases) {
 				_biases.Resize(1, 1, 1, _num_of_filters);
 			}
+			_layerID = "convolutional_layer" + std::to_string(layerIndex);
 		}
 
 		virtual void FeedForward(const Tensor& inputData) {
@@ -65,6 +66,14 @@ namespace nexural {
 		}
 
 		virtual void BackPropagate(const Tensor& prevLayerErrors) {
+
+		}
+
+		virtual void Serialize(std::string& data) {
+
+		}
+
+		virtual void Deserialize(const std::string& data) {
 
 		}
 

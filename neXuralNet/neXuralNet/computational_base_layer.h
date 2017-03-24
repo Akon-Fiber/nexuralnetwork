@@ -21,6 +21,7 @@ OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
 #include "i_layer.h"
 #include "i_computational_layer.h"
+#include "data_serializer.h"
 
 #ifndef _NEXURALNET_DNN_LAYERS_COMPUTATIONAL_BASE_LAYER
 #define _NEXURALNET_DNN_LAYERS_COMPUTATIONAL_BASE_LAYER
@@ -78,6 +79,10 @@ namespace nexural {
 			return _hasBiases;
 		}
 
+		virtual std::string GetLayerID() const {
+			return _layerID;
+		}
+
 	protected:
 		LayerParams _layerParams;
 		LayerShape _inputShape;
@@ -90,6 +95,7 @@ namespace nexural {
 		Tensor _dBiases;
 		bool _hasWeights;
 		bool _hasBiases;
+		std::string _layerID;
 	};
 	typedef std::shared_ptr<ComputationalBaseLayer> ComputationalBaseLayerPtr;
 }

@@ -46,7 +46,7 @@ namespace nexural {
 		long _maxNumEpochs; 
 		long _maxNumEpochsWithoutProgress;
 		float _minErrorThreshold;
-		float _batchSize;
+		long _batchSize;
 		Tensor _input;
 		Tensor _target;
 		NetSolver _solver;

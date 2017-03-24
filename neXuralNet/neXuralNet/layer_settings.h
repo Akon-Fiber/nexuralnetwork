@@ -19,33 +19,21 @@ TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE
 OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 */
 
-#include "layer_settings.h"
-#include "json_engine_reader.h"
-#include "json_config_reader.h"
+#include "general_data_types.h"
 
-#ifndef _NEXURALNET_UTILITY_CONFIG_READER_H
-#define _NEXURALNET_UTILITY_CONFIG_READER_H
+#ifndef _NEXURALNET_DATA_TYPES_LAYER_DETAILS_H
+#define _NEXURALNET_DATA_TYPES_LAYER_DETAILS_H
 
 namespace nexural {
-	enum class ConfigReaderType {
-		JSON = 0
+	struct LayerSettings {
+		LayerSettings() = delete;
+		LayerSettings(std::string layerType_, LayerParams layerParams_) :
+			layerType(layerType_),
+			layerParams(layerParams_) { }
+		~LayerSettings() { }
+		std::string layerType;
+		LayerParams layerParams;
 	};
-
-	class ConfigReader {
-	public:
-		static void DecodeNetCongif(const std::string networkConfigPath, LayerSettingsCollection& layerSettingsCollection, const ConfigReaderType& readerType = ConfigReaderType::JSON) {
-			if (readerType == ConfigReaderType::JSON) {
-				JSONConfigReader jsonReader(networkConfigPath);
-				jsonReader.DecodeNetConfigInternal(layerSettingsCollection);
-			}
-		}
-
-		static void DecodeTrainerCongif(const std::string trainerConfigPath, TrainerSettings& trainerSettings, const ConfigReaderType& readerType = ConfigReaderType::JSON) {
-			if (readerType == ConfigReaderType::JSON) {
-				JSONConfigReader jsonReader(trainerConfigPath);
-				jsonReader.DecodeTrainerConfigInternal(trainerSettings);
-			}
-		}
-	};
+	typedef std::vector<LayerSettings> LayerSettingsCollection;
 }
 #endif

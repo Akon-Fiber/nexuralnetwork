@@ -19,7 +19,9 @@ TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE
 OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 */
 
+#include <string>
 #include "tensor.h"
+#include "general_data_types.h"
 
 #ifndef _NEXURALNET_DNN_I_COMPUTATIONAL_LAYER
 #define _NEXURALNET_DNN_I_COMPUTATIONAL_LAYER
@@ -28,6 +30,7 @@ namespace nexural {
 	class IComputationalLayer {
 	public:
 		virtual ~IComputationalLayer() { }
+		virtual void Setup(const LayerShape& prevLayerShape, const int layerIndex) = 0;
 		virtual void BackPropagate(const Tensor& prevLayerErrors) = 0;
 		virtual Tensor* GetLayerWeights() = 0;
 		virtual Tensor* GetLayerDWeights() = 0; 
@@ -35,6 +38,9 @@ namespace nexural {
 		virtual Tensor* GetLayerDBiases() = 0;
 		virtual bool HasWeights() = 0;
 		virtual bool HasBiases() = 0;
+		virtual std::string GetLayerID() const = 0;
+		virtual void Serialize(std::string& data) = 0;
+		virtual void Deserialize(const std::string& data) = 0;
 	};
 }
 #endif

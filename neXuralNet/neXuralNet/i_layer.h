@@ -28,7 +28,6 @@ namespace nexural {
 	class ILayer {
 	public:
 		virtual ~ILayer() { }
-		virtual void Setup(const LayerShape& prevLayerShape) = 0;
 		virtual void FeedForward(const Tensor& inputData) = 0;
 		virtual Tensor* GetOutput() = 0;
 		virtual Tensor* GetLayerErrors() = 0;

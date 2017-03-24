@@ -39,7 +39,7 @@ namespace nexural {
 
 		}
 
-		virtual void Setup(const LayerShape& prevLayerShape) {
+		virtual void Setup(const LayerShape& prevLayerShape, const int layerIndex) {
 			_inputShape.Resize(prevLayerShape);
 			_outputShape.Resize(_inputShape.GetNumSamples(), 1, 1, _numOutputNeurons);
 			_outputData.Resize(_outputShape);
@@ -47,17 +47,7 @@ namespace nexural {
 			_biases.Resize(1, 1, 1, _numOutputNeurons);
 			_weights.FillRandom();
 			_biases.FillRandom();
-
-			std::cout << "++++++++++++++++++++++++++++++++++++++++" << std::endl;
-			std::cout << "Weights: " << std::endl;
-			for (int i = 0; i < _weights.Size(); i++) {
-				std::cout << _weights[i] << std::endl;
-			}
-			std::cout << "Biases: " << std::endl;
-			for (int i = 0; i < _biases.Size(); i++) {
-				std::cout << _biases[i] << std::endl;
-			}
-			std::cout << "++++++++++++++++++++++++++++++++++++++++" << std::endl;
+			_layerID = "fully_connected_layer" + std::to_string(layerIndex);
 		}
 
 		virtual void FeedForward(const Tensor& inputData) {
@@ -140,6 +130,17 @@ namespace nexural {
 					}
 				}
 			}
+		}
+
+		virtual void Serialize(std::string& data) {
+			DataSerializer::AddParentNode(_layerID, data);
+			DataSerializer::SerializeTensor(_weights, _layerID, "weights", data);
+			DataSerializer::SerializeTensor(_biases, _layerID, "biases", data);
+		}
+
+		virtual void Deserialize(const std::string& data) {
+			DataSerializer::DeserializeTensor(_weights, _layerID, "weights", data);
+			DataSerializer::DeserializeTensor(_biases, _layerID, "biases", data);
 		}
 
 	private:

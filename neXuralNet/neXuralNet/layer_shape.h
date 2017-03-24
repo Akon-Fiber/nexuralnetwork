@@ -22,8 +22,8 @@ OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 #include <vector>
 #include <map>
 
-#ifndef _NEXURALNET_UTILITY_DATA_TYPES
-#define _NEXURALNET_UTILITY_DATA_TYPES
+#ifndef _NEXURALNET_DATA_TYPES_LAYER_SHAPE_H
+#define _NEXURALNET_DATA_TYPES_LAYER_SHAPE_H
 
 namespace nexural {
 	typedef std::map<std::string, std::string> LayerParams;

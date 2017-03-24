@@ -16,7 +16,7 @@
       }
     },
     {
-      "type": "leaky_relu",
+      "type": "relu",
       "params": {
 
       }
@@ -28,7 +28,7 @@
       }
     },
     {
-      "type": "leaky_relu",
+      "type": "relu",
       "params": {
 
       }

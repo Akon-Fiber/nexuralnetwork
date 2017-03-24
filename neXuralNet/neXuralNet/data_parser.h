@@ -20,11 +20,6 @@ OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 */
 
 #include <map>
-#include <vector>
-#include <string>
-#include <sstream>
-#include <iterator>
-#include <stdexcept>
 #include "utils.h"
 
 #ifndef _NEXURALNET_UTILITY_DATA_PARSER_H
@@ -176,44 +171,6 @@ namespace nexural {
 			}
 
 			return result;
-		}
-
-
-		static cv::Scalar ParseScalar(std::map<std::string, std::string> &map, std::string key, int channels_nb)
-		{
-			if (map.find(key) == map.end())
-				throw std::runtime_error("The key was not found!");
-
-			if (map[key].empty()) {
-				throw std::runtime_error("Empty key value!");
-			}
-
-			cv::Scalar thresh(channels_nb);
-			std::vector<std::string> tokens = Utils::TokenizeString(map[key], ",");
-
-			bool safely_parsed = true;
-
-			for (size_t token_id = 0; token_id < std::min((int)tokens.size(), channels_nb); ++token_id)
-			{
-				float value = 0;
-				try
-				{
-					value = std::stof(tokens[token_id]);
-				}
-				catch (...)
-				{
-					safely_parsed = false;
-					break;
-				}
-
-				thresh[static_cast<int>(token_id)] = value;
-			}
-
-			if (!safely_parsed) {
-				throw std::runtime_error("Error while parsing!");
-			}
-
-			return thresh;
 		}
 	}
 }
