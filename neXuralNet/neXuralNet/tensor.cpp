@@ -44,6 +44,9 @@ namespace nexural {
 		_host.reset(new float[_size], std::default_delete<float[]>());
 	}
 
+	Tensor::Tensor(const LayerShape& layerShape) : 
+		Tensor(layerShape.GetNumSamples(), layerShape.GetK(), layerShape.GetNR(), layerShape.GetNC()) { }
+
 	Tensor::Tensor(const Tensor& tensor) {
 		this->Clone(tensor);
 	}
@@ -158,13 +161,13 @@ namespace nexural {
 		std::random_device rd;
 		std::mt19937 gen(rd());
 		std::uniform_real_distribution<> dis(0, 1);
-		std::generate(begin(), end(), [&]() { return dis(gen); });
+		std::generate(Begin(), End(), [&]() { return dis(gen); });
 	}
 
 	void Tensor::FillRandomBinomialDistribution() {
 		std::default_random_engine gen;
 		std::binomial_distribution<int> dis(1, 0.5);
-		std::generate(begin(), end(), [&]() { return dis(gen); });
+		std::generate(Begin(), End(), [&]() { return dis(gen); });
 	}
 
 	void Tensor::GetBatch(const Tensor& tensor, const long startIndex, const long batchSize) {

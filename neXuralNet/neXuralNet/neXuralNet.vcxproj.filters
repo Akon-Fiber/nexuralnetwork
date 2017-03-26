@@ -200,6 +200,15 @@
     <ClInclude Include="layer_settings.h">
       <Filter>Source Files\data_types</Filter>
     </ClInclude>
+    <ClInclude Include="softmax_loss_layer.h">
+      <Filter>Source Files\dnn\layers\loss_layers</Filter>
+    </ClInclude>
+    <ClInclude Include="xor_gate_with_relu_softmax.h">
+      <Filter>Tests</Filter>
+    </ClInclude>
+    <ClInclude Include="and_gate_with_relu_softmax.h">
+      <Filter>Tests</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="tensor.cpp">

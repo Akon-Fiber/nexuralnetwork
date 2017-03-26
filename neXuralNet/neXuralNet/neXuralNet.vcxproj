@@ -131,11 +131,13 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="and_gate_with_relu.h" />
+    <ClInclude Include="and_gate_with_relu_softmax.h" />
     <ClInclude Include="and_gate_with_tanh.h" />
     <ClInclude Include="average_pooling_layer.h" />
     <ClInclude Include="base_solver.h" />
     <ClInclude Include="computational_layers.h" />
     <ClInclude Include="convolutional_layer.h" />
+    <ClInclude Include="softmax_loss_layer.h" />
     <ClInclude Include="data_parser.h" />
     <ClInclude Include="data_reader.h" />
     <ClInclude Include="data_serializer.h" />
@@ -176,6 +178,7 @@
     <ClInclude Include="tensor_input_layer.h" />
     <ClInclude Include="utils.h" />
     <ClInclude Include="xor_gate_with_relu.h" />
+    <ClInclude Include="xor_gate_with_relu_softmax.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main_tests.cpp" />

@@ -1,0 +1,43 @@
+{
+  "NetworkLayers": [
+    {
+      "type": "tensor_input",
+      "params": {
+        "num_samples": "1",
+        "k": "1",
+        "nr": "1",
+        "nc": "2"
+      }
+    },
+    {
+      "type": "fully_connected",
+      "params": {
+        "neurons": "4"
+      }
+    },
+    {
+      "type": "relu",
+      "params": {
+
+      }
+    },  
+    {
+      "type": "fully_connected",
+      "params": {
+        "neurons": "2"
+      }
+    },
+    {
+      "type": "relu",
+      "params": {
+
+      }
+    },
+    {
+      "type": "softmax",
+      "params": {
+
+      }
+    }
+  ]
+}

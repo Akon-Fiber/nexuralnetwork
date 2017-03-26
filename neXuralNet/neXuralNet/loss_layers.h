@@ -20,3 +20,4 @@ OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 */
 
 #include "mse_loss_layer.h"
+#include "softmax_loss_layer.h"

@@ -1,7 +1,7 @@
 {
   "NetworkLayers": [
     {
-     "type": "tensor_input",
+      "type": "tensor_input",
       "params": {
         "num_samples": "1",
         "k": "1",
@@ -61,13 +61,13 @@
       "params": {
 
       }
-    },  
+    },
     {
       "type": "tanh",
       "params": {
 
       }
-    },  
+    },
     {
       "type": "dropout",
       "params": {
@@ -94,6 +94,12 @@
     },
     {
       "type": "rmse",
+      "params": {
+
+      }
+    },
+    {
+      "type": "softmax",
       "params": {
 
       }

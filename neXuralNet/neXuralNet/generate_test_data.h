@@ -27,19 +27,23 @@ OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
 enum class TestDataType {
 	XOR = 0,
-	AND = 1
+	AND = 1,
+	XOR_SOFTMAX = 2,
+	AND_SOFTMAX = 3
 };
 
 void GenerateTestData(TestDataType testDataType) {
-	std::map <int, std::string> xorTraining { { 0, "1 0" }, { 1, "0 1" }, { 2, "1 1" }, { 3, "0 0" } };
+	std::map <int, std::string> xorTraining{ { 0, "1 0" }, { 1, "0 1" }, { 2, "1 1" }, { 3, "0 0" } };
 	std::map <int, std::string> xorTarget{ { 0, "1" }, { 1, "1" }, { 2, "0" }, { 3, "0" } };
 	std::map <int, std::string> andTraining{ { 0, "1 0" }, { 1, "0 1" }, { 2, "1 1" }, { 3, "0 0" } };
 	std::map <int, std::string> andTarget{ { 0, "0" }, { 1, "0" }, { 2, "1" }, { 3, "0" } };
+	std::map <int, std::string> xorSoftmaxTarget{ { 0, "0 1" },{ 1, "0 1" },{ 2, "1 0" },{ 3, "1 0" } };
+	std::map <int, std::string> andSoftmaxTarget{ { 0, "1 0" },{ 1, "1 0" },{ 2, "0 1" },{ 3, "1 0" } };
 
 	std::ofstream fileTrainingData, fileTargetData;
 	fileTrainingData.open("trainingData.txt");
 	fileTargetData.open("targetData.txt");
-	
+
 	std::random_device rd;
 	std::mt19937 gen(rd());
 	std::uniform_int_distribution<> dis(0, 3);
@@ -49,7 +53,13 @@ void GenerateTestData(TestDataType testDataType) {
 	std::cin >> iterations;
 
 	fileTrainingData << iterations << " 1 1 2";
-	fileTargetData << iterations << " 1 1 1";
+	if(testDataType == TestDataType::XOR_SOFTMAX || testDataType == TestDataType::AND_SOFTMAX) {
+		fileTargetData << iterations << " 1 1 2";
+	}
+	else 
+	{
+		fileTargetData << iterations << " 1 1 1";
+	}
 
 	switch (testDataType)
 	{
@@ -65,6 +75,20 @@ void GenerateTestData(TestDataType testDataType) {
 			int randomIndex = dis(gen);
 			fileTrainingData << "\n" << xorTraining[randomIndex];
 			fileTargetData << "\n" << xorTarget[randomIndex];
+		}
+		break;
+	case TestDataType::XOR_SOFTMAX:
+		for (int i = 0; i < iterations; i++) {
+			int randomIndex = dis(gen);
+			fileTrainingData << "\n" << xorTraining[randomIndex];
+			fileTargetData << "\n" << xorSoftmaxTarget[randomIndex];
+		}
+		break;
+	case TestDataType::AND_SOFTMAX:
+		for (int i = 0; i < iterations; i++) {
+			int randomIndex = dis(gen);
+			fileTrainingData << "\n" << xorTraining[randomIndex];
+			fileTargetData << "\n" << andSoftmaxTarget[randomIndex];
 		}
 		break;
 	default:

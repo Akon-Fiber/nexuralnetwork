@@ -38,7 +38,7 @@ namespace nexural {
 
 		virtual void Setup(const LayerShape& prevLayerShape) {
 			if (prevLayerShape.GetK() != 1 || prevLayerShape.GetNR() != 1) {
-				throw std::runtime_error("");
+				throw std::runtime_error("Previous layer don't have a correct shape!");
 			}
 			_inputShape.Resize(prevLayerShape.GetNumSamples(), 1, 1, prevLayerShape.GetNC());
 			_outputShape.Resize(_inputShape);
@@ -46,19 +46,8 @@ namespace nexural {
 		}
 
 		virtual void FeedForward(const Tensor& inputData) {
-			for (long numSamples = 0; numSamples < inputData.GetNumSamples(); numSamples++)
-			{
-				for (long k = 0; k < inputData.GetK(); k++)
-				{
-					for (long nr = 0; nr < inputData.GetNR(); nr++)
-					{
-						for (long nc = 0; nc < inputData.GetNC(); nc++)
-						{
-							float value = inputData[(((numSamples * inputData.GetK()) + k) * inputData.GetNR() + nr) * inputData.GetNC() + nc];
-							_outputData[(((numSamples * _outputData.GetK()) + k) * _outputData.GetNR() + nr) * _outputData.GetNC() + nc] = value;
-						}
-					}
-				}
+			for (long index = 0; index < inputData.Size(); index++) {
+				_outputData[index] = inputData[index];
 			}
 		}
 
@@ -71,7 +60,7 @@ namespace nexural {
 				throw std::runtime_error("The output and target data should have the same size!");
 			}
 			
-			float n = static_cast<float>(_outputData.GetNumSamples());
+			long n = _outputData.GetNumSamples();
 			float factor = float(2) / n;
 			
 			for (long numSamples = 0; numSamples < n; numSamples++)
@@ -91,23 +80,19 @@ namespace nexural {
 				throw std::runtime_error("The output and target data should have the same size!");
 			}
 
-			float n = static_cast<float>(_outputData.GetNumSamples());
-			float totalError = 0;
-
+			long n = _outputData.GetNumSamples();
+			_totalError = 0;
 			for (long numSamples = 0; numSamples < n; numSamples++)
 			{
 				for (long nc = 0; nc < _outputData.GetNC(); nc++)
 				{
 					long idx = numSamples * _outputData.GetNC() + nc;
-					float error = ((_outputData[numSamples * _outputData.GetNC() + nc] -
+					_totalError += ((_outputData[numSamples * _outputData.GetNC() + nc] -
 						targetData[numSamples * _outputData.GetNC() + nc]) *
 						(_outputData[numSamples * _outputData.GetNC() + nc] -
 							targetData[numSamples * _outputData.GetNC() + nc])) / n;
-
-					totalError += error;
 				}
 			}
-			_totalError = totalError;
 		}
 
 	private:

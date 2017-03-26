@@ -30,7 +30,7 @@ namespace nexural {
 		_maxIterationsWithoutProgress(100),
 		_minLearningRateThreshold(0.00001f),
 		_batchSize(1),
-		_solver(new SGD()),
+		_solver(new SGDMomentum()),
 		_beVerbose(true)
 	{ };
 

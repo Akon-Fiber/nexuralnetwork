@@ -110,6 +110,9 @@ namespace nexural {
 			else if (type_member == "mse") {
 				SetLossLayer(LossBaseLayerPtr(new nexural::MSELossLayer(layerParams)));
 			}
+			else if (type_member == "softmax") {
+				SetLossLayer(LossBaseLayerPtr(new nexural::SoftmaxLossLayer(layerParams)));
+			}
 		}
 	}
 

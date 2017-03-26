@@ -46,6 +46,7 @@ namespace nexural {
 	public:
 		Tensor();
 		Tensor(long numSamples_, long k_, long nr_, long nc_);
+		Tensor(const LayerShape& layerShape);
 		~Tensor();
 		explicit Tensor(const Tensor& tensor);
 		Tensor& operator=(const Tensor& tensor);
@@ -54,10 +55,10 @@ namespace nexural {
 
 		typedef float* iterator;
 		typedef const float* const_iterator;
-		iterator       begin() { return  _host.get(); }
-		const_iterator begin() const { return  _host.get(); }
-		iterator       end() { return  _host.get() + _size; }
-		const_iterator end() const { return  _host.get() + _size; }
+		iterator       Begin() { return  _host.get(); }
+		const_iterator Begin() const { return  _host.get(); }
+		iterator       End() { return  _host.get() + _size; }
+		const_iterator End() const { return  _host.get() + _size; }
 
 		void Resize(const long numSamples_, const long k_, const long nr_, const long nc_);
 		void Resize(const LayerShape& layerShape);

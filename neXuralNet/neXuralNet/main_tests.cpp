@@ -26,6 +26,8 @@ OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 #include "and_gate_with_tanh.h"
 #include "and_gate_with_relu.h"
 #include "xor_gate_with_relu.h"
+#include "xor_gate_with_relu_softmax.h"
+#include "and_gate_with_relu_softmax.h"
 #include "generate_test_data.h"
 
 #include "tensor.h"
@@ -35,41 +37,25 @@ void Menu() {
 	std::cout << "--------------------------MENU--------------------------" << std::endl;
 	std::cout << "| Available options:" << std::endl;
 	std::cout << "| 0 - EXIT" << std::endl;
-	std::cout << "| 1 - AND gate with TanH" << std::endl;
-	std::cout << "| 2 - AND gate with RELU" << std::endl;
+	std::cout << "| 1 - Random data for AND gate with Softmax" << std::endl;
+	std::cout << "| 1 - Random data for XOR gate with Softmax" << std::endl;
 	std::cout << "| 3 - Random data for AND gate" << std::endl;
 	std::cout << "| 4 - Random data for XOR gate" << std::endl;
-	std::cout << "| 5 - XOR gate with RELU" << std::endl;
+	std::cout << "| 5 - AND gate with TanH" << std::endl;
+	std::cout << "| 6 - AND gate with RELU" << std::endl;
+	std::cout << "| 7 - XOR gate with RELU" << std::endl;
+	std::cout << "| 8 - AND gate with RELU and Softmax" << std::endl;
+	std::cout << "| 9 - XOR gate with RELU and Softmax" << std::endl;
 	std::cout << "--------------------------------------------------------" << std::endl << std::endl;
-}
-
-void Test() {
-	nexural::Tensor tens1, tens2, tens3, tens4, tens5, tens6, tens7;
-	tens1.Resize(2, 3, 1, 2);
-	tens1.Fill(7);
-
-	tens2 = tens1;
-	tens2[0] = 5;
-	tens3 = tens2;
-	tens4 = std::move(tens3);
-	tens4[0] = 12;
-	tens5.ShareTensor(tens4);
-	tens6 = tens5;
-	tens7 = std::move(tens6);
-	tens5.Reset();
-	tens6.Reset();
-
-
-
 }
 
 void DoTests(const int option) {
 	switch (option) {
 	case 1:
-		Test_AND_Gate_With_TanH();
+		GenerateTestData(TestDataType::AND_SOFTMAX);
 		break;
 	case 2:
-		Test_AND_Gate_With_RELU();
+		GenerateTestData(TestDataType::XOR_SOFTMAX);
 		break;
 	case 3:
 		GenerateTestData(TestDataType::AND);
@@ -78,10 +64,19 @@ void DoTests(const int option) {
 		GenerateTestData(TestDataType::XOR);
 		break;
 	case 5:
-		Test_XOR_Gate_With_RELU();
+		Test_AND_Gate_With_TanH();
 		break;
 	case 6:
-		Test();
+		Test_AND_Gate_With_RELU();
+		break;
+	case 7:
+		Test_XOR_Gate_With_RELU();
+		break;
+	case 8:
+		Test_AND_Gate_With_RELU_Softmax();
+		break;
+	case 9:
+		Test_XOR_Gate_With_RELU_Softmax();
 		break;
 	default:
 		break;
