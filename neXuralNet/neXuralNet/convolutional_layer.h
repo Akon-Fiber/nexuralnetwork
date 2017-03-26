@@ -29,14 +29,15 @@ namespace nexural {
 	class ConvolutionalLayer : public ComputationalBaseLayer {
 	public:
 		ConvolutionalLayer(const LayerParams &layerParams) : ComputationalBaseLayer(layerParams) {
+			_num_of_filters = parser::ParseLong(_layerParams, "num_of_filters");
 			_kernel_width = parser::ParseLong(_layerParams, "kernel_width");
 			_kernel_height = parser::ParseLong(_layerParams, "kernel_height");
 			_padding_width = parser::ParseLong(_layerParams, "padding_width");
 			_padding_height = parser::ParseLong(_layerParams, "padding_height");
 			_stride_width = parser::ParseLong(_layerParams, "stride_width");
 			_stride_height = parser::ParseLong(_layerParams, "stride_height");
-			_num_of_filters = parser::ParseLong(_layerParams, "num_of_filters");
-			_hasBiases = parser::ParseBool(_layerParams, "has_bias");
+			_hasWeights = true;
+			_hasBiases = true;
 		}
 
 		~ConvolutionalLayer() {
@@ -70,11 +71,14 @@ namespace nexural {
 		}
 
 		virtual void Serialize(std::string& data) {
-
+			DataSerializer::AddParentNode(_layerID, data);
+			DataSerializer::SerializeTensor(_weights, _layerID, "weights", data);
+			DataSerializer::SerializeTensor(_biases, _layerID, "biases", data);
 		}
 
 		virtual void Deserialize(const std::string& data) {
-
+			DataSerializer::DeserializeTensor(_weights, _layerID, "weights", data);
+			DataSerializer::DeserializeTensor(_biases, _layerID, "biases", data);
 		}
 
 	private:

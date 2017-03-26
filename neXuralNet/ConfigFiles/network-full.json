@@ -46,8 +46,7 @@
         "padding_width": "2",
         "padding_height": "2",
         "stride_width": "2",
-        "stride_height": "2",
-        "has_bias": "false"
+        "stride_height": "2"
       }
     },
     {
