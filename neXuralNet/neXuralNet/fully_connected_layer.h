@@ -21,7 +21,6 @@ OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
 #include "computational_base_layer.h"
 #include "data_parser.h"
-#include <iostream>
 
 #ifndef _NEXURALNET_DNN_LAYERS_FULLY_CONNECTED_LAYER
 #define _NEXURALNET_DNN_LAYERS_FULLY_CONNECTED_LAYER

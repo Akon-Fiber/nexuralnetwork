@@ -43,15 +43,15 @@ void Test_AND_Gate_With_RELU() {
 	inputData[0] = 1.0;
 	inputData[1] = 1.0;
 	net.Run(inputData);
-	std::cout << "Input: 1 0 | Traget: 0" << std::endl;
+	std::cout << "Input: 1 0 | Target: 0" << std::endl;
 	inputData[0] = 1.0;
 	inputData[1] = 0.0;
 	net.Run(inputData);
-	std::cout << "Input: 0 1 | Traget: 0" << std::endl;
+	std::cout << "Input: 0 1 | Target: 0" << std::endl;
 	inputData[0] = 0.0;
 	inputData[1] = 1.0;
 	net.Run(inputData);
-	std::cout << "Input: 0 0 | Traget: 0" << std::endl;
+	std::cout << "Input: 0 0 | Target: 0" << std::endl;
 	inputData[0] = 0.0;
 	inputData[1] = 0.0;
 	net.Run(inputData);
