@@ -1,36 +1,22 @@
 {
   "NetworkLayers": [
     {
-      "type": "tensor_input",
+      "type": "bgr_image_input",
       "params": {
-        "num_samples": "1",
-        "k": "1",
-        "nr": "1",
-        "nc": "2"
+        "input_width": "4",
+        "input_height": "4"
       }
     },
     {
-      "type": "fully_connected",
+      "type": "convolutional",
       "params": {
-        "neurons": "4"
-      }
-    },
-    {
-      "type": "tanh",
-      "params": {
-
-      }
-    },  
-    {
-      "type": "fully_connected",
-      "params": {
-        "neurons": "1"
-      }
-    },
-    {
-      "type": "tanh",
-      "params": {
-
+        "num_of_filters": "2",
+        "kernel_width": "2",
+        "kernel_height": "2",
+        "padding_width": "0",
+        "padding_height": "0",
+        "stride_width": "1",
+        "stride_height": "1"
       }
     },
     {

@@ -29,13 +29,13 @@ namespace nexural {
 	class ConvolutionalLayer : public ComputationalBaseLayer {
 	public:
 		ConvolutionalLayer(const LayerParams &layerParams) : ComputationalBaseLayer(layerParams) {
-			_num_of_filters = parser::ParseLong(_layerParams, "num_of_filters");
-			_kernel_width = parser::ParseLong(_layerParams, "kernel_width");
-			_kernel_height = parser::ParseLong(_layerParams, "kernel_height");
-			_padding_width = parser::ParseLong(_layerParams, "padding_width");
-			_padding_height = parser::ParseLong(_layerParams, "padding_height");
-			_stride_width = parser::ParseLong(_layerParams, "stride_width");
-			_stride_height = parser::ParseLong(_layerParams, "stride_height");
+			_numOfFilters = parser::ParseLong(_layerParams, "num_of_filters");
+			_kernelWidth = parser::ParseLong(_layerParams, "kernel_width");
+			_kernelHeight = parser::ParseLong(_layerParams, "kernel_height");
+			_paddingWidth = parser::ParseLong(_layerParams, "padding_width");
+			_paddingHeight = parser::ParseLong(_layerParams, "padding_height");
+			_strideWidth = parser::ParseLong(_layerParams, "stride_width");
+			_strideHeight = parser::ParseLong(_layerParams, "stride_height");
 			_hasWeights = true;
 			_hasBiases = true;
 		}
@@ -46,20 +46,41 @@ namespace nexural {
 
 		virtual void Setup(const LayerShape& prevLayerShape, const int layerIndex) {
 			_inputShape.Resize(prevLayerShape);
-			_outputShape.Resize(_inputShape.GetNumSamples(), _num_of_filters, 
-				(((_inputShape.GetNR() - _kernel_height - (2 * _padding_height)) / _stride_height)  + 1), 
-				(((_inputShape.GetNC() - _kernel_width - (2 * _padding_width)) / _stride_width) + 1));
+			_outputShape.Resize(_inputShape.GetNumSamples(), _numOfFilters,
+				(((_inputShape.GetNR() - _kernelHeight - (2 * _paddingHeight)) / _strideHeight)  + 1), 
+				(((_inputShape.GetNC() - _kernelWidth - (2 * _paddingWidth)) / _strideWidth) + 1));
 			_outputData.Resize(_outputShape);
-			_weights.Resize(_num_of_filters, _inputShape.GetK(), _kernel_height, _kernel_width);
+			_weights.Resize(_numOfFilters, _inputShape.GetK(), _kernelHeight, _kernelWidth);
+			_biases.Resize(1, 1, 1, _numOfFilters);
 			_weights.FillRandom();
-			if (_hasBiases) {
-				_biases.Resize(1, 1, 1, _num_of_filters);
-			}
+			_biases.FillRandom();
 			_layerID = "convolutional_layer" + std::to_string(layerIndex);
 		}
 
 		virtual void FeedForward(const Tensor& inputData) {
-
+			for (long numSamples = 0; numSamples < inputData.GetNumSamples(); numSamples++) {
+				for (long numFilters = 0; numFilters < _weights.GetNumSamples(); numFilters++) {
+					long nro = 0;
+					for (long nr = 0; nr < inputData.GetNR() - _kernelHeight + 1; nr += _strideHeight) {
+						long nco = 0;
+						for (long nc = 0; nc < inputData.GetNC() - _kernelWidth + 1; nc += _strideWidth) {
+							float value = 0;
+							for (long i = 0; i < _kernelHeight; i++) {
+								for (long j = 0; j < _kernelWidth; j++) {
+									for (long k = 0; k < inputData.GetK(); k++) {
+										value += inputData[(((numSamples * inputData.GetK()) + k) * inputData.GetNR() + (nr + i)) * inputData.GetNC() + (nc + j)] +
+										_weights[(((numFilters * _weights.GetK()) + k) * _weights.GetNR() + i) * _weights.GetNC() + j];
+									}
+								}
+							}
+							value += _biases[numFilters];
+							_outputData[(((numSamples * _outputData.GetK()) + numFilters) * _outputData.GetNR() + nro) * _outputData.GetNC() + nco] = value;
+							nco++;
+						}
+						nro++;
+					}
+				}
+			}
 		}
 
 		virtual void SetupLayerForTraining() {
@@ -82,13 +103,13 @@ namespace nexural {
 		}
 
 	private:
-		long _num_of_filters;
-		long _kernel_width;
-		long _kernel_height;
-		long _padding_width;
-		long _padding_height;
-		long _stride_width;
-		long _stride_height;
+		long _numOfFilters;
+		long _kernelWidth;
+		long _kernelHeight;
+		long _paddingWidth;
+		long _paddingHeight;
+		long _strideWidth;
+		long _strideHeight;
 	};
 }
 #endif
