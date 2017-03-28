@@ -19,6 +19,9 @@ TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE
 OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 */
 
+#include <opencv2\highgui\highgui.hpp>
+#include <opencv2\core\mat.hpp>
+
 #include <iostream>
 #include <stdlib.h>
 #include <conio.h>
@@ -46,7 +49,17 @@ void Menu() {
 	std::cout << "| 7 - XOR gate with RELU" << std::endl;
 	std::cout << "| 8 - AND gate with RELU and Softmax" << std::endl;
 	std::cout << "| 9 - XOR gate with RELU and Softmax" << std::endl;
+	std::cout << "| 10 - Test the working network" << std::endl;
 	std::cout << "--------------------------------------------------------" << std::endl << std::endl;
+}
+
+void TestWorkingNet() {
+	nexural::Tensor inputData;
+	cv::Mat image = cv::imread("d:\\RESEARCH\\neXuralNetwork\\data\\images\\cat_3.png", CV_LOAD_IMAGE_COLOR);
+	nexural::Utils::ConvertToTensor(image, inputData);
+	std::string networkConfigPath = "d:\\RESEARCH\\neXuralNetwork\\neXuralNet\\ConfigFiles\\network.json";
+	nexural::Network net(networkConfigPath);
+	net.Run(inputData);
 }
 
 void DoTests(const int option) {
@@ -77,6 +90,9 @@ void DoTests(const int option) {
 		break;
 	case 9:
 		Test_XOR_Gate_With_RELU_Softmax();
+		break;
+	case 10:
+		TestWorkingNet();
 		break;
 	default:
 		break;

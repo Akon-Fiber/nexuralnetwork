@@ -3,8 +3,8 @@
     {
       "type": "bgr_image_input",
       "params": {
-        "input_width": "4",
-        "input_height": "4"
+        "input_width": "3",
+        "input_height": "3"
       }
     },
     {
@@ -17,6 +17,12 @@
         "padding_height": "0",
         "stride_width": "1",
         "stride_height": "1"
+      }
+    },
+    {
+      "type": "fully_connected",
+      "params": {
+        "neurons": "1"
       }
     },
     {

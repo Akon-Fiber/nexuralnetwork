@@ -94,6 +94,9 @@
     <PostBuildEvent>
       <Command>xcopy /c /y "$(SolutionDir)ConfigFiles\network.json" "$(SolutionDir)$(PlatformTarget)\$(Configuration)\"</Command>
     </PostBuildEvent>
+    <Link>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+    </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <ClCompile>

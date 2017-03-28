@@ -104,6 +104,9 @@ namespace nexural {
 			else if (type_member == "dropout") {
 				AddComputationalLayer(ComputationalBaseLayerPtr(new nexural::DropoutLayer(layerParams)));
 			}
+			else if (type_member == "convolutional") {
+				AddComputationalLayer(ComputationalBaseLayerPtr(new nexural::ConvolutionalLayer(layerParams)));
+			}
 			else if (type_member == "fully_connected") {
 				AddComputationalLayer(ComputationalBaseLayerPtr(new nexural::FullyConnectedLayer(layerParams)));
 			}

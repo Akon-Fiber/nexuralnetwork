@@ -58,6 +58,7 @@ namespace nexural {
 		}
 
 		virtual void FeedForward(const Tensor& inputData) {
+			_internalInputData.ShareTensor(inputData);
 			for (long numSamples = 0; numSamples < inputData.GetNumSamples(); numSamples++) {
 				for (long numFilters = 0; numFilters < _weights.GetNumSamples(); numFilters++) {
 					long nro = 0;
@@ -68,7 +69,7 @@ namespace nexural {
 							for (long i = 0; i < _kernelHeight; i++) {
 								for (long j = 0; j < _kernelWidth; j++) {
 									for (long k = 0; k < inputData.GetK(); k++) {
-										value += inputData[(((numSamples * inputData.GetK()) + k) * inputData.GetNR() + (nr + i)) * inputData.GetNC() + (nc + j)] +
+										value += inputData[(((numSamples * inputData.GetK()) + k) * inputData.GetNR() + (nr + i)) * inputData.GetNC() + (nc + j)] *
 										_weights[(((numFilters * _weights.GetK()) + k) * _weights.GetNR() + i) * _weights.GetNC() + j];
 									}
 								}
@@ -85,9 +86,41 @@ namespace nexural {
 
 		virtual void SetupLayerForTraining() {
 			_layerErrors.Resize(_inputShape);
+			_dWeights.Resize(_weights.GetShape());
+			_dBiases.Resize(_biases.GetShape());
 		}
 
 		virtual void BackPropagate(const Tensor& prevLayerErrors) {
+			_dWeights.Fill(0.0);
+			_dBiases.Fill(0.0);
+
+			// Calculate gradient wrt. weights: (_internalInputData * prevLayerErrors)
+			// Calculate gradient wrt. biases: (1 * prevLayerErrors)
+			for (long numSamples = 0; numSamples < _internalInputData.GetNumSamples(); numSamples++) {
+				for (long numFilters = 0; numFilters < _weights.GetNumSamples(); numFilters++) {
+					long nro = 0;
+					for (long nr = 0; nr < _internalInputData.GetNR() - _kernelHeight + 1; nr += _strideHeight) {
+						long nco = 0;
+						for (long nc = 0; nc < _internalInputData.GetNC() - _kernelWidth + 1; nc += _strideWidth) {
+							float value = 0;
+							for (long i = 0; i < _kernelHeight; i++) {
+								for (long j = 0; j < _kernelWidth; j++) {
+									for (long k = 0; k < _internalInputData.GetK(); k++) {
+										value += _internalInputData[(((numSamples * _internalInputData.GetK()) + k) * _internalInputData.GetNR() + (nr + i)) * _internalInputData.GetNC() + (nc + j)] *
+											_weights[(((numFilters * _weights.GetK()) + k) * _weights.GetNR() + i) * _weights.GetNC() + j];
+									}
+								}
+							}
+							value += _biases[numFilters];
+							_outputData[(((numSamples * _outputData.GetK()) + numFilters) * _outputData.GetNR() + nro) * _outputData.GetNC() + nco] = value;
+							nco++;
+						}
+						nro++;
+					}
+				}
+			}
+
+			// Calculate gradient wrt. input: (_weights * prevLayerErrors)
 
 		}
 
@@ -103,6 +136,7 @@ namespace nexural {
 		}
 
 	private:
+		Tensor _internalInputData;
 		long _numOfFilters;
 		long _kernelWidth;
 		long _kernelHeight;
