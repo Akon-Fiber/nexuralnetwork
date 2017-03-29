@@ -209,6 +209,9 @@
     <ClInclude Include="and_gate_with_relu_softmax.h">
       <Filter>Tests</Filter>
     </ClInclude>
+    <ClInclude Include="mnist_softmax.h">
+      <Filter>Tests</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="tensor.cpp">

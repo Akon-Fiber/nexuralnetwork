@@ -140,6 +140,7 @@
     <ClInclude Include="base_solver.h" />
     <ClInclude Include="computational_layers.h" />
     <ClInclude Include="convolutional_layer.h" />
+    <ClInclude Include="mnist_softmax.h" />
     <ClInclude Include="softmax_loss_layer.h" />
     <ClInclude Include="data_parser.h" />
     <ClInclude Include="data_reader.h" />

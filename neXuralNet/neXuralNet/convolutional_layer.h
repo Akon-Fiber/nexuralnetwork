@@ -95,28 +95,34 @@ namespace nexural {
 			_dBiases.Fill(0.0);
 
 			// Calculate gradient wrt. weights: (_internalInputData * prevLayerErrors)
-			// Calculate gradient wrt. biases: (1 * prevLayerErrors)
-			for (long numSamples = 0; numSamples < _internalInputData.GetNumSamples(); numSamples++) {
-				for (long numFilters = 0; numFilters < _weights.GetNumSamples(); numFilters++) {
+			for (long errorNumSamples = 0; errorNumSamples < prevLayerErrors.GetNumSamples(); errorNumSamples++) {
+				for (long k = 0; k < _internalInputData.GetK(); k++) {
 					long nro = 0;
-					for (long nr = 0; nr < _internalInputData.GetNR() - _kernelHeight + 1; nr += _strideHeight) {
+					for (long nr = 0; nr < _internalInputData.GetNR() - prevLayerErrors.GetNR() + 1; nr += _strideHeight) {
 						long nco = 0;
-						for (long nc = 0; nc < _internalInputData.GetNC() - _kernelWidth + 1; nc += _strideWidth) {
-							float value = 0;
-							for (long i = 0; i < _kernelHeight; i++) {
-								for (long j = 0; j < _kernelWidth; j++) {
-									for (long k = 0; k < _internalInputData.GetK(); k++) {
-										value += _internalInputData[(((numSamples * _internalInputData.GetK()) + k) * _internalInputData.GetNR() + (nr + i)) * _internalInputData.GetNC() + (nc + j)] *
-											_weights[(((numFilters * _weights.GetK()) + k) * _weights.GetNR() + i) * _weights.GetNC() + j];
+						for (long nc = 0; nc < _internalInputData.GetNC() - prevLayerErrors.GetNC() + 1; nc += _strideWidth) {
+							float error = 0;
+							for (long i = 0; i < prevLayerErrors.GetNR(); i++) {
+								for (long j = 0; j < prevLayerErrors.GetNC(); j++) {
+									for (long inputNumSamples = 0; inputNumSamples < _internalInputData.GetNumSamples(); inputNumSamples++) {
+										error += _internalInputData[(((inputNumSamples * _internalInputData.GetK()) + k) * _internalInputData.GetNR() + (nr + i)) * _internalInputData.GetNC() + (nc + j)] *
+											prevLayerErrors[(((errorNumSamples * prevLayerErrors.GetK()) + k) * prevLayerErrors.GetNR() + i) * prevLayerErrors.GetNC() + j];
 									}
 								}
 							}
-							value += _biases[numFilters];
-							_outputData[(((numSamples * _outputData.GetK()) + numFilters) * _outputData.GetNR() + nro) * _outputData.GetNC() + nco] = value;
+							_dWeights[(((errorNumSamples * _dWeights.GetK()) + k) * _dWeights.GetNR() + nro) * _dWeights.GetNC() + nco] = error;
 							nco++;
 						}
 						nro++;
 					}
+				}
+			}
+
+			// Calculate gradient wrt. biases: (1 * prevLayerErrors)
+			long gbTotal = prevLayerErrors.GetK() * prevLayerErrors.GetNR() * prevLayerErrors.GetNC();
+			for (long errorNumSamples = 0; errorNumSamples < prevLayerErrors.GetNumSamples(); errorNumSamples++) {
+				for (long index = 0; index < gbTotal; index++) {
+					prevLayerErrors[(errorNumSamples * gbTotal) + index];
 				}
 			}
 
@@ -133,6 +139,11 @@ namespace nexural {
 		virtual void Deserialize(const std::string& data) {
 			DataSerializer::DeserializeTensor(_weights, _layerID, "weights", data);
 			DataSerializer::DeserializeTensor(_biases, _layerID, "biases", data);
+		}
+
+	private:
+		void AddPadding(const Tensor& input, Tensor& output, int padding) {
+
 		}
 
 	private:

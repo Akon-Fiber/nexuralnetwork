@@ -36,8 +36,66 @@ namespace nexural {
 			COLOR,
 			GRAY
 		};
+
+		static void ReadMNISTData(const std::string& filename, Tensor& tensor) {
+			std::ifstream file(filename, std::ios::binary);
+			if (file.is_open())
+			{
+				int magicNumber = 0;
+				int numberOfImages = 0;
+				int nRows = 0;
+				int nCols = 0;
+
+				file.read((char*)&magicNumber, sizeof(magicNumber));
+				magicNumber = ReverseInt(magicNumber);
+				file.read((char*)&numberOfImages, sizeof(numberOfImages));
+				numberOfImages = ReverseInt(numberOfImages);
+				file.read((char*)&nRows, sizeof(nRows));
+				nRows = ReverseInt(nRows);
+				file.read((char*)&nCols, sizeof(nCols));
+				nCols = ReverseInt(nCols);
+
+				tensor.Resize(numberOfImages, 1, nRows, nCols);
+
+				for (int numSamples = 0; numSamples < numberOfImages; ++numSamples)
+				{
+					for (int nr = 0; nr < nRows; ++nr)
+					{
+						for (int nc = 0; nc < nCols; ++nc)
+						{
+							unsigned char temp = 0;
+							file.read((char*)&temp, sizeof(temp));
+							tensor[((numSamples * tensor.GetK()) * tensor.GetNR() + nr) * tensor.GetNC() + nc] = (float)temp;
+						}
+					}
+				}
+			}
+		}
+
+		static void ReadMNISTLabels(const std::string& filename, Tensor& tensor) {
+			std::ifstream file(filename, std::ios::binary);
+			if (file.is_open())
+			{
+				int magicNumber = 0;
+				int numberOfLabels = 0;
+
+				file.read((char*)&magicNumber, sizeof(magicNumber));
+				magicNumber = ReverseInt(magicNumber);
+				file.read((char*)&numberOfLabels, sizeof(numberOfLabels));
+				numberOfLabels = ReverseInt(numberOfLabels);
+
+				tensor.Resize(numberOfLabels, 1, 1, 1);
+
+				for (int numSamples = 0; numSamples < numberOfLabels; ++numSamples)
+				{
+					unsigned char temp = 0;
+					file.read((char*)&temp, sizeof(temp));
+					tensor[numSamples] = (float)temp;
+				}
+			}
+		}
 	
-		static void ReadImagesFromDirectory(const std::string directoryPath, TensorCollection& tensorCollection, ReadImageType imagesType = ReadImageType::COLOR) {
+		static void ReadImagesFromDirectory(const std::string directoryPath, Tensor& tensor, ReadImageType imagesType = ReadImageType::COLOR) {
 			//auto readType = imagesType == ReadImageType::COLOR ? cv::IMREAD_COLOR : cv::IMREAD_GRAYSCALE;
 			//std::vector<cv::String> fn;
 			//cv::glob("/home/images/*.png", fn, false);
@@ -80,6 +138,16 @@ namespace nexural {
 			file.close();
 		}
 
+	private:
+		static int ReverseInt(int i)
+		{
+			unsigned char ch1, ch2, ch3, ch4;
+			ch1 = i & 255;
+			ch2 = (i >> 8) & 255;
+			ch3 = (i >> 16) & 255;
+			ch4 = (i >> 24) & 255;
+			return((int)ch1 << 24) + ((int)ch2 << 16) + ((int)ch3 << 8) + ch4;
+		}
 	};
 }
 #endif

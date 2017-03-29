@@ -31,6 +31,7 @@ OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 #include "xor_gate_with_relu.h"
 #include "xor_gate_with_relu_softmax.h"
 #include "and_gate_with_relu_softmax.h"
+#include "mnist_softmax.h"
 #include "generate_test_data.h"
 
 #include "tensor.h"
@@ -49,14 +50,52 @@ void Menu() {
 	std::cout << "| 7 - XOR gate with RELU" << std::endl;
 	std::cout << "| 8 - AND gate with RELU and Softmax" << std::endl;
 	std::cout << "| 9 - XOR gate with RELU and Softmax" << std::endl;
-	std::cout << "| 10 - Test the working network" << std::endl;
+	std::cout << "| 10 - MNIST" << std::endl;
+	std::cout << "| 11 - Experminetal" << std::endl;
 	std::cout << "--------------------------------------------------------" << std::endl << std::endl;
 }
 
-void TestWorkingNet() {
-	nexural::Tensor inputData;
+void AddPadding(const nexural::Tensor& input, nexural::Tensor& output, long paddingWidth, long paddingHeight) {
+	long newNR = input.GetNR() + 2 * paddingHeight;
+	long newNC = input.GetNC() + 2 * paddingWidth;
+	output.Resize(input.GetNumSamples(), input.GetK(), newNR, newNC);
+
+	// Top and bottom bording
+	for (long i = 0; i < newNC; i++) {
+		output[i] = 0;
+		output[i + output.GetNC() * (output.GetNR() - 1)] = 0;
+	}
+
+	// Left and right bording
+	for (long j = 0; j < newNC; j++) {
+		output[j * output.GetNC()] = 0;
+		output[j * output.GetNC() + output.GetNC() - 1] = 0;
+	}
+
+	// Copy the data from input to output
+	for (long numSamples = 0; numSamples < input.GetNumSamples(); numSamples++) {
+		for (long k = 0; k < input.GetK(); k++) {
+			long i = 0;
+			for (long nr = paddingHeight; nr < newNR - paddingHeight; nr++) {
+				long j = 0;
+				for (long nc = paddingWidth; nc < newNC - paddingWidth; nc++) {
+					output[(((numSamples * output.GetK()) + k) * output.GetNR() + nr) * output.GetNC() + nc] =
+						input[(((numSamples * input.GetK()) + k) * input.GetNR() + i) * input.GetNC() + j];
+					j++;
+				}
+				i++;
+			}
+		}
+	}
+}
+
+void Experimental() {
+	nexural::Tensor inputData, test;
 	cv::Mat image = cv::imread("d:\\RESEARCH\\neXuralNetwork\\data\\images\\cat_3.png", CV_LOAD_IMAGE_COLOR);
 	nexural::Utils::ConvertToTensor(image, inputData);
+
+	AddPadding(inputData, test, 2, 2);
+
 	std::string networkConfigPath = "d:\\RESEARCH\\neXuralNetwork\\neXuralNet\\ConfigFiles\\network.json";
 	nexural::Network net(networkConfigPath);
 	net.Run(inputData);
@@ -92,7 +131,10 @@ void DoTests(const int option) {
 		Test_XOR_Gate_With_RELU_Softmax();
 		break;
 	case 10:
-		TestWorkingNet();
+		Test_MNIST_Softmax();
+		break;
+	case 11:
+		Experimental();
 		break;
 	default:
 		break;
@@ -100,8 +142,6 @@ void DoTests(const int option) {
 }
 
 int main(int argc, char* argv[]) {
-	//std::cout.setf(std::ios::fixed, std::ios::floatfield);
-	//std::cout.setf(std::ios::showpoint);
 	try {
 		int option = 1;
 		while (option != 0) {
