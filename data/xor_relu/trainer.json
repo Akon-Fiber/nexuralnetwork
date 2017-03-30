@@ -1,7 +1,7 @@
 {
   "TrainerSettings": {
-     "max_num_epochs": "10",
-     "max_num_iterations_without_progress": "10",
+     "max_num_epochs": "10000",
+     "max_num_iterations_without_progress": "50",
      "min_learning_rate_threshold": "0.0000001",
      "batch_size": "1",
      "solver": "sgd",

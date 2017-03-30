@@ -94,7 +94,6 @@ namespace nexural {
 				net._lossNetworkLayer->CalculateTotalError(_target);
 				error = net._lossNetworkLayer->GetLayerErrors();
 				currentError = net._lossNetworkLayer->GetTotalError();
-				std::cout << "Total error: " << currentError << std::endl;
 
 				if (prevError == currentError) {
 					stepsWithoutAnyProgress++;
@@ -127,6 +126,7 @@ namespace nexural {
 					}
 				}
 			}
+			std::cout << "Total error: " << currentError << std::endl;
 			currentEpoch++;
 			if (currentEpoch == _maxNumEpochs) {
 				doTraining = false;

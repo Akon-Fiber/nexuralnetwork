@@ -37,7 +37,7 @@
     {
       "type": "convolutional",
       "params": {
-        "num_of_filters": "3",
+        "num_of_filters": "16",
         "kernel_width": "5",
         "kernel_height": "5",
         "padding_width": "0",
@@ -62,7 +62,7 @@
     {
       "type": "fully_connected",
       "params": {
-        "neurons": "5"
+        "neurons": "20"
       }
     },
     {

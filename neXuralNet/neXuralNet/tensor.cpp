@@ -161,7 +161,7 @@ namespace nexural {
 	void Tensor::FillRandom() {
 		std::random_device rd;
 		std::mt19937 gen(rd());
-		std::uniform_real_distribution<> dis(0, 1);
+		std::uniform_real_distribution<> dis(-1, 1);
 		std::generate(Begin(), End(), [&]() { return dis(gen); });
 	}
 
@@ -198,7 +198,7 @@ namespace nexural {
 	}
 
 	void Tensor::OutputToConsole() {
-		std::cout.precision(8);
+		//std::cout.precision(8);
 		for (long numSamples = 0; numSamples < _numSamples; numSamples++) {
 			std::cout << "=========== Numsample: " << numSamples << " =============" << std::endl;
 			for (long k = 0; k < _k; k++) {
