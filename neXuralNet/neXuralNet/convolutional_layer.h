@@ -118,7 +118,7 @@ namespace nexural {
 				}
 			}
 
-			// Calculate gradient wrt. biases: (1 * prevLayerErrors)
+			// Calculate gradient wrt. biases: (prevLayerErrors * 1)
 			long gbTotal = prevLayerErrors.GetK() * prevLayerErrors.GetNR() * prevLayerErrors.GetNC();
 			for (long errorNumSamples = 0; errorNumSamples < prevLayerErrors.GetNumSamples(); errorNumSamples++) {
 				for (long index = 0; index < gbTotal; index++) {
@@ -126,8 +126,34 @@ namespace nexural {
 				}
 			}
 
-			// Calculate gradient wrt. input: (_weights * prevLayerErrors)
+			// Calculate gradient wrt. input: (prevLayerErrors * _weights)
+			long paddingWidth = _weights.GetNC() - 1;
+			long paddingHeight = _weights.GetNR() - 1;
+			Tensor convPrevLayerErrors;
+			AddPadding(prevLayerErrors, convPrevLayerErrors, paddingWidth, paddingHeight);
 
+			for (long errorNumSamples = 0; errorNumSamples < convPrevLayerErrors.GetNumSamples(); errorNumSamples++) {
+				for (long k = 0; k < _weights.GetK(); k++) {
+					long nro = 0;
+					for (long nr = 0; nr < _weights.GetNR() - convPrevLayerErrors.GetNR() + 1; nr += _strideHeight) {
+						long nco = 0;
+						for (long nc = 0; nc < _weights.GetNC() - convPrevLayerErrors.GetNC() + 1; nc += _strideWidth) {
+							float error = 0;
+							for (long i = 0; i < convPrevLayerErrors.GetNR(); i++) {
+								for (long j = 0; j < convPrevLayerErrors.GetNC(); j++) {
+									for (long weightsNumSamples = 0; weightsNumSamples < _weights.GetNumSamples(); weightsNumSamples++) {
+										error += _weights[(((weightsNumSamples * _weights.GetK()) + k) * _weights.GetNR() + (nr + i)) * _weights.GetNC() + (nc + j)] *
+											convPrevLayerErrors[(((errorNumSamples * convPrevLayerErrors.GetK()) + k) * convPrevLayerErrors.GetNR() + i) * convPrevLayerErrors.GetNC() + j];
+									}
+								}
+							}
+							_layerErrors[(((errorNumSamples * _layerErrors.GetK()) + k) * _layerErrors.GetNR() + nro) * _layerErrors.GetNC() + nco] = error;
+							nco++;
+						}
+						nro++;
+					}
+				}
+			}
 		}
 
 		virtual void Serialize(std::string& data) {
@@ -142,8 +168,42 @@ namespace nexural {
 		}
 
 	private:
-		void AddPadding(const Tensor& input, Tensor& output, int padding) {
+		void AddPadding(const nexural::Tensor& input, nexural::Tensor& output, long paddingWidth, long paddingHeight) {
+			long newNR = input.GetNR() + 2 * paddingHeight;
+			long newNC = input.GetNC() + 2 * paddingWidth;
+			output.Resize(input.GetNumSamples(), input.GetK(), newNR, newNC);
 
+			for (long numSamples = 0; numSamples < output.GetNumSamples(); numSamples++) {
+				for (long k = 0; k < output.GetK(); k++) {
+					// Top and bottom bording
+					for (long nr = 0; nr < paddingHeight; nr++) {
+						for (long nc = 0; nc < newNC; nc++) {
+							output[(((numSamples * output.GetK()) + k) * output.GetNR() + nr) * output.GetNC() + nc] = 0;
+							output[(((numSamples * output.GetK()) + k) * output.GetNR() + (nr + (output.GetNR() - paddingHeight))) * output.GetNC() + nc] = 0;
+						}
+					}
+
+					// Left and right bording
+					for (long nr = paddingHeight; nr < newNR - paddingHeight; nr++) {
+						for (long nc = 0; nc < paddingWidth; nc++) {
+							output[(((numSamples * output.GetK()) + k) * output.GetNR() + nr) * output.GetNC() + nc] = 0;
+							output[(((numSamples * output.GetK()) + k) * output.GetNR() + nr) * output.GetNC() + nc + (output.GetNC() - paddingWidth)] = 0;
+						}
+					}
+
+					// Copy the data from input to output
+					long i = 0;
+					for (long nr = paddingHeight; nr < newNR - paddingHeight; nr++) {
+						long j = 0;
+						for (long nc = paddingWidth; nc < newNC - paddingWidth; nc++) {
+							output[(((numSamples * output.GetK()) + k) * output.GetNR() + nr) * output.GetNC() + nc] =
+								input[(((numSamples * input.GetK()) + k) * input.GetNR() + i) * input.GetNC() + j];
+							j++;
+						}
+						i++;
+					}
+				}
+			}
 		}
 
 	private:

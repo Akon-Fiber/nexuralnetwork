@@ -84,6 +84,8 @@ namespace nexural {
 		void GetBatch(const Tensor& tensor, const long startIndex, const long batchSize = 1);
 		LayerShape GetShape() const;
 
+		void OutputToConsole();
+
 	private:
 		std::shared_ptr<float> _host;
 		long _numSamples;

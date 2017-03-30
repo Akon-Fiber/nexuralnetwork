@@ -28,10 +28,14 @@ void Test_MNIST_Softmax() {
 	std::string networkConfigPath = "d:\\RESEARCH\\neXuralNetwork\\data\\mnist_softmax\\network.json";
 	std::string trainerConfigPath = "d:\\RESEARCH\\neXuralNetwork\\data\\mnist_softmax\\trainer.json";
 
+	std::cout << "Reading the training dataset..." << std::endl;
 	nexural::DataReader::ReadMNISTData("D:\\RESEARCH\\Datasets\\MNIST\\train-images.idx3-ubyte", trainingData);
+	std::cout << "Reading the labels for the training dataset..." << std::endl;
 	nexural::DataReader::ReadMNISTLabels("D:\\RESEARCH\\Datasets\\MNIST\\train-labels.idx1-ubyte", targetData);
 
+	std::cout << "Initialize the trainer..." << std::endl;
 	nexural::Network net(networkConfigPath);
-	//nexural::NetworkTrainer netTrainer(trainerConfigPath);
-	//netTrainer.Train(net, trainingData, targetData);
+	nexural::NetworkTrainer netTrainer(trainerConfigPath);
+	std::cout << "Starting the training process..." << std::endl;
+	netTrainer.Train(net, trainingData, targetData);
 }

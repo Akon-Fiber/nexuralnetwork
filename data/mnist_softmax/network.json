@@ -5,16 +5,16 @@
       "params": {
         "num_samples": "1",
         "k": "1",
-        "nr": "1",
-        "nc": "2"
+        "nr": "28",
+        "nc": "28"
       }
     },
     {
       "type": "convolutional",
       "params": {
         "num_of_filters": "2",
-        "kernel_width": "2",
-        "kernel_height": "2",
+        "kernel_width": "3",
+        "kernel_height": "3",
         "padding_width": "0",
         "padding_height": "0",
         "stride_width": "1",
@@ -28,9 +28,53 @@
       }
     },
     {
+      "type": "max_pooling",
+      "params": {
+        "kernel_width": "2",
+        "kernel_height": "2"
+      }
+    },
+    {
+      "type": "convolutional",
+      "params": {
+        "num_of_filters": "3",
+        "kernel_width": "5",
+        "kernel_height": "5",
+        "padding_width": "0",
+        "padding_height": "0",
+        "stride_width": "1",
+        "stride_height": "1"
+      }
+    },
+    {
+      "type": "relu",
+      "params": {
+
+      }
+    },
+    {
+      "type": "max_pooling",
+      "params": {
+        "kernel_width": "2",
+        "kernel_height": "2"
+      }
+    },
+    {
       "type": "fully_connected",
       "params": {
-        "neurons": "1"
+        "neurons": "5"
+      }
+    },
+    {
+      "type": "relu",
+      "params": {
+
+      }
+    },
+    {
+      "type": "fully_connected",
+      "params": {
+        "neurons": "10"
       }
     },
     {

@@ -86,7 +86,7 @@ namespace nexural {
 			_dBiases.Fill(0.0);
 
 			// Calculate gradient wrt. weights: (_internalInputData * prevLayerErrors)
-			// Calculate gradient wrt. biases: (1 * prevLayerErrors)
+			// Calculate gradient wrt. biases: (prevLayerErrors * 1)
 			for (long numSamples = 0; numSamples < _internalInputData.GetNumSamples(); numSamples++)
 			{
 				for (long n = 0; n < _numOutputNeurons; n++)
@@ -109,7 +109,7 @@ namespace nexural {
 				}
 			}
 
-			// Calculate gradient wrt. input: (_weights * prevLayerErrors)
+			// Calculate gradient wrt. input: (prevLayerErrors * _weights)
 			for (long numSamples = 0; numSamples < _layerErrors.GetNumSamples(); numSamples++)
 			{
 				for (long n = 0; n < _numOutputNeurons; n++)

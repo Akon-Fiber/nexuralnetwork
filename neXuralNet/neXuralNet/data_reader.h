@@ -37,7 +37,7 @@ namespace nexural {
 			GRAY
 		};
 
-		static void ReadMNISTData(const std::string& filename, Tensor& tensor) {
+		static void ReadMNISTData(const std::string& filename, Tensor& tensor, long limit = 60000) {
 			std::ifstream file(filename, std::ios::binary);
 			if (file.is_open())
 			{
@@ -55,9 +55,13 @@ namespace nexural {
 				file.read((char*)&nCols, sizeof(nCols));
 				nCols = ReverseInt(nCols);
 
-				tensor.Resize(numberOfImages, 1, nRows, nCols);
+				if (limit > numberOfImages) {
+					throw std::runtime_error("The dataset limit was exceeded!");
+				}
 
-				for (int numSamples = 0; numSamples < numberOfImages; ++numSamples)
+				tensor.Resize(limit, 1, nRows, nCols);
+
+				for (int numSamples = 0; numSamples < limit; ++numSamples)
 				{
 					for (int nr = 0; nr < nRows; ++nr)
 					{
@@ -72,7 +76,7 @@ namespace nexural {
 			}
 		}
 
-		static void ReadMNISTLabels(const std::string& filename, Tensor& tensor) {
+		static void ReadMNISTLabels(const std::string& filename, Tensor& tensor, long limit = 60000) {
 			std::ifstream file(filename, std::ios::binary);
 			if (file.is_open())
 			{
@@ -84,13 +88,27 @@ namespace nexural {
 				file.read((char*)&numberOfLabels, sizeof(numberOfLabels));
 				numberOfLabels = ReverseInt(numberOfLabels);
 
-				tensor.Resize(numberOfLabels, 1, 1, 1);
+				if (limit > numberOfLabels) {
+					throw std::runtime_error("The dataset limit was exceeded!");
+				}
 
-				for (int numSamples = 0; numSamples < numberOfLabels; ++numSamples)
+				tensor.Resize(limit, 1, 1, 10);
+
+				for (int numSamples = 0; numSamples < limit; ++numSamples)
 				{
 					unsigned char temp = 0;
 					file.read((char*)&temp, sizeof(temp));
-					tensor[numSamples] = (float)temp;
+
+					for (int number = 0; number < 10; number++) {
+						if (static_cast<int>(temp) == number) {
+							tensor[numSamples * tensor.GetNC() + number] = 1;
+						}
+						else 
+						{
+							tensor[numSamples * tensor.GetNC() + number] = 0;
+						}
+					}
+					
 				}
 			}
 		}

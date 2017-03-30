@@ -22,6 +22,7 @@ OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 #include "tensor.h"
 #include <algorithm>
 #include <random>
+#include <iostream>
 
 namespace nexural {
 	Tensor::Tensor() : 
@@ -194,5 +195,22 @@ namespace nexural {
 
 	LayerShape Tensor::GetShape() const {
 		return LayerShape(_numSamples, _k, _nr, _nc);
+	}
+
+	void Tensor::OutputToConsole() {
+		std::cout.precision(8);
+		for (long numSamples = 0; numSamples < _numSamples; numSamples++) {
+			std::cout << "=========== Numsample: " << numSamples << " =============" << std::endl;
+			for (long k = 0; k < _k; k++) {
+				for (long nr = 0; nr < _nr; nr++) {
+					for (long nc = 0; nc < _nc; nc++) {
+						std::cout << _host.get()[(((numSamples * _k) + k) * _nr + nr) * _nc + nc] << " ";
+					}
+					std::cout << std::endl;
+				}
+				std::cout << "------------------------------" << std::endl;
+			}
+			std::cout << "================================" << std::endl << std::endl;
+		}
 	}
 }
