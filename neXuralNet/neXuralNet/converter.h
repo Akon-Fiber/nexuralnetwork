@@ -19,16 +19,14 @@ TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE
 OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 */
 
-#include <vector>
-#include <string>
 #include <opencv2\core\core.hpp>
 #include "tensor.h"
 
-#ifndef _NEXURALNET_UTILITY_UTILS_H
-#define _NEXURALNET_UTILITY_UTILS_H
+#ifndef _NEXURALNET_UTILITY_CONVERTER_H
+#define _NEXURALNET_UTILITY_CONVERTER_H
 
 namespace nexural {
-	namespace Utils {
+	namespace converter {
 		static void ConvertToTensor(const cv::Mat& sourceImage, Tensor& outputData) {
 			outputData.Resize(1, sourceImage.channels(), sourceImage.rows, sourceImage.cols);
 
@@ -45,22 +43,39 @@ namespace nexural {
 			}
 		}
 
-		static std::vector<std::string> TokenizeString(const std::string& str, const std::string& delimiters) {
-			std::vector<std::string> tokens;
-			// Skip delimiters at beginning.
-			std::string::size_type lastPos = str.find_first_not_of(delimiters, 0);
-			// Find first "non-delimiter".
-			std::string::size_type pos = str.find_first_of(delimiters, lastPos);
-
-			while (std::string::npos != pos || std::string::npos != lastPos)
-			{  // Found a token, add it to the vector.
-				tokens.push_back(str.substr(lastPos, pos - lastPos));
-				// Skip delimiters.  Note the "not_of"
-				lastPos = str.find_first_not_of(delimiters, pos);
-				// Find next "non-delimiter"
-				pos = str.find_first_of(delimiters, lastPos);
+		static void ConvertToTensor(const std::vector<cv::Mat>& sourceImages, Tensor& outputData) {
+			if (sourceImages.size() == 0) {
+				return;
 			}
-			return tokens;
+
+			long numSamples = static_cast<long>(sourceImages.size());
+			long channels = static_cast<long>(sourceImages[0].channels());
+			long nr = sourceImages[0].rows;
+			long nc = sourceImages[0].cols;
+
+			outputData.Resize(numSamples, channels, nr, nc);
+
+			for (long imageNumber = 0; imageNumber < numSamples; imageNumber++) {
+				int currentChannels = sourceImages[0].channels();
+				long currentNr = sourceImages[0].rows;
+				long currentNc = sourceImages[0].cols;
+
+				if (currentChannels != channels || currentNr != nr || currentNc != nc) {
+					throw std::runtime_error("All the samples inside a tensor shoud have the same size!");
+				}
+
+				for (long nr = 0; nr < outputData.GetNR(); nr++)
+				{
+					for (long nc = 0; nc < outputData.GetNC(); nc++)
+					{
+						cv::Vec3b intensity = sourceImages[imageNumber].at<cv::Vec3b>(nr, nc);
+						for (long k = 0; k < outputData.GetK(); k++) {
+							float col = (float)intensity.val[k];
+							outputData[(k * outputData.GetNR() + nr) * outputData.GetNC() + nc] = col;
+						}
+					}
+				}
+			}
 		}
 	}
 }

@@ -24,7 +24,6 @@ OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 #include "input_layers.h"
 #include "computational_layers.h"
 #include "loss_layers.h"
-#include "utils.h"
 #include "network_trainer.h"
 #include "data_reader.h"
 #include "config_reader.h"

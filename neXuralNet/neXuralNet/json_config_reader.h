@@ -70,14 +70,14 @@ namespace nexural {
 			}
 		}
 
-		void DecodeTrainerConfigInternal(TrainerSettings& trainerSettings) {
+		void DecodeTrainerConfigInternal(TrainerParams& trainerParams) {
 			if (!_document.HasMember("TrainerSettings")) {
 				throw std::runtime_error("TrainerSettings member is missing from the config file!");
 			}
 
 			const rapidjson::Value& trSettings = _document["TrainerSettings"];
 			for (rapidjson::Value::ConstMemberIterator iter = trSettings.MemberBegin(); iter != trSettings.MemberEnd(); ++iter) {
-				trainerSettings.insert(std::pair<std::string, std::string>(iter->name.GetString(), iter->value.GetString()));
+				trainerParams.insert(std::pair<std::string, std::string>(iter->name.GetString(), iter->value.GetString()));
 			}
 		}
 	};

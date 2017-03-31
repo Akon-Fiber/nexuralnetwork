@@ -5,10 +5,6 @@
       <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
       <Extensions>cpp;c;cc;cxx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
     </Filter>
-    <Filter Include="Resource Files">
-      <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
-      <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
-    </Filter>
     <Filter Include="Source Files\dnn">
       <UniqueIdentifier>{63bb8cce-7ce8-4a38-8374-2f7a92690022}</UniqueIdentifier>
     </Filter>
@@ -51,25 +47,25 @@
     <Filter Include="Source Files\dnn\solvers\common">
       <UniqueIdentifier>{dffe9103-880c-48ae-a8c5-074dbd82eb6b}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Configs">
-      <UniqueIdentifier>{0f0e1cd2-3099-48fb-81cf-8084cf412274}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Source Files\utility\json_utility">
       <UniqueIdentifier>{f0206211-1372-46ad-8cfc-f2d9a7bc8e2a}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Demo">
+    <Filter Include="demo">
       <UniqueIdentifier>{e5ecc299-c488-463b-a59a-1d5d6bc215e9}</UniqueIdentifier>
     </Filter>
-    <Filter Include="UnitTests">
+    <Filter Include="unit_tests">
       <UniqueIdentifier>{7f99242b-772f-448b-9b77-b13c1eeb9cce}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="tools">
+      <UniqueIdentifier>{9027192c-3886-43e8-b4f4-09e5d2c8b72b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="configs">
+      <UniqueIdentifier>{0f0e1cd2-3099-48fb-81cf-8084cf412274}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="network.h">
       <Filter>Source Files\dnn\network</Filter>
-    </ClInclude>
-    <ClInclude Include="utils.h">
-      <Filter>Source Files\utility</Filter>
     </ClInclude>
     <ClInclude Include="average_pooling_layer.h">
       <Filter>Source Files\dnn\layers\computational_layers</Filter>
@@ -162,22 +158,16 @@
       <Filter>Source Files\dnn\solvers</Filter>
     </ClInclude>
     <ClInclude Include="and_gate_with_tanh.h">
-      <Filter>Demo</Filter>
+      <Filter>demo</Filter>
     </ClInclude>
     <ClInclude Include="and_gate_with_relu.h">
-      <Filter>Demo</Filter>
+      <Filter>demo</Filter>
     </ClInclude>
     <ClInclude Include="generate_test_data.h">
-      <Filter>Demo</Filter>
+      <Filter>demo</Filter>
     </ClInclude>
     <ClInclude Include="xor_gate_with_relu.h">
-      <Filter>Demo</Filter>
-    </ClInclude>
-    <ClInclude Include="data_parser.h">
-      <Filter>Source Files\utility</Filter>
-    </ClInclude>
-    <ClInclude Include="data_reader.h">
-      <Filter>Source Files\utility</Filter>
+      <Filter>demo</Filter>
     </ClInclude>
     <ClInclude Include="config_reader.h">
       <Filter>Source Files\utility</Filter>
@@ -207,13 +197,25 @@
       <Filter>Source Files\dnn\layers\loss_layers</Filter>
     </ClInclude>
     <ClInclude Include="xor_gate_with_relu_softmax.h">
-      <Filter>Demo</Filter>
+      <Filter>demo</Filter>
     </ClInclude>
     <ClInclude Include="and_gate_with_relu_softmax.h">
-      <Filter>Demo</Filter>
+      <Filter>demo</Filter>
     </ClInclude>
     <ClInclude Include="mnist_softmax.h">
-      <Filter>Demo</Filter>
+      <Filter>demo</Filter>
+    </ClInclude>
+    <ClInclude Include="params_parser.h">
+      <Filter>Source Files\utility</Filter>
+    </ClInclude>
+    <ClInclude Include="converter.h">
+      <Filter>Source Files\utility</Filter>
+    </ClInclude>
+    <ClInclude Include="helper.h">
+      <Filter>Source Files\utility</Filter>
+    </ClInclude>
+    <ClInclude Include="data_reader.h">
+      <Filter>tools</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -227,16 +229,16 @@
       <Filter>Source Files\dnn\network</Filter>
     </ClCompile>
     <ClCompile Include="main_tests.cpp">
-      <Filter>Demo</Filter>
+      <Filter>demo</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
     <None Include="..\ConfigFiles\network.json">
-      <Filter>Configs</Filter>
+      <Filter>configs</Filter>
     </None>
     <None Include="..\ConfigFiles\network-full.json">
-      <Filter>Configs</Filter>
+      <Filter>configs</Filter>
     </None>
   </ItemGroup>
 </Project>

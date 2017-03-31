@@ -43,15 +43,15 @@ namespace nexural {
 	}
 
 	void NetworkTrainer::InitTrainer(const std::string& trainerConfigPath) {
-		TrainerSettings trainerSettings;
-		ConfigReader::DecodeTrainerCongif(trainerConfigPath, trainerSettings);
+		TrainerParams trainerParams;
+		ConfigReader::DecodeTrainerCongif(trainerConfigPath, trainerParams);
 
-		_maxNumEpochs = parser::ParseInt(trainerSettings, "max_num_epochs");
-		_maxIterationsWithoutProgress = parser::ParseInt(trainerSettings, "max_num_iterations_without_progress");
-		_minLearningRateThreshold = parser::ParseFloat(trainerSettings, "min_learning_rate_threshold");
-		_batchSize = parser::ParseInt(trainerSettings, "batch_size");
-		_beVerbose = parser::ParseBool(trainerSettings, "be_verbose");
-		std::string selectedSolver = parser::ParseString(trainerSettings, "solver");
+		_maxNumEpochs = parser::ParseInt(trainerParams, "max_num_epochs");
+		_maxIterationsWithoutProgress = parser::ParseInt(trainerParams, "max_num_iterations_without_progress");
+		_minLearningRateThreshold = parser::ParseFloat(trainerParams, "min_learning_rate_threshold");
+		_batchSize = parser::ParseInt(trainerParams, "batch_size");
+		_beVerbose = parser::ParseBool(trainerParams, "be_verbose");
+		std::string selectedSolver = parser::ParseString(trainerParams, "solver");
 
 		if (selectedSolver == "sgd") {
 			_solver.reset(new SGD());

@@ -19,36 +19,27 @@ TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE
 OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 */
 
-#include "params_parser.h"
-#include "input_base_class.h"
+#include <vector>
+#include <string>
 
-#ifndef _NEXURALNET_DNN_LAYERS_BGR_IMAGE_INPUT_LAYER
-#define _NEXURALNET_DNN_LAYERS_BGR_IMAGE_INPUT_LAYER
+#ifndef _NEXURALNET_UTILITY_HELPER_H
+#define _NEXURALNET_UTILITY_HELPER_H
 
 namespace nexural {
-	class BGRImageInputLayer : public InputBaseLayer {
-	public:
-		BGRImageInputLayer(const LayerParams &layerParams) : InputBaseLayer(layerParams) {
-			long nr = parser::ParseLong(_layerParams, "input_height");
-			long nc = parser::ParseLong(_layerParams, "input_width");
-			_inputShape.Resize(1, 3, nr, nc);
-			_outputShape.Resize(_inputShape);
-			_outputData.Resize(_outputShape);
-		}
+	namespace helper {
+		static std::vector<std::string> TokenizeString(const std::string& str, const std::string& delimiters) {
+			std::vector<std::string> tokens;
+			std::string::size_type lastPos = str.find_first_not_of(delimiters, 0);
+			std::string::size_type pos = str.find_first_of(delimiters, lastPos);
 
-		~BGRImageInputLayer() {
-
-		}
-
-		void LoadData(const Tensor& inputTensor) {
-			if (inputTensor.GetShape() != _outputData.GetShape()) {
-				throw std::runtime_error("The input image is not of the same size as the layer!");
+			while (std::string::npos != pos || std::string::npos != lastPos)
+			{
+				tokens.push_back(str.substr(lastPos, pos - lastPos));
+				lastPos = str.find_first_not_of(delimiters, pos);
+				pos = str.find_first_of(delimiters, lastPos);
 			}
-			_outputData.ShareTensor(inputTensor);
+			return tokens;
 		}
-
-	private:
-
-	};
+	}
 }
 #endif

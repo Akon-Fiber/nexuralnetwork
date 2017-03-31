@@ -139,10 +139,11 @@
     <ClInclude Include="average_pooling_layer.h" />
     <ClInclude Include="base_solver.h" />
     <ClInclude Include="computational_layers.h" />
+    <ClInclude Include="converter.h" />
     <ClInclude Include="convolutional_layer.h" />
     <ClInclude Include="mnist_softmax.h" />
     <ClInclude Include="softmax_loss_layer.h" />
-    <ClInclude Include="data_parser.h" />
+    <ClInclude Include="params_parser.h" />
     <ClInclude Include="data_reader.h" />
     <ClInclude Include="data_serializer.h" />
     <ClInclude Include="general_data_types.h" />
@@ -180,7 +181,7 @@
     <ClInclude Include="tanh_layerh.h" />
     <ClInclude Include="tensor.h" />
     <ClInclude Include="tensor_input_layer.h" />
-    <ClInclude Include="utils.h" />
+    <ClInclude Include="helper.h" />
     <ClInclude Include="xor_gate_with_relu.h" />
     <ClInclude Include="xor_gate_with_relu_softmax.h" />
   </ItemGroup>
@@ -199,6 +200,9 @@
   <ImportGroup Label="ExtensionTargets">
     <Import Project="..\packages\OpenCV_VS2015_3.2.0_WithContribs.1.0.1\build\native\OpenCV_VS2015_3.2.0_WithContribs.targets" Condition="Exists('..\packages\OpenCV_VS2015_3.2.0_WithContribs.1.0.1\build\native\OpenCV_VS2015_3.2.0_WithContribs.targets')" />
     <Import Project="..\packages\RapidJson.1.1.0.0\build\native\RapidJson.targets" Condition="Exists('..\packages\RapidJson.1.1.0.0\build\native\RapidJson.targets')" />
+    <Import Project="..\packages\boost.1.63.0.0\build\native\boost.targets" Condition="Exists('..\packages\boost.1.63.0.0\build\native\boost.targets')" />
+    <Import Project="..\packages\boost_filesystem-vc140.1.63.0.0\build\native\boost_filesystem-vc140.targets" Condition="Exists('..\packages\boost_filesystem-vc140.1.63.0.0\build\native\boost_filesystem-vc140.targets')" />
+    <Import Project="..\packages\boost_system-vc140.1.63.0.0\build\native\boost_system-vc140.targets" Condition="Exists('..\packages\boost_system-vc140.1.63.0.0\build\native\boost_system-vc140.targets')" />
   </ImportGroup>
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
     <PropertyGroup>
@@ -208,5 +212,8 @@
     <Error Condition="!Exists('..\packages\OpenCV_VS2015_3.2.0_WithContribs.1.0.1\build\native\OpenCV_VS2015_3.2.0_WithContribs.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\OpenCV_VS2015_3.2.0_WithContribs.1.0.1\build\native\OpenCV_VS2015_3.2.0_WithContribs.targets'))" />
     <Error Condition="!Exists('..\packages\RapidJson.1.1.0.0\build\native\RapidJson.props')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\RapidJson.1.1.0.0\build\native\RapidJson.props'))" />
     <Error Condition="!Exists('..\packages\RapidJson.1.1.0.0\build\native\RapidJson.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\RapidJson.1.1.0.0\build\native\RapidJson.targets'))" />
+    <Error Condition="!Exists('..\packages\boost.1.63.0.0\build\native\boost.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\boost.1.63.0.0\build\native\boost.targets'))" />
+    <Error Condition="!Exists('..\packages\boost_filesystem-vc140.1.63.0.0\build\native\boost_filesystem-vc140.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\boost_filesystem-vc140.1.63.0.0\build\native\boost_filesystem-vc140.targets'))" />
+    <Error Condition="!Exists('..\packages\boost_system-vc140.1.63.0.0\build\native\boost_system-vc140.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\boost_system-vc140.1.63.0.0\build\native\boost_system-vc140.targets'))" />
   </Target>
 </Project>

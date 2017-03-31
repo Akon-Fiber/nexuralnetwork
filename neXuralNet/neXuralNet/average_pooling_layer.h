@@ -20,7 +20,7 @@ OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 */
 
 #include "computational_base_layer.h"
-#include "data_parser.h"
+#include "params_parser.h"
 
 #ifndef _NEXURALNET_DNN_LAYERS_AVERAGE_POOLING_LAYER
 #define _NEXURALNET_DNN_LAYERS_AVERAGE_POOLING_LAYER

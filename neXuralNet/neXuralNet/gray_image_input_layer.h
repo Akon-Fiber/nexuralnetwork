@@ -19,7 +19,7 @@ TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE
 OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 */
 
-#include "data_parser.h"
+#include "params_parser.h"
 #include "input_base_class.h"
 
 #ifndef _NEXURALNET_DNN_LAYERS_GRAY_IMAGE_INPUT_LAYER

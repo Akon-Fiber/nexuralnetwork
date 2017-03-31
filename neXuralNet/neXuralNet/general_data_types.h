@@ -27,6 +27,6 @@ OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
 namespace nexural {
 	typedef std::map<std::string, std::string> LayerParams;
-	typedef std::map<std::string, std::string> TrainerSettings;
+	typedef std::map<std::string, std::string> TrainerParams;
 }
 #endif

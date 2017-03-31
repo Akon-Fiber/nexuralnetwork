@@ -21,13 +21,16 @@ OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
 #include <opencv2\core\core.hpp>
 #include <opencv2\highgui\highgui.hpp>
+#include <boost/filesystem.hpp>
+#include <boost/range/iterator_range.hpp>
 #include <fstream>
 #include <string>
 
 #include "tensor.h"
+#include "converter.h"
 
-#ifndef _NEXURALNET_UTILITY_DATA_READER_H
-#define _NEXURALNET_UTILITY_DATA_READER_H
+#ifndef _NEXURALNET_TOOLS_DATA_READER_H
+#define _NEXURALNET_TOOLS_DATA_READER_H
 
 namespace nexural {
 	class DataReader {
@@ -56,7 +59,7 @@ namespace nexural {
 				nCols = ReverseInt(nCols);
 
 				if (limit > numberOfImages) {
-					throw std::runtime_error("The dataset limit was exceeded!");
+					throw std::runtime_error("The MNIST dataset limit was exceeded!");
 				}
 
 				tensor.Resize(limit, 1, nRows, nCols);
@@ -89,7 +92,7 @@ namespace nexural {
 				numberOfLabels = ReverseInt(numberOfLabels);
 
 				if (limit > numberOfLabels) {
-					throw std::runtime_error("The dataset limit was exceeded!");
+					throw std::runtime_error("The MNIST dataset limit was exceeded!");
 				}
 
 				tensor.Resize(limit, 1, 1, 10);
@@ -114,23 +117,22 @@ namespace nexural {
 		}
 	
 		static void ReadImagesFromDirectory(const std::string directoryPath, Tensor& tensor, ReadImageType imagesType = ReadImageType::COLOR) {
-			//auto readType = imagesType == ReadImageType::COLOR ? cv::IMREAD_COLOR : cv::IMREAD_GRAYSCALE;
-			//std::vector<cv::String> fn;
-			//cv::glob("/home/images/*.png", fn, false);
-
-			//for (long i = 0; i < fn.size(); i++) {
-			//	//cv::Mat image = cv::imread(fn[i], readType);
-			//	//Tensor tensor;
-			//	//DataToTensorConverter::Convert(image, tensor);
-			//	//tensorCollection.push_back(tensor);
-			//}
+			auto readType = imagesType == ReadImageType::COLOR ? cv::IMREAD_COLOR : cv::IMREAD_GRAYSCALE;
+			std::vector<cv::Mat> images;
+			if (boost::filesystem::is_directory(directoryPath)) {
+				for (auto& imagePath : boost::make_iterator_range(boost::filesystem::directory_iterator(directoryPath), {})) {
+					// TODO: Check if the selected file is an image
+					cv::Mat image = cv::imread(imagePath.path().string(), readType);
+					images.push_back(image);
+				}
+				converter::ConvertToTensor(images, tensor);
+			}
 		}
 
-		// TODO: Change it with a class that supports RAII
 		static void ReadTensorFromFile(const std::string filePath, Tensor& tensor) {
 			std::ifstream file(filePath, std::ios::binary);
 			if (file.fail()) {
-				throw std::runtime_error("Can't open file!");
+				throw std::runtime_error("Can't open the file in order to read data!");
 			}
 
 			long index = 0, numSamples, k, nr, nc;
@@ -153,7 +155,6 @@ namespace nexural {
 					index++;
 				}
 			}
-			file.close();
 		}
 
 	private:

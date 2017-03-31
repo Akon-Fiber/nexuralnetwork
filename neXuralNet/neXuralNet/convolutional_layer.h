@@ -20,7 +20,7 @@ OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 */
 
 #include "computational_base_layer.h"
-#include "data_parser.h"
+#include "params_parser.h"
 
 #ifndef _NEXURALNET_DNN_LAYERS_CONVOLUTIONAL_LAYER
 #define _NEXURALNET_DNN_LAYERS_CONVOLUTIONAL_LAYER
@@ -37,7 +37,7 @@ namespace nexural {
 			_strideWidth = parser::ParseLong(_layerParams, "stride_width");
 			_strideHeight = parser::ParseLong(_layerParams, "stride_height");
 			_hasWeights = true;
-			_hasBiases = true;
+			_hasBiases = false;
 		}
 
 		~ConvolutionalLayer() {
@@ -52,8 +52,8 @@ namespace nexural {
 			_outputData.Resize(_outputShape);
 			_weights.Resize(_numOfFilters, _inputShape.GetK(), _kernelHeight, _kernelWidth);
 			_biases.Resize(1, 1, 1, _numOfFilters);
-			_weights.FillRandom();
-			_biases.FillRandom();
+			_weights.FillRandom(1);
+			_biases.FillRandom(1);
 			_layerID = "convolutional_layer" + std::to_string(layerIndex);
 		}
 
@@ -74,7 +74,7 @@ namespace nexural {
 									}
 								}
 							}
-							value += _biases[numFilters];
+							//value += _biases[numFilters];
 							_outputData[(((numSamples * _outputData.GetK()) + numFilters) * _outputData.GetNR() + nro) * _outputData.GetNC() + nco] = value;
 							nco++;
 						}
@@ -92,7 +92,7 @@ namespace nexural {
 
 		virtual void BackPropagate(const Tensor& prevLayerErrors) {
 			_dWeights.Fill(0.0);
-			_dBiases.Fill(0.0);
+			//_dBiases.Fill(0.0);
 
 			// Calculate gradient wrt. weights: (_internalInputData * prevLayerErrors)
 			for (long errorNumSamples = 0; errorNumSamples < prevLayerErrors.GetNumSamples(); errorNumSamples++) {
@@ -119,12 +119,12 @@ namespace nexural {
 			}
 
 			// Calculate gradient wrt. biases: (prevLayerErrors * 1)
-			long gbTotal = prevLayerErrors.GetK() * prevLayerErrors.GetNR() * prevLayerErrors.GetNC();
+			/*long gbTotal = prevLayerErrors.GetK() * prevLayerErrors.GetNR() * prevLayerErrors.GetNC();
 			for (long errorNumSamples = 0; errorNumSamples < prevLayerErrors.GetNumSamples(); errorNumSamples++) {
 				for (long index = 0; index < gbTotal; index++) {
 					prevLayerErrors[(errorNumSamples * gbTotal) + index];
 				}
-			}
+			}*/
 
 			// Calculate gradient wrt. input: (prevLayerErrors * _weights)
 			long paddingWidth = _weights.GetNC() - 1;

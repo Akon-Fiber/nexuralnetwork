@@ -20,7 +20,7 @@ OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 */
 
 #include "tensor.h"
-#include "data_parser.h"
+#include "params_parser.h"
 #include "input_base_class.h"
 
 #ifndef _NEXURALNET_DNN_LAYERS_TENSOR_INPUT_LAYER

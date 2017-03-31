@@ -20,7 +20,7 @@ OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 */
 
 #include <map>
-#include "utils.h"
+#include "helper.h"
 
 #ifndef _NEXURALNET_UTILITY_DATA_PARSER_H
 #define _NEXURALNET_UTILITY_DATA_PARSER_H
@@ -129,7 +129,7 @@ namespace nexural {
 				throw std::runtime_error("Empty key value!");
 			}
 
-			std::vector<std::string> tokens = Utils::TokenizeString(map[key], ",");
+			std::vector<std::string> tokens = helper::TokenizeString(map[key], ",");
 			return tokens;
 		}
 
@@ -143,7 +143,7 @@ namespace nexural {
 			}
 
 
-			std::vector<std::string> tokens = Utils::TokenizeString(map[key], ",");
+			std::vector<std::string> tokens = helper::TokenizeString(map[key], ",");
 
 			int tokens_cnt = (int)tokens.size();
 			std::vector<float> result(tokens_cnt);
