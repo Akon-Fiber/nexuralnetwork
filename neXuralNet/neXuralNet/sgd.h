@@ -34,6 +34,7 @@ namespace nexural {
 		}
 		
 		virtual void UpdateWeights(Tensor& weights, const Tensor& dWeights, const std::string& layerID) {
+			// TODO: Add weight_decay
 			for (int i = 0; i < weights.Size(); i++) {
 				weights[i] -= _learningRate * dWeights[i];
 			}

@@ -70,7 +70,14 @@
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
-  <PropertyGroup />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <OutDir>$(SolutionDir)$(Platform)\$(Configuration)\</OutDir>
+    <IntDir>$(Platform)\$(Configuration)\</IntDir>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <IntDir>$(Platform)\$(Configuration)\</IntDir>
+    <OutDir>$(SolutionDir)$(Platform)\$(Configuration)\</OutDir>
+  </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
       <WarningLevel>Level3</WarningLevel>
@@ -80,7 +87,7 @@
     </ClCompile>
     <Link />
     <PostBuildEvent>
-      <Command>xcopy /c /y "$(SolutionDir)ConfigFiles\network.json" "$(SolutionDir)$(PlatformTarget)\$(Configuration)\"</Command>
+      <Command>xcopy /c /y "$(SolutionDir)neXuralNet\configs\network.json" "$(SolutionDir)$(PlatformTarget)\$(Configuration)\"</Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
@@ -92,7 +99,7 @@
     </ClCompile>
     <Link />
     <PostBuildEvent>
-      <Command>xcopy /c /y "$(SolutionDir)ConfigFiles\network.json" "$(SolutionDir)$(PlatformTarget)\$(Configuration)\"</Command>
+      <Command>xcopy /c /y "$(SolutionDir)neXuralNet\configs\network.json" "$(SolutionDir)$(PlatformTarget)\$(Configuration)\"</Command>
     </PostBuildEvent>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
@@ -112,7 +119,7 @@
       <OptimizeReferences>true</OptimizeReferences>
     </Link>
     <PostBuildEvent>
-      <Command>xcopy /c /y "$(SolutionDir)ConfigFiles\network.json" "$(SolutionDir)$(PlatformTarget)\$(Configuration)\"</Command>
+      <Command>xcopy /c /y "$(SolutionDir)neXuralNet\configs\network.json" "$(SolutionDir)$(PlatformTarget)\$(Configuration)\"</Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
@@ -129,22 +136,23 @@
       <OptimizeReferences>true</OptimizeReferences>
     </Link>
     <PostBuildEvent>
-      <Command>xcopy /c /y "$(SolutionDir)ConfigFiles\network.json" "$(SolutionDir)$(PlatformTarget)\$(Configuration)\"</Command>
+      <Command>xcopy /c /y "$(SolutionDir)neXuralNet\configs\network.json" "$(SolutionDir)$(PlatformTarget)\$(Configuration)\"</Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClInclude Include="and_gate_with_relu.h" />
-    <ClInclude Include="and_gate_with_relu_softmax.h" />
-    <ClInclude Include="and_gate_with_tanh.h" />
     <ClInclude Include="average_pooling_layer.h" />
     <ClInclude Include="base_solver.h" />
     <ClInclude Include="computational_layers.h" />
     <ClInclude Include="converter.h" />
     <ClInclude Include="convolutional_layer.h" />
-    <ClInclude Include="mnist_softmax.h" />
+    <ClInclude Include="demo\and_gate_with_relu.h" />
+    <ClInclude Include="demo\and_gate_with_relu_softmax.h" />
+    <ClInclude Include="demo\and_gate_with_tanh.h" />
+    <ClInclude Include="demo\mnist_softmax.h" />
+    <ClInclude Include="demo\xor_gate_with_relu.h" />
+    <ClInclude Include="demo\xor_gate_with_relu_softmax.h" />
     <ClInclude Include="softmax_loss_layer.h" />
     <ClInclude Include="params_parser.h" />
-    <ClInclude Include="data_reader.h" />
     <ClInclude Include="data_serializer.h" />
     <ClInclude Include="general_data_types.h" />
     <ClInclude Include="json_data_serializer.h" />
@@ -154,7 +162,6 @@
     <ClInclude Include="json_engine_reader.h" />
     <ClInclude Include="fully_connected_layer.h" />
     <ClInclude Include="computational_base_layer.h" />
-    <ClInclude Include="generate_test_data.h" />
     <ClInclude Include="input_base_class.h" />
     <ClInclude Include="i_computational_layer.h" />
     <ClInclude Include="input_layers.h" />
@@ -182,18 +189,19 @@
     <ClInclude Include="tensor.h" />
     <ClInclude Include="tensor_input_layer.h" />
     <ClInclude Include="helper.h" />
-    <ClInclude Include="xor_gate_with_relu.h" />
-    <ClInclude Include="xor_gate_with_relu_softmax.h" />
+    <ClInclude Include="tools\data_reader.h" />
+    <ClInclude Include="tools\generate_test_data.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="main_tests.cpp" />
+    <ClCompile Include="demo\main_tests.cpp" />
     <ClCompile Include="network.cpp" />
     <ClCompile Include="network_trainer.cpp" />
     <ClCompile Include="tensor.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="..\ConfigFiles\network-full.json" />
-    <None Include="..\ConfigFiles\network.json" />
+    <None Include="configs\network-full.json" />
+    <None Include="configs\network.json" />
+    <None Include="configs\trainer.json" />
     <None Include="packages.config" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

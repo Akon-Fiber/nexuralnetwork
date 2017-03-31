@@ -25,7 +25,7 @@ OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 #include "computational_layers.h"
 #include "loss_layers.h"
 #include "network_trainer.h"
-#include "data_reader.h"
+#include "tools/data_reader.h"
 #include "config_reader.h"
 
 #ifndef _NEXURALNET_DNN_NETWORK_NETWORK

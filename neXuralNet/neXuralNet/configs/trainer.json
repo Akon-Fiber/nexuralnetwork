@@ -1,0 +1,10 @@
+{
+  "TrainerSettings": {
+     "max_num_epochs": "10",
+     "max_num_epochs_without_progress": "10",
+     "min_error_threshold": "0.0001",
+     "batch_size": "1",
+     "solver": "sgd",
+     "be_verbose": "true"
+  }
+}

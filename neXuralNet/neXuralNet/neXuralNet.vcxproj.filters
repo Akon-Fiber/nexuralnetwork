@@ -53,9 +53,6 @@
     <Filter Include="demo">
       <UniqueIdentifier>{e5ecc299-c488-463b-a59a-1d5d6bc215e9}</UniqueIdentifier>
     </Filter>
-    <Filter Include="unit_tests">
-      <UniqueIdentifier>{7f99242b-772f-448b-9b77-b13c1eeb9cce}</UniqueIdentifier>
-    </Filter>
     <Filter Include="tools">
       <UniqueIdentifier>{9027192c-3886-43e8-b4f4-09e5d2c8b72b}</UniqueIdentifier>
     </Filter>
@@ -157,18 +154,6 @@
     <ClInclude Include="sgd_momentum.h">
       <Filter>Source Files\dnn\solvers</Filter>
     </ClInclude>
-    <ClInclude Include="and_gate_with_tanh.h">
-      <Filter>demo</Filter>
-    </ClInclude>
-    <ClInclude Include="and_gate_with_relu.h">
-      <Filter>demo</Filter>
-    </ClInclude>
-    <ClInclude Include="generate_test_data.h">
-      <Filter>demo</Filter>
-    </ClInclude>
-    <ClInclude Include="xor_gate_with_relu.h">
-      <Filter>demo</Filter>
-    </ClInclude>
     <ClInclude Include="config_reader.h">
       <Filter>Source Files\utility</Filter>
     </ClInclude>
@@ -196,15 +181,6 @@
     <ClInclude Include="softmax_loss_layer.h">
       <Filter>Source Files\dnn\layers\loss_layers</Filter>
     </ClInclude>
-    <ClInclude Include="xor_gate_with_relu_softmax.h">
-      <Filter>demo</Filter>
-    </ClInclude>
-    <ClInclude Include="and_gate_with_relu_softmax.h">
-      <Filter>demo</Filter>
-    </ClInclude>
-    <ClInclude Include="mnist_softmax.h">
-      <Filter>demo</Filter>
-    </ClInclude>
     <ClInclude Include="params_parser.h">
       <Filter>Source Files\utility</Filter>
     </ClInclude>
@@ -214,7 +190,28 @@
     <ClInclude Include="helper.h">
       <Filter>Source Files\utility</Filter>
     </ClInclude>
-    <ClInclude Include="data_reader.h">
+    <ClInclude Include="tools\data_reader.h">
+      <Filter>tools</Filter>
+    </ClInclude>
+    <ClInclude Include="demo\and_gate_with_relu.h">
+      <Filter>demo</Filter>
+    </ClInclude>
+    <ClInclude Include="demo\and_gate_with_relu_softmax.h">
+      <Filter>demo</Filter>
+    </ClInclude>
+    <ClInclude Include="demo\and_gate_with_tanh.h">
+      <Filter>demo</Filter>
+    </ClInclude>
+    <ClInclude Include="demo\mnist_softmax.h">
+      <Filter>demo</Filter>
+    </ClInclude>
+    <ClInclude Include="demo\xor_gate_with_relu.h">
+      <Filter>demo</Filter>
+    </ClInclude>
+    <ClInclude Include="demo\xor_gate_with_relu_softmax.h">
+      <Filter>demo</Filter>
+    </ClInclude>
+    <ClInclude Include="tools\generate_test_data.h">
       <Filter>tools</Filter>
     </ClInclude>
   </ItemGroup>
@@ -228,16 +225,19 @@
     <ClCompile Include="network_trainer.cpp">
       <Filter>Source Files\dnn\network</Filter>
     </ClCompile>
-    <ClCompile Include="main_tests.cpp">
+    <ClCompile Include="demo\main_tests.cpp">
       <Filter>demo</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
-    <None Include="..\ConfigFiles\network.json">
+    <None Include="configs\network.json">
       <Filter>configs</Filter>
     </None>
-    <None Include="..\ConfigFiles\network-full.json">
+    <None Include="configs\network-full.json">
+      <Filter>configs</Filter>
+    </None>
+    <None Include="configs\trainer.json">
       <Filter>configs</Filter>
     </None>
   </ItemGroup>
