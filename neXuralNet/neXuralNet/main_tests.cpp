@@ -45,9 +45,9 @@ void Menu() {
 	std::cout << "| 1 - Random data for XOR gate with Softmax" << std::endl;
 	std::cout << "| 3 - Random data for AND gate" << std::endl;
 	std::cout << "| 4 - Random data for XOR gate" << std::endl;
-	std::cout << "| 5 - AND gate with TanH" << std::endl;
-	std::cout << "| 6 - AND gate with RELU" << std::endl;
-	std::cout << "| 7 - XOR gate with RELU" << std::endl;
+	std::cout << "| 5 - AND gate with TanH with MSE" << std::endl;
+	std::cout << "| 6 - AND gate with RELU with MSE" << std::endl;
+	std::cout << "| 7 - XOR gate with RELU with MSE" << std::endl;
 	std::cout << "| 8 - AND gate with RELU and Softmax" << std::endl;
 	std::cout << "| 9 - XOR gate with RELU and Softmax" << std::endl;
 	std::cout << "| 10 - MNIST with Softmax" << std::endl;

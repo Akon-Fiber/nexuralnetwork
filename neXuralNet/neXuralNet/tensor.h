@@ -79,7 +79,7 @@ namespace nexural {
 		long Size() const { return _size; }
 
 		void Fill(const float value);
-		void FillRandom();
+		void FillRandom(const float range);
 		void FillRandomBinomialDistribution();
 		void GetBatch(const Tensor& tensor, const long startIndex, const long batchSize = 1);
 		LayerShape GetShape() const;

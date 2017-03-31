@@ -44,8 +44,11 @@ namespace nexural {
 			_outputData.Resize(_outputShape);
 			_weights.Resize(1, 1, _numOutputNeurons, (_inputShape.GetK() * _inputShape.GetNR() * _inputShape.GetNC()));
 			_biases.Resize(1, 1, 1, _numOutputNeurons);
-			_weights.FillRandom();
-			_biases.FillRandom();
+
+			float weightRange = (float)(std::sqrt(2. / (double)_inputShape.Size()));
+			float biasRange = (float)(std::sqrt(2. / (double)_biases.Size()));
+			_weights.FillRandom(weightRange);
+			_biases.FillRandom(biasRange);
 			_layerID = "fully_connected_layer" + std::to_string(layerIndex);
 		}
 

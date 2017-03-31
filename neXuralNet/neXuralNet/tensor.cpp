@@ -158,10 +158,10 @@ namespace nexural {
 		}
 	}
 
-	void Tensor::FillRandom() {
+	void Tensor::FillRandom(const float range) {
 		std::random_device rd;
 		std::mt19937 gen(rd());
-		std::uniform_real_distribution<> dis(-1, 1);
+		std::uniform_real_distribution<> dis(-range, range);
 		std::generate(Begin(), End(), [&]() { return dis(gen); });
 	}
 
