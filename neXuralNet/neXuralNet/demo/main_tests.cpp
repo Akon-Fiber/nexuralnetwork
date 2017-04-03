@@ -55,8 +55,16 @@ void Menu() {
 	std::cout << "--------------------------------------------------------" << std::endl << std::endl;
 }
 
-void Experimental() {
-	std::cout << "Nothig here!" << std::endl;
+void Experimental(const std::string& dataFolderPath) {
+	Tensor inputData;
+
+	std::string networkConfigPath = dataFolderPath + "\\mnist_softmax\\network.json";
+	Network net(networkConfigPath);
+	net.Deserialize("D:\\mnist.json");
+
+	cv::Mat image = cv::imread("D:\\6.jpg", cv::IMREAD_GRAYSCALE);
+	nexural::converter::ConvertToTensor(image, inputData);
+	net.Run(inputData);
 }
 
 void DoTests(const int option, const std::string& dataFolderPath) {
@@ -92,7 +100,7 @@ void DoTests(const int option, const std::string& dataFolderPath) {
 		Test_MNIST_Softmax(dataFolderPath);
 		break;
 	case 11:
-		Experimental();
+		Experimental(dataFolderPath);
 		break;
 	default:
 		break;
@@ -122,6 +130,7 @@ int main(int argc, char* argv[]) {
 	}
 	catch (std::exception stdEx) {
 		std::cout << stdEx.what() << std::endl;
+		_getch();
 	}
 	catch (...) {
 		std::cout << "Something unexpected happened while running the network!" << std::endl;

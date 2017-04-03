@@ -107,10 +107,15 @@ namespace nexural {
 					stepsWithoutAnyProgress = 0;
 				}
 
+				//std::cout << "Softmax:" << std::endl;
+				//error->OutputToConsole();
+
 				// Backpropagate the error
 				for (auto it = net._computationalNetworkLyers.rbegin(); it < net._computationalNetworkLyers.rend(); it++) {
 					(*it)->BackPropagate(*error);
 					error = (*it)->GetLayerErrors();
+					//std::cout << (*it)->GetLayerID() << std::endl;
+					//error->OutputToConsole();
 				}
 
 				// Update the weights

@@ -37,7 +37,7 @@ namespace nexural {
 			_strideWidth = parser::ParseLong(_layerParams, "stride_width");
 			_strideHeight = parser::ParseLong(_layerParams, "stride_height");
 			_hasWeights = true;
-			_hasBiases = false;
+			_hasBiases = true;
 		}
 
 		~ConvolutionalLayer() {
@@ -52,8 +52,11 @@ namespace nexural {
 			_outputData.Resize(_outputShape);
 			_weights.Resize(_numOfFilters, _inputShape.GetK(), _kernelHeight, _kernelWidth);
 			_biases.Resize(1, 1, 1, _numOfFilters);
-			_weights.FillRandom(1);
-			_biases.FillRandom(1);
+			
+			float weightRange = (float)(std::sqrt(2. / (double)_inputShape.Size()));
+			float biasRange = (float)(std::sqrt(2. / (double)_biases.Size()));
+			_weights.FillRandom(weightRange);
+			_biases.FillRandom(biasRange);
 			_layerID = "convolutional_layer" + std::to_string(layerIndex);
 		}
 
@@ -62,12 +65,12 @@ namespace nexural {
 			for (long numSamples = 0; numSamples < inputData.GetNumSamples(); numSamples++) {
 				for (long numFilters = 0; numFilters < _weights.GetNumSamples(); numFilters++) {
 					long nro = 0;
-					for (long nr = 0; nr < inputData.GetNR() - _kernelHeight + 1; nr += _strideHeight) {
+					for (long nr = 0; nr < inputData.GetNR() - _weights.GetNR() + 1; nr += _strideHeight) {
 						long nco = 0;
-						for (long nc = 0; nc < inputData.GetNC() - _kernelWidth + 1; nc += _strideWidth) {
+						for (long nc = 0; nc < inputData.GetNC() - _weights.GetNC() + 1; nc += _strideWidth) {
 							float value = 0;
-							for (long i = 0; i < _kernelHeight; i++) {
-								for (long j = 0; j < _kernelWidth; j++) {
+							for (long i = 0; i < _weights.GetNR(); i++) {
+								for (long j = 0; j < _weights.GetNC(); j++) {
 									for (long k = 0; k < inputData.GetK(); k++) {
 										value += inputData[(((numSamples * inputData.GetK()) + k) * inputData.GetNR() + (nr + i)) * inputData.GetNC() + (nc + j)] *
 										_weights[(((numFilters * _weights.GetK()) + k) * _weights.GetNR() + i) * _weights.GetNC() + j];
@@ -92,7 +95,7 @@ namespace nexural {
 
 		virtual void BackPropagate(const Tensor& prevLayerErrors) {
 			_dWeights.Fill(0.0);
-			//_dBiases.Fill(0.0);
+			_dBiases.Fill(0.0);
 
 			// Calculate gradient wrt. weights: (_internalInputData * prevLayerErrors)
 			for (long errorNumSamples = 0; errorNumSamples < prevLayerErrors.GetNumSamples(); errorNumSamples++) {
@@ -110,6 +113,7 @@ namespace nexural {
 									}
 								}
 							}
+							long idx = (((errorNumSamples * _dWeights.GetK()) + k) * _dWeights.GetNR() + nro) * _dWeights.GetNC() + nco;
 							_dWeights[(((errorNumSamples * _dWeights.GetK()) + k) * _dWeights.GetNR() + nro) * _dWeights.GetNC() + nco] = error;
 							nco++;
 						}
@@ -135,18 +139,19 @@ namespace nexural {
 			for (long errorNumSamples = 0; errorNumSamples < convPrevLayerErrors.GetNumSamples(); errorNumSamples++) {
 				for (long k = 0; k < _weights.GetK(); k++) {
 					long nro = 0;
-					for (long nr = 0; nr < _weights.GetNR() - convPrevLayerErrors.GetNR() + 1; nr += _strideHeight) {
+					for (long nr = 0; nr < convPrevLayerErrors.GetNR() - _weights.GetNR() + 1; nr += _strideHeight) {
 						long nco = 0;
-						for (long nc = 0; nc < _weights.GetNC() - convPrevLayerErrors.GetNC() + 1; nc += _strideWidth) {
+						for (long nc = 0; nc < convPrevLayerErrors.GetNC() - _weights.GetNC() + 1; nc += _strideWidth) {
 							float error = 0;
-							for (long i = 0; i < convPrevLayerErrors.GetNR(); i++) {
-								for (long j = 0; j < convPrevLayerErrors.GetNC(); j++) {
+							for (long i = 0; i < _weights.GetNR(); i++) {
+								for (long j = 0; j < _weights.GetNC(); j++) {
 									for (long weightsNumSamples = 0; weightsNumSamples < _weights.GetNumSamples(); weightsNumSamples++) {
 										error += _weights[(((weightsNumSamples * _weights.GetK()) + k) * _weights.GetNR() + (nr + i)) * _weights.GetNC() + (nc + j)] *
 											convPrevLayerErrors[(((errorNumSamples * convPrevLayerErrors.GetK()) + k) * convPrevLayerErrors.GetNR() + i) * convPrevLayerErrors.GetNC() + j];
 									}
 								}
 							}
+							long idx = (((errorNumSamples * _layerErrors.GetK()) + k) * _layerErrors.GetNR() + nro) * _layerErrors.GetNC() + nco;
 							_layerErrors[(((errorNumSamples * _layerErrors.GetK()) + k) * _layerErrors.GetNR() + nro) * _layerErrors.GetNC() + nco] = error;
 							nco++;
 						}

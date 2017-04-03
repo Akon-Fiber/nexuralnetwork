@@ -34,10 +34,12 @@ namespace nexural {
 			{
 				for (long nc = 0; nc < outputData.GetNC(); nc++)
 				{
-					cv::Vec3b intensity = sourceImage.at<cv::Vec3b>(nr, nc);
+					//cv::Vec3b intensity = sourceImage.at<cv::Vec3b>(nr, nc);
 					for (long k = 0; k < outputData.GetK(); k++) {
-						float col = (float)intensity.val[k];
-						outputData[(k * outputData.GetNR() + nr) * outputData.GetNC() + nc] = col;
+						//float col = (float)intensity.val[k];
+						//outputData[(k * outputData.GetNR() + nr) * outputData.GetNC() + nc] = col;
+						float value = (float)sourceImage.at<uchar>(nr, nc);
+						outputData[(k * outputData.GetNR() + nr) * outputData.GetNC() + nc] = value;
 					}
 				}
 			}
