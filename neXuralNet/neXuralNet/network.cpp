@@ -120,18 +120,17 @@ namespace nexural {
 	}
 
 	void Network::Serialize(const std::string& dataPath) {
-		std::string data;
+		DataSerializer serializer(SerializerType::JSON);
 		for (int i = 0; i < _computationalNetworkLyers.size(); i++) {
-			_computationalNetworkLyers[i]->Serialize(data);
+			_computationalNetworkLyers[i]->Serialize(serializer);
 		}
-		DataSerializer::Save(dataPath, data);
+		serializer.Save(dataPath);
 	}
 	
 	void Network::Deserialize(const std::string& dataPath) {
-		std::string data;
-		DataSerializer::Load(dataPath, data);
+		DataSerializer serializer(SerializerType::JSON, dataPath);
 		for (int i = 0; i < _computationalNetworkLyers.size(); i++) {
-			_computationalNetworkLyers[i]->Deserialize(data);
+			_computationalNetworkLyers[i]->Deserialize(serializer);
 		}
 	}
 }

@@ -32,14 +32,16 @@ OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 #define _NEXURALNET_UTILITY_JSON_ENGINE_READER_H
 
 namespace nexural {
+	enum class JSONSourceType {
+		FROM_FILE = 0,
+		FROM_STRING = 1
+	};
+
 	class JSONEngineReader {
 	public:
-		enum class JSONSourceType {
-			FROM_FILE = 0,
-			FROM_STRING = 1
+		JSONEngineReader() { 
+			_document.SetObject();
 		};
-
-		JSONEngineReader() { };
 
 		JSONEngineReader(const std::string source, const JSONSourceType sourcetype) {
 			if (sourcetype == JSONSourceType::FROM_FILE) {
@@ -78,7 +80,7 @@ namespace nexural {
 			value = result;
 		}
 
-		virtual void SerializeToFile(const std::string outputFilePath) {
+		virtual void SerializeToFile(const std::string& outputFilePath) {
 			std::ofstream ofs(outputFilePath);
 			rapidjson::OStreamWrapper osw(ofs);
 			rapidjson::Writer<rapidjson::OStreamWrapper> writer(osw);

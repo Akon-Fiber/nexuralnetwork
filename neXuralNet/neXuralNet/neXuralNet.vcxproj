@@ -141,6 +141,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="average_pooling_layer.h" />
+    <ClInclude Include="base_serializer.h" />
     <ClInclude Include="base_solver.h" />
     <ClInclude Include="computational_layers.h" />
     <ClInclude Include="converter.h" />

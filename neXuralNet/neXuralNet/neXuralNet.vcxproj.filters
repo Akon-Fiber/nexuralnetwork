@@ -59,6 +59,9 @@
     <Filter Include="configs">
       <UniqueIdentifier>{0f0e1cd2-3099-48fb-81cf-8084cf412274}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source Files\utility\serializer">
+      <UniqueIdentifier>{842c969e-b6d1-478c-8edb-edef2e2253ab}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="network.h">
@@ -169,12 +172,6 @@
     <ClInclude Include="general_data_types.h">
       <Filter>Source Files\data_types</Filter>
     </ClInclude>
-    <ClInclude Include="json_data_serializer.h">
-      <Filter>Source Files\utility\json_utility</Filter>
-    </ClInclude>
-    <ClInclude Include="data_serializer.h">
-      <Filter>Source Files\utility</Filter>
-    </ClInclude>
     <ClInclude Include="layer_settings.h">
       <Filter>Source Files\data_types</Filter>
     </ClInclude>
@@ -213,6 +210,15 @@
     </ClInclude>
     <ClInclude Include="tools\generate_test_data.h">
       <Filter>tools</Filter>
+    </ClInclude>
+    <ClInclude Include="data_serializer.h">
+      <Filter>Source Files\utility\serializer</Filter>
+    </ClInclude>
+    <ClInclude Include="json_data_serializer.h">
+      <Filter>Source Files\utility\serializer</Filter>
+    </ClInclude>
+    <ClInclude Include="base_serializer.h">
+      <Filter>Source Files\utility\serializer</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

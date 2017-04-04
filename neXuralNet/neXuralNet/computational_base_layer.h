@@ -83,6 +83,14 @@ namespace nexural {
 			return _layerID;
 		}
 
+		virtual void Serialize(DataSerializer& serializer) {
+
+		}
+
+		virtual void Deserialize(DataSerializer& serializer) {
+
+		}
+
 	protected:
 		LayerParams _layerParams;
 		LayerShape _inputShape;

@@ -130,14 +130,6 @@ namespace nexural {
 			}
 		}
 
-		virtual void Serialize(std::string& data) {
-
-		}
-
-		virtual void Deserialize(const std::string& data) {
-
-		}
-
 	private:
 		long _kernel_width;
 		long _kernel_height;

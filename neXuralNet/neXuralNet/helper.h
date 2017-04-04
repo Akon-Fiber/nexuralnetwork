@@ -40,6 +40,12 @@ namespace nexural {
 			}
 			return tokens;
 		}
+
+		// TODO: If the project is updated to use c++17, change with the new std::clamp method
+		template <typename T>
+		static T clip(const T& n, const T& lower, const T& upper) {
+			return std::max(lower, std::min(n, upper));
+		}
 	}
 }
 #endif

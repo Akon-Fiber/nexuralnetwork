@@ -19,29 +19,41 @@ TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE
 OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 */
 
-#include <string>
 #include "tensor.h"
-#include "general_data_types.h"
-#include "data_serializer.h"
 
-#ifndef _NEXURALNET_DNN_I_COMPUTATIONAL_LAYER
-#define _NEXURALNET_DNN_I_COMPUTATIONAL_LAYER
+#ifndef _NEXURALNET_UTILITY_BASE_SERIALIZER_H
+#define _NEXURALNET_UTILITY_BASE_SERIALIZER_H
 
 namespace nexural {
-	class IComputationalLayer {
+	class BaseSerializer {
 	public:
-		virtual ~IComputationalLayer() { }
-		virtual void Setup(const LayerShape& prevLayerShape, const int layerIndex) = 0;
-		virtual void BackPropagate(const Tensor& prevLayerErrors) = 0;
-		virtual Tensor* GetLayerWeights() = 0;
-		virtual Tensor* GetLayerDWeights() = 0; 
-		virtual Tensor* GetLayerBiases() = 0;
-		virtual Tensor* GetLayerDBiases() = 0;
-		virtual bool HasWeights() = 0;
-		virtual bool HasBiases() = 0;
-		virtual std::string GetLayerID() const = 0;
-		virtual void Serialize(DataSerializer& serializer) = 0;
-		virtual void Deserialize(DataSerializer& serializer) = 0;
+		BaseSerializer() {
+
+		}
+
+		virtual ~BaseSerializer() {
+
+		}
+
+		virtual void AddParentNode(const std::string& parentNodeName) {
+			
+		}
+
+		virtual void SerializeTensor(const Tensor& tensor, const std::string& parentNodeName, const std::string& nodeName) {
+			
+		}
+
+		virtual void DeserializeTensor(Tensor& tensor, const std::string& parentNodeName, const std::string& nodeName) {
+
+		}
+
+		virtual void Save(const std::string& outputFilePath) {
+
+		}
+
+	protected:
+		
 	};
+	typedef std::shared_ptr<BaseSerializer> BaseSerializerPtr;
 }
-#endif
+#endif 

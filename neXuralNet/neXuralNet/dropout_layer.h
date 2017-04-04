@@ -68,14 +68,6 @@ namespace nexural {
 			}
 		}
 
-		virtual void Serialize(std::string& data) {
-
-		}
-
-		virtual void Deserialize(const std::string& data) {
-
-		}
-
 	private:
 		Tensor _dropoutIndexes;
 	};

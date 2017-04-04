@@ -19,54 +19,81 @@ TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE
 OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 */
 
+#include "base_serializer.h" 
 #include "json_engine_reader.h"
-#include "tensor.h"
+#include <sstream>
+#include <limits>
+#include <iomanip>
+#include <math.h>
+#include <iostream>
 
 #ifndef _NEXURALNET_UTILITY_JSON_DATA_SERIALIZER_H
 #define _NEXURALNET_UTILITY_JSON_DATA_SERIALIZER_H
 
 namespace nexural {
-	namespace json_data_serializer {
-		static void SerializeTensor(const Tensor& tensor, const std::string& parentNodeName, const std::string& nodeName, std::string& serializedData) {
-			rapidjson::Document document;
-			if (document.Parse<0>(serializedData.c_str()).HasParseError()) {
-				throw std::runtime_error("The JSON source is not valid!");
-			}
-			rapidjson::Document::AllocatorType& allocator = document.GetAllocator();
+	class JSONSerializer : public JSONEngineReader, public BaseSerializer {
+	public:
+		JSONSerializer() : JSONEngineReader() {
 
-			rapidjson::Value tensorData(rapidjson::kObjectType);
-			tensorData.AddMember("numSamples", tensor.GetNumSamples(), allocator);
-			tensorData.AddMember("k", tensor.GetK(), allocator);
-			tensorData.AddMember("nr", tensor.GetNR(), allocator);
-			tensorData.AddMember("nc", tensor.GetNC(), allocator);
-
-			rapidjson::Value dataArray(rapidjson::kArrayType);
-			for (int i = 0; i < tensor.Size(); i++) {
-				dataArray.PushBack(rapidjson::Value().SetDouble(tensor[i]), allocator);
-			}
-			tensorData.AddMember("host", dataArray, allocator);
-
-			rapidjson::Value jsonNodeName(nodeName.c_str(), allocator);
-			document[parentNodeName.c_str()].AddMember(jsonNodeName.Move(), tensorData, allocator);
-			rapidjson::StringBuffer strbuf;
-			rapidjson::Writer<rapidjson::StringBuffer> writer(strbuf);
-			document.Accept(writer);
-
-			std::string result(strbuf.GetString());
-			serializedData = result;
 		}
 
-		static void DeserializeTensor(Tensor& tensor, const std::string& parentNodeName, const std::string& nodeName, const std::string& serializedData) {
-			rapidjson::Document document;
-			if (document.Parse<0>(serializedData.c_str()).HasParseError()) {
-				throw std::runtime_error("The JSON source is not valid!");
-			}
+		JSONSerializer(const std::string dataPath, JSONSourceType sourceType = JSONSourceType::FROM_FILE) : JSONEngineReader(dataPath, sourceType) {
 
-			if (!document.HasMember(parentNodeName.c_str())) {
+		}
+
+		~JSONSerializer() {
+
+		}
+
+		void AddParentNode(const std::string& parentNodeName) {
+			_document.AddMember(rapidjson::Value().SetString(parentNodeName.c_str(), _document.GetAllocator()), rapidjson::Value().SetObject(), _document.GetAllocator());
+		}
+
+		void SerializeTensor(const Tensor& tensor, const std::string& parentNodeName, const std::string& nodeName) {
+			rapidjson::Value tensorData(rapidjson::kObjectType);
+			tensorData.AddMember("numSamples", tensor.GetNumSamples(), _document.GetAllocator());
+			tensorData.AddMember("k", tensor.GetK(), _document.GetAllocator());
+			tensorData.AddMember("nr", tensor.GetNR(), _document.GetAllocator());
+			tensorData.AddMember("nc", tensor.GetNC(), _document.GetAllocator());
+
+			// Workaround: rapidjson array method fails, so use stringstream
+			std::stringstream ss;
+			ss << std::setprecision(std::numeric_limits<float>::digits10 + 1);
+
+			for (int i = 0; i < tensor.Size() - 1; i++) {
+				if (std::isnan(tensor[i])) {
+					std::cout << "tadam" << std::endl;
+				}
+				if (!(tensor[i] == tensor[i])) {
+					std::cout << "nan" << std::endl;
+				}
+				if (tensor[i] <= DBL_MAX && tensor[i] >= -DBL_MAX) {
+					std::cout << "inf" << std::endl;
+				}
+
+				ss << tensor[i] << ",";
+			}
+			ss << tensor[tensor.Size() - 1];
+			const std::string tmp = ss.str();
+			rapidjson::Value arrayData(tmp.c_str(), _document.GetAllocator());
+			tensorData.AddMember("host", arrayData.Move(), _document.GetAllocator());
+
+			/*rapidjson::Value arrayData(rapidjson::kArrayType);
+			for (int i = 0; i < tensor.Size(); i++) {
+				arrayData.PushBack(rapidjson::Value().SetDouble(tensor[i]), allocator);
+			}
+			tensorData.AddMember("host", arrayData, allocator);*/
+
+			rapidjson::Value jsonNodeName(nodeName.c_str(), _document.GetAllocator());
+			_document[parentNodeName.c_str()].AddMember(jsonNodeName.Move(), tensorData, _document.GetAllocator());
+		}
+
+		void DeserializeTensor(Tensor& tensor, const std::string& parentNodeName, const std::string& nodeName) {
+			if (!_document.HasMember(parentNodeName.c_str())) {
 				throw std::runtime_error(parentNodeName + " member is missing from the config file!");
 			}
 
-			const rapidjson::Value& node = document[parentNodeName.c_str()];
+			const rapidjson::Value& node = _document[parentNodeName.c_str()];
 
 			if (!node.HasMember(nodeName.c_str())) {
 				throw std::runtime_error(nodeName + " member is missing from the config file!");
@@ -99,44 +126,26 @@ namespace nexural {
 			long nr = t["nr"].GetInt();
 			long nc = t["nc"].GetInt();
 			tensor.Resize(numSamples, k, nr, nc);
-			
-			const rapidjson::Value& tensorData = t["host"];
+
+			std::string arrayData = t["host"].GetString();
+			std::vector<std::string> tokens = helper::TokenizeString(arrayData, ",");
+
+			for (long index = 0; index < tokens.size(); ++index)
+			{
+				tensor[index] = std::stof(tokens[index]);
+			}
+
+			/*const rapidjson::Value& arrayData = t["host"];
 			long index = 0;
-			for (rapidjson::Value::ConstValueIterator itr = tensorData.Begin(); itr != tensorData.End(); ++itr) {
+			for (rapidjson::Value::ConstValueIterator itr = arrayData.Begin(); itr != arrayData.End(); ++itr) {
 				tensor[index] = static_cast<float>(itr->GetDouble());
 				index++;
-			}
+			}*/
 		}
 
-		static void Save(const std::string& filePath, const std::string& data) {
-			JSONEngineReader jsonEngine(data, JSONEngineReader::JSONSourceType::FROM_STRING);
-			jsonEngine.SerializeToFile(filePath);
+		void Save(const std::string& outputFilePath) {
+			SerializeToFile(outputFilePath);
 		}
-
-		static void Load(const std::string& filePath, std::string& data) {
-			JSONEngineReader jsonEngine(filePath, JSONEngineReader::JSONSourceType::FROM_FILE);
-			jsonEngine.ToString(data);
-		}
-
-		static void AddParentNode(const std::string& parentNodeName, std::string& data) {
-			if (data.empty()) {
-				data = "{ }";
-			}
-			
-			rapidjson::Document document;
-			if (document.Parse<0>(data.c_str()).HasParseError()) {
-				throw std::runtime_error("The JSON source is not valid!");
-			}
-
-			rapidjson::Document::AllocatorType& allocator = document.GetAllocator();
-			document.AddMember(rapidjson::Value().SetString(parentNodeName.c_str(), allocator), rapidjson::Value().SetObject(), allocator);
-			rapidjson::StringBuffer strbuf;
-			rapidjson::Writer<rapidjson::StringBuffer> writer(strbuf);
-			document.Accept(writer);
-
-			std::string result(strbuf.GetString());
-			data = result;
-		}
-	}
+	};
 }
 #endif

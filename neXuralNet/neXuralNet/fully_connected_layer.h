@@ -134,15 +134,15 @@ namespace nexural {
 			}
 		}
 
-		virtual void Serialize(std::string& data) {
-			DataSerializer::AddParentNode(_layerID, data);
-			DataSerializer::SerializeTensor(_weights, _layerID, "weights", data);
-			DataSerializer::SerializeTensor(_biases, _layerID, "biases", data);
+		virtual void Serialize(DataSerializer& serializer) {
+			serializer.AddParentNode(_layerID);
+			serializer.SerializeTensor(_weights, _layerID, "weights");
+			serializer.SerializeTensor(_biases, _layerID, "biases");
 		}
 
-		virtual void Deserialize(const std::string& data) {
-			DataSerializer::DeserializeTensor(_weights, _layerID, "weights", data);
-			DataSerializer::DeserializeTensor(_biases, _layerID, "biases", data);
+		virtual void Deserialize(DataSerializer& serializer) {
+			serializer.DeserializeTensor(_weights, _layerID, "weights");
+			serializer.DeserializeTensor(_biases, _layerID, "biases");
 		}
 
 	private:

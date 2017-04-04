@@ -105,7 +105,7 @@ namespace nexural {
 			for (long numSamples = 0; numSamples < totalOutputNumSamples; numSamples++)
 			{
 				long idx = numSamples * _outputData.GetNC() + indexes[numSamples];
-				_totalError += -std::log(_outputData[idx]);
+				_totalError += -std::log(helper::clip(_outputData[idx], 1e-10f, 1.0f));
 			}
 		}
 

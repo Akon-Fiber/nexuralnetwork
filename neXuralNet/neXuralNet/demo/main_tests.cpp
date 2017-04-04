@@ -115,7 +115,6 @@ int main(int argc, char* argv[]) {
 			_getch();
 			return -1;
 		}
-
 		std::string dataFolderPath = argv[1];
 		int option = 1;
 		while (option != 0) {

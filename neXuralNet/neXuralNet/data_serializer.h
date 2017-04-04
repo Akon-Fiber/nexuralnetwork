@@ -26,41 +26,46 @@ OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 #define _NEXURALNET_UTILITY_DATA_SERIALIZER_H
 
 namespace nexural {
-	enum class DataSerializationType {
+	enum class SerializerType {
 		JSON = 0
 	};
 
 	class DataSerializer {
 	public:
-		static void SerializeTensor(const Tensor& tensor, const std::string& parentNodeName, const std::string& nodeName, std::string& serializedData, const DataSerializationType& serializationType = DataSerializationType::JSON) {
-			if (serializationType == DataSerializationType::JSON) {
-				json_data_serializer::SerializeTensor(tensor, parentNodeName, nodeName, serializedData);
+		DataSerializer(const SerializerType serializerType) {
+			if (serializerType == SerializerType::JSON) {
+				_serializer = BaseSerializerPtr(new JSONSerializer());
 			}
 		}
 
-		static void DeserializeTensor(Tensor& tensor, const std::string& parentNodeName, const std::string& nodeName, const std::string& serializedData, const DataSerializationType& serializationType = DataSerializationType::JSON) {
-			if (serializationType == DataSerializationType::JSON) {
-				json_data_serializer::DeserializeTensor(tensor, parentNodeName, nodeName, serializedData);
+		DataSerializer(const SerializerType serializerType, const std::string& dataPath) {
+			if (serializerType == SerializerType::JSON) {
+				_serializer = BaseSerializerPtr(new JSONSerializer(dataPath));
 			}
 		}
 
-		static void Save(const std::string& filePath, const std::string& data, const DataSerializationType& serializationType = DataSerializationType::JSON) {
-			if (serializationType == DataSerializationType::JSON) {
-				json_data_serializer::Save(filePath, data);
-			}
+		~DataSerializer() {
+
 		}
 
-		static void Load(const std::string& filePath, std::string& data, const DataSerializationType& serializationType = DataSerializationType::JSON) {
-			if (serializationType == DataSerializationType::JSON) {
-				json_data_serializer::Load(filePath, data);
-			}
+		void AddParentNode(const std::string& parentNodeName) {
+			_serializer->AddParentNode(parentNodeName);
 		}
 
-		static void AddParentNode(const std::string& parentNodeName, std::string& data, const DataSerializationType& serializationType = DataSerializationType::JSON) {
-			if (serializationType == DataSerializationType::JSON) {
-				json_data_serializer::AddParentNode(parentNodeName, data);
-			}
+		void SerializeTensor(const Tensor& tensor, const std::string& parentNodeName, const std::string& nodeName) {
+			_serializer->SerializeTensor(tensor, parentNodeName, nodeName);
 		}
+
+		void DeserializeTensor(Tensor& tensor, const std::string& parentNodeName, const std::string& nodeName) {
+			_serializer->DeserializeTensor(tensor, parentNodeName, nodeName);
+		}
+
+		void Save(const std::string& outputFilePath) {
+			_serializer->Save(outputFilePath);
+		}
+
+	private:
+		BaseSerializerPtr _serializer;
 	};
 }
 #endif

@@ -32,7 +32,7 @@ OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 namespace nexural {
 	class JSONConfigReader : public JSONEngineReader {
 	public:
-		JSONConfigReader(const std::string networkConfigPath) : JSONEngineReader(networkConfigPath, JSONEngineReader::JSONSourceType::FROM_FILE) {
+		JSONConfigReader(const std::string networkConfigPath) : JSONEngineReader(networkConfigPath, JSONSourceType::FROM_FILE) {
 
 		}
 
