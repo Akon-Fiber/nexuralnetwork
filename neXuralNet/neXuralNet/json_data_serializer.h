@@ -56,33 +56,33 @@ namespace nexural {
 			tensorData.AddMember("nr", tensor.GetNR(), _document.GetAllocator());
 			tensorData.AddMember("nc", tensor.GetNC(), _document.GetAllocator());
 
-			// Workaround: rapidjson array method fails, so use stringstream
-			std::stringstream ss;
-			ss << std::setprecision(std::numeric_limits<float>::digits10 + 1);
+			//// Workaround: rapidjson array method fails, so use stringstream
+			//std::stringstream ss;
+			//ss << std::setprecision(std::numeric_limits<float>::digits10 + 1);
 
-			for (int i = 0; i < tensor.Size() - 1; i++) {
-				if (std::isnan(tensor[i])) {
-					std::cout << "tadam" << std::endl;
-				}
-				if (!(tensor[i] == tensor[i])) {
-					std::cout << "nan" << std::endl;
-				}
-				if (tensor[i] <= DBL_MAX && tensor[i] >= -DBL_MAX) {
-					std::cout << "inf" << std::endl;
-				}
+			//for (int i = 0; i < tensor.Size() - 1; i++) {
+			//	if (std::isnan(tensor[i])) {
+			//		std::cout << "tadam" << std::endl;
+			//	}
+			//	if (!(tensor[i] == tensor[i])) {
+			//		std::cout << "nan" << std::endl;
+			//	}
+			//	if (tensor[i] <= DBL_MAX && tensor[i] >= -DBL_MAX) {
+			//		std::cout << "inf" << std::endl;
+			//	}
 
-				ss << tensor[i] << ",";
-			}
-			ss << tensor[tensor.Size() - 1];
-			const std::string tmp = ss.str();
-			rapidjson::Value arrayData(tmp.c_str(), _document.GetAllocator());
-			tensorData.AddMember("host", arrayData.Move(), _document.GetAllocator());
+			//	ss << tensor[i] << ",";
+			//}
+			//ss << tensor[tensor.Size() - 1];
+			//const std::string tmp = ss.str();
+			//rapidjson::Value arrayData(tmp.c_str(), _document.GetAllocator());
+			//tensorData.AddMember("host", arrayData.Move(), _document.GetAllocator());
 
-			/*rapidjson::Value arrayData(rapidjson::kArrayType);
+			rapidjson::Value arrayData(rapidjson::kArrayType);
 			for (int i = 0; i < tensor.Size(); i++) {
-				arrayData.PushBack(rapidjson::Value().SetDouble(tensor[i]), allocator);
+				arrayData.PushBack(rapidjson::Value().SetDouble(tensor[i]), _document.GetAllocator());
 			}
-			tensorData.AddMember("host", arrayData, allocator);*/
+			tensorData.AddMember("host", arrayData, _document.GetAllocator());
 
 			rapidjson::Value jsonNodeName(nodeName.c_str(), _document.GetAllocator());
 			_document[parentNodeName.c_str()].AddMember(jsonNodeName.Move(), tensorData, _document.GetAllocator());
@@ -127,20 +127,20 @@ namespace nexural {
 			long nc = t["nc"].GetInt();
 			tensor.Resize(numSamples, k, nr, nc);
 
-			std::string arrayData = t["host"].GetString();
+			/*std::string arrayData = t["host"].GetString();
 			std::vector<std::string> tokens = helper::TokenizeString(arrayData, ",");
 
 			for (long index = 0; index < tokens.size(); ++index)
 			{
 				tensor[index] = std::stof(tokens[index]);
-			}
+			}*/
 
-			/*const rapidjson::Value& arrayData = t["host"];
+			const rapidjson::Value& arrayData = t["host"];
 			long index = 0;
 			for (rapidjson::Value::ConstValueIterator itr = arrayData.Begin(); itr != arrayData.End(); ++itr) {
 				tensor[index] = static_cast<float>(itr->GetDouble());
 				index++;
-			}*/
+			}
 		}
 
 		void Save(const std::string& outputFilePath) {
