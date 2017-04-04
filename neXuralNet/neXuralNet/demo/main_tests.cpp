@@ -22,7 +22,6 @@ OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 #include <opencv2\highgui\highgui.hpp>
 #include <opencv2\core\mat.hpp>
 
-#include <iostream>
 #include <stdlib.h>
 #include <conio.h>
 
@@ -33,9 +32,6 @@ OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 #include "and_gate_with_relu_softmax.h"
 #include "mnist_softmax.h"
 #include "../tools/generate_test_data.h"
-
-#include "../tensor.h"
-#include "../data_serializer.h"
 
 void Menu() {
 	std::cout << "--------------------------MENU--------------------------" << std::endl;

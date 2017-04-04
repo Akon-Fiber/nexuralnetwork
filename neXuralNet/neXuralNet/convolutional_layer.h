@@ -98,7 +98,7 @@ namespace nexural {
 			_dBiases.Fill(0.0);
 
 			// Calculate gradient wrt. weights: (_internalInputData * prevLayerErrors)
-			for (long errorNumSamples = 0; errorNumSamples < prevLayerErrors.GetNumSamples(); errorNumSamples++) {
+			for (long prevLayerErrorsNumSamples = 0; prevLayerErrorsNumSamples < prevLayerErrors.GetNumSamples(); prevLayerErrorsNumSamples++) {
 				for (long k = 0; k < _internalInputData.GetK(); k++) {
 					long nro = 0;
 					for (long nr = 0; nr < _internalInputData.GetNR() - prevLayerErrors.GetNR() + 1; nr += _strideHeight) {
@@ -109,12 +109,12 @@ namespace nexural {
 								for (long j = 0; j < prevLayerErrors.GetNC(); j++) {
 									for (long inputNumSamples = 0; inputNumSamples < _internalInputData.GetNumSamples(); inputNumSamples++) {
 										error += _internalInputData[(((inputNumSamples * _internalInputData.GetK()) + k) * _internalInputData.GetNR() + (nr + i)) * _internalInputData.GetNC() + (nc + j)] *
-											prevLayerErrors[(((errorNumSamples * prevLayerErrors.GetK()) + k) * prevLayerErrors.GetNR() + i) * prevLayerErrors.GetNC() + j];
+											prevLayerErrors[(((prevLayerErrorsNumSamples * prevLayerErrors.GetK()) + k) * prevLayerErrors.GetNR() + i) * prevLayerErrors.GetNC() + j];
 									}
 								}
 							}
-							long idx = (((errorNumSamples * _dWeights.GetK()) + k) * _dWeights.GetNR() + nro) * _dWeights.GetNC() + nco;
-							_dWeights[(((errorNumSamples * _dWeights.GetK()) + k) * _dWeights.GetNR() + nro) * _dWeights.GetNC() + nco] = error;
+							long idx = (((prevLayerErrorsNumSamples * _dWeights.GetK()) + k) * _dWeights.GetNR() + nro) * _dWeights.GetNC() + nco;
+							_dWeights[(((prevLayerErrorsNumSamples * _dWeights.GetK()) + k) * _dWeights.GetNR() + nro) * _dWeights.GetNC() + nco] = error;
 							nco++;
 						}
 						nro++;
@@ -136,7 +136,7 @@ namespace nexural {
 			Tensor convPrevLayerErrors;
 			AddPadding(prevLayerErrors, convPrevLayerErrors, paddingWidth, paddingHeight);
 
-			for (long errorNumSamples = 0; errorNumSamples < convPrevLayerErrors.GetNumSamples(); errorNumSamples++) {
+			for (long prevLayerErrorsNumSamples = 0; prevLayerErrorsNumSamples < convPrevLayerErrors.GetNumSamples(); prevLayerErrorsNumSamples++) {
 				for (long k = 0; k < _weights.GetK(); k++) {
 					long nro = 0;
 					for (long nr = 0; nr < convPrevLayerErrors.GetNR() - _weights.GetNR() + 1; nr += _strideHeight) {
@@ -147,12 +147,12 @@ namespace nexural {
 								for (long j = 0; j < _weights.GetNC(); j++) {
 									for (long weightsNumSamples = 0; weightsNumSamples < _weights.GetNumSamples(); weightsNumSamples++) {
 										error += _weights[(((weightsNumSamples * _weights.GetK()) + k) * _weights.GetNR() + (nr + i)) * _weights.GetNC() + (nc + j)] *
-											convPrevLayerErrors[(((errorNumSamples * convPrevLayerErrors.GetK()) + k) * convPrevLayerErrors.GetNR() + i) * convPrevLayerErrors.GetNC() + j];
+											convPrevLayerErrors[(((prevLayerErrorsNumSamples * convPrevLayerErrors.GetK()) + k) * convPrevLayerErrors.GetNR() + i) * convPrevLayerErrors.GetNC() + j];
 									}
 								}
 							}
-							long idx = (((errorNumSamples * _layerErrors.GetK()) + k) * _layerErrors.GetNR() + nro) * _layerErrors.GetNC() + nco;
-							_layerErrors[(((errorNumSamples * _layerErrors.GetK()) + k) * _layerErrors.GetNR() + nro) * _layerErrors.GetNC() + nco] = error;
+							long idx = (((prevLayerErrorsNumSamples * _layerErrors.GetK()) + k) * _layerErrors.GetNR() + nro) * _layerErrors.GetNC() + nco;
+							_layerErrors[(((prevLayerErrorsNumSamples * _layerErrors.GetK()) + k) * _layerErrors.GetNR() + nro) * _layerErrors.GetNC() + nco] = error;
 							nco++;
 						}
 						nro++;
