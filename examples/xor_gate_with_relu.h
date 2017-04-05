@@ -20,7 +20,7 @@ OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 */
 
 #include <iostream>
-#include "../dnn/network/network.h"
+#include "../nexuralnet/dnn/network/network.h"
 
 using namespace nexural;
 

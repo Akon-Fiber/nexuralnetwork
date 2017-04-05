@@ -144,12 +144,12 @@
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClInclude Include="..\..\neXuralNet\demo\and_gate_with_relu.h" />
-    <ClInclude Include="..\..\neXuralNet\demo\and_gate_with_relu_softmax.h" />
-    <ClInclude Include="..\..\neXuralNet\demo\and_gate_with_tanh.h" />
-    <ClInclude Include="..\..\neXuralNet\demo\mnist_softmax.h" />
-    <ClInclude Include="..\..\neXuralNet\demo\xor_gate_with_relu.h" />
-    <ClInclude Include="..\..\neXuralNet\demo\xor_gate_with_relu_softmax.h" />
+    <ClInclude Include="..\..\examples\and_gate_with_relu.h" />
+    <ClInclude Include="..\..\examples\and_gate_with_relu_softmax.h" />
+    <ClInclude Include="..\..\examples\and_gate_with_tanh.h" />
+    <ClInclude Include="..\..\examples\mnist_softmax.h" />
+    <ClInclude Include="..\..\examples\xor_gate_with_relu.h" />
+    <ClInclude Include="..\..\examples\xor_gate_with_relu_softmax.h" />
     <ClInclude Include="..\..\neXuralNet\dnn\data_types\general_data_types.h" />
     <ClInclude Include="..\..\neXuralNet\dnn\data_types\layer_settings.h" />
     <ClInclude Include="..\..\neXuralNet\dnn\data_types\layer_shape.h" />
@@ -198,7 +198,7 @@
     <ClInclude Include="..\..\neXuralNet\tools\generate_test_data.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="..\..\neXuralNet\demo\main_tests.cpp" />
+    <ClCompile Include="..\..\examples\main_tests.cpp" />
     <ClCompile Include="..\..\neXuralNet\dnn\data_types\tensor.cpp" />
     <ClCompile Include="..\..\neXuralNet\dnn\network\network.cpp" />
     <ClCompile Include="..\..\neXuralNet\dnn\network\network_trainer.cpp" />

@@ -56,29 +56,11 @@
     <Filter Include="tools">
       <UniqueIdentifier>{9027192c-3886-43e8-b4f4-09e5d2c8b72b}</UniqueIdentifier>
     </Filter>
-    <Filter Include="demo">
-      <UniqueIdentifier>{06d10117-bbb2-4ea4-8ca9-6d059ca79224}</UniqueIdentifier>
+    <Filter Include="examples">
+      <UniqueIdentifier>{c0ef2ac3-7d49-429b-9d49-d5f050203c19}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="..\..\neXuralNet\demo\and_gate_with_relu.h">
-      <Filter>demo</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\neXuralNet\demo\and_gate_with_relu_softmax.h">
-      <Filter>demo</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\neXuralNet\demo\and_gate_with_tanh.h">
-      <Filter>demo</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\neXuralNet\demo\mnist_softmax.h">
-      <Filter>demo</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\neXuralNet\demo\xor_gate_with_relu.h">
-      <Filter>demo</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\neXuralNet\demo\xor_gate_with_relu_softmax.h">
-      <Filter>demo</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\neXuralNet\tools\data_reader.h">
       <Filter>tools</Filter>
     </ClInclude>
@@ -217,11 +199,26 @@
     <ClInclude Include="..\..\neXuralNet\dnn\layers\computational_layers\computational_base_layer.h">
       <Filter>nexural\dnn\layers\computational_layers\common</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\examples\and_gate_with_relu.h">
+      <Filter>examples</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\examples\and_gate_with_relu_softmax.h">
+      <Filter>examples</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\examples\and_gate_with_tanh.h">
+      <Filter>examples</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\examples\mnist_softmax.h">
+      <Filter>examples</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\examples\xor_gate_with_relu.h">
+      <Filter>examples</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\examples\xor_gate_with_relu_softmax.h">
+      <Filter>examples</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="..\..\neXuralNet\demo\main_tests.cpp">
-      <Filter>demo</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\neXuralNet\dnn\data_types\tensor.cpp">
       <Filter>nexural\data_types</Filter>
     </ClCompile>
@@ -230,6 +227,9 @@
     </ClCompile>
     <ClCompile Include="..\..\neXuralNet\dnn\network\network_trainer.cpp">
       <Filter>nexural\dnn\network</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\examples\main_tests.cpp">
+      <Filter>examples</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

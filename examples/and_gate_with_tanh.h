@@ -20,23 +20,22 @@ OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 */
 
 #include <iostream>
-#include "../dnn/network/network.h"
+#include "../nexuralnet/dnn/network/network.h"
 
 using namespace nexural;
 
-void Test_AND_Gate_With_RELU(const std::string& dataFolderPath) {
+void Test_AND_Gate_With_TanH(const std::string& dataFolderPath) {
 	Tensor inputData, trainingData, targetData;
 
-	std::string networkConfigPath = dataFolderPath + "\\and_relu\\network.json";
-	std::string trainerConfigPath = dataFolderPath + "\\and_relu\\trainer.json";
-	std::string trainingDataPath = dataFolderPath + "\\and_relu\\trainingData.txt";
-	std::string targetDataPath = dataFolderPath + "\\and_relu\\targetData.txt";
+	std::string networkConfigPath = dataFolderPath + "\\and_tanh\\network.json";
+	std::string trainingDataPath = dataFolderPath + "\\and_tanh\\trainingData.txt";
+	std::string targetDataPath = dataFolderPath + "\\and_tanh\\targetData.txt";
 
 	tools::DataReader::ReadTensorFromFile(trainingDataPath, trainingData);
 	tools::DataReader::ReadTensorFromFile(targetDataPath, targetData);
 
 	Network net(networkConfigPath);
-	NetworkTrainer netTrainer(trainerConfigPath);
+	NetworkTrainer netTrainer;
 	netTrainer.Train(net, trainingData, targetData);
 
 	std::cout << "Test the trained network: " << std::endl;

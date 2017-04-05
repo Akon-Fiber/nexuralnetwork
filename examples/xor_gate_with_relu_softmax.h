@@ -20,39 +20,52 @@ OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 */
 
 #include <iostream>
-#include "../dnn/network/network.h"
+#include "../nexuralnet/dnn/network/network.h"
 
 using namespace nexural;
 
-void Test_AND_Gate_With_TanH(const std::string& dataFolderPath) {
+void Test_XOR_Gate_With_RELU_Softmax(const std::string& dataFolderPath) {
 	Tensor inputData, trainingData, targetData;
 
-	std::string networkConfigPath = dataFolderPath + "\\and_tanh\\network.json";
-	std::string trainingDataPath = dataFolderPath + "\\and_tanh\\trainingData.txt";
-	std::string targetDataPath = dataFolderPath + "\\and_tanh\\targetData.txt";
+	std::string networkConfigPath = dataFolderPath + "\\xor_relu_softmax\\network.json";
+	std::string trainerConfigPath = dataFolderPath + "\\xor_relu_softmax\\trainer.json";
+	std::string trainingDataPath = dataFolderPath + "\\xor_relu_softmax\\trainingData.txt";
+	std::string targetDataPath = dataFolderPath + "\\xor_relu_softmax\\targetData.txt";
 
 	tools::DataReader::ReadTensorFromFile(trainingDataPath, trainingData);
 	tools::DataReader::ReadTensorFromFile(targetDataPath, targetData);
 
+	int option = 0;
+	std::cout << "1 - Train and test" << std::endl;
+	std::cout << "2 - Test apretrained network" << std::endl;
+	std::cin >> option;
+
 	Network net(networkConfigPath);
-	NetworkTrainer netTrainer;
-	netTrainer.Train(net, trainingData, targetData);
+
+	if (option == 1) {
+		NetworkTrainer netTrainer(trainerConfigPath);
+		netTrainer.Train(net, trainingData, targetData);
+		net.Serialize("D:\\netsave.json");
+	}
+	else {
+		net.Deserialize("D:\\netsave.json");
+	}
 
 	std::cout << "Test the trained network: " << std::endl;
 	inputData.Resize(1, 1, 1, 2);
-	std::cout << "Input: 1 1 | Target: 1" << std::endl;
+	std::cout << "Input: 1 1 | Target: 1 0" << std::endl;
 	inputData[0] = 1.0;
 	inputData[1] = 1.0;
 	net.Run(inputData);
-	std::cout << "Input: 1 0 | Target: 0" << std::endl;
+	std::cout << "Input: 1 0 | Target: 0 1" << std::endl;
 	inputData[0] = 1.0;
 	inputData[1] = 0.0;
 	net.Run(inputData);
-	std::cout << "Input: 0 1 | Target: 0" << std::endl;
+	std::cout << "Input: 0 1 | Target: 0 1" << std::endl;
 	inputData[0] = 0.0;
 	inputData[1] = 1.0;
 	net.Run(inputData);
-	std::cout << "Input: 0 0 | Target: 0" << std::endl;
+	std::cout << "Input: 0 0 | Target: 1 0" << std::endl;
 	inputData[0] = 0.0;
 	inputData[1] = 0.0;
 	net.Run(inputData);
