@@ -123,7 +123,7 @@ namespace nexural {
 						{
 							for (long nc = 0; nc < _layerErrors.GetNC(); nc++)
 							{
-								long indx = (n * _dWeights.GetNC() + ((k * _internalInputData.GetNR() + nr) * _internalInputData.GetNC() + nc));
+								long indx = (n * _weights.GetNC() + ((k * _internalInputData.GetNR() + nr) * _internalInputData.GetNC() + nc));
 								float value = _weights[indx];
 								_layerErrors[(((numSamples * _layerErrors.GetK()) + k) * _layerErrors.GetNR() + nr) * _layerErrors.GetNC() + nc] = value * error;
 							}
