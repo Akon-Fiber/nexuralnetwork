@@ -52,15 +52,65 @@ void Menu() {
 }
 
 void Experimental(const std::string& dataFolderPath) {
-	Tensor inputData;
+	//Tensor inputData;
 
-	std::string networkConfigPath = dataFolderPath + "\\mnist_softmax\\network.json";
-	Network net(networkConfigPath);
-	net.Deserialize("D:\\mnist.json");
+	//std::string networkConfigPath = dataFolderPath + "\\mnist_softmax\\network.json";
+	//Network net(networkConfigPath);
+	//net.Deserialize("D:\\mnist.json");
 
-	cv::Mat image = cv::imread("D:\\6.jpg", cv::IMREAD_GRAYSCALE);
-	nexural::converter::ConvertToTensor(image, inputData);
-	net.Run(inputData);
+	//cv::Mat image = cv::imread("D:\\6.jpg", cv::IMREAD_GRAYSCALE);
+	//nexural::converter::ConvertToTensor(image, inputData);
+	//net.Run(inputData);
+
+
+	long _strideHeight = 1, _strideWidth = 1;
+	Tensor convPrevLayerErrors;
+	convPrevLayerErrors.Resize(1, 2, 4, 4);
+	convPrevLayerErrors.Fill(std::vector<float>{2, 5, 7, 3, 1, 4, 9, 10, 6, 12, 18, 20, 15, 31, 14, 8,
+		6, 8, 9, 21, 53, 54, 7, 10, 1, 8, 13, 17, 25, 4, 3, 1});
+	convPrevLayerErrors.OutputToConsole();
+
+	Tensor _weights;
+	_weights.Resize(2, 3, 2, 2);
+	_weights.Fill(std::vector<float>{7, 9, 5, 3, 1, 4, 7, 12, 8, 20, 33, 45, 5, 12, 41, 13, 11, 9, 7, 5, 3, 10, 27, 8});
+	_weights.OutputToConsole();
+
+	Tensor _layerErrors;
+	_layerErrors.Resize(1, 2, 3, 3);
+	_layerErrors.Fill(0.0);
+
+	for (long numSamples = 0; numSamples < convPrevLayerErrors.GetNumSamples(); numSamples++) {
+		for (long numOfFilters = 0; numOfFilters < convPrevLayerErrors.GetK(); numOfFilters++) {
+			long nro = 0;
+			for (long nr = 0; nr < convPrevLayerErrors.GetNR() - _weights.GetNR() + 1; nr += _strideHeight) {
+				long nco = 0;
+				for (long nc = 0; nc < convPrevLayerErrors.GetNC() - _weights.GetNC() + 1; nc += _strideWidth) {
+					for (long i = 0; i < _weights.GetNR(); i++) {
+						for (long j = 0; j < _weights.GetNC(); j++) {
+							for (long k = 0; k < _weights.GetK(); k++) {
+						
+								long convPrevLayerErrors_idx = (((numSamples * convPrevLayerErrors.GetK()) + numOfFilters) * convPrevLayerErrors.GetNR() + (nr + i)) * convPrevLayerErrors.GetNC() + (nc + j);
+								float convpr = convPrevLayerErrors[convPrevLayerErrors_idx];
+
+								long _weights_idx = (((numOfFilters * _weights.GetK()) + k) * _weights.GetNR() + i) * _weights.GetNC() + j;
+								float weighval = _weights[_weights_idx];
+								
+								float error = convpr * weighval;
+								
+								long idx = (((numSamples * _layerErrors.GetK()) + k) * _layerErrors.GetNR() + nro) * _layerErrors.GetNC() + nco;
+								_layerErrors[idx] += error;
+							}
+						}
+					}
+					nco++;
+				}
+				nro++;
+			}
+		}
+	}
+
+	_layerErrors.OutputToConsole();
+
 }
 
 void DoTests(const int option, const std::string& dataFolderPath) {

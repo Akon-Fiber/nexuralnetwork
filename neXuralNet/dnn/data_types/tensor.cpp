@@ -153,8 +153,16 @@ namespace nexural {
 	}
 
 	void Tensor::Fill(const float value) {
-		for (int i = 0; i < _size; i++) {
+		for (long i = 0; i < _size; i++) {
 			_host.get()[i] = value;
+		}
+	}
+
+	void Tensor::Fill(const std::vector<float>& values) {
+		if (values.size() == _size) {
+			for (long i = 0; i < _size; i++) {
+				_host.get()[i] = values[i];
+			}
 		}
 	}
 

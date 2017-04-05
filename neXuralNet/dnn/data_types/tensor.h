@@ -20,6 +20,7 @@ OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 */
 
 #include <memory>
+#include <vector>
 #include "layer_shape.h"
 
 #ifndef _NEXURALNET_DATA_TYPES_TENSOR_H
@@ -79,6 +80,7 @@ namespace nexural {
 		long Size() const { return _size; }
 
 		void Fill(const float value);
+		void Fill(const std::vector<float>& values);
 		void FillRandom(const float range);
 		void FillRandomBinomialDistribution();
 		void GetBatch(const Tensor& tensor, const long startIndex, const long batchSize = 1);
