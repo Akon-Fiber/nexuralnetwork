@@ -52,8 +52,8 @@ namespace nexural {
 			_weights.Resize(_numOfFilters, _inputShape.GetK(), _kernelHeight, _kernelWidth);
 			_biases.Resize(1, 1, 1, _numOfFilters);
 			
-			float weightRange = (float)(std::sqrt(2. / (double)_inputShape.Size()));
-			float biasRange = (float)(std::sqrt(2. / (double)_biases.Size()));
+			float_n weightRange = (float_n)(std::sqrt(2. / (double)_inputShape.Size()));
+			float_n biasRange = (float_n)(std::sqrt(2. / (double)_biases.Size()));
 			_weights.FillRandom(weightRange);
 			_biases.FillRandom(biasRange);
 			_layerID = "convolutional_layer" + std::to_string(layerIndex);
@@ -67,7 +67,7 @@ namespace nexural {
 					for (long nr = 0; nr < inputData.GetNR() - _weights.GetNR() + 1; nr += _strideHeight) {
 						long nco = 0;
 						for (long nc = 0; nc < inputData.GetNC() - _weights.GetNC() + 1; nc += _strideWidth) {
-							float value = 0;
+							float_n value = 0;
 							for (long i = 0; i < _weights.GetNR(); i++) {
 								for (long j = 0; j < _weights.GetNC(); j++) {
 									for (long k = 0; k < inputData.GetK(); k++) {
@@ -100,7 +100,7 @@ namespace nexural {
 					for (long nr = 0; nr < _internalInputData.GetNR() - prevLayerErrors.GetNR() + 1; nr += _strideHeight) {
 						long nco = 0;
 						for (long nc = 0; nc < _internalInputData.GetNC() - prevLayerErrors.GetNC() + 1; nc += _strideWidth) {
-							float error = 0;
+							float_n error = 0;
 							for (long i = 0; i < prevLayerErrors.GetNR(); i++) {
 								for (long j = 0; j < prevLayerErrors.GetNC(); j++) {
 									for (long prevLayerErrorsNumSamples = 0; prevLayerErrorsNumSamples < prevLayerErrors.GetNumSamples(); prevLayerErrorsNumSamples++) {
@@ -139,7 +139,7 @@ namespace nexural {
 					for (long nr = 0; nr < convPrevLayerErrors.GetNR() - _weights.GetNR() + 1; nr += _strideHeight) {
 						long nco = 0;
 						for (long nc = 0; nc < convPrevLayerErrors.GetNC() - _weights.GetNC() + 1; nc += _strideWidth) {
-							float error = 0;
+							float_n error = 0;
 							for (long i = 0; i < _weights.GetNR(); i++) {
 								for (long j = 0; j < _weights.GetNC(); j++) {
 									for (long numOfFilters = 0; numOfFilters < convPrevLayerErrors.GetK(); numOfFilters++) {

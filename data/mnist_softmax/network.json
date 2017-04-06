@@ -12,7 +12,7 @@
     {
       "type": "convolutional",
       "params": {
-        "num_of_filters": "3",
+        "num_of_filters": "5",
         "kernel_width": "3",
         "kernel_height": "3",
         "padding_width": "0",
@@ -36,7 +36,7 @@
     },{
       "type": "convolutional",
       "params": {
-        "num_of_filters": "5",
+        "num_of_filters": "10",
         "kernel_width": "5",
         "kernel_height": "5",
         "padding_width": "0",

@@ -46,7 +46,7 @@ namespace nexural {
 			_internalInputData.ShareTensor(inputData);
 			for (long i = 0; i < inputData.Size(); i++)
 			{
-				float value = inputData[i];
+				float_n value = inputData[i];
 				_outputData[i] = std::tanh(value);
 			}
 		}
@@ -58,9 +58,9 @@ namespace nexural {
 		virtual void BackPropagate(const Tensor& prevLayerErrors) {
 			for (long i = 0; i < _internalInputData.Size(); i++)
 			{
-				float error = prevLayerErrors[i];
-				float value = _internalInputData[i];
-				_layerErrors[i] = static_cast<float>(error * (1.0 - std::tanh(value) * std::tanh(value)));
+				float_n error = prevLayerErrors[i];
+				float_n value = _internalInputData[i];
+				_layerErrors[i] = static_cast<float_n>(error * (1.0 - std::tanh(value) * std::tanh(value)));
 			}
 		}
 

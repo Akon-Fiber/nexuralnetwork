@@ -60,13 +60,13 @@ namespace nexural {
 							long khLimit = _kernel_height - (nr == (inputData.GetNR() - (inputData.GetNR() % _kernel_height)) ? _kernel_height - inputData.GetNR() % _kernel_height : 0);
 							long kwLimit = _kernel_width - (nc == (inputData.GetNC() - (inputData.GetNC() % _kernel_width)) ? _kernel_width - inputData.GetNC() % _kernel_width : 0);
 							
-							float sum = 0;
+							float_n sum = 0;
 
 							for (long kh = 0; kh < khLimit; kh++)
 							{
 								for (long kw = 0; kw < kwLimit; kw++)
 								{
-									float value = inputData[(((numSamples * inputData.GetK()) + k) * inputData.GetNR() + (nr + kh)) * inputData.GetNC() + (nc + kw)];
+									float_n value = inputData[(((numSamples * inputData.GetK()) + k) * inputData.GetNR() + (nr + kh)) * inputData.GetNC() + (nc + kw)];
 									sum += value;
 								}
 							}
@@ -97,7 +97,7 @@ namespace nexural {
 							long khLimit = _kernel_height - (nr == (_layerErrors.GetNR() - (_layerErrors.GetNR() % _kernel_height)) ? _kernel_height - _layerErrors.GetNR() % _kernel_height : 0);
 							long kwLimit = _kernel_width - (nc == (_layerErrors.GetNC() - (_layerErrors.GetNC() % _kernel_width)) ? _kernel_width - _layerErrors.GetNC() % _kernel_width : 0);
 
-							float error = prevLayerErrors[(((numSamples * prevLayerErrors.GetK()) + k) * prevLayerErrors.GetNR() + outNR) * prevLayerErrors.GetNC() + outNC] / (khLimit * kwLimit);
+							float_n error = prevLayerErrors[(((numSamples * prevLayerErrors.GetK()) + k) * prevLayerErrors.GetNR() + outNR) * prevLayerErrors.GetNC() + outNC] / (khLimit * kwLimit);
 
 							for (long kh = 0; kh < khLimit; kh++)
 							{

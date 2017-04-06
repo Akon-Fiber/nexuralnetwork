@@ -60,13 +60,13 @@ namespace nexural {
 			}
 			
 			long n = _outputData.GetNumSamples();
-			float factor = float(2) / n;
+			float_n factor = float_n(2) / n;
 			
 			for (long numSamples = 0; numSamples < n; numSamples++)
 			{
 				for (long nc = 0; nc < _outputData.GetNC(); nc++)
 				{
-					float error = factor * (_outputData[numSamples * _outputData.GetNC() + nc] -
+					float_n error = factor * (_outputData[numSamples * _outputData.GetNC() + nc] -
 						targetData[numSamples * _outputData.GetNC() + nc]);
 					
 					_layerErrors[numSamples * _outputData.GetNC() + nc] = error;

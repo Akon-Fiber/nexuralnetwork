@@ -42,7 +42,7 @@ namespace nexural {
 		_nc(nc_) 
 	{
 		_size = numSamples_ * k_ * nr_ * nc_;
-		_host.reset(new float[_size], std::default_delete<float[]>());
+		_host.reset(new float_n[_size], std::default_delete<float_n[]>());
 	}
 
 	Tensor::Tensor(const LayerShape& layerShape) : 
@@ -93,7 +93,7 @@ namespace nexural {
 
 	void Tensor::Clone(const Tensor& tensor) {
 		if (this != &tensor) {
-			_host.reset(new float[tensor._size], std::default_delete<float[]>());
+			_host.reset(new float_n[tensor._size], std::default_delete<float_n[]>());
 
 			for (int i = 0; i < tensor._size; i++) {
 				_host.get()[i] = tensor[i];
@@ -121,7 +121,7 @@ namespace nexural {
 		if (_size == 0) {
 			_host.reset();
 		} else {
-			_host.reset(new float[_size], std::default_delete<float[]>());
+			_host.reset(new float_n[_size], std::default_delete<float_n[]>());
 		}
 	}
 
@@ -152,13 +152,13 @@ namespace nexural {
 		this->Resize(0, 0, 0, 0);
 	}
 
-	void Tensor::Fill(const float value) {
+	void Tensor::Fill(const float_n value) {
 		for (long i = 0; i < _size; i++) {
 			_host.get()[i] = value;
 		}
 	}
 
-	void Tensor::Fill(const std::vector<float>& values) {
+	void Tensor::Fill(const std::vector<float_n>& values) {
 		if (values.size() == _size) {
 			for (long i = 0; i < _size; i++) {
 				_host.get()[i] = values[i];
@@ -166,7 +166,7 @@ namespace nexural {
 		}
 	}
 
-	void Tensor::FillRandom(const float range) {
+	void Tensor::FillRandom(const float_n range) {
 		std::random_device rd;
 		std::mt19937 gen(rd());
 		std::uniform_real_distribution<> dis(-range, range);

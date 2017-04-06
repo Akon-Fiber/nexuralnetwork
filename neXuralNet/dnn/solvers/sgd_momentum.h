@@ -75,7 +75,7 @@ namespace nexural {
 		}
 
 	private:
-		float _mu;
+		float_n _mu;
 		std::map<std::string, Tensor> _weightsVelocity;
 		std::map<std::string, Tensor> _biasesVelocity;
 	};

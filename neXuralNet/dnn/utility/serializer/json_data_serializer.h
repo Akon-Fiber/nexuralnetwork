@@ -138,7 +138,7 @@ namespace nexural {
 			const rapidjson::Value& arrayData = t["host"];
 			long index = 0;
 			for (rapidjson::Value::ConstValueIterator itr = arrayData.Begin(); itr != arrayData.End(); ++itr) {
-				tensor[index] = static_cast<float>(itr->GetDouble());
+				tensor[index] = static_cast<float_n>(itr->GetDouble());
 				index++;
 			}
 		}

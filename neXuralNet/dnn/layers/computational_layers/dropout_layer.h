@@ -48,8 +48,8 @@ namespace nexural {
 
 			for (long i = 0; i < inputData.Size(); i++)
 			{
-				float value = inputData[i];
-				float drop = _dropoutIndexes[i];
+				float_n value = inputData[i];
+				float_n drop = _dropoutIndexes[i];
 				_outputData[i] = value * drop;
 			}
 		}
@@ -61,8 +61,8 @@ namespace nexural {
 		virtual void BackPropagate(const Tensor& prevLayerErrors) {
 			for (long i = 0; i < _layerErrors.Size(); i++)
 			{
-				float error = prevLayerErrors[i];
-				float drop = _dropoutIndexes[i];
+				float_n error = prevLayerErrors[i];
+				float_n drop = _dropoutIndexes[i];
 				_layerErrors[i] = error * drop;
 			}
 		}

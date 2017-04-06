@@ -72,7 +72,7 @@ namespace nexural {
 			return value;
 		}
 
-		static float ParseFloat(std::map<std::string, std::string> &map, std::string key)
+		static float_n ParseFloat(std::map<std::string, std::string> &map, std::string key)
 		{
 			if (map.find(key) == map.end())
 				throw std::runtime_error("The key was not found!");
@@ -81,7 +81,7 @@ namespace nexural {
 				throw std::runtime_error("Empty key value!");
 			}
 
-			float value = -1;
+			float_n value = -1;
 			try
 			{
 				value = std::stof(map[key]);
@@ -133,7 +133,7 @@ namespace nexural {
 			return tokens;
 		}
 
-		static std::vector<float> ParseFltVector(std::map<std::string, std::string> &map, std::string key)
+		static std::vector<float_n> ParseFltVector(std::map<std::string, std::string> &map, std::string key)
 		{
 			if (map.find(key) == map.end())
 				throw std::runtime_error("The key was not found!");
@@ -146,13 +146,13 @@ namespace nexural {
 			std::vector<std::string> tokens = helper::TokenizeString(map[key], ",");
 
 			int tokens_cnt = (int)tokens.size();
-			std::vector<float> result(tokens_cnt);
+			std::vector<float_n> result(tokens_cnt);
 
 			bool safely_parsed = true;
 
 			for (size_t token_id = 0; token_id < tokens_cnt; ++token_id)
 			{
-				float value = 0;
+				float_n value = 0;
 				try
 				{
 					value = std::stof(tokens[token_id]);

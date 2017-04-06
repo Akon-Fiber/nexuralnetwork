@@ -30,7 +30,7 @@ namespace nexural {
 		virtual ~ISolver() { }
 		virtual void UpdateWeights(Tensor& weights, const Tensor& dWeights, const std::string& layerID) = 0;
 		virtual void UpdateBiases(Tensor& baises, const Tensor& dBiases, const std::string& layerID) = 0;
-		virtual void UpdateLearningRate(const float scaleFactor) = 0;
+		virtual void UpdateLearningRate(const float_n scaleFactor) = 0;
 	};
 }
 #endif

@@ -63,8 +63,8 @@ namespace nexural {
 	void NetworkTrainer::Train(Network& net, Tensor& trainingData, Tensor& targetData, const long batchSize) {
 		std::cout << "The engine is initializing the network for the training process." << std::endl << std::endl;
 		InitLayersForTraining(net);
-		float prevError = std::numeric_limits<float>::max();
-		float currentError = 0;
+		float_n prevError = std::numeric_limits<float_n>::max();
+		float_n currentError = 0;
 		bool doTraining = true;
 		long currentEpoch = 0;
 		long stepsWithoutAnyProgress = 0;

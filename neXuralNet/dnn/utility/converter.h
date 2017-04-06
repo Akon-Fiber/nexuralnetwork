@@ -36,9 +36,9 @@ namespace nexural {
 				{
 					//cv::Vec3b intensity = sourceImage.at<cv::Vec3b>(nr, nc);
 					for (long k = 0; k < outputData.GetK(); k++) {
-						//float col = (float)intensity.val[k];
+						//float col = (float_n)intensity.val[k];
 						//outputData[(k * outputData.GetNR() + nr) * outputData.GetNC() + nc] = col;
-						float value = (float)sourceImage.at<uchar>(nr, nc);
+						float_n value = (float_n)sourceImage.at<uchar>(nr, nc);
 						outputData[(k * outputData.GetNR() + nr) * outputData.GetNC() + nc] = value;
 					}
 				}
@@ -72,7 +72,7 @@ namespace nexural {
 					{
 						cv::Vec3b intensity = sourceImages[imageNumber].at<cv::Vec3b>(nr, nc);
 						for (long k = 0; k < outputData.GetK(); k++) {
-							float col = (float)intensity.val[k];
+							float_n col = (float_n)intensity.val[k];
 							outputData[(k * outputData.GetNR() + nr) * outputData.GetNC() + nc] = col;
 						}
 					}

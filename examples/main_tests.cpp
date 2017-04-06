@@ -66,13 +66,13 @@ void Experimental(const std::string& dataFolderPath) {
 	long _strideHeight = 1, _strideWidth = 1;
 	Tensor convPrevLayerErrors;
 	convPrevLayerErrors.Resize(1, 2, 4, 4);
-	convPrevLayerErrors.Fill(std::vector<float>{0, 0, 0, 0, 0, 3, 4, 0, 0, 6, 8, 0, 0, 0, 0, 0, 
+	convPrevLayerErrors.Fill(std::vector<float_n>{0, 0, 0, 0, 0, 3, 4, 0, 0, 6, 8, 0, 0, 0, 0, 0,
 												0, 0, 0, 0, 0, 5, 5, 0, 0, 2, 3, 0, 0, 0, 0, 0});
 	convPrevLayerErrors.OutputToConsole();
 
 	Tensor _weights;
 	_weights.Resize(2, 3, 2, 2);
-	_weights.Fill(std::vector<float>{2, 7, 5, 1, 9, 3, 2, 4, 6, 1, 4, 7, 8, 7, 1, 3, 5, 9, 3, 5, 4, 4, 6, 8});
+	_weights.Fill(std::vector<float_n>{2, 7, 5, 1, 9, 3, 2, 4, 6, 1, 4, 7, 8, 7, 1, 3, 5, 9, 3, 5, 4, 4, 6, 8});
 	_weights.OutputToConsole();
 
 	Tensor _layerErrors;
@@ -85,7 +85,7 @@ void Experimental(const std::string& dataFolderPath) {
 			for (long nr = 0; nr < convPrevLayerErrors.GetNR() - _weights.GetNR() + 1; nr += _strideHeight) {
 				long nco = 0;
 				for (long nc = 0; nc < convPrevLayerErrors.GetNC() - _weights.GetNC() + 1; nc += _strideWidth) {
-					float error = 0;
+					float_n error = 0;
 					for (long i = 0; i < _weights.GetNR(); i++) {
 						for (long j = 0; j < _weights.GetNC(); j++) {
 							for (long numOfFilters = 0; numOfFilters < convPrevLayerErrors.GetK(); numOfFilters++) {

@@ -62,7 +62,7 @@ namespace nexural {
 							long kwLimit = _kernel_width - (nc == (inputData.GetNC() - (inputData.GetNC() % _kernel_width)) ? _kernel_width - inputData.GetNC() % _kernel_width : 0);
 							
 							long maxIndex = 0;
-							float maxValue = std::numeric_limits<float>::min();
+							float_n maxValue = std::numeric_limits<float_n>::min();
 
 							for (long kh = 0; kh < khLimit; kh++)
 							{
@@ -70,7 +70,7 @@ namespace nexural {
 								{
 									long currentIndex = (((numSamples * inputData.GetK()) + k) * inputData.GetNR() + (nr + kh)) * inputData.GetNC() + (nc + kw);
 									_maxIndexes[currentIndex] = 0;
-									float value = inputData[currentIndex];
+									float_n value = inputData[currentIndex];
 									if (value >= maxValue) {
 										maxValue = value;
 										maxIndex = currentIndex;
@@ -106,7 +106,7 @@ namespace nexural {
 							long khLimit = _kernel_height - (nr == (_layerErrors.GetNR() - (_layerErrors.GetNR() % _kernel_height)) ? _kernel_height - _layerErrors.GetNR() % _kernel_height : 0);
 							long kwLimit = _kernel_width - (nc == (_layerErrors.GetNC() - (_layerErrors.GetNC() % _kernel_width)) ? _kernel_width - _layerErrors.GetNC() % _kernel_width : 0);
 
-							float error = prevLayerErrors[(((numSamples * prevLayerErrors.GetK()) + k) * prevLayerErrors.GetNR() + outNR) * prevLayerErrors.GetNC() + outNC];
+							float_n error = prevLayerErrors[(((numSamples * prevLayerErrors.GetK()) + k) * prevLayerErrors.GetNR() + outNR) * prevLayerErrors.GetNC() + outNC];
 
 							for (long kh = 0; kh < khLimit; kh++)
 							{

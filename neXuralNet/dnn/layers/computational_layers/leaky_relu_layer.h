@@ -46,8 +46,8 @@ namespace nexural {
 			_internalInputData.ShareTensor(inputData);
 			for (long i = 0; i < inputData.Size(); i++)
 			{
-				float value = inputData[i];
-				_outputData[i] = value < 0 ? (float)0.01 * value : value;
+				float_n value = inputData[i];
+				_outputData[i] = value < 0 ? (float_n)0.01 * value : value;
 			}
 		}
 
@@ -58,9 +58,9 @@ namespace nexural {
 		virtual void BackPropagate(const Tensor& prevLayerErrors) {
 			for (long i = 0; i < _internalInputData.Size(); i++)
 			{
-				float error = prevLayerErrors[i];
-				float value = _internalInputData[i];
-				_layerErrors[i] = value < 0 ? (float)0.01 * error : error;
+				float_n error = prevLayerErrors[i];
+				float_n value = _internalInputData[i];
+				_layerErrors[i] = value < 0 ? (float_n)0.01 * error : error;
 			}
 		}
 

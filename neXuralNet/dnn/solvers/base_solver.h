@@ -35,13 +35,13 @@ namespace nexural {
 
 		}
 
-		virtual void UpdateLearningRate(const float scaleFactor) {
+		virtual void UpdateLearningRate(const float_n scaleFactor) {
 			_learningRate *= scaleFactor;
 		}
 
 	protected:
-		float _learningRate;
-		float _weightDecay;
+		float_n _learningRate;
+		float_n _weightDecay;
 	};
 	typedef std::shared_ptr<BaseSolver> BaseSolverPtr;
 }

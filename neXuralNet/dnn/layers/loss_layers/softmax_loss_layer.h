@@ -104,18 +104,18 @@ namespace nexural {
 			for (long numSamples = 0; numSamples < totalOutputNumSamples; numSamples++)
 			{
 				long idx = numSamples * _outputData.GetNC() + indexes[numSamples];
-				_totalError += -std::log(helper::clip(_outputData[idx], 1e-10f, 1.0f));
+				_totalError += -std::log(helper::clip(_outputData[idx], 1e-10, 1.0));
 			}
 		}
 
 	private:
 		void Softmax(const Tensor& inputData, Tensor& outputData) {
 			long totalInputNumSamples = inputData.GetNumSamples();
-			std::vector<float> max(totalInputNumSamples);
+			std::vector<float_n> max(totalInputNumSamples);
 			_totalError = 0;
 			for (long numSamples = 0; numSamples < totalInputNumSamples; numSamples++)
 			{
-				max[numSamples] = std::numeric_limits<float>::min();
+				max[numSamples] = std::numeric_limits<float_n>::min();
 				for (long nc = 0; nc < inputData.GetNC(); nc++)
 				{
 					long idx = numSamples * inputData.GetNC() + nc;
@@ -126,14 +126,14 @@ namespace nexural {
 			}
 
 			Tensor exp(inputData.GetShape());
-			std::vector<float> sum(totalInputNumSamples);
+			std::vector<float_n> sum(totalInputNumSamples);
 			for (long numSamples = 0; numSamples < totalInputNumSamples; numSamples++)
 			{
 				sum[numSamples] = 0;
 				for (long nc = 0; nc < inputData.GetNC(); nc++)
 				{
 					long idx = numSamples * inputData.GetNC() + nc;
-					float expValue = std::exp(inputData[idx] - max[numSamples]); // numerically stable
+					float_n expValue = std::exp(inputData[idx] - max[numSamples]); // numerically stable
 					exp[idx] = expValue;
 					sum[numSamples] += expValue;
 				}

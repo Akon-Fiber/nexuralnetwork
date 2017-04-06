@@ -22,11 +22,13 @@ OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 #include <memory>
 #include <vector>
 #include "layer_shape.h"
+#include <cmath>
 
 #ifndef _NEXURALNET_DATA_TYPES_TENSOR_H
 #define _NEXURALNET_DATA_TYPES_TENSOR_H
 
 namespace nexural {
+	typedef double_t float_n;
 	class Tensor {
 		/*!
 		WHAT THIS OBJECT REPRESENTS
@@ -54,8 +56,8 @@ namespace nexural {
 		explicit Tensor(Tensor&& tensor);
 		Tensor& operator=(Tensor&& tensor);
 
-		typedef float* iterator;
-		typedef const float* const_iterator;
+		typedef float_n* iterator;
+		typedef const float_n* const_iterator;
 		iterator       Begin() { return  _host.get(); }
 		const_iterator Begin() const { return  _host.get(); }
 		iterator       End() { return  _host.get() + _size; }
@@ -66,8 +68,8 @@ namespace nexural {
 		void Reshape(const long numSamples_, const long k_, const long nr_, const long nc_);
 		void Reshape(const LayerShape& layerShape);
 
-		const float & operator [](long i) const { return _host.get()[i]; }
-		float & operator [](long i) { return _host.get()[i]; }
+		const float_n & operator [](long i) const { return _host.get()[i]; }
+		float_n & operator [](long i) { return _host.get()[i]; }
 
 		void ShareTensor(const Tensor& tensor);
 		void Clone(const Tensor& tensor);
@@ -79,9 +81,9 @@ namespace nexural {
 		long GetNC() const { return _nc; }
 		long Size() const { return _size; }
 
-		void Fill(const float value);
-		void Fill(const std::vector<float>& values);
-		void FillRandom(const float range);
+		void Fill(const float_n value);
+		void Fill(const std::vector<float_n>& values);
+		void FillRandom(const float_n range);
 		void FillRandomBinomialDistribution();
 		void GetBatch(const Tensor& tensor, const long startIndex, const long batchSize = 1);
 		LayerShape GetShape() const;
@@ -89,7 +91,7 @@ namespace nexural {
 		void OutputToConsole() const;
 
 	private:
-		std::shared_ptr<float> _host;
+		std::shared_ptr<float_n> _host;
 		long _numSamples;
 		long _k;
 		long _nr;

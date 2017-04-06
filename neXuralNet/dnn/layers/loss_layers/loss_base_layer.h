@@ -53,7 +53,7 @@ namespace nexural {
 			return _outputShape;
 		}
 
-		virtual const float GetTotalError() {
+		virtual const float_n GetTotalError() {
 			return _totalError;
 		}
 
@@ -63,7 +63,7 @@ namespace nexural {
 		LayerShape _outputShape;
 		Tensor _outputData;
 		Tensor _layerErrors;
-		float _totalError;
+		float_n _totalError;
 	};
 	typedef std::shared_ptr<LossBaseLayer> LossBaseLayerPtr;
 }

@@ -44,7 +44,7 @@ namespace nexural {
 	private:
 		long _maxNumEpochs; 
 		long _maxIterationsWithoutProgress;
-		float _minLearningRateThreshold;
+		float_n _minLearningRateThreshold;
 		long _batchSize;
 		Tensor _input;
 		Tensor _target;
