@@ -78,7 +78,7 @@ namespace nexural {
 							{
 								unsigned char temp = 0;
 								file.read((char*)&temp, sizeof(temp));
-								tensor[((numSamples * tensor.GetK()) * tensor.GetNR() + nr) * tensor.GetNC() + nc] = (float_n)temp;
+								tensor[((numSamples * tensor.GetK()) * tensor.GetNR() + nr) * tensor.GetNC() + nc] = (float_n)temp / 255;
 							}
 						}
 					}
@@ -165,7 +165,7 @@ namespace nexural {
 				{
 					float_n value;
 					file >> value;
-					tensor[index] = value / 255;
+					tensor[index] = value;
 					if (size == index) {
 						break;
 					}
