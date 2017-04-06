@@ -89,17 +89,12 @@ void Experimental(const std::string& dataFolderPath) {
 					for (long i = 0; i < _weights.GetNR(); i++) {
 						for (long j = 0; j < _weights.GetNC(); j++) {
 							for (long numOfFilters = 0; numOfFilters < convPrevLayerErrors.GetK(); numOfFilters++) {
-								long prevError_idx = (((numSamples * convPrevLayerErrors.GetK()) + numOfFilters) * convPrevLayerErrors.GetNR() + (nr + i)) * convPrevLayerErrors.GetNC() + (nc + j);
-								long weights_idx = (((numOfFilters * _weights.GetK()) + k) * _weights.GetNR() + i) * _weights.GetNC() + j;
-
-								float prevErrorValue = convPrevLayerErrors[prevError_idx];
-								float weightsValue = _weights[weights_idx];
-								error += weightsValue * prevErrorValue;
+								error += convPrevLayerErrors[(((numSamples * convPrevLayerErrors.GetK()) + numOfFilters) * convPrevLayerErrors.GetNR() + (nr + i)) * convPrevLayerErrors.GetNC() + (nc + j)] 
+									* _weights[(((numOfFilters * _weights.GetK()) + k) * _weights.GetNR() + i) * _weights.GetNC() + j];
 							}
 						}
 					}
-					long idx = (((numSamples * _layerErrors.GetK()) + k) * _layerErrors.GetNR() + nro) * _layerErrors.GetNC() + nco;
-					_layerErrors[idx] = error;
+					_layerErrors[(((numSamples * _layerErrors.GetK()) + k) * _layerErrors.GetNR() + nro) * _layerErrors.GetNC() + nco] = error;
 					nco++;
 				}
 				nro++;

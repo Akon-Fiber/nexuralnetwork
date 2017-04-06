@@ -33,9 +33,9 @@ void Test_MNIST_Softmax(const std::string& dataFolderPath) {
 	std::string targetDataPath = dataFolderPath + "\\mnist_softmax\\train-labels.idx1-ubyte";
 
 	std::cout << "Reading the training dataset..." << std::endl;
-	tools::DataReader::ReadMNISTData(trainingDataPath, trainingData, 60000);
+	tools::DataReader::ReadMNISTData(trainingDataPath, trainingData, 10000);
 	std::cout << "Reading the labels for the training dataset..." << std::endl;
-	tools::DataReader::ReadMNISTLabels(targetDataPath, targetData, 60000);
+	tools::DataReader::ReadMNISTLabels(targetDataPath, targetData, 10000);
 
 	std::cout << "Initialize the trainer..." << std::endl;
 	Network net(networkConfigPath);
