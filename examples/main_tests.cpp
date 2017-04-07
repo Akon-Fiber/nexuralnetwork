@@ -52,57 +52,57 @@ void Menu() {
 }
 
 void Experimental(const std::string& dataFolderPath) {
-	//Tensor inputData;
+	Tensor inputData;
 
-	//std::string networkConfigPath = dataFolderPath + "\\mnist_softmax\\network.json";
-	//Network net(networkConfigPath);
-	//net.Deserialize("D:\\mnist.json");
+	std::string networkConfigPath = dataFolderPath + "\\mnist_softmax\\network.json";
+	Network net(networkConfigPath);
+	net.Deserialize("D:\\mnist.json");
 
-	//cv::Mat image = cv::imread("D:\\6.jpg", cv::IMREAD_GRAYSCALE);
-	//nexural::converter::ConvertToTensor(image, inputData);
-	//net.Run(inputData);
+	cv::Mat image = cv::imread("D:\\RESEARCH\\nexural_tests\\5.jpg", cv::IMREAD_GRAYSCALE);
+	nexural::converter::ConvertToTensor(image, inputData);
+	net.Run(inputData);
 
 
-	long _strideHeight = 1, _strideWidth = 1;
-	Tensor convPrevLayerErrors;
-	convPrevLayerErrors.Resize(1, 2, 4, 4);
-	convPrevLayerErrors.Fill(std::vector<float_n>{0, 0, 0, 0, 0, 3, 4, 0, 0, 6, 8, 0, 0, 0, 0, 0,
-												0, 0, 0, 0, 0, 5, 5, 0, 0, 2, 3, 0, 0, 0, 0, 0});
-	convPrevLayerErrors.OutputToConsole();
+	//long _strideHeight = 1, _strideWidth = 1;
+	//Tensor convPrevLayerErrors;
+	//convPrevLayerErrors.Resize(1, 2, 4, 4);
+	//convPrevLayerErrors.Fill(std::vector<float_n>{0, 0, 0, 0, 0, 3, 4, 0, 0, 6, 8, 0, 0, 0, 0, 0,
+	//											0, 0, 0, 0, 0, 5, 5, 0, 0, 2, 3, 0, 0, 0, 0, 0});
+	//convPrevLayerErrors.OutputToConsole();
 
-	Tensor _weights;
-	_weights.Resize(2, 3, 2, 2);
-	_weights.Fill(std::vector<float_n>{2, 7, 5, 1, 9, 3, 2, 4, 6, 1, 4, 7, 8, 7, 1, 3, 5, 9, 3, 5, 4, 4, 6, 8});
-	_weights.OutputToConsole();
+	//Tensor _weights;
+	//_weights.Resize(2, 3, 2, 2);
+	//_weights.Fill(std::vector<float_n>{2, 7, 5, 1, 9, 3, 2, 4, 6, 1, 4, 7, 8, 7, 1, 3, 5, 9, 3, 5, 4, 4, 6, 8});
+	//_weights.OutputToConsole();
 
-	Tensor _layerErrors;
-	_layerErrors.Resize(1, 3, 3, 3);
-	_layerErrors.Fill(0.0);
+	//Tensor _layerErrors;
+	//_layerErrors.Resize(1, 3, 3, 3);
+	//_layerErrors.Fill(0.0);
 
-	for (long numSamples = 0; numSamples < convPrevLayerErrors.GetNumSamples(); numSamples++) {
-		for (long k = 0; k < _weights.GetK(); k++) {
-			long nro = 0;
-			for (long nr = 0; nr < convPrevLayerErrors.GetNR() - _weights.GetNR() + 1; nr += _strideHeight) {
-				long nco = 0;
-				for (long nc = 0; nc < convPrevLayerErrors.GetNC() - _weights.GetNC() + 1; nc += _strideWidth) {
-					float_n error = 0;
-					for (long i = 0; i < _weights.GetNR(); i++) {
-						for (long j = 0; j < _weights.GetNC(); j++) {
-							for (long numOfFilters = 0; numOfFilters < convPrevLayerErrors.GetK(); numOfFilters++) {
-								error += convPrevLayerErrors[(((numSamples * convPrevLayerErrors.GetK()) + numOfFilters) * convPrevLayerErrors.GetNR() + (nr + i)) * convPrevLayerErrors.GetNC() + (nc + j)] 
-									* _weights[(((numOfFilters * _weights.GetK()) + k) * _weights.GetNR() + i) * _weights.GetNC() + j];
-							}
-						}
-					}
-					_layerErrors[(((numSamples * _layerErrors.GetK()) + k) * _layerErrors.GetNR() + nro) * _layerErrors.GetNC() + nco] = error;
-					nco++;
-				}
-				nro++;
-			}
-		}
-	}
+	//for (long numSamples = 0; numSamples < convPrevLayerErrors.GetNumSamples(); numSamples++) {
+	//	for (long k = 0; k < _weights.GetK(); k++) {
+	//		long nro = 0;
+	//		for (long nr = 0; nr < convPrevLayerErrors.GetNR() - _weights.GetNR() + 1; nr += _strideHeight) {
+	//			long nco = 0;
+	//			for (long nc = 0; nc < convPrevLayerErrors.GetNC() - _weights.GetNC() + 1; nc += _strideWidth) {
+	//				float_n error = 0;
+	//				for (long i = 0; i < _weights.GetNR(); i++) {
+	//					for (long j = 0; j < _weights.GetNC(); j++) {
+	//						for (long numOfFilters = 0; numOfFilters < convPrevLayerErrors.GetK(); numOfFilters++) {
+	//							error += convPrevLayerErrors[(((numSamples * convPrevLayerErrors.GetK()) + numOfFilters) * convPrevLayerErrors.GetNR() + (nr + i)) * convPrevLayerErrors.GetNC() + (nc + j)] 
+	//								* _weights[(((numOfFilters * _weights.GetK()) + k) * _weights.GetNR() + i) * _weights.GetNC() + j];
+	//						}
+	//					}
+	//				}
+	//				_layerErrors[(((numSamples * _layerErrors.GetK()) + k) * _layerErrors.GetNR() + nro) * _layerErrors.GetNC() + nco] = error;
+	//				nco++;
+	//			}
+	//			nro++;
+	//		}
+	//	}
+	//}
 
-	_layerErrors.OutputToConsole();
+	//_layerErrors.OutputToConsole();
 
 }
 
