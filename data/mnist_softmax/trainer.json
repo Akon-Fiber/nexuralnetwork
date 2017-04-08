@@ -1,8 +1,8 @@
 {
   "TrainerSettings": {
-     "max_num_epochs": "65",
-     "max_num_iterations_without_progress": "50",
-     "min_learning_rate_threshold": "0.0000001",
+     "max_num_epochs": "10000",
+     "max_num_iterations_without_progress": "6",
+     "min_learning_rate_threshold": "0.0000000001",
      "batch_size": "1",
      "solver": "sgd_momentum",
      "be_verbose": "true"

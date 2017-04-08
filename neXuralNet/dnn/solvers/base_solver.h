@@ -28,7 +28,8 @@ namespace nexural {
 	class BaseSolver : public ISolver {
 	public:
 		BaseSolver() {
-			_learningRate = 0.01f;
+			_learningRate = 0.01;
+			_weightDecay = 0.00005;
 		}
 
 		virtual ~BaseSolver() {
@@ -37,6 +38,10 @@ namespace nexural {
 
 		virtual void UpdateLearningRate(const float_n scaleFactor) {
 			_learningRate *= scaleFactor;
+		}
+
+		virtual float_n GetLearningRate() const {
+			return _learningRate;
 		}
 
 	protected:

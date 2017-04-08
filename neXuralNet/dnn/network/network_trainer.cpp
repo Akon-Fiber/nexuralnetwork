@@ -26,9 +26,9 @@ OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 namespace nexural {
 
 	NetworkTrainer::NetworkTrainer() :
-		_maxNumEpochs(10),
-		_maxIterationsWithoutProgress(100),
-		_minLearningRateThreshold(0.00001f),
+		_maxNumEpochs(10000),
+		_maxIterationsWithoutProgress(6),
+		_minLearningRateThreshold(0.00001),
 		_batchSize(1),
 		_solver(new SGDMomentum()),
 		_beVerbose(true)
@@ -61,19 +61,25 @@ namespace nexural {
 	}
 
 	void NetworkTrainer::Train(Network& net, Tensor& trainingData, Tensor& targetData, const long batchSize) {
-		std::cout << "The engine is initializing the network for the training process." << std::endl << std::endl;
-		InitLayersForTraining(net);
+		Tensor *error, *weights, *dWeights, *biases, *dBiases;
 		float_n prevError = std::numeric_limits<float_n>::max();
-		float_n currentError = 0;
+		float_n toalEpochError = 0;
+		float_n learningRateDecay = 0.00001;
+		float_n diffErrorThreshold = 0.001;
 		bool doTraining = true;
 		long currentEpoch = 0;
 		long stepsWithoutAnyProgress = 0;
 
+		std::cout << "The engine is initializing the network for the training process." << std::endl << std::endl;
+		InitLayersForTraining(net);
+
 		std::cout << "Training started:" << std::endl;
 		while (doTraining) {
-			Tensor *error, *weights, *dWeights, *biases, *dBiases;
-			std::cout << "Epoch: " << currentEpoch << std::endl << std::endl;
 			long trainingDataIter = trainingData.GetNumSamples();
+			toalEpochError = 0;
+
+			std::cout << "Current training epoch: " << currentEpoch << std::endl;
+			
 			for (int batchIndex = 0; batchIndex < trainingDataIter; batchIndex += batchSize) {
 				_input.GetBatch(trainingData, batchIndex, batchSize);
 				_target.GetBatch(targetData, batchIndex, batchSize);
@@ -93,29 +99,13 @@ namespace nexural {
 				net._lossNetworkLayer->CalculateError(_target);
 				net._lossNetworkLayer->CalculateTotalError(_target);
 				error = net._lossNetworkLayer->GetLayerErrors();
-				currentError = net._lossNetworkLayer->GetTotalError();
+				toalEpochError += net._lossNetworkLayer->GetTotalError();
 				//std::cout << "Total error for current iteration: " << currentError << std::endl;
-
-				if (prevError == currentError) {
-					stepsWithoutAnyProgress++;
-					if (stepsWithoutAnyProgress == _maxIterationsWithoutProgress) {
-						doTraining = false;
-						break;
-					}
-				}
-				else {
-					stepsWithoutAnyProgress = 0;
-				}
-
-				//std::cout << "Softmax:" << std::endl;
-				//error->OutputToConsole();
 
 				// Backpropagate the error
 				for (auto it = net._computationalNetworkLyers.rbegin(); it < net._computationalNetworkLyers.rend(); it++) {
 					(*it)->BackPropagate(*error);
 					error = (*it)->GetLayerErrors();
-					//std::cout << (*it)->GetLayerID() << std::endl;
-					//error->OutputToConsole();
 				}
 
 				// Update the weights
@@ -132,10 +122,44 @@ namespace nexural {
 					}
 				}
 			}
-			std::cout << "Total error for current epoch: " << currentError << std::endl;
+			toalEpochError /= trainingDataIter;
+
+			// If there isn't any progress, probably we are jumping over the global minimum
+			// so, we need to reduce the learning rate in order to hit the minimum
+			if (((prevError - diffErrorThreshold) < toalEpochError) && (toalEpochError < (prevError + diffErrorThreshold))) {
+				stepsWithoutAnyProgress++;
+				std::cout << " -!-[INFO] Num of steps without any progress: " << stepsWithoutAnyProgress << std::endl;
+				if (stepsWithoutAnyProgress == _maxIterationsWithoutProgress) {
+					std::cout << " -!-[INFO] Reducing the learning rate!" << std::endl;
+					learningRateDecay += 0.00005;
+					diffErrorThreshold *= 0.1;
+					stepsWithoutAnyProgress = 0;
+				}
+			}
+			else {
+				stepsWithoutAnyProgress = 0;
+			}
+
+			// Print epoch error
+			std::cout << " -- Mean total error at the end of the epoch: " << toalEpochError << std::endl;
+
+			//Update the learning rate
+			std::cout << " -- Learning rate before update: " << _solver->GetLearningRate() << std::endl;
+			double learningRateStep = 1 / (1 + learningRateDecay * currentEpoch);
+			_solver->UpdateLearningRate(learningRateStep);
+			std::cout << " -- Learning after before update: " << _solver->GetLearningRate() << std::endl;
+			std::cout << std::endl << std::endl;
+
+			prevError = toalEpochError;
 			currentEpoch++;
+
 			if (currentEpoch == _maxNumEpochs) {
 				doTraining = false;
+				std::cout << std::endl << "[STOP CONDITION] The trainer has reached the maxim number of epochs!" << std::endl;
+			}
+			else if (_solver->GetLearningRate() < _minLearningRateThreshold) {
+				doTraining = false;
+				std::cout << std::endl << "[STOP CONDITION] The trainer has reached the minim learning rate threshold!" << std::endl;
 			}
 		}
 	}

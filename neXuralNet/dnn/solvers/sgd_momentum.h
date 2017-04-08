@@ -28,7 +28,7 @@ namespace nexural {
 	class SGDMomentum : public BaseSolver {
 	public:
 		SGDMomentum() : BaseSolver(),
-			_mu(0.9f) { }
+			_mu(0.9) { }
 
 		~SGDMomentum() {
 
@@ -47,10 +47,10 @@ namespace nexural {
 				_weightsVelocity.insert(std::pair<std::string, Tensor>(layerID, std::ref(v)));
 			}
 			
-			// TODO: Add weight_decay.
+			// Momentum update
 			// Formula: V = mu * V - learning_rate * (dW + W * weight_decay);
 			for (int i = 0; i < weights.Size(); i++) {
-				v[i] = _mu * v[i] + _learningRate * dWeights[i];
+				v[i] = _mu * v[i] + _learningRate * (dWeights[i] + weights[i] * _weightDecay);
 				weights[i] -= v[i];
 			}
 		}
