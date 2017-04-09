@@ -27,7 +27,7 @@ OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 namespace nexural {
 	class ReluLayer : public ComputationalBaseLayer {
 	public:
-		ReluLayer(const LayerParams &layerParams) : ComputationalBaseLayer(layerParams) {
+		ReluLayer(const Params &layerParams) : ComputationalBaseLayer(layerParams) {
 
 		}
 

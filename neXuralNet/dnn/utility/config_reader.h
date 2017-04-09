@@ -40,10 +40,10 @@ namespace nexural {
 			}
 		}
 
-		static void DecodeTrainerCongif(const std::string trainerConfigPath, TrainerParams& trainerParams, const ConfigReaderType& readerType = ConfigReaderType::JSON) {
+		static void DecodeTrainerCongif(const std::string trainerConfigPath, Params& trainerParams, Params& solverParams, const ConfigReaderType& readerType = ConfigReaderType::JSON) {
 			if (readerType == ConfigReaderType::JSON) {
 				JSONConfigReader jsonReader(trainerConfigPath);
-				jsonReader.DecodeTrainerConfigInternal(trainerParams);
+				jsonReader.DecodeTrainerConfigInternal(trainerParams, solverParams);
 			}
 		}
 	};

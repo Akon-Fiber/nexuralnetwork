@@ -27,7 +27,7 @@ OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 namespace nexural {
 	class TanHLayer : public ComputationalBaseLayer {
 	public:
-		TanHLayer(const LayerParams &layerParams) : ComputationalBaseLayer(layerParams) {
+		TanHLayer(const Params &layerParams) : ComputationalBaseLayer(layerParams) {
 
 		}
 

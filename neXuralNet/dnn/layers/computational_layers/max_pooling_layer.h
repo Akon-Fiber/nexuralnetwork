@@ -27,7 +27,7 @@ OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 namespace nexural {
 	class MaxPoolingLayer : public ComputationalBaseLayer {
 	public:
-		MaxPoolingLayer(const LayerParams &layerParams) : ComputationalBaseLayer(layerParams) {
+		MaxPoolingLayer(const Params &layerParams) : ComputationalBaseLayer(layerParams) {
 			_kernel_width = parser::ParseLong(_layerParams, "kernel_width");
 			_kernel_height = parser::ParseLong(_layerParams, "kernel_height");
 		}

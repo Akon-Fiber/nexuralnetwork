@@ -26,7 +26,6 @@ OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 #define _NEXURALNET_DATA_TYPES_GENERAL_DATA_TYPES_H
 
 namespace nexural {
-	typedef std::map<std::string, std::string> LayerParams;
-	typedef std::map<std::string, std::string> TrainerParams;
+	typedef std::map<std::string, std::string> Params;
 }
 #endif

@@ -27,7 +27,7 @@ OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 namespace nexural {
 	class FullyConnectedLayer : public ComputationalBaseLayer {
 	public:
-		FullyConnectedLayer(const LayerParams &layerParams) : ComputationalBaseLayer(layerParams) {
+		FullyConnectedLayer(const Params &layerParams) : ComputationalBaseLayer(layerParams) {
 			_numOutputNeurons = parser::ParseLong(_layerParams, "neurons");
 			_hasWeights = true;
 			_hasBiases = true;

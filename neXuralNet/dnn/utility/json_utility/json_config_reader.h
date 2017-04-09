@@ -40,11 +40,11 @@ namespace nexural {
 		}
 
 		void DecodeNetConfigInternal(LayerSettingsCollection& layerSettingsCollection) {
-			if (!_document.HasMember("NetworkLayers")) {
-				throw std::runtime_error("NetworkLayers member is missing from the config file!");
+			if (!_document.HasMember("network_layers")) {
+				throw std::runtime_error("network_layers member is missing from the config file!");
 			}
 
-			const rapidjson::Value& netLayers = _document["NetworkLayers"];
+			const rapidjson::Value& netLayers = _document["network_layers"];
 
 			for (rapidjson::SizeType i = 0; i < netLayers.Size(); i++)
 			{
@@ -57,10 +57,10 @@ namespace nexural {
 					throw std::runtime_error("params member is missing from the config file!");
 				}
 
-				LayerParams layerParams;
+				Params layerParams;
 				std::string layerType = currentLayer["type"].GetString();
-				const rapidjson::Value& paramsMember = currentLayer["params"];
 
+				const rapidjson::Value& paramsMember = currentLayer["params"];
 				for (rapidjson::Value::ConstMemberIterator iter = paramsMember.MemberBegin(); iter != paramsMember.MemberEnd(); ++iter) {
 					layerParams.insert(std::pair<std::string, std::string>(iter->name.GetString(), iter->value.GetString()));
 				}
@@ -69,14 +69,23 @@ namespace nexural {
 			}
 		}
 
-		void DecodeTrainerConfigInternal(TrainerParams& trainerParams) {
-			if (!_document.HasMember("TrainerSettings")) {
-				throw std::runtime_error("TrainerSettings member is missing from the config file!");
+		void DecodeTrainerConfigInternal(Params& trainerParams, Params& solverParams) {
+			if (!_document.HasMember("trainer_settings")) {
+				throw std::runtime_error("trainer_settings member is missing from the config file!");
 			}
 
-			const rapidjson::Value& trSettings = _document["TrainerSettings"];
-			for (rapidjson::Value::ConstMemberIterator iter = trSettings.MemberBegin(); iter != trSettings.MemberEnd(); ++iter) {
+			if (!_document.HasMember("solver")) {
+				throw std::runtime_error("solver member is missing from the config file!");
+			}
+
+			const rapidjson::Value& trainerSettings = _document["trainer_settings"];
+			for (rapidjson::Value::ConstMemberIterator iter = trainerSettings.MemberBegin(); iter != trainerSettings.MemberEnd(); ++iter) {
 				trainerParams.insert(std::pair<std::string, std::string>(iter->name.GetString(), iter->value.GetString()));
+			}
+
+			const rapidjson::Value& solverMember = _document["solver"];
+			for (rapidjson::Value::ConstMemberIterator iter = solverMember.MemberBegin(); iter != solverMember.MemberEnd(); ++iter) {
+				solverParams.insert(std::pair<std::string, std::string>(iter->name.GetString(), iter->value.GetString()));
 			}
 		}
 	};

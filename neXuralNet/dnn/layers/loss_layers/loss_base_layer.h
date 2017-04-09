@@ -33,7 +33,7 @@ namespace nexural {
 		
 		}
 
-		LossBaseLayer(const LayerParams& layerParams) { 
+		LossBaseLayer(const Params& layerParams) {
 			_layerParams = layerParams;
 		}
 
@@ -58,7 +58,7 @@ namespace nexural {
 		}
 
 	protected:
-		LayerParams _layerParams;
+		Params _layerParams;
 		LayerShape _inputShape;
 		LayerShape _outputShape;
 		Tensor _outputData;

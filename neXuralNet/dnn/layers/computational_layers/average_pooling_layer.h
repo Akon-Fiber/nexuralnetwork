@@ -27,7 +27,7 @@ OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 namespace nexural {
 	class AveragePoolingLayer : public ComputationalBaseLayer {
 	public:
-		AveragePoolingLayer(const LayerParams &layerParams) : ComputationalBaseLayer(layerParams) {
+		AveragePoolingLayer(const Params &layerParams) : ComputationalBaseLayer(layerParams) {
 			_kernel_width = parser::ParseLong(_layerParams, "kernel_width");
 			_kernel_height = parser::ParseLong(_layerParams, "kernel_height");
 		}

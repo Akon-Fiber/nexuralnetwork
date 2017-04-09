@@ -27,7 +27,7 @@ OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 namespace nexural {
 	class BGRImageInputLayer : public InputBaseLayer {
 	public:
-		BGRImageInputLayer(const LayerParams &layerParams) : InputBaseLayer(layerParams) {
+		BGRImageInputLayer(const Params &layerParams) : InputBaseLayer(layerParams) {
 			long nr = parser::ParseLong(_layerParams, "input_height");
 			long nc = parser::ParseLong(_layerParams, "input_width");
 			_inputShape.Resize(1, 3, nr, nc);

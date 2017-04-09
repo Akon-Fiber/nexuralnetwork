@@ -27,7 +27,7 @@ OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 namespace nexural {
 	class MSELossLayer : public LossBaseLayer {
 	public:
-		MSELossLayer(const LayerParams& layerParams) : LossBaseLayer(layerParams) {
+		MSELossLayer(const Params& layerParams) : LossBaseLayer(layerParams) {
 
 		}
 

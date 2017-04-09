@@ -27,7 +27,7 @@ namespace nexural {
 
 	NetworkTrainer::NetworkTrainer() :
 		_maxNumEpochs(10000),
-		_maxIterationsWithoutProgress(6),
+		_maxEpochsWithoutProgress(6),
 		_minLearningRateThreshold(0.00001),
 		_batchSize(1),
 		_solver(new SGDMomentum()),
@@ -43,40 +43,39 @@ namespace nexural {
 	}
 
 	void NetworkTrainer::InitTrainer(const std::string& trainerConfigPath) {
-		TrainerParams trainerParams;
-		ConfigReader::DecodeTrainerCongif(trainerConfigPath, trainerParams);
+		Params trainerParams, solverParams;
+		ConfigReader::DecodeTrainerCongif(trainerConfigPath, trainerParams, solverParams);
 
 		_maxNumEpochs = parser::ParseInt(trainerParams, "max_num_epochs");
-		_maxIterationsWithoutProgress = parser::ParseInt(trainerParams, "max_num_iterations_without_progress");
+		_maxEpochsWithoutProgress = parser::ParseInt(trainerParams, "max_epochs_without_progress");
 		_minLearningRateThreshold = parser::ParseFloat(trainerParams, "min_learning_rate_threshold");
+		_minValidationErrorThreshold = parser::ParseFloat(trainerParams, "min_validation_error_threshold");
 		_batchSize = parser::ParseInt(trainerParams, "batch_size");
 		_beVerbose = parser::ParseBool(trainerParams, "be_verbose");
-		std::string selectedSolver = parser::ParseString(trainerParams, "solver");
 
-		if (selectedSolver == "sgd") {
-			_solver.reset(new SGD());
-		} else if (selectedSolver == "sgd_momentum") {
-			_solver.reset(new SGDMomentum());
+		// Init the solver
+		std::string solverAlgorithm = parser::ParseString(solverParams, "algorithm");
+		if (solverAlgorithm == "sgd") {
+			_solver.reset(new SGD(solverParams));
+		} else if (solverAlgorithm == "sgd_momentum") {
+			_solver.reset(new SGDMomentum(solverParams));
 		}
 	}
 
 	void NetworkTrainer::Train(Network& net, Tensor& trainingData, Tensor& targetData, const long batchSize) {
 		Tensor *error, *weights, *dWeights, *biases, *dBiases;
-		float_n prevError = std::numeric_limits<float_n>::max();
-		float_n toalEpochError = 0;
-		float_n learningRateDecay = 0.00001;
-		float_n diffErrorThreshold = 0.01;
+		float_n prevEpochError = std::numeric_limits<float_n>::max();
+		float_n currentEpochError, learningRateDecay = 0.00001, diffErrorThreshold = 0.01;
 		bool doTraining = true;
-		long currentEpoch = 0;
-		long stepsWithoutAnyProgress = 0;
+		long currentEpoch = 0, stepsWithoutAnyProgress = 0;
 
-		std::cout << "The engine is initializing the network for the training process." << std::endl << std::endl;
+		std::cout << std::endl << "The engine is initializing the network for the training process." << std::endl << std::endl;
 		InitLayersForTraining(net);
 
 		std::cout << "Starting the training process..." << std::endl;
 		while (doTraining) {
 			long trainingDataIter = trainingData.GetNumSamples();
-			toalEpochError = 0;
+			currentEpochError = 0;
 
 			std::cout << "Current training epoch: " << currentEpoch << std::endl;
 			
@@ -99,7 +98,7 @@ namespace nexural {
 				net._lossNetworkLayer->CalculateError(_target);
 				net._lossNetworkLayer->CalculateTotalError(_target);
 				error = net._lossNetworkLayer->GetLayerErrors();
-				toalEpochError += net._lossNetworkLayer->GetTotalError();
+				currentEpochError += net._lossNetworkLayer->GetTotalError();
 				//std::cout << "Total error for current iteration: " << currentError << std::endl;
 
 				// Backpropagate the error
@@ -122,14 +121,14 @@ namespace nexural {
 					}
 				}
 			}
-			toalEpochError /= trainingDataIter;
+			currentEpochError /= trainingDataIter;
 
 			// If there isn't any progress, probably we are jumping over the global minimum
 			// so, we need to reduce the learning rate in order to hit the minimum
-			if (((prevError - prevError * diffErrorThreshold) < toalEpochError) && (toalEpochError < (prevError + prevError * diffErrorThreshold))) {
+			if (((prevEpochError - prevEpochError * diffErrorThreshold) < currentEpochError) && (currentEpochError < (prevEpochError + prevEpochError * diffErrorThreshold))) {
 				stepsWithoutAnyProgress++;
 				std::cout << " -!-[INFO] Num of steps without any progress: " << stepsWithoutAnyProgress << std::endl;
-				if (stepsWithoutAnyProgress == _maxIterationsWithoutProgress) {
+				if (stepsWithoutAnyProgress == _maxEpochsWithoutProgress) {
 					std::cout << " -!-[INFO] Reducing the learning rate!" << std::endl;
 					learningRateDecay += 0.00005;
 					diffErrorThreshold *= 0.1;
@@ -141,25 +140,25 @@ namespace nexural {
 			}
 
 			// Print epoch error
-			std::cout << " -- Mean total error at the end of the epoch: " << toalEpochError << std::endl;
+			std::cout << " -- MEAN ERROR: " << currentEpochError << std::endl;
 
 			//Update the learning rate
-			std::cout << " -- Learning rate before update: " << _solver->GetLearningRate() << std::endl;
+			std::cout << "   -- Learning rate before update: " << _solver->GetLearningRate() << std::endl;
 			double learningRateStep = 1 / (1 + learningRateDecay * currentEpoch);
 			_solver->UpdateLearningRate(learningRateStep);
-			std::cout << " -- Learning after before update: " << _solver->GetLearningRate() << std::endl;
+			std::cout << "   -- Learning after before update: " << _solver->GetLearningRate() << std::endl;
 			std::cout << std::endl << std::endl;
 
-			prevError = toalEpochError;
+			prevEpochError = currentEpochError;
 			currentEpoch++;
 
 			if (currentEpoch == _maxNumEpochs) {
 				doTraining = false;
-				std::cout << std::endl << "[STOP CONDITION] The trainer has reached the maxim number of epochs!" << std::endl;
+				std::cout << std::endl << "[STOP CONDITION] The trainer has reached the maxim number of epochs!" << std::endl << std::endl;
 			}
 			else if (_solver->GetLearningRate() < _minLearningRateThreshold) {
 				doTraining = false;
-				std::cout << std::endl << "[STOP CONDITION] The trainer has reached the minim learning rate threshold!" << std::endl;
+				std::cout << std::endl << "[STOP CONDITION] The trainer has reached the minim learning rate threshold!" << std::endl << std::endl;
 			}
 		}
 	}

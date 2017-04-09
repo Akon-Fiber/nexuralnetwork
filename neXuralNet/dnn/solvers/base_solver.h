@@ -20,6 +20,8 @@ OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 */
 
 #include "i_solver.h"
+#include "../data_types/general_data_types.h"
+#include "../utility/params_parser.h"
 
 #ifndef _NEXURALNET_DNN_BASE_SOLVER
 #define _NEXURALNET_DNN_BASE_SOLVER
@@ -29,9 +31,10 @@ namespace nexural {
 	public:
 		BaseSolver() : _learningRate(0.01), _weightDecay(0.0005) { }
 
-		BaseSolver(float_n learningRate, float_n weightDecay) :
-			_learningRate(learningRate),
-			_weightDecay(weightDecay) { }
+		BaseSolver(Params &solverParams) {
+			_learningRate = parser::ParseFloat(solverParams, "learning_rate");
+			_weightDecay = parser::ParseFloat(solverParams, "weight_decay");
+		}
 
 		virtual ~BaseSolver() {
 

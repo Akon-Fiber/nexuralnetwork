@@ -29,7 +29,7 @@ namespace nexural {
 	public:
 		SGD() : BaseSolver() { }
 
-		SGD(float_n learningRate, float_n weightDecay) : BaseSolver(learningRate, weightDecay) { }
+		SGD(Params &solverParams) : BaseSolver(solverParams) { }
 
 		~SGD() {
 

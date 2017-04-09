@@ -22,12 +22,12 @@ OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 #include <vector>
 #include <map>
 
+#include "general_data_types.h"
+
 #ifndef _NEXURALNET_DATA_TYPES_LAYER_SHAPE_H
 #define _NEXURALNET_DATA_TYPES_LAYER_SHAPE_H
 
 namespace nexural {
-	typedef std::map<std::string, std::string> LayerParams;
-
 	struct LayerShape {
 		LayerShape() :
 			_numSamples(0),

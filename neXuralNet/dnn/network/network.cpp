@@ -75,7 +75,7 @@ namespace nexural {
 
 		for (int i = 0; i < layerSettingsCollection.size(); i++) {
 			std::string type_member = layerSettingsCollection[i].layerType;
-			LayerParams layerParams = layerSettingsCollection[i].layerParams;
+			Params layerParams = layerSettingsCollection[i].layerParams;
 
 			if (type_member == "bgr_image_input") {
 				SetInputLayer(InputBaseLayerPtr(new nexural::BGRImageInputLayer(layerParams)));

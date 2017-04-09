@@ -33,7 +33,7 @@ namespace nexural {
 		
 		}
 
-		ComputationalBaseLayer(const LayerParams &layerParams) {
+		ComputationalBaseLayer(const Params &layerParams) {
 			_layerParams = layerParams;
 			_hasWeights = false;
 			_hasBiases = false;
@@ -92,7 +92,7 @@ namespace nexural {
 		}
 
 	protected:
-		LayerParams _layerParams;
+		Params _layerParams;
 		LayerShape _inputShape;
 		LayerShape _outputShape;
 		Tensor _outputData;

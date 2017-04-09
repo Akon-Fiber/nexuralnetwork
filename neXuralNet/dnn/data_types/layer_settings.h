@@ -27,12 +27,12 @@ OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 namespace nexural {
 	struct LayerSettings {
 		LayerSettings() = delete;
-		LayerSettings(std::string layerType_, LayerParams layerParams_) :
+		LayerSettings(std::string layerType_, Params layerParams_) :
 			layerType(layerType_),
 			layerParams(layerParams_) { }
 		~LayerSettings() { }
 		std::string layerType;
-		LayerParams layerParams;
+		Params layerParams;
 	};
 	typedef std::vector<LayerSettings> LayerSettingsCollection;
 }

@@ -27,7 +27,7 @@ OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 namespace nexural {
 	class ConvolutionalLayer : public ComputationalBaseLayer {
 	public:
-		ConvolutionalLayer(const LayerParams &layerParams) : ComputationalBaseLayer(layerParams) {
+		ConvolutionalLayer(const Params &layerParams) : ComputationalBaseLayer(layerParams) {
 			_numOfFilters = parser::ParseLong(_layerParams, "num_of_filters");
 			_kernelWidth = parser::ParseLong(_layerParams, "kernel_width");
 			_kernelHeight = parser::ParseLong(_layerParams, "kernel_height");

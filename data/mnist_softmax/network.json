@@ -1,5 +1,5 @@
 {
-  "NetworkLayers": [
+  "network_layers": [
     {
       "type": "tensor_input",
       "params": {

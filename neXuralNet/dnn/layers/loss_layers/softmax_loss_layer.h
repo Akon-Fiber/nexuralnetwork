@@ -27,7 +27,7 @@ OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 namespace nexural {
 	class SoftmaxLossLayer : public LossBaseLayer {
 	public:
-		SoftmaxLossLayer(const LayerParams& layerParams) : LossBaseLayer(layerParams) {
+		SoftmaxLossLayer(const Params& layerParams) : LossBaseLayer(layerParams) {
 
 		}
 

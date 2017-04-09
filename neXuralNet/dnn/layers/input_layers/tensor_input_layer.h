@@ -27,7 +27,7 @@ OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 namespace nexural {
 	class TensorInputLayer : public InputBaseLayer {
 	public:
-		TensorInputLayer(const LayerParams &layerParams) : InputBaseLayer(layerParams) {
+		TensorInputLayer(const Params &layerParams) : InputBaseLayer(layerParams) {
 			long numSamples = parser::ParseLong(_layerParams, "num_samples");
 			long k = parser::ParseLong(_layerParams, "k");
 			long nr = parser::ParseLong(_layerParams, "nr");

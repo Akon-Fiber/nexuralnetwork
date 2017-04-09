@@ -1,10 +1,16 @@
 {
-  "TrainerSettings": {
-     "max_num_epochs": "10",
-     "max_num_epochs_without_progress": "10",
-     "min_error_threshold": "0.0001",
-     "batch_size": "1",
-     "solver": "sgd",
-     "be_verbose": "true"
-  }
+  	"trainer_settings": {
+    	"max_num_epochs": "10000",
+    	"max_epochs_without_progress": "100",
+    	"min_learning_rate_threshold": "0.000001",
+    	"min_validation_error_threshold": "0.001",
+    	"batch_size": "1",
+    	"be_verbose": "true",
+  	},
+    "solver": {
+      "algorithm": "sgd_momentum",
+      "learning_rate": "0.01",
+      "weight_decay": "0.0005",
+      "momentum": "0.9"
+    }
 }

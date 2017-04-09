@@ -27,7 +27,7 @@ OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 namespace nexural {
 	class DropoutLayer : public ComputationalBaseLayer {
 	public:
-		DropoutLayer(const LayerParams &layerParams) : ComputationalBaseLayer(layerParams) {
+		DropoutLayer(const Params &layerParams) : ComputationalBaseLayer(layerParams) {
 
 		}
 
