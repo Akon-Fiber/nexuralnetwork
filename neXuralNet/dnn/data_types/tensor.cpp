@@ -205,8 +205,7 @@ namespace nexural {
 		return LayerShape(_numSamples, _k, _nr, _nc);
 	}
 
-	void Tensor::OutputToConsole() const {
-		//std::cout.precision(8);
+	void Tensor::PrintToConsole() const {
 		for (long numSamples = 0; numSamples < _numSamples; numSamples++) {
 			std::cout << "=========== Numsample: " << numSamples << " =============" << std::endl;
 			for (long k = 0; k < _k; k++) {

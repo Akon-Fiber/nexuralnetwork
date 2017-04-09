@@ -27,17 +27,18 @@ using namespace nexural;
 void Test_XOR_Gate_With_RELU_Softmax(const std::string& dataFolderPath) {
 	Tensor inputData, trainingData, targetData;
 
-	std::string networkConfigPath = dataFolderPath + "\\xor_relu_softmax\\network.json";
-	std::string trainerConfigPath = dataFolderPath + "\\xor_relu_softmax\\trainer.json";
-	std::string trainingDataPath = dataFolderPath + "\\xor_relu_softmax\\trainingData.txt";
-	std::string targetDataPath = dataFolderPath + "\\xor_relu_softmax\\targetData.txt";
+	std::string exampleRoot = dataFolderPath + "\\xor_relu_softmax\\";
+	std::string networkConfigPath = exampleRoot + "network.json";
+	std::string trainerConfigPath = exampleRoot + "trainer.json";
+	std::string trainingDataPath = exampleRoot + "trainingData.txt";
+	std::string targetDataPath = exampleRoot + "targetData.txt";
 
 	tools::DataReader::ReadTensorFromFile(trainingDataPath, trainingData);
 	tools::DataReader::ReadTensorFromFile(targetDataPath, targetData);
 
 	int option = 0;
 	std::cout << "1 - Train and test" << std::endl;
-	std::cout << "2 - Test apretrained network" << std::endl;
+	std::cout << "2 - Test a pretrained network" << std::endl;
 	std::cin >> option;
 
 	Network net(networkConfigPath);
@@ -45,10 +46,10 @@ void Test_XOR_Gate_With_RELU_Softmax(const std::string& dataFolderPath) {
 	if (option == 1) {
 		NetworkTrainer netTrainer(trainerConfigPath);
 		netTrainer.Train(net, trainingData, targetData);
-		net.Serialize("D:\\netsave.json");
+		net.Serialize(exampleRoot + "xor_relu_softmax.json");
 	}
 	else {
-		net.Deserialize("D:\\netsave.json");
+		net.Deserialize(exampleRoot + "xor_relu_softmax.json");
 	}
 
 	std::cout << "Test the trained network: " << std::endl;

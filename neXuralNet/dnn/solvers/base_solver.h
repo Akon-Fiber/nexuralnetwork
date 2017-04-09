@@ -27,10 +27,11 @@ OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 namespace nexural {
 	class BaseSolver : public ISolver {
 	public:
-		BaseSolver() {
-			_learningRate = 0.01;
-			_weightDecay = 0.00005;
-		}
+		BaseSolver() : _learningRate(0.01), _weightDecay(0.0005) { }
+
+		BaseSolver(float_n learningRate, float_n weightDecay) :
+			_learningRate(learningRate),
+			_weightDecay(weightDecay) { }
 
 		virtual ~BaseSolver() {
 

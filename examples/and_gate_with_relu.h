@@ -27,10 +27,11 @@ using namespace nexural;
 void Test_AND_Gate_With_RELU(const std::string& dataFolderPath) {
 	Tensor inputData, trainingData, targetData;
 
-	std::string networkConfigPath = dataFolderPath + "\\and_relu\\network.json";
-	std::string trainerConfigPath = dataFolderPath + "\\and_relu\\trainer.json";
-	std::string trainingDataPath = dataFolderPath + "\\and_relu\\trainingData.txt";
-	std::string targetDataPath = dataFolderPath + "\\and_relu\\targetData.txt";
+	std::string exampleRoot = dataFolderPath + "\\and_relu\\";
+	std::string networkConfigPath = exampleRoot + "network.json";
+	std::string trainerConfigPath = exampleRoot + "trainer.json";
+	std::string trainingDataPath = exampleRoot + "trainingData.txt";
+	std::string targetDataPath = exampleRoot + "targetData.txt";
 
 	tools::DataReader::ReadTensorFromFile(trainingDataPath, trainingData);
 	tools::DataReader::ReadTensorFromFile(targetDataPath, targetData);

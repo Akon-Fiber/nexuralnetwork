@@ -30,6 +30,10 @@ namespace nexural {
 		SGDMomentum() : BaseSolver(),
 			_mu(0.9) { }
 
+		SGDMomentum(float_n learningRate, float_n weightDecay) : BaseSolver(learningRate, weightDecay), _mu(0.9) { }
+
+		SGDMomentum(float_n learningRate, float_n weightDecay, float_n momentum) : BaseSolver(learningRate, weightDecay), _mu(momentum) { }
+
 		~SGDMomentum() {
 
 		}

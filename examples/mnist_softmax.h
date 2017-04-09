@@ -26,22 +26,62 @@ using namespace nexural;
 
 void Test_MNIST_Softmax(const std::string& dataFolderPath) {
 	Tensor inputData, trainingData, targetData;
+	cv::Mat image;
 
-	std::string networkConfigPath = dataFolderPath + "\\mnist_softmax\\network.json";
-	std::string trainerConfigPath = dataFolderPath + "\\mnist_softmax\\trainer.json";
-	std::string trainingDataPath = dataFolderPath + "\\mnist_softmax\\train-images.idx3-ubyte";
-	std::string targetDataPath = dataFolderPath + "\\mnist_softmax\\train-labels.idx1-ubyte";
+	std::string exampleRoot = dataFolderPath + "\\mnist_softmax\\";
+	std::string networkConfigPath = exampleRoot + "network.json";
+	std::string trainerConfigPath = exampleRoot + "trainer.json";
+	std::string trainingDataPath = exampleRoot + "train-images.idx3-ubyte";
+	std::string targetDataPath = exampleRoot + "train-labels.idx1-ubyte";
+	std::string testDataPath = exampleRoot + "test_images\\";
 
-	std::cout << "Reading the training dataset..." << std::endl;
-	tools::DataReader::ReadMNISTData(trainingDataPath, trainingData, 20000);
-	std::cout << "Reading the labels for the training dataset..." << std::endl;
-	tools::DataReader::ReadMNISTLabels(targetDataPath, targetData, 20000);
+	int option = 0, numOfSamples = 0;
+	std::cout << "1 - Train and test" << std::endl;
+	std::cout << "2 - Test a pretrained network" << std::endl;
+	std::cin >> option;
 
-	std::cout << "Initialize the trainer..." << std::endl;
 	Network net(networkConfigPath);
-	NetworkTrainer netTrainer(trainerConfigPath);
-	std::cout << "Starting the training process..." << std::endl;
-	netTrainer.Train(net, trainingData, targetData);
 
-	net.Serialize("D:\\mnist.json");
+	if (option == 1) {
+		std::cout << "Num of samples from dataset:" << std::endl;
+		std::cin >> numOfSamples;
+
+		std::cout << "Reading the training dataset..." << std::endl;
+		tools::DataReader::ReadMNISTData(trainingDataPath, trainingData, numOfSamples);
+		std::cout << "Reading the labels for the training dataset..." << std::endl;
+		tools::DataReader::ReadMNISTLabels(targetDataPath, targetData, numOfSamples);
+
+		NetworkTrainer netTrainer(trainerConfigPath);
+		netTrainer.Train(net, trainingData, targetData);
+		net.Serialize(exampleRoot + "mnist.json");
+	}
+	else {
+		net.Serialize(exampleRoot + "mnist.json");
+	}
+
+	std::cout << "Test the trained network: " << std::endl;
+	image = cv::imread(testDataPath + "0.jpg", cv::IMREAD_GRAYSCALE);
+	nexural::converter::ConvertToTensor(image, inputData);
+	std::cout << "Target: 0" << std::endl;
+	net.Run(inputData);
+	std::cout << std::endl;
+	image = cv::imread(testDataPath + "2.jpg", cv::IMREAD_GRAYSCALE);
+	nexural::converter::ConvertToTensor(image, inputData);
+	std::cout << "Target: 2" << std::endl;
+	net.Run(inputData);
+	std::cout << std::endl;
+	image = cv::imread(testDataPath + "5.jpg", cv::IMREAD_GRAYSCALE);
+	nexural::converter::ConvertToTensor(image, inputData);
+	std::cout << "Target: 5" << std::endl;
+	net.Run(inputData);
+	std::cout << std::endl;
+	image = cv::imread(testDataPath + "6.jpg", cv::IMREAD_GRAYSCALE);
+	nexural::converter::ConvertToTensor(image, inputData);
+	std::cout << "Target: 6" << std::endl;
+	net.Run(inputData);
+	std::cout << std::endl;
+	image = cv::imread(testDataPath + "8.jpg", cv::IMREAD_GRAYSCALE);
+	nexural::converter::ConvertToTensor(image, inputData);
+	std::cout << "Target: 8" << std::endl;
+	net.Run(inputData);
 }

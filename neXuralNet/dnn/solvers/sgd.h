@@ -29,14 +29,15 @@ namespace nexural {
 	public:
 		SGD() : BaseSolver() { }
 
+		SGD(float_n learningRate, float_n weightDecay) : BaseSolver(learningRate, weightDecay) { }
+
 		~SGD() {
 
 		}
 		
 		virtual void UpdateWeights(Tensor& weights, const Tensor& dWeights, const std::string& layerID) {
-			// TODO: Add weight_decay
 			for (int i = 0; i < weights.Size(); i++) {
-				weights[i] -= _learningRate * dWeights[i];
+				weights[i] -= _learningRate * (dWeights[i] + _weightDecay * weights[i]);
 			}
 		}
 

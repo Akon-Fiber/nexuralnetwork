@@ -36,7 +36,7 @@ namespace nexural {
 			_strideWidth = parser::ParseLong(_layerParams, "stride_width");
 			_strideHeight = parser::ParseLong(_layerParams, "stride_height");
 			_hasWeights = true;
-			_hasBiases = false;
+			_hasBiases = true;
 		}
 
 		~ConvolutionalLayer() {
@@ -76,7 +76,7 @@ namespace nexural {
 									}
 								}
 							}
-							//value += _biases[numFilters];
+							value += _biases[numFilters];
 							_outputData[(((numSamples * _outputData.GetK()) + numFilters) * _outputData.GetNR() + nro) * _outputData.GetNC() + nco] = value;
 							nco++;
 						}
@@ -117,15 +117,15 @@ namespace nexural {
 				}
 			}
 
-			//_dWeights.OutputToConsole();
-
 			// Calculate gradient wrt. biases: (prevLayerErrors * 1)
-			/*long gbTotal = prevLayerErrors.GetK() * prevLayerErrors.GetNR() * prevLayerErrors.GetNC();
+			long sampleDim = prevLayerErrors.GetK() * prevLayerErrors.GetNR() * prevLayerErrors.GetNC();
 			for (long errorNumSamples = 0; errorNumSamples < prevLayerErrors.GetNumSamples(); errorNumSamples++) {
-				for (long index = 0; index < gbTotal; index++) {
-					prevLayerErrors[(errorNumSamples * gbTotal) + index];
+				float_n error = 0;
+				for (long index = 0; index < sampleDim; index++) {
+					error += prevLayerErrors[(errorNumSamples * sampleDim) + index];
 				}
-			}*/
+				_dBiases[errorNumSamples] = error;
+			}
 
 			// Calculate gradient wrt. input: (prevLayerErrors * _weights)
 			long paddingWidth = _weights.GetNC() - 1;

@@ -65,7 +65,7 @@ namespace nexural {
 		float_n prevError = std::numeric_limits<float_n>::max();
 		float_n toalEpochError = 0;
 		float_n learningRateDecay = 0.00001;
-		float_n diffErrorThreshold = 0.001;
+		float_n diffErrorThreshold = 0.01;
 		bool doTraining = true;
 		long currentEpoch = 0;
 		long stepsWithoutAnyProgress = 0;
@@ -73,7 +73,7 @@ namespace nexural {
 		std::cout << "The engine is initializing the network for the training process." << std::endl << std::endl;
 		InitLayersForTraining(net);
 
-		std::cout << "Training started:" << std::endl;
+		std::cout << "Starting the training process..." << std::endl;
 		while (doTraining) {
 			long trainingDataIter = trainingData.GetNumSamples();
 			toalEpochError = 0;
@@ -126,7 +126,7 @@ namespace nexural {
 
 			// If there isn't any progress, probably we are jumping over the global minimum
 			// so, we need to reduce the learning rate in order to hit the minimum
-			if (((prevError - diffErrorThreshold) < toalEpochError) && (toalEpochError < (prevError + diffErrorThreshold))) {
+			if (((prevError - prevError * diffErrorThreshold) < toalEpochError) && (toalEpochError < (prevError + prevError * diffErrorThreshold))) {
 				stepsWithoutAnyProgress++;
 				std::cout << " -!-[INFO] Num of steps without any progress: " << stepsWithoutAnyProgress << std::endl;
 				if (stepsWithoutAnyProgress == _maxIterationsWithoutProgress) {
