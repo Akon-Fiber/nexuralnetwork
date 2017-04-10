@@ -91,6 +91,16 @@ namespace nexural {
 
 		}
 
+#ifdef _DEBUG_NETWORK
+		virtual void SetWeights(std::vector<float_n>& values) {
+			_weights.Fill(values);
+		}
+
+		virtual void SetBiases(std::vector<float_n>& values) {
+			_biases.Fill(values);
+		}
+#endif
+
 	protected:
 		Params _layerParams;
 		LayerShape _inputShape;

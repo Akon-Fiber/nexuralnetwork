@@ -71,6 +71,9 @@ namespace nexural {
 		const float_n & operator [](long i) const { return _host.get()[i]; }
 		float_n & operator [](long i) { return _host.get()[i]; }
 
+		bool operator==(const Tensor& other);
+		bool operator!=(const Tensor& other);
+
 		void ShareTensor(const Tensor& tensor);
 		void Clone(const Tensor& tensor);
 		void Reset();

@@ -59,6 +59,9 @@
     <Filter Include="examples">
       <UniqueIdentifier>{c0ef2ac3-7d49-429b-9d49-d5f050203c19}</UniqueIdentifier>
     </Filter>
+    <Filter Include="tests">
+      <UniqueIdentifier>{01e27e81-5586-4767-8af6-53e0158eaaed}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\neXuralNet\tools\data_reader.h">
@@ -230,6 +233,9 @@
     </ClCompile>
     <ClCompile Include="..\..\examples\main_tests.cpp">
       <Filter>examples</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\tests\network_test.cpp">
+      <Filter>tests</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

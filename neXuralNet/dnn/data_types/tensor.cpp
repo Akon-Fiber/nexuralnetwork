@@ -80,6 +80,22 @@ namespace nexural {
 		return *this;
 	}
 
+	bool Tensor::operator==(const Tensor& other) {
+		if (!(this->_size == other._size)) {
+			return false;
+		}
+		for (long index = 0; index < _size; index++) {
+			if ((*this)[index] != other[index]) {
+				return false;
+			}
+		}
+		return true;
+	}
+
+	bool Tensor::operator!=(const Tensor& other) {
+		return !(*this == other);
+	}
+
 	void Tensor::ShareTensor(const Tensor& tensor) {
 		if (this != &tensor) {
 			_host = tensor._host;
