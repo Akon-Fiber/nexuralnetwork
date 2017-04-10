@@ -118,11 +118,11 @@ namespace nexural {
 			}
 
 			// Calculate gradient wrt. biases: (prevLayerErrors * 1)
-			long sampleDim = prevLayerErrors.GetK() * prevLayerErrors.GetNR() * prevLayerErrors.GetNC();
+			long numberOfElementsPerSample = prevLayerErrors.GetK() * prevLayerErrors.GetNR() * prevLayerErrors.GetNC();
 			for (long errorNumSamples = 0; errorNumSamples < prevLayerErrors.GetNumSamples(); errorNumSamples++) {
 				float_n error = 0;
-				for (long index = 0; index < sampleDim; index++) {
-					error += prevLayerErrors[(errorNumSamples * sampleDim) + index];
+				for (long index = 0; index < numberOfElementsPerSample; index++) {
+					error += prevLayerErrors[(errorNumSamples * numberOfElementsPerSample) + index];
 				}
 				_dBiases[errorNumSamples] = error;
 			}

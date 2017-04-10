@@ -180,8 +180,9 @@ namespace nexural {
 	}
 
 	void Tensor::GetBatch(const Tensor& tensor, const long startIndex, const long batchSize) {
+		// TODO: Check if is the same tensor (this will crash the program)
 		Resize(batchSize, tensor._k, tensor._nr, tensor._nc);
-
+		
 		long numSampleUpper = (startIndex + batchSize) < tensor._numSamples ? (startIndex + batchSize) : tensor._numSamples;
 		long newNumSample = 0;
 

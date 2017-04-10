@@ -46,6 +46,31 @@ namespace nexural {
 		static T clip(const T& n, const T& lower, const T& upper) {
 			return std::max(lower, std::min(n, upper));
 		}
+
+		static void SplitData(const Tensor& data, Tensor &firstFold, Tensor &secondFold, const float_n firstFoldPercentage = 90) {
+			long dataNumOfSamples = data.GetNumSamples();
+			long foldNumOfSamples = 0;
+			long numberOfElementsPerSample = data.GetK() * data.GetNR() * data.GetNC();
+			int separator = static_cast<int>(std::round(dataNumOfSamples * firstFoldPercentage / 100));
+
+			firstFold.Resize(separator, data.GetK(), data.GetNR(), data.GetNC());
+			secondFold.Resize(dataNumOfSamples - separator, data.GetK(), data.GetNR(), data.GetNC());
+
+			for (long numSample = 0; numSample < separator; numSample++) {
+				for (long index = 0; index < numberOfElementsPerSample; index++) {
+					firstFold[(foldNumOfSamples * numberOfElementsPerSample) + index] = data[(numSample * numberOfElementsPerSample) + index];
+				}
+				foldNumOfSamples++;
+			}
+
+			foldNumOfSamples = 0;
+			for (long numSample = separator; numSample < dataNumOfSamples; numSample++) {
+				for (long index = 0; index < numberOfElementsPerSample; index++) {
+					secondFold[(foldNumOfSamples * numberOfElementsPerSample) + index] = data[(numSample * numberOfElementsPerSample) + index];
+				}
+				foldNumOfSamples++;
+			}
+		}
 	}
 }
 #endif

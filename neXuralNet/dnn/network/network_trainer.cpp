@@ -33,8 +33,7 @@ namespace nexural {
 		_learningRateDecay(0.00005),
 		_batchSize(1),
 		_solver(new SGDMomentum()),
-		_beVerbose(true)
-	{ };
+		_beVerbose(true) { };
 
 	NetworkTrainer::NetworkTrainer(const std::string& trainerConfigPath) {
 		InitTrainer(trainerConfigPath);
@@ -67,51 +66,54 @@ namespace nexural {
 		}
 	}
 
-	void NetworkTrainer::Train(Network& net, Tensor& trainingData, Tensor& validationData, Tensor& targetData, const long batchSize) {
-		Tensor *error, *weights, *dWeights, *biases, *dBiases;
+	void NetworkTrainer::Train(Network& net, Tensor& data, Tensor& labels, const long batchSize) {
 		float_n prevEpochError = std::numeric_limits<float_n>::max(), currentEpochError, validationError;
-		bool doTraining = true;
 		long currentEpoch = 0, stepsWithoutAnyProgress = 0;
+		bool doTraining = true;
 
 		std::cout << std::endl << "The engine is initializing the network for the training process." << std::endl << std::endl;
 		InitLayersForTraining(net);
 
+		std::cout << std::endl << "Splitting data in training and validation datasets." << std::endl << std::endl;
+		helper::SplitData(data, _trainingData, _validationData);
+		helper::SplitData(labels, _trainingTargetData, _validationTargetData);
+		data.Reset();
+		labels.Reset();
+
+		long trainingDataIterations = _trainingData.GetNumSamples();
+		long validationDataIterations = _validationData.GetNumSamples();
+
 		std::cout << "Starting the training process..." << std::endl;
 		while (doTraining) {
-			long trainingDataIter = trainingData.GetNumSamples();
 			currentEpochError = 0;
-
-			std::cout << "Current training epoch: " << currentEpoch << std::endl;
 			
-			for (int batchIndex = 0; batchIndex < trainingDataIter; batchIndex += batchSize) {
-				_inputData.GetBatch(trainingData, batchIndex, batchSize);
-				_targetData.GetBatch(targetData, batchIndex, batchSize);
+			std::cout << "Current training epoch: " << currentEpoch << std::endl;
 
-				net._inputNetworkLayer->LoadData(_inputData);
+			for (int batchIndex = 0; batchIndex < trainingDataIterations; batchIndex += batchSize) {
+				_subTrainingData.GetBatch(_trainingData, batchIndex, batchSize);
+				_subTrainingTargetData.GetBatch(_trainingTargetData, batchIndex, batchSize);
+
+				net._inputNetworkLayer->LoadData(_subTrainingData);
 				Tensor *internalNetData = net._inputNetworkLayer->GetOutput();
 
-				// Feedforward the error
 				for (auto it = net._computationalNetworkLyers.begin(); it < net._computationalNetworkLyers.end(); it++) {
- 					(*it)->FeedForward(*internalNetData);
+					(*it)->FeedForward(*internalNetData);
 					internalNetData = (*it)->GetOutput();
 				}
 
 				net._lossNetworkLayer->FeedForward(*internalNetData);
-
-				// Calculate the total error
-				net._lossNetworkLayer->CalculateError(_targetData);
-				net._lossNetworkLayer->CalculateTotalError(_targetData);
+				net._lossNetworkLayer->CalculateError(_subTrainingTargetData);
+				net._lossNetworkLayer->CalculateTotalError(_subTrainingTargetData);
 				error = net._lossNetworkLayer->GetLayerErrors();
 				currentEpochError += net._lossNetworkLayer->GetTotalError();
-				//std::cout << "Total error for current iteration: " << currentError << std::endl;
 
-				// Backpropagate the error
 				for (auto it = net._computationalNetworkLyers.rbegin(); it < net._computationalNetworkLyers.rend(); it++) {
 					(*it)->BackPropagate(*error);
 					error = (*it)->GetLayerErrors();
 				}
 
-				// Update the weights
+				// Update the weights and biases using the solver (only if the layer has weights and/or biases)
+				// TODO: For each layer add weight_decay_multiplier
 				for (auto it = net._computationalNetworkLyers.rbegin(); it < net._computationalNetworkLyers.rend(); it++) {
 					if ((*it)->HasWeights()) {
 						weights = (*it)->GetLayerWeights();
@@ -125,32 +127,37 @@ namespace nexural {
 					}
 				}
 			}
-			currentEpochError /= trainingDataIter;
+			currentEpochError /= trainingDataIterations;
 			prevEpochError = currentEpochError;
+			std::cout << " -- EPOCH MEAN ERROR: " << currentEpochError << std::endl;
 
-			// Cross validation
-			// TODO: Check if is ok to feedforward the entire validation set
+			// Training validation
 			validationError = 0;
-			for () {
-				net._inputNetworkLayer->LoadData(_validationData);
+			for (int validationBatchIndex = 0; validationBatchIndex < validationDataIterations; validationBatchIndex += batchSize) {
+				_subValidationData.GetBatch(_validationData, validationBatchIndex, batchSize);
+				_subValidationTargetData.GetBatch(_validationTargetData, validationBatchIndex, batchSize);
+
+				net._inputNetworkLayer->LoadData(_subValidationData);
 				Tensor *internalNetData = net._inputNetworkLayer->GetOutput();
 				for (auto it = net._computationalNetworkLyers.begin(); it < net._computationalNetworkLyers.end(); it++) {
 					(*it)->FeedForward(*internalNetData);
 					internalNetData = (*it)->GetOutput();
 				}
 				net._lossNetworkLayer->FeedForward(*internalNetData);
-				net._lossNetworkLayer->CalculateTotalError(_validationTargetData);
+				net._lossNetworkLayer->CalculateTotalError(_subValidationTargetData);
 				validationError += net._lossNetworkLayer->GetTotalError();
 			}
+			validationError /= validationDataIterations;
+			std::cout << " -- VALIDATION MEAN ERROR: " << validationError << std::endl;
 
 			// If there isn't any progress, probably we are jumping over the global minimum
 			// so, we need to reduce the learning rate in order to hit the minimum
 			if (((prevEpochError - prevEpochError * _updateLRThreshold) < currentEpochError) && (currentEpochError < (prevEpochError + prevEpochError * _updateLRThreshold))) {
 				stepsWithoutAnyProgress++;
-				std::cout << " -!-[INFO] Num of steps without any progress: " << stepsWithoutAnyProgress << std::endl;
+				std::cout << " -! [INFO] Num of steps without any progress: " << stepsWithoutAnyProgress << std::endl;
 				if (stepsWithoutAnyProgress == _maxEpochsWithoutProgress) {
-					std::cout << " -!-[INFO] Reducing the learning rate!" << std::endl;
-					_learningRateDecay += 0.00005;
+					std::cout << " -! [INFO] Reducing the learning rate!" << std::endl;
+					_learningRateDecay += 0.0005;
 					_updateLRThreshold *= 0.1;
 					stepsWithoutAnyProgress = 0;
 				}
@@ -159,14 +166,11 @@ namespace nexural {
 				stepsWithoutAnyProgress = 0;
 			}
 
-			// Print epoch error
-			std::cout << " -- MEAN ERROR: " << currentEpochError << std::endl;
-
-			//Update the learning rate
-			std::cout << "   -- Learning rate before update: " << _solver->GetLearningRate() << std::endl;
+			// Update the learning rate: at each epoch decrease the learning rate
+			std::cout << "    -- Learning rate before update: " << _solver->GetLearningRate() << std::endl;
 			double learningRateStep = 1 / (1 + _learningRateDecay * currentEpoch);
 			_solver->UpdateLearningRate(learningRateStep);
-			std::cout << "   -- Learning after before update: " << _solver->GetLearningRate() << std::endl;
+			std::cout << "    -- Learning after update: " << _solver->GetLearningRate() << std::endl;
 			std::cout << std::endl << std::endl;
 
 			currentEpoch++;
@@ -174,6 +178,10 @@ namespace nexural {
 			if (currentEpoch == _maxNumEpochs) {
 				doTraining = false;
 				std::cout << std::endl << "[STOP CONDITION] The trainer has reached the maxim number of epochs!" << std::endl << std::endl;
+			}
+			else if (validationError < _minValidationErrorThreshold) {
+				doTraining = false;
+				std::cout << std::endl << "[STOP CONDITION] The trainer has reached the minim validation threshold!" << std::endl << std::endl;
 			}
 			else if (_solver->GetLearningRate() < _minLearningRateThreshold) {
 				doTraining = false;

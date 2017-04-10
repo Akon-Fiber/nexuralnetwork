@@ -31,7 +31,7 @@ namespace nexural {
 		static int ParseInt(std::map<std::string, std::string> &map, std::string key)
 		{
 			if (map.find(key) == map.end())
-				throw std::runtime_error("The key was not found!");
+				throw std::runtime_error("The key " + key + " was not found!");
 
 			if (map[key].empty()) {
 				throw std::runtime_error("Empty key value!");
@@ -53,7 +53,7 @@ namespace nexural {
 		static int ParseLong(std::map<std::string, std::string> &map, std::string key)
 		{
 			if (map.find(key) == map.end())
-				throw std::runtime_error("The key was not found!");
+				throw std::runtime_error("The key " + key + " was not found!");
 
 			if (map[key].empty()) {
 				throw std::runtime_error("Empty key value!");
@@ -75,7 +75,7 @@ namespace nexural {
 		static float_n ParseFloat(std::map<std::string, std::string> &map, std::string key)
 		{
 			if (map.find(key) == map.end())
-				throw std::runtime_error("The key was not found!");
+				throw std::runtime_error("The key " + key + " was not found!");
 
 			if (map[key].empty()) {
 				throw std::runtime_error("Empty key value!");
@@ -97,7 +97,7 @@ namespace nexural {
 		static bool ParseBool(std::map<std::string, std::string> &map, std::string key)
 		{
 			if (map.find(key) == map.end())
-				throw std::runtime_error("The key was not found!");
+				throw std::runtime_error("The key " + key + " was not found!");
 
 			if (map[key].empty()) {
 				throw std::runtime_error("Empty key value!");
@@ -109,7 +109,7 @@ namespace nexural {
 		static std::string ParseString(std::map<std::string, std::string> &map, std::string key)
 		{
 			if (map.find(key) == map.end())
-				throw std::runtime_error("The key was not found!");
+				throw std::runtime_error("The key " + key + " was not found!");
 
 			if (map[key].empty()) {
 				throw std::runtime_error("Empty key value!");
@@ -123,7 +123,7 @@ namespace nexural {
 		static std::vector<std::string> ParseStrVector(std::map<std::string, std::string> &map, std::string key)
 		{
 			if (map.find(key) == map.end())
-				throw std::runtime_error("The key was not found!");
+				throw std::runtime_error("The key " + key + " was not found!");
 
 			if (map[key].empty()) {
 				throw std::runtime_error("Empty key value!");
@@ -136,7 +136,7 @@ namespace nexural {
 		static std::vector<float_n> ParseFltVector(std::map<std::string, std::string> &map, std::string key)
 		{
 			if (map.find(key) == map.end())
-				throw std::runtime_error("The key was not found!");
+				throw std::runtime_error("The key " + key + " was not found!");
 
 			if (map[key].empty()) {
 				throw std::runtime_error("Empty key value!");
