@@ -35,7 +35,7 @@ namespace nexural {
 		NetworkTrainer(const std::string& trainerConfigPath);
 		~NetworkTrainer();
 
-		void Train(Network& net, Tensor& trainingData, Tensor& targetData, const long batchSize = 1);
+		void Train(Network& net, Tensor& trainingData, Tensor& validationData, Tensor& targetData, const long batchSize = 1);
 
 	private:
 		void InitTrainer(const std::string& trainerConfigPath);
@@ -46,9 +46,13 @@ namespace nexural {
 		long _maxEpochsWithoutProgress;
 		float_n _minLearningRateThreshold;
 		float_n _minValidationErrorThreshold;
+		float_n _updateLRThreshold;
+		float_n _learningRateDecay;
 		long _batchSize;
-		Tensor _input;
-		Tensor _target;
+		Tensor _inputData;
+		Tensor _targetData;
+		Tensor _validationData;
+		Tensor _validationTargetData;
 		NetSolver _solver;
 		bool _beVerbose;
 	};
