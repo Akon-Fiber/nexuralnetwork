@@ -23,15 +23,11 @@ OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 #include "network.h"
 
 namespace nexural {
-	Network::Network(const std::string jsonFilePath) {
-		InitNetwork(jsonFilePath);
+	Network::Network() { }
 
-		LayerShape prevLayerShape = _inputNetworkLayer->GetOutputShape();
-		for (int i = 0; i < _computationalNetworkLyers.size(); i++) {
-			_computationalNetworkLyers[i]->Setup(prevLayerShape, i);
-			prevLayerShape = _computationalNetworkLyers[i]->GetOutputShape();
-		}
-		_lossNetworkLayer->Setup(prevLayerShape);
+	Network::Network(const std::string networkConfigPath) {
+		CreateNetworkLayers(networkConfigPath);
+		SetupNetwork();
 	}
 
 	Network::~Network() {
@@ -69,7 +65,7 @@ namespace nexural {
 		_lossNetworkLayer = lossLayer;
 	}
 
-	void Network::InitNetwork(const std::string networkConfigPath) {
+	void Network::CreateNetworkLayers(const std::string networkConfigPath) {
 		LayerSettingsCollection layerSettingsCollection;
 		ConfigReader::DecodeNetCongif(networkConfigPath, layerSettingsCollection);
 
@@ -117,6 +113,15 @@ namespace nexural {
 				SetLossLayer(LossBaseLayerPtr(new nexural::SoftmaxLossLayer(layerParams)));
 			}
 		}
+	}
+
+	void Network::SetupNetwork() {
+		LayerShape prevLayerShape = _inputNetworkLayer->GetOutputShape();
+		for (int i = 0; i < _computationalNetworkLyers.size(); i++) {
+			_computationalNetworkLyers[i]->Setup(prevLayerShape, i);
+			prevLayerShape = _computationalNetworkLyers[i]->GetOutputShape();
+		}
+		_lossNetworkLayer->Setup(prevLayerShape);
 	}
 
 	void Network::Serialize(const std::string& dataPath) {

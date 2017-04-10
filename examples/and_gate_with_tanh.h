@@ -29,15 +29,27 @@ void Test_AND_Gate_With_TanH(const std::string& dataFolderPath) {
 
 	std::string exampleRoot = dataFolderPath + "\\and_tanh\\";
 	std::string networkConfigPath = exampleRoot + "network.json";
+	std::string trainerConfigPath = exampleRoot + "trainer.json";
 	std::string trainingDataPath = exampleRoot + "trainingData.txt";
 	std::string targetDataPath = exampleRoot + "targetData.txt";
 
-	tools::DataReader::ReadTensorFromFile(trainingDataPath, trainingData);
-	tools::DataReader::ReadTensorFromFile(targetDataPath, targetData);
+	int option = 0;
+	std::cout << "1 - Train and test" << std::endl;
+	std::cout << "2 - Test a pretrained network" << std::endl;
+	std::cin >> option;
 
 	Network net(networkConfigPath);
-	NetworkTrainer netTrainer;
-	netTrainer.Train(net, trainingData, targetData);
+
+	if (option == 1) {
+		tools::DataReader::ReadTensorFromFile(trainingDataPath, trainingData);
+		tools::DataReader::ReadTensorFromFile(targetDataPath, targetData);
+
+		NetworkTrainer netTrainer(networkConfigPath, trainerConfigPath);
+		netTrainer.Train(trainingData, targetData);
+		netTrainer.Serialize(exampleRoot + "and_tanh.json");
+	}
+
+	net.Deserialize(exampleRoot + "and_tanh.json");
 
 	std::cout << "Test the trained network: " << std::endl;
 	inputData.Resize(1, 1, 1, 2);

@@ -24,24 +24,26 @@ OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 #ifndef _NEXURALNET_DNN_NETWORK_NETWORK_TRAINNER
 #define _NEXURALNET_DNN_NETWORK_NETWORK_TRAINNER
 
-namespace nexural {
-	class Network;
+// Protect the network include
+#include "network.h"
 
+namespace nexural {
 	class NetworkTrainer {
 		typedef BaseSolverPtr NetSolver;
 
 	public:
-		NetworkTrainer();
-		NetworkTrainer(const std::string& trainerConfigPath);
+		NetworkTrainer(const std::string networkConfigPath, const std::string& trainerConfigPath);
 		~NetworkTrainer();
-
-		void Train(Network& net, Tensor& data, Tensor& labels, const long batchSize = 1);
-
-	private:
-		void InitTrainer(const std::string& trainerConfigPath);
-		void InitLayersForTraining(Network& net);
+		void Train(Tensor& data, Tensor& labels);
+		void Serialize(const std::string& dataPath);
 
 	private:
+		void InitTrainer(const std::string networkConfigPath, const std::string& trainerConfigPath);
+		void InitLayersForTraining();
+		void SetInputBatchSize(const long batchSize);
+
+	private:
+		Network _net;
 		long _maxNumEpochs; 
 		long _maxEpochsWithoutProgress;
 		float_n _minLearningRateThreshold;

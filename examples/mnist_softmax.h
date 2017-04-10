@@ -48,16 +48,15 @@ void Test_MNIST_Softmax(const std::string& dataFolderPath) {
 
 		std::cout << "Reading the training dataset..." << std::endl;
 		tools::DataReader::ReadMNISTData(trainingDataPath, trainingData, numOfSamples);
-		std::cout << "Reading the labels for the training dataset..." << std::endl;
+		std::cout << "Reading the labels for the training dataset..." << std::endl << std::endl;
 		tools::DataReader::ReadMNISTLabels(targetDataPath, targetData, numOfSamples);
 
-		NetworkTrainer netTrainer(trainerConfigPath);
-		netTrainer.Train(net, trainingData, targetData);
-		net.Serialize(exampleRoot + "mnist.json");
+		NetworkTrainer netTrainer(networkConfigPath, trainerConfigPath);
+		netTrainer.Train(trainingData, targetData);
+		netTrainer.Serialize(exampleRoot + "mnist.json");
 	}
-	else {
-		net.Serialize(exampleRoot + "mnist.json");
-	}
+
+	net.Deserialize(exampleRoot + "mnist.json");
 
 	std::cout << "Test the trained network: " << std::endl;
 	image = cv::imread(testDataPath + "0.jpg", cv::IMREAD_GRAYSCALE);

@@ -40,6 +40,12 @@ namespace nexural {
 
 		}
 
+		virtual void SetInputBatchSize(const long batchSize) {
+			_inputShape.Resize(batchSize, _inputShape.GetK(), _inputShape.GetNR(), _inputShape.GetNC());
+			_outputShape.Resize(_inputShape);
+			_outputData.Resize(_outputShape);
+		}
+
 		virtual Tensor* GetOutput() {
 			return &_outputData;
 		}

@@ -29,6 +29,7 @@ namespace nexural {
 	public:
 		virtual ~IInputLayer() { }
 		virtual void LoadData(const Tensor& inputTensor) = 0;
+		virtual void SetInputBatchSize(const long batchSize) = 0;
 		virtual Tensor* GetOutput() = 0;
 		virtual LayerShape GetOutputShape() = 0;
 	};

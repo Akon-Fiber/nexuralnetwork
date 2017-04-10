@@ -33,9 +33,6 @@ void Test_XOR_Gate_With_RELU_Softmax(const std::string& dataFolderPath) {
 	std::string trainingDataPath = exampleRoot + "trainingData.txt";
 	std::string targetDataPath = exampleRoot + "targetData.txt";
 
-	tools::DataReader::ReadTensorFromFile(trainingDataPath, trainingData);
-	tools::DataReader::ReadTensorFromFile(targetDataPath, targetData);
-
 	int option = 0;
 	std::cout << "1 - Train and test" << std::endl;
 	std::cout << "2 - Test a pretrained network" << std::endl;
@@ -44,13 +41,15 @@ void Test_XOR_Gate_With_RELU_Softmax(const std::string& dataFolderPath) {
 	Network net(networkConfigPath);
 
 	if (option == 1) {
-		NetworkTrainer netTrainer(trainerConfigPath);
-		netTrainer.Train(net, trainingData, targetData);
-		net.Serialize(exampleRoot + "xor_relu_softmax.json");
+		tools::DataReader::ReadTensorFromFile(trainingDataPath, trainingData);
+		tools::DataReader::ReadTensorFromFile(targetDataPath, targetData);
+
+		NetworkTrainer netTrainer(networkConfigPath, trainerConfigPath);
+		netTrainer.Train(trainingData, targetData);
+		netTrainer.Serialize(exampleRoot + "xor_relu_softmax.json");
 	}
-	else {
-		net.Deserialize(exampleRoot + "xor_relu_softmax.json");
-	}
+
+	net.Deserialize(exampleRoot + "xor_relu_softmax.json");
 
 	std::cout << "Test the trained network: " << std::endl;
 	inputData.Resize(1, 1, 1, 2);

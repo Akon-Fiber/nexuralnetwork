@@ -33,12 +33,23 @@ void Test_AND_Gate_With_RELU_Softmax(const std::string& dataFolderPath) {
 	std::string trainingDataPath = exampleRoot + "trainingData.txt";
 	std::string targetDataPath = exampleRoot + "targetData.txt";
 
-	tools::DataReader::ReadTensorFromFile(trainingDataPath, trainingData);
-	tools::DataReader::ReadTensorFromFile(targetDataPath, targetData);
+	int option = 0;
+	std::cout << "1 - Train and test" << std::endl;
+	std::cout << "2 - Test a pretrained network" << std::endl;
+	std::cin >> option;
 
 	Network net(networkConfigPath);
-	NetworkTrainer netTrainer(trainerConfigPath);
-	netTrainer.Train(net, trainingData, targetData);
+
+	if (option == 1) {
+		tools::DataReader::ReadTensorFromFile(trainingDataPath, trainingData);
+		tools::DataReader::ReadTensorFromFile(targetDataPath, targetData);
+
+		NetworkTrainer netTrainer(networkConfigPath, trainerConfigPath);
+		netTrainer.Train(trainingData, targetData);
+		netTrainer.Serialize(exampleRoot + "and_relu_softmax.json");
+	}
+
+	net.Deserialize(exampleRoot + "and_relu_softmax.json");
 
 	std::cout << "Test the trained network: " << std::endl;
 	inputData.Resize(1, 1, 1, 2);

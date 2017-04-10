@@ -24,9 +24,9 @@ OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 #include "../layers/input_layers/input_layers.h"
 #include "../layers/computational_layers/computational_layers.h"
 #include "../layers/loss_layers/loss_layers.h"
-#include "network_trainer.h"
 #include "../../tools/data_reader.h"
 #include "../utility/config_reader.h"
+#include "network_trainer.h"
 
 #ifndef _NEXURALNET_DNN_NETWORK_NETWORK
 #define _NEXURALNET_DNN_NETWORK_NETWORK
@@ -39,7 +39,6 @@ namespace nexural {
 		typedef LossBaseLayerPtr LossNetworkLayer;
 
 	public:
-		Network() = delete;
 		Network(const std::string networkConfigPath);
 		explicit Network(const Network& network) = delete;
 		explicit Network(Network&& network) = delete;
@@ -48,15 +47,17 @@ namespace nexural {
 		~Network();
 
 		void Run(Tensor& inputData);
-		void Serialize(const std::string& dataPath);
 		void Deserialize(const std::string& dataPath);
 
 	private:
+		Network();
+		void Serialize(const std::string& dataPath);
+		void CreateNetworkLayers(const std::string networkConfigPath);
+		void SetupNetwork();
 		void SetInputLayer(InputBaseLayerPtr inputLayer);
 		void AddComputationalLayer(ComputationalBaseLayerPtr computationalLayer);
 		void SetLossLayer(LossBaseLayerPtr lossLayer);
-		void InitNetwork(const std::string networkConfigPath);
-
+		
 	private:
 		InputNetworkLayer _inputNetworkLayer;
 		ComputationalNetworkLayers _computationalNetworkLyers;

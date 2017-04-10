@@ -24,36 +24,25 @@ OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 #include <iostream>
 
 namespace nexural {
-
-	NetworkTrainer::NetworkTrainer() :
-		_maxNumEpochs(10000),
-		_maxEpochsWithoutProgress(6),
-		_minLearningRateThreshold(0.00001),
-		_updateLRThreshold(0.001),
-		_learningRateDecay(0.00005),
-		_batchSize(1),
-		_solver(new SGDMomentum()),
-		_beVerbose(true) { };
-
-	NetworkTrainer::NetworkTrainer(const std::string& trainerConfigPath) {
-		InitTrainer(trainerConfigPath);
+	NetworkTrainer::NetworkTrainer(const std::string networkConfigPath, const std::string& trainerConfigPath) {
+		InitTrainer(networkConfigPath, trainerConfigPath);
 	}
 
 	NetworkTrainer::~NetworkTrainer() {
 
 	}
 
-	void NetworkTrainer::InitTrainer(const std::string& trainerConfigPath) {
+	void NetworkTrainer::InitTrainer(const std::string networkConfigPath, const std::string& trainerConfigPath) {
 		Params trainerParams, solverParams;
 		ConfigReader::DecodeTrainerCongif(trainerConfigPath, trainerParams, solverParams);
 
-		_maxNumEpochs = parser::ParseInt(trainerParams, "max_num_epochs");
-		_maxEpochsWithoutProgress = parser::ParseInt(trainerParams, "max_epochs_without_progress");
+		_maxNumEpochs = parser::ParseLong(trainerParams, "max_num_epochs");
+		_maxEpochsWithoutProgress = parser::ParseLong(trainerParams, "max_epochs_without_progress");
 		_minLearningRateThreshold = parser::ParseFloat(trainerParams, "min_learning_rate_threshold");
 		_minValidationErrorThreshold = parser::ParseFloat(trainerParams, "min_validation_error_threshold");
 		_updateLRThreshold = parser::ParseFloat(trainerParams, "update_learning_rate_threshold");
 		_learningRateDecay = parser::ParseFloat(trainerParams, "learning_rate_decay");
-		_batchSize = parser::ParseInt(trainerParams, "batch_size");
+		_batchSize = parser::ParseLong(trainerParams, "batch_size");
 		_beVerbose = parser::ParseBool(trainerParams, "be_verbose");
 
 		// Init the solver
@@ -62,17 +51,18 @@ namespace nexural {
 			_solver.reset(new SGD(solverParams));
 		} else if (solverAlgorithm == "sgd_momentum") {
 			_solver.reset(new SGDMomentum(solverParams));
-
 		}
+
+		_net.CreateNetworkLayers(networkConfigPath);
+		SetInputBatchSize(_batchSize);
+		_net.SetupNetwork();
+		InitLayersForTraining();
 	}
 
-	void NetworkTrainer::Train(Network& net, Tensor& data, Tensor& labels, const long batchSize) {
+	void NetworkTrainer::Train(Tensor& data, Tensor& labels) {
 		float_n prevEpochError = std::numeric_limits<float_n>::max(), currentEpochError, validationError;
 		long currentEpoch = 0, stepsWithoutAnyProgress = 0;
 		bool doTraining = true;
-
-		std::cout << std::endl << "The engine is initializing the network for the training process." << std::endl << std::endl;
-		InitLayersForTraining(net);
 
 		std::cout << std::endl << "Splitting data in training and validation datasets." << std::endl << std::endl;
 		helper::SplitData(data, _trainingData, _validationData);
@@ -89,32 +79,32 @@ namespace nexural {
 			
 			std::cout << "Current training epoch: " << currentEpoch << std::endl;
 
-			for (int batchIndex = 0; batchIndex < trainingDataIterations; batchIndex += batchSize) {
-				_subTrainingData.GetBatch(_trainingData, batchIndex, batchSize);
-				_subTrainingTargetData.GetBatch(_trainingTargetData, batchIndex, batchSize);
+			for (int batchIndex = 0; batchIndex < trainingDataIterations; batchIndex += _batchSize) {
+				_subTrainingData.GetBatch(_trainingData, batchIndex, _batchSize);
+				_subTrainingTargetData.GetBatch(_trainingTargetData, batchIndex, _batchSize);
 
-				net._inputNetworkLayer->LoadData(_subTrainingData);
-				Tensor *internalNetData = net._inputNetworkLayer->GetOutput();
+				_net._inputNetworkLayer->LoadData(_subTrainingData);
+				Tensor *internalNetData = _net._inputNetworkLayer->GetOutput();
 
-				for (auto it = net._computationalNetworkLyers.begin(); it < net._computationalNetworkLyers.end(); it++) {
+				for (auto it = _net._computationalNetworkLyers.begin(); it < _net._computationalNetworkLyers.end(); it++) {
 					(*it)->FeedForward(*internalNetData);
 					internalNetData = (*it)->GetOutput();
 				}
 
-				net._lossNetworkLayer->FeedForward(*internalNetData);
-				net._lossNetworkLayer->CalculateError(_subTrainingTargetData);
-				net._lossNetworkLayer->CalculateTotalError(_subTrainingTargetData);
-				error = net._lossNetworkLayer->GetLayerErrors();
-				currentEpochError += net._lossNetworkLayer->GetTotalError();
+				_net._lossNetworkLayer->FeedForward(*internalNetData);
+				_net._lossNetworkLayer->CalculateError(_subTrainingTargetData);
+				_net._lossNetworkLayer->CalculateTotalError(_subTrainingTargetData);
+				error = _net._lossNetworkLayer->GetLayerErrors();
+				currentEpochError += _net._lossNetworkLayer->GetTotalError();
 
-				for (auto it = net._computationalNetworkLyers.rbegin(); it < net._computationalNetworkLyers.rend(); it++) {
+				for (auto it = _net._computationalNetworkLyers.rbegin(); it < _net._computationalNetworkLyers.rend(); it++) {
 					(*it)->BackPropagate(*error);
 					error = (*it)->GetLayerErrors();
 				}
 
 				// Update the weights and biases using the solver (only if the layer has weights and/or biases)
 				// TODO: For each layer add weight_decay_multiplier
-				for (auto it = net._computationalNetworkLyers.rbegin(); it < net._computationalNetworkLyers.rend(); it++) {
+				for (auto it = _net._computationalNetworkLyers.rbegin(); it < _net._computationalNetworkLyers.rend(); it++) {
 					if ((*it)->HasWeights()) {
 						weights = (*it)->GetLayerWeights();
 						dWeights = (*it)->GetLayerDWeights();
@@ -133,19 +123,19 @@ namespace nexural {
 
 			// Training validation
 			validationError = 0;
-			for (int validationBatchIndex = 0; validationBatchIndex < validationDataIterations; validationBatchIndex += batchSize) {
-				_subValidationData.GetBatch(_validationData, validationBatchIndex, batchSize);
-				_subValidationTargetData.GetBatch(_validationTargetData, validationBatchIndex, batchSize);
+			for (int validationBatchIndex = 0; validationBatchIndex < validationDataIterations; validationBatchIndex += _batchSize) {
+				_subValidationData.GetBatch(_validationData, validationBatchIndex, _batchSize);
+				_subValidationTargetData.GetBatch(_validationTargetData, validationBatchIndex, _batchSize);
 
-				net._inputNetworkLayer->LoadData(_subValidationData);
-				Tensor *internalNetData = net._inputNetworkLayer->GetOutput();
-				for (auto it = net._computationalNetworkLyers.begin(); it < net._computationalNetworkLyers.end(); it++) {
+				_net._inputNetworkLayer->LoadData(_subValidationData);
+				Tensor *internalNetData = _net._inputNetworkLayer->GetOutput();
+				for (auto it = _net._computationalNetworkLyers.begin(); it < _net._computationalNetworkLyers.end(); it++) {
 					(*it)->FeedForward(*internalNetData);
 					internalNetData = (*it)->GetOutput();
 				}
-				net._lossNetworkLayer->FeedForward(*internalNetData);
-				net._lossNetworkLayer->CalculateTotalError(_subValidationTargetData);
-				validationError += net._lossNetworkLayer->GetTotalError();
+				_net._lossNetworkLayer->FeedForward(*internalNetData);
+				_net._lossNetworkLayer->CalculateTotalError(_subValidationTargetData);
+				validationError += _net._lossNetworkLayer->GetTotalError();
 			}
 			validationError /= validationDataIterations;
 			std::cout << " -- VALIDATION MEAN ERROR: " << validationError << std::endl;
@@ -190,10 +180,18 @@ namespace nexural {
 		}
 	}
 
-	void NetworkTrainer::InitLayersForTraining(Network& net) {
-		for (int i = 0; i < net._computationalNetworkLyers.size(); i++) {
-			net._computationalNetworkLyers[i]->SetupLayerForTraining();
+	void NetworkTrainer::Serialize(const std::string& dataPath) {
+		_net.Serialize(dataPath);
+	}
+
+	void NetworkTrainer::InitLayersForTraining() {
+		for (int i = 0; i < _net._computationalNetworkLyers.size(); i++) {
+			_net._computationalNetworkLyers[i]->SetupLayerForTraining();
 		}
-		net._lossNetworkLayer->SetupLayerForTraining();
+		_net._lossNetworkLayer->SetupLayerForTraining();
+	}
+
+	void NetworkTrainer::SetInputBatchSize(const long batchSize) {
+		_net._inputNetworkLayer->SetInputBatchSize(batchSize);
 	}
 }
