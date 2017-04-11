@@ -79,9 +79,16 @@ namespace nexural {
 			
 			std::cout << "Current training epoch: " << currentEpoch << std::endl;
 
-			for (int batchIndex = 0; batchIndex < trainingDataIterations; batchIndex += _batchSize) {
-				_subTrainingData.GetBatch(_trainingData, batchIndex, _batchSize);
-				_subTrainingTargetData.GetBatch(_trainingTargetData, batchIndex, _batchSize);
+			// Shuffle the training set
+			std::vector<long> batchesIndexes;
+			for (int i = 0; i < trainingDataIterations; i += _batchSize) {
+				batchesIndexes.push_back(i);
+			}
+			std::random_shuffle(batchesIndexes.begin(), batchesIndexes.end());
+
+			for (int batchIndex = 0; batchIndex < batchesIndexes.size(); batchIndex ++) {
+				_subTrainingData.GetBatch(_trainingData, batchesIndexes[batchIndex], _batchSize);
+				_subTrainingTargetData.GetBatch(_trainingTargetData, batchesIndexes[batchIndex], _batchSize);
 
 				_net._inputNetworkLayer->LoadData(_subTrainingData);
 				Tensor *internalNetData = _net._inputNetworkLayer->GetOutput();
