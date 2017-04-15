@@ -1,7 +1,7 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project DefaultTargets="Build" ToolsVersion="14.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="..\packages\OpenCV_VS2015_3.2.0_NoContribs.1.0.1\build\native\OpenCV_VS2015_3.2.0_NoContribs.props" Condition="Exists('..\packages\OpenCV_VS2015_3.2.0_NoContribs.1.0.1\build\native\OpenCV_VS2015_3.2.0_NoContribs.props')" />
   <Import Project="..\packages\RapidJson.1.1.0.0\build\native\RapidJson.props" Condition="Exists('..\packages\RapidJson.1.1.0.0\build\native\RapidJson.props')" />
-  <Import Project="..\packages\OpenCV_VS2015_3.2.0_WithContribs.1.0.1\build\native\OpenCV_VS2015_3.2.0_WithContribs.props" Condition="Exists('..\packages\OpenCV_VS2015_3.2.0_WithContribs.1.0.1\build\native\OpenCV_VS2015_3.2.0_WithContribs.props')" />
   <ItemGroup Label="ProjectConfigurations">
     <ProjectConfiguration Include="Debug|Win32">
       <Configuration>Debug</Configuration>
@@ -22,31 +22,31 @@
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <ProjectGuid>{36C931FD-0B6B-4512-95CF-562C06122972}</ProjectGuid>
-    <RootNamespace>MAVNet</RootNamespace>
-    <WindowsTargetPlatformVersion>8.1</WindowsTargetPlatformVersion>
+    <RootNamespace>nexuralnet</RootNamespace>
+    <ProjectName>nexuralnet</ProjectName>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
-    <ConfigurationType>Application</ConfigurationType>
+    <ConfigurationType>StaticLibrary</ConfigurationType>
     <UseDebugLibraries>true</UseDebugLibraries>
     <PlatformToolset>v140</PlatformToolset>
     <CharacterSet>MultiByte</CharacterSet>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
-    <ConfigurationType>Application</ConfigurationType>
+    <ConfigurationType>StaticLibrary</ConfigurationType>
     <UseDebugLibraries>false</UseDebugLibraries>
     <PlatformToolset>v140</PlatformToolset>
     <WholeProgramOptimization>true</WholeProgramOptimization>
     <CharacterSet>MultiByte</CharacterSet>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
-    <ConfigurationType>Application</ConfigurationType>
+    <ConfigurationType>StaticLibrary</ConfigurationType>
     <UseDebugLibraries>true</UseDebugLibraries>
     <PlatformToolset>v140</PlatformToolset>
     <CharacterSet>MultiByte</CharacterSet>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
-    <ConfigurationType>Application</ConfigurationType>
+    <ConfigurationType>StaticLibrary</ConfigurationType>
     <UseDebugLibraries>false</UseDebugLibraries>
     <PlatformToolset>v140</PlatformToolset>
     <WholeProgramOptimization>true</WholeProgramOptimization>
@@ -83,7 +83,6 @@
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
       <SDLCheck>true</SDLCheck>
-      <PreprocessorDefinitions>_DEBUG_NETWORK;_CRT_SECURE_NO_WARNINGS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
     </ClCompile>
     <Link />
     <PostBuildEvent>
@@ -95,8 +94,7 @@
     <ClCompile>
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
-      <SDLCheck>true</SDLCheck>
-      <PreprocessorDefinitions>_DEBUG_NETWORK;_CRT_SECURE_NO_WARNINGS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <SDLCheck>false</SDLCheck>
     </ClCompile>
     <Link />
     <PostBuildEvent>
@@ -114,7 +112,6 @@
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <SDLCheck>true</SDLCheck>
-      <PreprocessorDefinitions>_DEBUG_NETWORK;_CRT_SECURE_NO_WARNINGS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
     </ClCompile>
     <Link>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
@@ -132,7 +129,6 @@
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <SDLCheck>true</SDLCheck>
-      <PreprocessorDefinitions>_DEBUG_NETWORK;_CRT_SECURE_NO_WARNINGS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
     </ClCompile>
     <Link>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
@@ -144,87 +140,79 @@
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClInclude Include="..\..\examples\and_gate_with_relu.h" />
-    <ClInclude Include="..\..\examples\and_gate_with_relu_softmax.h" />
-    <ClInclude Include="..\..\examples\and_gate_with_tanh.h" />
-    <ClInclude Include="..\..\examples\mnist_softmax.h" />
-    <ClInclude Include="..\..\examples\xor_gate_with_relu.h" />
-    <ClInclude Include="..\..\examples\xor_gate_with_relu_softmax.h" />
-    <ClInclude Include="..\..\neXuralNet\dnn\data_types\general_data_types.h" />
-    <ClInclude Include="..\..\neXuralNet\dnn\data_types\layer_settings.h" />
-    <ClInclude Include="..\..\neXuralNet\dnn\data_types\layer_shape.h" />
-    <ClInclude Include="..\..\neXuralNet\dnn\data_types\tensor.h" />
-    <ClInclude Include="..\..\neXuralNet\dnn\layers\computational_layers\average_pooling_layer.h" />
-    <ClInclude Include="..\..\neXuralNet\dnn\layers\computational_layers\computational_base_layer.h" />
-    <ClInclude Include="..\..\neXuralNet\dnn\layers\computational_layers\computational_layers.h" />
-    <ClInclude Include="..\..\neXuralNet\dnn\layers\computational_layers\convolutional_layer.h" />
-    <ClInclude Include="..\..\neXuralNet\dnn\layers\computational_layers\dropout_layer.h" />
-    <ClInclude Include="..\..\neXuralNet\dnn\layers\computational_layers\fully_connected_layer.h" />
-    <ClInclude Include="..\..\neXuralNet\dnn\layers\computational_layers\i_computational_layer.h" />
-    <ClInclude Include="..\..\neXuralNet\dnn\layers\computational_layers\leaky_relu_layer.h" />
-    <ClInclude Include="..\..\neXuralNet\dnn\layers\computational_layers\max_pooling_layer.h" />
-    <ClInclude Include="..\..\neXuralNet\dnn\layers\computational_layers\relu_layer.h" />
-    <ClInclude Include="..\..\neXuralNet\dnn\layers\computational_layers\tanh_layerh.h" />
-    <ClInclude Include="..\..\neXuralNet\dnn\layers\input_layers\bgr_image_input_layer.h" />
-    <ClInclude Include="..\..\neXuralNet\dnn\layers\input_layers\gray_image_input_layer.h" />
-    <ClInclude Include="..\..\neXuralNet\dnn\layers\input_layers\input_base_class.h" />
-    <ClInclude Include="..\..\neXuralNet\dnn\layers\input_layers\input_layers.h" />
-    <ClInclude Include="..\..\neXuralNet\dnn\layers\input_layers\i_input_layer.h" />
-    <ClInclude Include="..\..\neXuralNet\dnn\layers\input_layers\tensor_input_layer.h" />
-    <ClInclude Include="..\..\neXuralNet\dnn\layers\i_layer.h" />
-    <ClInclude Include="..\..\neXuralNet\dnn\layers\loss_layers\i_loss_layer.h" />
-    <ClInclude Include="..\..\neXuralNet\dnn\layers\loss_layers\loss_base_layer.h" />
-    <ClInclude Include="..\..\neXuralNet\dnn\layers\loss_layers\loss_functions.h" />
-    <ClInclude Include="..\..\neXuralNet\dnn\layers\loss_layers\loss_layers.h" />
-    <ClInclude Include="..\..\neXuralNet\dnn\layers\loss_layers\mse_loss_layer.h" />
-    <ClInclude Include="..\..\neXuralNet\dnn\layers\loss_layers\softmax_loss_layer.h" />
-    <ClInclude Include="..\..\neXuralNet\dnn\network\network.h" />
-    <ClInclude Include="..\..\neXuralNet\dnn\network\network_trainer.h" />
-    <ClInclude Include="..\..\neXuralNet\dnn\solvers\base_solver.h" />
-    <ClInclude Include="..\..\neXuralNet\dnn\solvers\i_solver.h" />
-    <ClInclude Include="..\..\neXuralNet\dnn\solvers\sgd.h" />
-    <ClInclude Include="..\..\neXuralNet\dnn\solvers\sgd_momentum.h" />
-    <ClInclude Include="..\..\neXuralNet\dnn\solvers\solvers.h" />
-    <ClInclude Include="..\..\neXuralNet\dnn\utility\config_reader.h" />
-    <ClInclude Include="..\..\neXuralNet\dnn\utility\converter.h" />
-    <ClInclude Include="..\..\neXuralNet\dnn\utility\helper.h" />
-    <ClInclude Include="..\..\neXuralNet\dnn\utility\json_utility\json_config_reader.h" />
-    <ClInclude Include="..\..\neXuralNet\dnn\utility\json_utility\json_engine_reader.h" />
-    <ClInclude Include="..\..\neXuralNet\dnn\utility\params_parser.h" />
-    <ClInclude Include="..\..\neXuralNet\dnn\utility\serializer\base_serializer.h" />
-    <ClInclude Include="..\..\neXuralNet\dnn\utility\serializer\data_serializer.h" />
-    <ClInclude Include="..\..\neXuralNet\dnn\utility\serializer\json_data_serializer.h" />
-    <ClInclude Include="..\..\neXuralNet\tools\data_reader.h" />
-    <ClInclude Include="..\..\neXuralNet\tools\generate_test_data.h" />
+    <ClInclude Include="..\..\include\neXuralNet\dnn.h" />
+    <ClInclude Include="..\..\include\neXuralNet\dnn\data_types\general_data_types.h" />
+    <ClInclude Include="..\..\include\neXuralNet\dnn\data_types\layer_settings.h" />
+    <ClInclude Include="..\..\include\neXuralNet\dnn\data_types\layer_shape.h" />
+    <ClInclude Include="..\..\include\neXuralNet\dnn\data_types\tensor.h" />
+    <ClInclude Include="..\..\include\neXuralNet\dnn\layers\computational_layers\average_pooling_layer.h" />
+    <ClInclude Include="..\..\include\neXuralNet\dnn\layers\computational_layers\computational_base_layer.h" />
+    <ClInclude Include="..\..\include\neXuralNet\dnn\layers\computational_layers\computational_layers.h" />
+    <ClInclude Include="..\..\include\neXuralNet\dnn\layers\computational_layers\convolutional_layer.h" />
+    <ClInclude Include="..\..\include\neXuralNet\dnn\layers\computational_layers\dropout_layer.h" />
+    <ClInclude Include="..\..\include\neXuralNet\dnn\layers\computational_layers\fully_connected_layer.h" />
+    <ClInclude Include="..\..\include\neXuralNet\dnn\layers\computational_layers\i_computational_layer.h" />
+    <ClInclude Include="..\..\include\neXuralNet\dnn\layers\computational_layers\leaky_relu_layer.h" />
+    <ClInclude Include="..\..\include\neXuralNet\dnn\layers\computational_layers\max_pooling_layer.h" />
+    <ClInclude Include="..\..\include\neXuralNet\dnn\layers\computational_layers\relu_layer.h" />
+    <ClInclude Include="..\..\include\neXuralNet\dnn\layers\computational_layers\tanh_layerh.h" />
+    <ClInclude Include="..\..\include\neXuralNet\dnn\layers\input_layers\bgr_image_input_layer.h" />
+    <ClInclude Include="..\..\include\neXuralNet\dnn\layers\input_layers\gray_image_input_layer.h" />
+    <ClInclude Include="..\..\include\neXuralNet\dnn\layers\input_layers\input_base_class.h" />
+    <ClInclude Include="..\..\include\neXuralNet\dnn\layers\input_layers\input_layers.h" />
+    <ClInclude Include="..\..\include\neXuralNet\dnn\layers\input_layers\i_input_layer.h" />
+    <ClInclude Include="..\..\include\neXuralNet\dnn\layers\input_layers\tensor_input_layer.h" />
+    <ClInclude Include="..\..\include\neXuralNet\dnn\layers\i_layer.h" />
+    <ClInclude Include="..\..\include\neXuralNet\dnn\layers\loss_layers\i_loss_layer.h" />
+    <ClInclude Include="..\..\include\neXuralNet\dnn\layers\loss_layers\loss_base_layer.h" />
+    <ClInclude Include="..\..\include\neXuralNet\dnn\layers\loss_layers\loss_functions.h" />
+    <ClInclude Include="..\..\include\neXuralNet\dnn\layers\loss_layers\loss_layers.h" />
+    <ClInclude Include="..\..\include\neXuralNet\dnn\layers\loss_layers\mse_loss_layer.h" />
+    <ClInclude Include="..\..\include\neXuralNet\dnn\layers\loss_layers\softmax_loss_layer.h" />
+    <ClInclude Include="..\..\include\neXuralNet\dnn\network\network.h" />
+    <ClInclude Include="..\..\include\neXuralNet\dnn\network\network_trainer.h" />
+    <ClInclude Include="..\..\include\neXuralNet\dnn\solvers\base_solver.h" />
+    <ClInclude Include="..\..\include\neXuralNet\dnn\solvers\i_solver.h" />
+    <ClInclude Include="..\..\include\neXuralNet\dnn\solvers\sgd.h" />
+    <ClInclude Include="..\..\include\neXuralNet\dnn\solvers\sgd_momentum.h" />
+    <ClInclude Include="..\..\include\neXuralNet\dnn\solvers\solvers.h" />
+    <ClInclude Include="..\..\include\nexuralnet\dnn\utility\config_reader\config_reader.h" />
+    <ClInclude Include="..\..\include\nexuralnet\dnn\utility\config_reader\json_config_reader.h" />
+    <ClInclude Include="..\..\include\neXuralNet\dnn\utility\converter.h" />
+    <ClInclude Include="..\..\include\neXuralNet\dnn\utility\helper.h" />
+    <ClInclude Include="..\..\include\neXuralNet\dnn\utility\params_parser.h" />
+    <ClInclude Include="..\..\include\neXuralNet\dnn\utility\serializer\base_serializer.h" />
+    <ClInclude Include="..\..\include\neXuralNet\dnn\utility\serializer\data_serializer.h" />
+    <ClInclude Include="..\..\include\neXuralNet\dnn\utility\serializer\json_data_serializer.h" />
+    <ClInclude Include="..\..\include\neXuralNet\tests.h" />
+    <ClInclude Include="..\..\include\neXuralNet\tools.h" />
+    <ClInclude Include="..\..\include\neXuralNet\tools\data_reader.h" />
+    <ClInclude Include="..\..\include\neXuralNet\tools\generate_test_data.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="..\..\examples\main_tests.cpp" />
-    <ClCompile Include="..\..\neXuralNet\dnn\data_types\tensor.cpp" />
-    <ClCompile Include="..\..\neXuralNet\dnn\network\network.cpp" />
-    <ClCompile Include="..\..\neXuralNet\dnn\network\network_trainer.cpp" />
-    <ClCompile Include="..\..\tests\network_test.cpp" />
+    <ClCompile Include="..\..\include\neXuralNet\dnn\data_types\tensor.cpp" />
+    <ClCompile Include="..\..\include\neXuralNet\dnn\network\network.cpp" />
+    <ClCompile Include="..\..\include\neXuralNet\dnn\network\network_trainer.cpp" />
+    <ClCompile Include="..\..\include\nexuralnet\dnn\utility\config_reader\json_config_reader.cpp" />
+    <ClCompile Include="..\..\include\nexuralnet\dnn\utility\serializer\json_data_serializer.cpp" />
+    <ClCompile Include="..\..\include\neXuralNet\tests\run_tests.cpp" />
+    <ClCompile Include="..\..\include\nexuralnet\tools\data_reader.cpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
-    <Import Project="..\packages\OpenCV_VS2015_3.2.0_WithContribs.1.0.1\build\native\OpenCV_VS2015_3.2.0_WithContribs.targets" Condition="Exists('..\packages\OpenCV_VS2015_3.2.0_WithContribs.1.0.1\build\native\OpenCV_VS2015_3.2.0_WithContribs.targets')" />
     <Import Project="..\packages\RapidJson.1.1.0.0\build\native\RapidJson.targets" Condition="Exists('..\packages\RapidJson.1.1.0.0\build\native\RapidJson.targets')" />
-    <Import Project="..\packages\boost.1.63.0.0\build\native\boost.targets" Condition="Exists('..\packages\boost.1.63.0.0\build\native\boost.targets')" />
-    <Import Project="..\packages\boost_filesystem-vc140.1.63.0.0\build\native\boost_filesystem-vc140.targets" Condition="Exists('..\packages\boost_filesystem-vc140.1.63.0.0\build\native\boost_filesystem-vc140.targets')" />
-    <Import Project="..\packages\boost_system-vc140.1.63.0.0\build\native\boost_system-vc140.targets" Condition="Exists('..\packages\boost_system-vc140.1.63.0.0\build\native\boost_system-vc140.targets')" />
+    <Import Project="..\packages\OpenCV_VS2015_3.2.0_NoContribs.1.0.1\build\native\OpenCV_VS2015_3.2.0_NoContribs.targets" Condition="Exists('..\packages\OpenCV_VS2015_3.2.0_NoContribs.1.0.1\build\native\OpenCV_VS2015_3.2.0_NoContribs.targets')" />
   </ImportGroup>
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
     <PropertyGroup>
       <ErrorText>This project references NuGet package(s) that are missing on this computer. Use NuGet Package Restore to download them.  For more information, see http://go.microsoft.com/fwlink/?LinkID=322105. The missing file is {0}.</ErrorText>
     </PropertyGroup>
-    <Error Condition="!Exists('..\packages\OpenCV_VS2015_3.2.0_WithContribs.1.0.1\build\native\OpenCV_VS2015_3.2.0_WithContribs.props')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\OpenCV_VS2015_3.2.0_WithContribs.1.0.1\build\native\OpenCV_VS2015_3.2.0_WithContribs.props'))" />
-    <Error Condition="!Exists('..\packages\OpenCV_VS2015_3.2.0_WithContribs.1.0.1\build\native\OpenCV_VS2015_3.2.0_WithContribs.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\OpenCV_VS2015_3.2.0_WithContribs.1.0.1\build\native\OpenCV_VS2015_3.2.0_WithContribs.targets'))" />
     <Error Condition="!Exists('..\packages\RapidJson.1.1.0.0\build\native\RapidJson.props')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\RapidJson.1.1.0.0\build\native\RapidJson.props'))" />
     <Error Condition="!Exists('..\packages\RapidJson.1.1.0.0\build\native\RapidJson.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\RapidJson.1.1.0.0\build\native\RapidJson.targets'))" />
-    <Error Condition="!Exists('..\packages\boost.1.63.0.0\build\native\boost.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\boost.1.63.0.0\build\native\boost.targets'))" />
-    <Error Condition="!Exists('..\packages\boost_filesystem-vc140.1.63.0.0\build\native\boost_filesystem-vc140.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\boost_filesystem-vc140.1.63.0.0\build\native\boost_filesystem-vc140.targets'))" />
-    <Error Condition="!Exists('..\packages\boost_system-vc140.1.63.0.0\build\native\boost_system-vc140.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\boost_system-vc140.1.63.0.0\build\native\boost_system-vc140.targets'))" />
+    <Error Condition="!Exists('..\packages\OpenCV_VS2015_3.2.0_NoContribs.1.0.1\build\native\OpenCV_VS2015_3.2.0_NoContribs.props')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\OpenCV_VS2015_3.2.0_NoContribs.1.0.1\build\native\OpenCV_VS2015_3.2.0_NoContribs.props'))" />
+    <Error Condition="!Exists('..\packages\OpenCV_VS2015_3.2.0_NoContribs.1.0.1\build\native\OpenCV_VS2015_3.2.0_NoContribs.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\OpenCV_VS2015_3.2.0_NoContribs.1.0.1\build\native\OpenCV_VS2015_3.2.0_NoContribs.targets'))" />
   </Target>
 </Project>
