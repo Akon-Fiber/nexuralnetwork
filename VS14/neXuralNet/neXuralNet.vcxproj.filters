@@ -85,15 +85,6 @@
     <ClInclude Include="..\..\include\neXuralNet\dnn\utility\serializer\base_serializer.h">
       <Filter>src\nexural\utility\serializer</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\include\neXuralNet\dnn\utility\serializer\data_serializer.h">
-      <Filter>src\nexural\utility\serializer</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\include\neXuralNet\dnn\utility\serializer\json_data_serializer.h">
-      <Filter>src\nexural\utility\serializer</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\include\neXuralNet\dnn\utility\converter.h">
-      <Filter>src\nexural\utility</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\include\neXuralNet\dnn\utility\helper.h">
       <Filter>src\nexural\utility</Filter>
     </ClInclude>
@@ -208,6 +199,15 @@
     <ClInclude Include="..\..\include\neXuralNet\dnn\layers\computational_layers\leaky_relu_layer.h">
       <Filter>src\nexural\dnn\layers\computational_layers</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\include\neXuralNet\dnn\utility\serializer\serializer.h">
+      <Filter>src\nexural\utility\serializer</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\neXuralNet\dnn\utility\serializer\json_serializer.h">
+      <Filter>src\nexural\utility\serializer</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\nexuralnet\tools\converter.h">
+      <Filter>src\tools</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\include\neXuralNet\dnn\data_types\tensor.cpp">
@@ -219,9 +219,6 @@
     <ClCompile Include="..\..\include\neXuralNet\dnn\network\network_trainer.cpp">
       <Filter>src\nexural\dnn\network</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\include\nexuralnet\dnn\utility\serializer\json_data_serializer.cpp">
-      <Filter>src\nexural\utility\serializer</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\include\nexuralnet\dnn\utility\config_reader\json_config_reader.cpp">
       <Filter>src\nexural\utility\config_reader</Filter>
     </ClCompile>
@@ -230,6 +227,9 @@
     </ClCompile>
     <ClCompile Include="..\..\include\neXuralNet\tests\run_tests.cpp">
       <Filter>src\tests</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\include\nexuralnet\dnn\utility\serializer\json_serializer.cpp">
+      <Filter>src\nexural\utility\serializer</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

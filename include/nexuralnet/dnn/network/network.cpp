@@ -125,7 +125,7 @@ namespace nexural {
 	}
 
 	void Network::Serialize(const std::string& dataPath) {
-		DataSerializer serializer(SerializerType::JSON);
+		Serializer serializer(SerializerType::JSON);
 		for (int i = 0; i < _computationalNetworkLyers.size(); i++) {
 			_computationalNetworkLyers[i]->Serialize(serializer);
 		}
@@ -133,7 +133,7 @@ namespace nexural {
 	}
 	
 	void Network::Deserialize(const std::string& dataPath) {
-		DataSerializer serializer(SerializerType::JSON, dataPath);
+		Serializer serializer(SerializerType::JSON, dataPath);
 		for (int i = 0; i < _computationalNetworkLyers.size(); i++) {
 			_computationalNetworkLyers[i]->Deserialize(serializer);
 		}

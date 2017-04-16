@@ -31,7 +31,7 @@ OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 #include <rapidjson/writer.h>
 #include <fstream>
 
-#include "json_data_serializer.h"
+#include "json_serializer.h"
 
 namespace nexural {
 	struct JSONSerializer::impl {

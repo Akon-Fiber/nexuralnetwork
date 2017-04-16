@@ -157,13 +157,13 @@ namespace nexural {
 			}
 		}
 
-		virtual void Serialize(DataSerializer& serializer) {
+		virtual void Serialize(Serializer& serializer) {
 			serializer.AddParentNode(_layerID);
 			serializer.SerializeTensor(_weights, _layerID, "weights");
 			serializer.SerializeTensor(_biases, _layerID, "biases");
 		}
 
-		virtual void Deserialize(DataSerializer& serializer) {
+		virtual void Deserialize(Serializer& serializer) {
 			serializer.DeserializeTensor(_weights, _layerID, "weights");
 			serializer.DeserializeTensor(_biases, _layerID, "biases");
 		}

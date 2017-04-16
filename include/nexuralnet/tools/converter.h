@@ -20,26 +20,39 @@ OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 */
 
 #include <opencv2/core/core.hpp>
-#include "../data_types/tensor.h"
+#include "../dnn/data_types/tensor.h"
 
-#ifndef _NEXURALNET_UTILITY_CONVERTER_H
-#define _NEXURALNET_UTILITY_CONVERTER_H
+#ifndef _NEXURALNET_TOOLS_CONVERTER_H
+#define _NEXURALNET_TOOLS_CONVERTER_H
 
 namespace nexural {
 	namespace converter {
 		static void ConvertToTensor(const cv::Mat& sourceImage, Tensor& outputData) {
 			outputData.Resize(1, sourceImage.channels(), sourceImage.rows, sourceImage.cols);
 
-			for (long nr = 0; nr < outputData.GetNR(); nr++)
-			{
-				for (long nc = 0; nc < outputData.GetNC(); nc++)
+			if (sourceImage.channels() == 1) {
+				for (long nr = 0; nr < outputData.GetNR(); nr++)
 				{
-					//cv::Vec3b intensity = sourceImage.at<cv::Vec3b>(nr, nc);
-					for (long k = 0; k < outputData.GetK(); k++) {
-						//float col = (float_n)intensity.val[k];
-						//outputData[(k * outputData.GetNR() + nr) * outputData.GetNC() + nc] = col;
-						float_n value = (float_n)sourceImage.at<uchar>(nr, nc);
-						outputData[(k * outputData.GetNR() + nr) * outputData.GetNC() + nc] = value;
+					for (long nc = 0; nc < outputData.GetNC(); nc++)
+					{
+						for (long k = 0; k < outputData.GetK(); k++) {
+							float_n value = (float_n)sourceImage.at<uchar>(nr, nc);
+							outputData[(k * outputData.GetNR() + nr) * outputData.GetNC() + nc] = value;
+						}
+					}
+				}
+			}
+			else if(sourceImage.channels() == 3)
+			{
+				for (long nr = 0; nr < outputData.GetNR(); nr++)
+				{
+					for (long nc = 0; nc < outputData.GetNC(); nc++)
+					{
+						cv::Vec3b intensity = sourceImage.at<cv::Vec3b>(nr, nc);
+						for (long k = 0; k < outputData.GetK(); k++) {
+							float_n value = (float_n)intensity.val[k];
+							outputData[(k * outputData.GetNR() + nr) * outputData.GetNC() + nc] = value;
+						}
 					}
 				}
 			}

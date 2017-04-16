@@ -21,7 +21,7 @@ OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
 #include <string>
 #include "../../data_types/general_data_types.h"
-#include "../../utility/serializer/data_serializer.h"
+#include "../../utility/serializer/serializer.h"
 
 #ifndef _NEXURALNET_DNN_I_COMPUTATIONAL_LAYER
 #define _NEXURALNET_DNN_I_COMPUTATIONAL_LAYER
@@ -39,8 +39,8 @@ namespace nexural {
 		virtual bool HasWeights() = 0;
 		virtual bool HasBiases() = 0;
 		virtual std::string GetLayerID() const = 0;
-		virtual void Serialize(DataSerializer& serializer) = 0;
-		virtual void Deserialize(DataSerializer& serializer) = 0;
+		virtual void Serialize(Serializer& serializer) = 0;
+		virtual void Deserialize(Serializer& serializer) = 0;
 #ifdef _DEBUG_NETWORK
 		virtual void SetWeights(std::vector<float_n>& values) = 0;
 		virtual void SetBiases(std::vector<float_n>& values) = 0;

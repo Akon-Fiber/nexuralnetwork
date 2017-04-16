@@ -23,7 +23,7 @@ OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 #include <fstream>
 
 #include "data_reader.h"
-#include "../dnn/utility/converter.h"
+#include "converter.h"
 
 namespace nexural {
 	namespace tools {

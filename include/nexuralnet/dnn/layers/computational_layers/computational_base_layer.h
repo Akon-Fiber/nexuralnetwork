@@ -83,11 +83,11 @@ namespace nexural {
 			return _layerID;
 		}
 
-		virtual void Serialize(DataSerializer& serializer) {
+		virtual void Serialize(Serializer& serializer) {
 
 		}
 
-		virtual void Deserialize(DataSerializer& serializer) {
+		virtual void Deserialize(Serializer& serializer) {
 
 		}
 

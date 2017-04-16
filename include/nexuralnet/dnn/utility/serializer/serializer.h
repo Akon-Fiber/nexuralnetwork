@@ -19,31 +19,31 @@ TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE
 OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 */
 
-#include "json_data_serializer.h"
+#include "json_serializer.h"
 
-#ifndef _NEXURALNET_UTILITY_DATA_SERIALIZER_H
-#define _NEXURALNET_UTILITY_DATA_SERIALIZER_H
+#ifndef _NEXURALNET_UTILITY_SERIALIZER_H
+#define _NEXURALNET_UTILITY_SERIALIZER_H
 
 namespace nexural {
 	enum class SerializerType {
 		JSON = 0
 	};
 
-	class DataSerializer {
+	class Serializer {
 	public:
-		DataSerializer(const SerializerType serializerType) {
+		Serializer(const SerializerType serializerType) {
 			if (serializerType == SerializerType::JSON) {
 				_serializer = BaseSerializerPtr(new JSONSerializer());
 			}
 		}
 
-		DataSerializer(const SerializerType serializerType, const std::string& dataPath) {
+		Serializer(const SerializerType serializerType, const std::string& dataPath) {
 			if (serializerType == SerializerType::JSON) {
 				_serializer = BaseSerializerPtr(new JSONSerializer(dataPath));
 			}
 		}
 
-		~DataSerializer() {
+		~Serializer() {
 
 		}
 

@@ -24,6 +24,7 @@
     <ProjectGuid>{36C931FD-0B6B-4512-95CF-562C06122972}</ProjectGuid>
     <RootNamespace>nexuralnet</RootNamespace>
     <ProjectName>nexuralnet</ProjectName>
+    <WindowsTargetPlatformVersion>8.1</WindowsTargetPlatformVersion>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
@@ -178,14 +179,14 @@
     <ClInclude Include="..\..\include\neXuralNet\dnn\solvers\solvers.h" />
     <ClInclude Include="..\..\include\nexuralnet\dnn\utility\config_reader\config_reader.h" />
     <ClInclude Include="..\..\include\nexuralnet\dnn\utility\config_reader\json_config_reader.h" />
-    <ClInclude Include="..\..\include\neXuralNet\dnn\utility\converter.h" />
     <ClInclude Include="..\..\include\neXuralNet\dnn\utility\helper.h" />
     <ClInclude Include="..\..\include\neXuralNet\dnn\utility\params_parser.h" />
     <ClInclude Include="..\..\include\neXuralNet\dnn\utility\serializer\base_serializer.h" />
-    <ClInclude Include="..\..\include\neXuralNet\dnn\utility\serializer\data_serializer.h" />
-    <ClInclude Include="..\..\include\neXuralNet\dnn\utility\serializer\json_data_serializer.h" />
+    <ClInclude Include="..\..\include\neXuralNet\dnn\utility\serializer\serializer.h" />
+    <ClInclude Include="..\..\include\neXuralNet\dnn\utility\serializer\json_serializer.h" />
     <ClInclude Include="..\..\include\neXuralNet\tests.h" />
     <ClInclude Include="..\..\include\neXuralNet\tools.h" />
+    <ClInclude Include="..\..\include\nexuralnet\tools\converter.h" />
     <ClInclude Include="..\..\include\neXuralNet\tools\data_reader.h" />
     <ClInclude Include="..\..\include\neXuralNet\tools\generate_test_data.h" />
   </ItemGroup>
@@ -194,7 +195,7 @@
     <ClCompile Include="..\..\include\neXuralNet\dnn\network\network.cpp" />
     <ClCompile Include="..\..\include\neXuralNet\dnn\network\network_trainer.cpp" />
     <ClCompile Include="..\..\include\nexuralnet\dnn\utility\config_reader\json_config_reader.cpp" />
-    <ClCompile Include="..\..\include\nexuralnet\dnn\utility\serializer\json_data_serializer.cpp" />
+    <ClCompile Include="..\..\include\nexuralnet\dnn\utility\serializer\json_serializer.cpp" />
     <ClCompile Include="..\..\include\neXuralNet\tests\run_tests.cpp" />
     <ClCompile Include="..\..\include\nexuralnet\tools\data_reader.cpp" />
   </ItemGroup>
