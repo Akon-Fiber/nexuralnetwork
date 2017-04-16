@@ -19,79 +19,19 @@ TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE
 OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 */
 
-#include <opencv2/core/core.hpp>
 #include "../dnn/data_types/tensor.h"
 
 #ifndef _NEXURALNET_TOOLS_CONVERTER_H
 #define _NEXURALNET_TOOLS_CONVERTER_H
 
+namespace cv { 
+	class Mat; 
+}
+
 namespace nexural {
 	namespace converter {
-		static void ConvertToTensor(const cv::Mat& sourceImage, Tensor& outputData) {
-			outputData.Resize(1, sourceImage.channels(), sourceImage.rows, sourceImage.cols);
-
-			if (sourceImage.channels() == 1) {
-				for (long nr = 0; nr < outputData.GetNR(); nr++)
-				{
-					for (long nc = 0; nc < outputData.GetNC(); nc++)
-					{
-						for (long k = 0; k < outputData.GetK(); k++) {
-							float_n value = (float_n)sourceImage.at<uchar>(nr, nc);
-							outputData[(k * outputData.GetNR() + nr) * outputData.GetNC() + nc] = value;
-						}
-					}
-				}
-			}
-			else if(sourceImage.channels() == 3)
-			{
-				for (long nr = 0; nr < outputData.GetNR(); nr++)
-				{
-					for (long nc = 0; nc < outputData.GetNC(); nc++)
-					{
-						cv::Vec3b intensity = sourceImage.at<cv::Vec3b>(nr, nc);
-						for (long k = 0; k < outputData.GetK(); k++) {
-							float_n value = (float_n)intensity.val[k];
-							outputData[(k * outputData.GetNR() + nr) * outputData.GetNC() + nc] = value;
-						}
-					}
-				}
-			}
-		}
-
-		static void ConvertToTensor(const std::vector<cv::Mat>& sourceImages, Tensor& outputData) {
-			if (sourceImages.size() == 0) {
-				return;
-			}
-
-			long numSamples = static_cast<long>(sourceImages.size());
-			long channels = static_cast<long>(sourceImages[0].channels());
-			long nr = sourceImages[0].rows;
-			long nc = sourceImages[0].cols;
-
-			outputData.Resize(numSamples, channels, nr, nc);
-
-			for (long imageNumber = 0; imageNumber < numSamples; imageNumber++) {
-				int currentChannels = sourceImages[0].channels();
-				long currentNr = sourceImages[0].rows;
-				long currentNc = sourceImages[0].cols;
-
-				if (currentChannels != channels || currentNr != nr || currentNc != nc) {
-					throw std::runtime_error("All the samples inside a tensor shoud have the same size!");
-				}
-
-				for (long nr = 0; nr < outputData.GetNR(); nr++)
-				{
-					for (long nc = 0; nc < outputData.GetNC(); nc++)
-					{
-						cv::Vec3b intensity = sourceImages[imageNumber].at<cv::Vec3b>(nr, nc);
-						for (long k = 0; k < outputData.GetK(); k++) {
-							float_n col = (float_n)intensity.val[k];
-							outputData[(k * outputData.GetNR() + nr) * outputData.GetNC() + nc] = col;
-						}
-					}
-				}
-			}
-		}
+		void ConvertToTensor(const cv::Mat& sourceImage, Tensor& outputData);
+		void ConvertToTensor(const std::vector<cv::Mat>& sourceImages, Tensor& outputData);
 	}
 }
 #endif

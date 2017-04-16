@@ -197,6 +197,7 @@
     <ClCompile Include="..\..\include\nexuralnet\dnn\utility\config_reader\json_config_reader.cpp" />
     <ClCompile Include="..\..\include\nexuralnet\dnn\utility\serializer\json_serializer.cpp" />
     <ClCompile Include="..\..\include\neXuralNet\tests\run_tests.cpp" />
+    <ClCompile Include="..\..\include\nexuralnet\tools\converter.cpp" />
     <ClCompile Include="..\..\include\nexuralnet\tools\data_reader.cpp" />
   </ItemGroup>
   <ItemGroup>

@@ -20,12 +20,15 @@ OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 */
 
 #include "stdafx.h"
+#include <nexuralnet\tools.h>
+#include <opencv2\imgcodecs.hpp>
 
 using namespace nexural;
 
+
 void Test_MNIST_Softmax(const std::string& dataFolderPath) {
 	Tensor inputData, trainingData, targetData;
-	//cv::Mat image;
+	cv::Mat image;
 
 	std::string exampleRoot = dataFolderPath + "\\mnist_softmax\\";
 	std::string networkConfigPath = exampleRoot + "network.json";
@@ -57,7 +60,7 @@ void Test_MNIST_Softmax(const std::string& dataFolderPath) {
 
 	net.Deserialize(exampleRoot + "mnist.json");
 
-	/*std::cout << "Test the trained network: " << std::endl;
+	std::cout << "Test the trained network: " << std::endl;
 	image = cv::imread(testDataPath + "0.jpg", cv::IMREAD_GRAYSCALE);
 	nexural::converter::ConvertToTensor(image, inputData);
 	std::cout << "Target: 0" << std::endl;
@@ -81,5 +84,5 @@ void Test_MNIST_Softmax(const std::string& dataFolderPath) {
 	image = cv::imread(testDataPath + "8.jpg", cv::IMREAD_GRAYSCALE);
 	nexural::converter::ConvertToTensor(image, inputData);
 	std::cout << "Target: 8" << std::endl;
-	net.Run(inputData);*/
+	net.Run(inputData);
 }

@@ -231,6 +231,9 @@
     <ClCompile Include="..\..\include\nexuralnet\dnn\utility\serializer\json_serializer.cpp">
       <Filter>src\nexural\utility\serializer</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\include\nexuralnet\tools\converter.cpp">
+      <Filter>src\tools</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

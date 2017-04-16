@@ -116,16 +116,31 @@ namespace nexural {
 		}
 
 		void DataReader::ReadImagesFromDirectory(const std::string directoryPath, Tensor& tensor, ReadImageType imagesType) {
-			//auto readType = imagesType == ReadImageType::COLOR ? cv::IMREAD_COLOR : cv::IMREAD_GRAYSCALE;
-			//std::vector<cv::Mat> images;
-			//if (boost::filesystem::is_directory(directoryPath)) {
-			//	for (auto& imagePath : boost::make_iterator_range(boost::filesystem::directory_iterator(directoryPath), {})) {
-			//		// TODO: Check if the selected file is an image
-			//		cv::Mat image = cv::imread(imagePath.path().string(), readType);
-			//		images.push_back(image);
-			//	}
-			//	converter::ConvertToTensor(images, tensor);
-			//}
+			auto readType = imagesType == ReadImageType::COLOR ? cv::IMREAD_COLOR : cv::IMREAD_GRAYSCALE;
+			std::vector<cv::Mat> images;
+
+			// TODO: Optimize this code
+			std::vector<cv::String> imageNames;
+			std::vector<std::string> allowedExtensions = { ".jpg", ".png" };
+			for (int i = 0; i < allowedExtensions.size(); i++) {
+				std::vector<cv::String> imageNamesCurrentExtension;
+				cv::glob(
+					directoryPath + "*" + allowedExtensions[i],
+					imageNamesCurrentExtension,
+					true
+				);
+				imageNames.insert(
+					imageNames.end(),
+					imageNamesCurrentExtension.begin(),
+					imageNamesCurrentExtension.end()
+				);
+			}
+			for (int i = 0; i < imageNames.size(); i++) {
+				cv::Mat image = cv::imread(imageNames[i], readType);
+				images.push_back(image);
+			}
+
+			converter::ConvertToTensor(images, tensor);
 		}
 
 		void DataReader::ReadTensorFromFile(const std::string filePath, Tensor& tensor) {
