@@ -33,12 +33,19 @@ namespace nexural {
 		rapidjson::Document document;
 	};
 
-	JSONConfigReader::JSONConfigReader(const std::string networkConfigPath) : _impl(std::make_unique<impl>()) {
-		std::ifstream ifs(networkConfigPath);
-		rapidjson::IStreamWrapper isw(ifs);
+	JSONConfigReader::JSONConfigReader(const std::string& configSource, const ConfigSourceType& configSourceType) : _impl(std::make_unique<impl>()) {
+		if (configSourceType == ConfigSourceType::FROM_FILE) {
+			std::ifstream ifs(configSource);
+			rapidjson::IStreamWrapper isw(ifs);
 
-		if (_impl->document.ParseStream(isw).HasParseError()) {
-			throw std::runtime_error("The JSON source is not valid!");
+			if (_impl->document.ParseStream(isw).HasParseError()) {
+				throw std::runtime_error("The JSON source is not valid!");
+			}
+		}
+		else if (configSourceType == ConfigSourceType::FROM_STRING) {
+			if (_impl->document.Parse<0>(configSource.c_str()).HasParseError()) {
+				throw std::runtime_error("The JSON source is not valid!");
+			}
 		}
 	}
 

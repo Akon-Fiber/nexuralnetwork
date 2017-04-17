@@ -39,7 +39,7 @@ namespace nexural {
 		typedef LossBaseLayerPtr LossNetworkLayer;
 
 	public:
-		Network(const std::string networkConfigPath);
+		Network(const std::string& networkConfigSource, const ConfigSourceType& configSourceType = ConfigSourceType::FROM_FILE);
 		explicit Network(const Network& network) = delete;
 		explicit Network(Network&& network) = delete;
 		Network& operator=(const Network& network) = delete;
@@ -52,7 +52,7 @@ namespace nexural {
 	private:
 		Network();
 		void Serialize(const std::string& dataPath);
-		void CreateNetworkLayers(const std::string networkConfigPath);
+		void CreateNetworkLayers(const std::string& networkConfigSource, const ConfigSourceType& configSourceType);
 		void SetupNetwork();
 		void SetInputLayer(InputBaseLayerPtr inputLayer);
 		void AddComputationalLayer(ComputationalBaseLayerPtr computationalLayer);

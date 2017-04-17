@@ -24,17 +24,17 @@ OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 #include <iostream>
 
 namespace nexural {
-	NetworkTrainer::NetworkTrainer(const std::string networkConfigPath, const std::string& trainerConfigPath) {
-		InitTrainer(networkConfigPath, trainerConfigPath);
+	NetworkTrainer::NetworkTrainer(const std::string& networkConfigSource, const std::string& trainerConfigSource, const ConfigSourceType& configSourceType) {
+		InitTrainer(networkConfigSource, trainerConfigSource, configSourceType);
 	}
 
 	NetworkTrainer::~NetworkTrainer() {
 
 	}
 
-	void NetworkTrainer::InitTrainer(const std::string networkConfigPath, const std::string& trainerConfigPath) {
+	void NetworkTrainer::InitTrainer(const std::string& networkConfigSource, const std::string& trainerConfigSource, const ConfigSourceType& configSourceType) {
 		Params trainerParams, solverParams;
-		ConfigReader::DecodeTrainerCongif(trainerConfigPath, trainerParams, solverParams);
+		ConfigReader::DecodeTrainerCongif(trainerConfigSource, trainerParams, solverParams, configSourceType);
 
 		_maxNumEpochs = parser::ParseLong(trainerParams, "max_num_epochs");
 		_maxEpochsWithoutProgress = parser::ParseLong(trainerParams, "max_epochs_without_progress");
@@ -53,7 +53,7 @@ namespace nexural {
 			_solver.reset(new SGDMomentum(solverParams));
 		}
 
-		_net.CreateNetworkLayers(networkConfigPath);
+		_net.CreateNetworkLayers(networkConfigSource, configSourceType);
 		SetInputBatchSize(_batchSize);
 		_net.SetupNetwork();
 		InitLayersForTraining();

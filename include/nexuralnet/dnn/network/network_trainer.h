@@ -32,13 +32,13 @@ namespace nexural {
 		typedef BaseSolverPtr NetSolver;
 
 	public:
-		NetworkTrainer(const std::string networkConfigPath, const std::string& trainerConfigPath);
+		NetworkTrainer(const std::string& networkConfigSource, const std::string& trainerConfigSource, const ConfigSourceType& configSourceType = ConfigSourceType::FROM_FILE);
 		~NetworkTrainer();
 		void Train(Tensor& data, Tensor& labels);
 		void Serialize(const std::string& dataPath);
 
 	private:
-		void InitTrainer(const std::string networkConfigPath, const std::string& trainerConfigPath);
+		void InitTrainer(const std::string& networkConfigPath, const std::string& trainerConfigPath, const ConfigSourceType& configSourceType);
 		void InitLayersForTraining();
 		void SetInputBatchSize(const long batchSize);
 

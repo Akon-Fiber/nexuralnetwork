@@ -32,16 +32,16 @@ namespace nexural {
 
 	class ConfigReader {
 	public:
-		static void DecodeNetCongif(const std::string networkConfigPath, LayerSettingsCollection& layerSettingsCollection, const ConfigReaderType& readerType = ConfigReaderType::JSON) {
+		static void DecodeNetCongif(const std::string& networkConfigSource, LayerSettingsCollection& layerSettingsCollection, const ConfigSourceType& configSourceType, const ConfigReaderType& readerType = ConfigReaderType::JSON) {
 			if (readerType == ConfigReaderType::JSON) {
-				JSONConfigReader jsonReader(networkConfigPath);
+				JSONConfigReader jsonReader(networkConfigSource, configSourceType);
 				jsonReader.DecodeNetConfigInternal(layerSettingsCollection);
 			}
 		}
 
-		static void DecodeTrainerCongif(const std::string trainerConfigPath, Params& trainerParams, Params& solverParams, const ConfigReaderType& readerType = ConfigReaderType::JSON) {
+		static void DecodeTrainerCongif(const std::string& trainerConfigPath, Params& trainerParams, Params& solverParams, const ConfigSourceType& configSourceType, const ConfigReaderType& readerType = ConfigReaderType::JSON) {
 			if (readerType == ConfigReaderType::JSON) {
-				JSONConfigReader jsonReader(trainerConfigPath);
+				JSONConfigReader jsonReader(trainerConfigPath, configSourceType);
 				jsonReader.DecodeTrainerConfigInternal(trainerParams, solverParams);
 			}
 		}

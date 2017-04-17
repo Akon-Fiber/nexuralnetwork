@@ -25,8 +25,8 @@ OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 namespace nexural {
 	Network::Network() { }
 
-	Network::Network(const std::string networkConfigPath) {
-		CreateNetworkLayers(networkConfigPath);
+	Network::Network(const std::string& networkConfigSource, const ConfigSourceType& configSourceType) {
+		CreateNetworkLayers(networkConfigSource, configSourceType);
 		SetupNetwork();
 	}
 
@@ -65,9 +65,9 @@ namespace nexural {
 		_lossNetworkLayer = lossLayer;
 	}
 
-	void Network::CreateNetworkLayers(const std::string networkConfigPath) {
+	void Network::CreateNetworkLayers(const std::string& networkConfigSource, const ConfigSourceType& configSourceType) {
 		LayerSettingsCollection layerSettingsCollection;
-		ConfigReader::DecodeNetCongif(networkConfigPath, layerSettingsCollection);
+		ConfigReader::DecodeNetCongif(networkConfigSource, layerSettingsCollection, configSourceType);
 
 		for (size_t i = 0; i < layerSettingsCollection.size(); i++) {
 			std::string type_member = layerSettingsCollection[i].layerType;
