@@ -19,32 +19,5 @@ TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE
 OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 */
 
-#include <string>
-#include "../../data_types/general_data_types.h"
-#include "../../utility/serializer/serializer.h"
-
-#ifndef _NEXURALNET_DNN_I_COMPUTATIONAL_LAYER
-#define _NEXURALNET_DNN_I_COMPUTATIONAL_LAYER
-
-namespace nexural {
-	class IComputationalLayer {
-	public:
-		virtual ~IComputationalLayer() { }
-		virtual void Setup(const LayerShape& prevLayerShape, const size_t layerIndex) = 0;
-		virtual void BackPropagate(const Tensor& prevLayerErrors) = 0;
-		virtual Tensor* GetLayerWeights() = 0;
-		virtual Tensor* GetLayerDWeights() = 0; 
-		virtual Tensor* GetLayerBiases() = 0;
-		virtual Tensor* GetLayerDBiases() = 0;
-		virtual bool HasWeights() = 0;
-		virtual bool HasBiases() = 0;
-		virtual std::string GetLayerID() const = 0;
-		virtual void Serialize(Serializer& serializer) = 0;
-		virtual void Deserialize(Serializer& serializer) = 0;
-#ifdef _ENABLE_UNIT_TESTS
-		virtual void SetWeights(std::vector<float_n>& values) = 0;
-		virtual void SetBiases(std::vector<float_n>& values) = 0;
-#endif
-	};
-}
-#endif
+// Layers tests
+#include "layers_tests\average_pooling_layer_test.h"

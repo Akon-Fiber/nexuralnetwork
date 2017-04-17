@@ -56,9 +56,6 @@
     <Filter Include="src\tools">
       <UniqueIdentifier>{9027192c-3886-43e8-b4f4-09e5d2c8b72b}</UniqueIdentifier>
     </Filter>
-    <Filter Include="src\tests">
-      <UniqueIdentifier>{01e27e81-5586-4767-8af6-53e0158eaaed}</UniqueIdentifier>
-    </Filter>
     <Filter Include="src\nexural\utility\config_reader">
       <UniqueIdentifier>{f0206211-1372-46ad-8cfc-f2d9a7bc8e2a}</UniqueIdentifier>
     </Filter>
@@ -178,9 +175,6 @@
     <ClInclude Include="..\..\include\neXuralNet\dnn.h">
       <Filter>src</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\include\neXuralNet\tests.h">
-      <Filter>src</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\include\neXuralNet\tools.h">
       <Filter>src</Filter>
     </ClInclude>
@@ -230,9 +224,6 @@
     </ClCompile>
     <ClCompile Include="..\..\include\nexuralnet\tools\data_reader.cpp">
       <Filter>src\tools</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\include\neXuralNet\tests\run_tests.cpp">
-      <Filter>src\tests</Filter>
     </ClCompile>
     <ClCompile Include="..\..\include\nexuralnet\dnn\utility\serializer\json_serializer.cpp">
       <Filter>src\nexural\utility\serializer</Filter>

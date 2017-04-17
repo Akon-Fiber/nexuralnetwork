@@ -122,7 +122,7 @@ namespace nexural {
 			// TODO: Optimize this code
 			std::vector<cv::String> imageNames;
 			std::vector<std::string> allowedExtensions = { ".jpg", ".png" };
-			for (int i = 0; i < allowedExtensions.size(); i++) {
+			for (size_t i = 0; i < allowedExtensions.size(); i++) {
 				std::vector<cv::String> imageNamesCurrentExtension;
 				cv::glob(
 					directoryPath + "*" + allowedExtensions[i],
@@ -135,7 +135,7 @@ namespace nexural {
 					imageNamesCurrentExtension.end()
 				);
 			}
-			for (int i = 0; i < imageNames.size(); i++) {
+			for (size_t i = 0; i < imageNames.size(); i++) {
 				cv::Mat image = cv::imread(imageNames[i], readType);
 				images.push_back(image);
 			}

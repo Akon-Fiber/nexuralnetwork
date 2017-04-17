@@ -38,7 +38,7 @@ namespace nexural {
 		_inputNetworkLayer->LoadData(inputData);
 		Tensor *internalNetData = _inputNetworkLayer->GetOutput();
 
-		for (int i = 0; i < _computationalNetworkLyers.size(); i++) {
+		for (size_t i = 0; i < _computationalNetworkLyers.size(); i++) {
 			_computationalNetworkLyers[i]->FeedForward(*internalNetData);
 			internalNetData = _computationalNetworkLyers[i]->GetOutput();
 		}
@@ -69,7 +69,7 @@ namespace nexural {
 		LayerSettingsCollection layerSettingsCollection;
 		ConfigReader::DecodeNetCongif(networkConfigPath, layerSettingsCollection);
 
-		for (int i = 0; i < layerSettingsCollection.size(); i++) {
+		for (size_t i = 0; i < layerSettingsCollection.size(); i++) {
 			std::string type_member = layerSettingsCollection[i].layerType;
 			Params layerParams = layerSettingsCollection[i].layerParams;
 
@@ -123,7 +123,7 @@ namespace nexural {
 
 	void Network::SetupNetwork() {
 		LayerShape prevLayerShape = _inputNetworkLayer->GetOutputShape();
-		for (int i = 0; i < _computationalNetworkLyers.size(); i++) {
+		for (size_t i = 0; i < _computationalNetworkLyers.size(); i++) {
 			_computationalNetworkLyers[i]->Setup(prevLayerShape, i);
 			prevLayerShape = _computationalNetworkLyers[i]->GetOutputShape();
 		}
@@ -132,7 +132,7 @@ namespace nexural {
 
 	void Network::Serialize(const std::string& dataPath) {
 		Serializer serializer(SerializerType::JSON);
-		for (int i = 0; i < _computationalNetworkLyers.size(); i++) {
+		for (size_t i = 0; i < _computationalNetworkLyers.size(); i++) {
 			_computationalNetworkLyers[i]->Serialize(serializer);
 		}
 		serializer.Save(dataPath);
@@ -140,7 +140,7 @@ namespace nexural {
 	
 	void Network::Deserialize(const std::string& dataPath) {
 		Serializer serializer(SerializerType::JSON, dataPath);
-		for (int i = 0; i < _computationalNetworkLyers.size(); i++) {
+		for (size_t i = 0; i < _computationalNetworkLyers.size(); i++) {
 			_computationalNetworkLyers[i]->Deserialize(serializer);
 		}
 	}

@@ -145,7 +145,7 @@ namespace nexural {
 
 			std::vector<std::string> tokens = helper::TokenizeString(map[key], ",");
 
-			int tokens_cnt = (int)tokens.size();
+			size_t tokens_cnt = (size_t)tokens.size();
 			std::vector<float_n> result(tokens_cnt);
 
 			bool safely_parsed = true;

@@ -86,7 +86,7 @@ namespace nexural {
 			}
 			std::random_shuffle(batchesIndexes.begin(), batchesIndexes.end());
 
-			for (int batchIndex = 0; batchIndex < batchesIndexes.size(); batchIndex ++) {
+			for (size_t batchIndex = 0; batchIndex < batchesIndexes.size(); batchIndex ++) {
 				_subTrainingData.GetBatch(_trainingData, batchesIndexes[batchIndex], _batchSize);
 				_subTrainingTargetData.GetBatch(_trainingTargetData, batchesIndexes[batchIndex], _batchSize);
 
@@ -192,7 +192,7 @@ namespace nexural {
 	}
 
 	void NetworkTrainer::InitLayersForTraining() {
-		for (int i = 0; i < _net._computationalNetworkLyers.size(); i++) {
+		for (size_t i = 0; i < _net._computationalNetworkLyers.size(); i++) {
 			_net._computationalNetworkLyers[i]->SetupLayerForTraining();
 		}
 		_net._lossNetworkLayer->SetupLayerForTraining();

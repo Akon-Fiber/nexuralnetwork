@@ -36,7 +36,7 @@ namespace nexural {
 			
 		}
 		
-		virtual void Setup(const LayerShape& prevLayerShape, const int layerIndex) {
+		virtual void Setup(const LayerShape& prevLayerShape, const size_t layerIndex) {
 			_inputShape.Resize(prevLayerShape);
 			_outputShape.Resize(prevLayerShape.GetNumSamples(), prevLayerShape.GetK(),
 				(prevLayerShape.GetNR() / _kernel_height + (prevLayerShape.GetNR() % _kernel_height == 0 ? 0 : 1)),

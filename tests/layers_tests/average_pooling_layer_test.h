@@ -19,8 +19,11 @@ TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE
 OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 */
 
-namespace nexural {
-	void RunTests(int argc, char* argv[]) {
-		
-	}
+#include "../stdafx.h"
+#include <nexuralnet\dnn.h>
+using namespace nexural;
+
+TEST(LAYERS_TESTS, AVERAGE_POOLING_LAYER_TESTS)
+{
+	EXPECT_EQ(1, 1);
 }

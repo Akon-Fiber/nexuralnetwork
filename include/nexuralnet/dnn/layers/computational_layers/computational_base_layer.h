@@ -91,7 +91,7 @@ namespace nexural {
 
 		}
 
-#ifdef _DEBUG_NETWORK
+#ifdef _ENABLE_UNIT_TESTS
 		virtual void SetWeights(std::vector<float_n>& values) {
 			_weights.Fill(values);
 		}

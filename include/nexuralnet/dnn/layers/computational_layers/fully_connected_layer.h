@@ -37,7 +37,7 @@ namespace nexural {
 
 		}
 
-		virtual void Setup(const LayerShape& prevLayerShape, const int layerIndex) {
+		virtual void Setup(const LayerShape& prevLayerShape, const size_t layerIndex) {
 			_inputShape.Resize(prevLayerShape);
 			_outputShape.Resize(_inputShape.GetNumSamples(), 1, 1, _numOutputNeurons);
 			_outputData.Resize(_outputShape);
