@@ -82,11 +82,17 @@ namespace nexural {
 			else if (type_member == "tensor_input") {
 				SetInputLayer(InputBaseLayerPtr(new nexural::TensorInputLayer(layerParams)));
 			}
+			else if (type_member == "average_pooling") {
+				AddComputationalLayer(ComputationalBaseLayerPtr(new nexural::AveragePoolingLayer(layerParams)));
+			}
+			else if (type_member == "dynamic_average_pooling") {
+				AddComputationalLayer(ComputationalBaseLayerPtr(new nexural::DynamicAveragePoolingLayer(layerParams)));
+			}
 			else if (type_member == "max_pooling") {
 				AddComputationalLayer(ComputationalBaseLayerPtr(new nexural::MaxPoolingLayer(layerParams)));
 			}
-			else if (type_member == "average_pooling") {
-				AddComputationalLayer(ComputationalBaseLayerPtr(new nexural::AveragePoolingLayer(layerParams)));
+			else if (type_member == "dynamic_max_pooling") {
+				AddComputationalLayer(ComputationalBaseLayerPtr(new nexural::DynamicMaxPoolingLayer(layerParams)));
 			}
 			else if (type_member == "relu") {
 				AddComputationalLayer(ComputationalBaseLayerPtr(new nexural::ReluLayer(layerParams)));

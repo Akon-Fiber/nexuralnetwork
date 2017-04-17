@@ -146,7 +146,8 @@
     <ClInclude Include="..\..\include\neXuralNet\dnn\data_types\layer_settings.h" />
     <ClInclude Include="..\..\include\neXuralNet\dnn\data_types\layer_shape.h" />
     <ClInclude Include="..\..\include\neXuralNet\dnn\data_types\tensor.h" />
-    <ClInclude Include="..\..\include\neXuralNet\dnn\layers\computational_layers\average_pooling_layer.h" />
+    <ClInclude Include="..\..\include\nexuralnet\dnn\layers\computational_layers\average_pooling_layer.h" />
+    <ClInclude Include="..\..\include\neXuralNet\dnn\layers\computational_layers\dynamic_average_pooling_layer.h" />
     <ClInclude Include="..\..\include\neXuralNet\dnn\layers\computational_layers\computational_base_layer.h" />
     <ClInclude Include="..\..\include\neXuralNet\dnn\layers\computational_layers\computational_layers.h" />
     <ClInclude Include="..\..\include\neXuralNet\dnn\layers\computational_layers\convolutional_layer.h" />
@@ -154,7 +155,8 @@
     <ClInclude Include="..\..\include\neXuralNet\dnn\layers\computational_layers\fully_connected_layer.h" />
     <ClInclude Include="..\..\include\neXuralNet\dnn\layers\computational_layers\i_computational_layer.h" />
     <ClInclude Include="..\..\include\neXuralNet\dnn\layers\computational_layers\leaky_relu_layer.h" />
-    <ClInclude Include="..\..\include\neXuralNet\dnn\layers\computational_layers\max_pooling_layer.h" />
+    <ClInclude Include="..\..\include\neXuralNet\dnn\layers\computational_layers\dynamic_max_pooling_layer.h" />
+    <ClInclude Include="..\..\include\nexuralnet\dnn\layers\computational_layers\max_pooling_layer.h" />
     <ClInclude Include="..\..\include\neXuralNet\dnn\layers\computational_layers\relu_layer.h" />
     <ClInclude Include="..\..\include\neXuralNet\dnn\layers\computational_layers\tanh_layerh.h" />
     <ClInclude Include="..\..\include\neXuralNet\dnn\layers\input_layers\bgr_image_input_layer.h" />

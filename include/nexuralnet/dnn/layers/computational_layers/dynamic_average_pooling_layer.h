@@ -21,29 +21,26 @@ OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
 #include "computational_base_layer.h"
 
-#ifndef _NEXURALNET_DNN_LAYERS_AVERAGE_POOLING_LAYER
-#define _NEXURALNET_DNN_LAYERS_AVERAGE_POOLING_LAYER
+#ifndef _NEXURALNET_DNN_LAYERS_DYNAMIC_AVERAGE_POOLING_LAYER
+#define _NEXURALNET_DNN_LAYERS_DYNAMIC_AVERAGE_POOLING_LAYER
 
 namespace nexural {
-	class AveragePoolingLayer : public ComputationalBaseLayer {
+	class DynamicAveragePoolingLayer : public ComputationalBaseLayer {
 	public:
-		AveragePoolingLayer(const Params &layerParams) : ComputationalBaseLayer(layerParams) {
+		DynamicAveragePoolingLayer(const Params &layerParams) : ComputationalBaseLayer(layerParams) {
 			_kernel_width = parser::ParseLong(_layerParams, "kernel_width");
 			_kernel_height = parser::ParseLong(_layerParams, "kernel_height");
 		}
 
-		~AveragePoolingLayer() {
+		~DynamicAveragePoolingLayer() {
 			
 		}
 		
 		virtual void Setup(const LayerShape& prevLayerShape, const int layerIndex) {
-			if ((prevLayerShape.GetNR() % _kernel_height != 0) || (prevLayerShape.GetNC() % _kernel_width != 0)) {
-				throw std::runtime_error("Cannot apply average pooling to the input layer!");
-			}
-			
 			_inputShape.Resize(prevLayerShape);
 			_outputShape.Resize(prevLayerShape.GetNumSamples(), prevLayerShape.GetK(),
-				(prevLayerShape.GetNR() / _kernel_height), (prevLayerShape.GetNC() / _kernel_width));
+				(prevLayerShape.GetNR() / _kernel_height + (prevLayerShape.GetNR() % _kernel_height == 0 ? 0 : 1)),
+				(prevLayerShape.GetNC() / _kernel_width + (prevLayerShape.GetNC() % _kernel_width == 0 ? 0 : 1)));
 
 			_outputData.Resize(_outputShape);
 			_layerID = "average_pooling_layer" + std::to_string(layerIndex);
@@ -60,17 +57,20 @@ namespace nexural {
 						long outNC = 0;
 						for (long nc = 0; nc < inputData.GetNC(); nc += _kernel_width)
 						{
+							long khLimit = _kernel_height - (nr == (inputData.GetNR() - (inputData.GetNR() % _kernel_height)) ? _kernel_height - inputData.GetNR() % _kernel_height : 0);
+							long kwLimit = _kernel_width - (nc == (inputData.GetNC() - (inputData.GetNC() % _kernel_width)) ? _kernel_width - inputData.GetNC() % _kernel_width : 0);
+							
 							float_n sum = 0;
 
-							for (long kh = 0; kh < _kernel_height; kh++)
+							for (long kh = 0; kh < khLimit; kh++)
 							{
-								for (long kw = 0; kw < _kernel_width; kw++)
+								for (long kw = 0; kw < kwLimit; kw++)
 								{
 									float_n value = inputData[(((numSamples * inputData.GetK()) + k) * inputData.GetNR() + (nr + kh)) * inputData.GetNC() + (nc + kw)];
 									sum += value;
 								}
 							}
-							_outputData[(((numSamples * _outputData.GetK()) + k) * _outputData.GetNR() + outNR) * _outputData.GetNC() + outNC] = sum / (_kernel_height * _kernel_width);
+							_outputData[(((numSamples * _outputData.GetK()) + k) * _outputData.GetNR() + outNR) * _outputData.GetNC() + outNC] = sum / (khLimit * kwLimit);
 							outNC++;
 						}
 						outNR++;
@@ -94,11 +94,14 @@ namespace nexural {
 						long outNC = 0;
 						for (long nc = 0; nc < _layerErrors.GetNC(); nc += _kernel_width)
 						{
-							float_n error = prevLayerErrors[(((numSamples * prevLayerErrors.GetK()) + k) * prevLayerErrors.GetNR() + outNR) * prevLayerErrors.GetNC() + outNC] / (_kernel_height * _kernel_width);
+							long khLimit = _kernel_height - (nr == (_layerErrors.GetNR() - (_layerErrors.GetNR() % _kernel_height)) ? _kernel_height - _layerErrors.GetNR() % _kernel_height : 0);
+							long kwLimit = _kernel_width - (nc == (_layerErrors.GetNC() - (_layerErrors.GetNC() % _kernel_width)) ? _kernel_width - _layerErrors.GetNC() % _kernel_width : 0);
 
-							for (long kh = 0; kh < _kernel_height; kh++)
+							float_n error = prevLayerErrors[(((numSamples * prevLayerErrors.GetK()) + k) * prevLayerErrors.GetNR() + outNR) * prevLayerErrors.GetNC() + outNC] / (khLimit * kwLimit);
+
+							for (long kh = 0; kh < khLimit; kh++)
 							{
-								for (long kw = 0; kw < _kernel_width; kw++)
+								for (long kw = 0; kw < kwLimit; kw++)
 								{
 									_layerErrors[(((numSamples * _layerErrors.GetK()) + k) * _layerErrors.GetNR() + (nr + kh)) * _layerErrors.GetNC() + (nc + kw)] = error;
 								}

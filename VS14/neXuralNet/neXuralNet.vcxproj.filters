@@ -151,9 +151,6 @@
     <ClInclude Include="..\..\include\neXuralNet\dnn\layers\input_layers\input_base_class.h">
       <Filter>src\nexural\dnn\layers\input_layers\common</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\include\neXuralNet\dnn\layers\computational_layers\average_pooling_layer.h">
-      <Filter>src\nexural\dnn\layers\computational_layers</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\include\neXuralNet\dnn\layers\computational_layers\computational_layers.h">
       <Filter>src\nexural\dnn\layers\computational_layers</Filter>
     </ClInclude>
@@ -164,9 +161,6 @@
       <Filter>src\nexural\dnn\layers\computational_layers</Filter>
     </ClInclude>
     <ClInclude Include="..\..\include\neXuralNet\dnn\layers\computational_layers\fully_connected_layer.h">
-      <Filter>src\nexural\dnn\layers\computational_layers</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\include\neXuralNet\dnn\layers\computational_layers\max_pooling_layer.h">
       <Filter>src\nexural\dnn\layers\computational_layers</Filter>
     </ClInclude>
     <ClInclude Include="..\..\include\neXuralNet\dnn\layers\computational_layers\relu_layer.h">
@@ -207,6 +201,18 @@
     </ClInclude>
     <ClInclude Include="..\..\include\nexuralnet\tools\converter.h">
       <Filter>src\tools</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\neXuralNet\dnn\layers\computational_layers\dynamic_average_pooling_layer.h">
+      <Filter>src\nexural\dnn\layers\computational_layers</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\neXuralNet\dnn\layers\computational_layers\dynamic_max_pooling_layer.h">
+      <Filter>src\nexural\dnn\layers\computational_layers</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\nexuralnet\dnn\layers\computational_layers\average_pooling_layer.h">
+      <Filter>src\nexural\dnn\layers\computational_layers</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\nexuralnet\dnn\layers\computational_layers\max_pooling_layer.h">
+      <Filter>src\nexural\dnn\layers\computational_layers</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
