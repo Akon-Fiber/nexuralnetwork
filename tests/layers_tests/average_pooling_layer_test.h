@@ -20,10 +20,13 @@ OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 */
 
 #include "../stdafx.h"
-#include <nexuralnet\dnn.h>
+#include <nexuralnet\dnn\layers\computational_layers\average_pooling_layer.h>
 using namespace nexural;
 
 TEST(LAYERS_TESTS, AVERAGE_POOLING_LAYER_TESTS)
 {
+	Tensor inputData, trainingData, targetData;
+
+	
 	EXPECT_EQ(1, 1);
 }
