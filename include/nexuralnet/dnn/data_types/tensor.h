@@ -56,10 +56,10 @@ namespace nexural {
 
 		typedef float_n* iterator;
 		typedef const float_n* const_iterator;
-		iterator       Begin() { return  _host.get(); }
-		const_iterator Begin() const { return  _host.get(); }
-		iterator       End() { return  _host.get() + _size; }
-		const_iterator End() const { return  _host.get() + _size; }
+		iterator       begin() { return  _host.get(); }
+		const_iterator begin() const { return  _host.get(); }
+		iterator       end() { return  _host.get() + _size; }
+		const_iterator end() const { return  _host.get() + _size; }
 
 		void Resize(const long numSamples_, const long k_, const long nr_, const long nc_);
 		void Resize(const LayerShape& layerShape);
@@ -69,8 +69,8 @@ namespace nexural {
 		const float_n & operator [](long i) const { return _host.get()[i]; }
 		float_n & operator [](long i) { return _host.get()[i]; }
 
-		bool operator==(const Tensor& other);
-		bool operator!=(const Tensor& other);
+		bool operator==(const Tensor& other) const;
+		bool operator!=(const Tensor& other) const;
 
 		void ShareTensor(const Tensor& tensor);
 		void Clone(const Tensor& tensor);

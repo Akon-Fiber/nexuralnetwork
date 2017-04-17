@@ -80,7 +80,7 @@ namespace nexural {
 		return *this;
 	}
 
-	bool Tensor::operator==(const Tensor& other) {
+	bool Tensor::operator==(const Tensor& other) const {
 		if (!(this->_size == other._size)) {
 			return false;
 		}
@@ -92,7 +92,7 @@ namespace nexural {
 		return true;
 	}
 
-	bool Tensor::operator!=(const Tensor& other) {
+	bool Tensor::operator!=(const Tensor& other) const {
 		return !(*this == other);
 	}
 
@@ -186,13 +186,13 @@ namespace nexural {
 		std::random_device rd;
 		std::mt19937 gen(rd());
 		std::uniform_real_distribution<> dis(-range, range);
-		std::generate(Begin(), End(), [&]() { return dis(gen); });
+		std::generate(begin(), end(), [&]() { return dis(gen); });
 	}
 
 	void Tensor::FillRandomBinomialDistribution() {
 		std::default_random_engine gen;
 		std::binomial_distribution<int> dis(1, 0.5);
-		std::generate(Begin(), End(), [&]() { return dis(gen); });
+		std::generate(begin(), end(), [&]() { return dis(gen); });
 	}
 
 	void Tensor::GetBatch(const Tensor& tensor, const long startIndex, const long batchSize) {

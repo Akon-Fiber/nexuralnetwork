@@ -25,8 +25,28 @@ using namespace nexural;
 
 TEST(LAYERS_TESTS, AVERAGE_POOLING_LAYER_TESTS)
 {
-	Tensor inputData, trainingData, targetData;
+	// Init data for testing
+	Params layerParams { { "kernel_width", "2" }, { "kernel_height", "2" } };
+	LayerShape inputShape(1, 1, 6, 6);
+	Tensor inputData(inputShape);
+	Tensor *feedForwardResult, feedForwardExpected(1, 1, 3, 3);
 
+	// Fill data for testing
+	inputData.Fill({ 21, 5, 17, 35, 11, 19,
+		2, 18, 4, 10, 9, 58,
+		46, 38, 47, 18, 4, 6,
+		90, 3, 13, 51, 2, 77,
+		17, 14, 7, 1, 3, 5,
+		10, 2, 12, 90, 81, 8 });
+	feedForwardExpected.Fill({11.5, 16.5, 24.25, 
+		44.25, 32.25, 22.25, 
+		10.75, 27.5, 24.25});
+
+	// Testing the code
+	AveragePoolingLayer averagePoolingLayer(layerParams);
+	averagePoolingLayer.Setup(inputShape, 0);
+	averagePoolingLayer.FeedForward(inputData);
+	feedForwardResult = averagePoolingLayer.GetOutput();
 	
-	EXPECT_EQ(1, 1);
+	ASSERT_EQ(*feedForwardResult, feedForwardExpected);
 }
