@@ -31,6 +31,7 @@ OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 #include "xor_gate_with_relu_softmax.h"
 #include "and_gate_with_relu_softmax.h"
 #include "mnist_softmax.h"
+#include "mnist_mse.h"
 
 void Menu() {
 	std::cout << "--------------------------MENU--------------------------" << std::endl;
@@ -46,7 +47,8 @@ void Menu() {
 	std::cout << "| 8 - AND gate with RELU and Softmax" << std::endl;
 	std::cout << "| 9 - XOR gate with RELU and Softmax" << std::endl;
 	std::cout << "| 10 - MNIST with Softmax" << std::endl;
-	std::cout << "| 11 - Experminetal" << std::endl;
+	std::cout << "| 11 - MNIST with MSE" << std::endl;
+	std::cout << "| 12 - Experminetal" << std::endl;
 	std::cout << "--------------------------------------------------------" << std::endl << std::endl;
 }
 
@@ -87,6 +89,9 @@ void DoTests(const int option, const std::string& dataFolderPath) {
 		Test_MNIST_Softmax(dataFolderPath);
 		break;
 	case 11:
+		Test_MNIST_MSE(dataFolderPath);
+		break;
+	case 12:
 		Experimental(dataFolderPath);
 		break;
 	default:

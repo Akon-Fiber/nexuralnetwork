@@ -25,7 +25,6 @@ OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
 using namespace nexural;
 
-
 void Test_MNIST_Softmax(const std::string& dataFolderPath) {
 	Tensor inputData, trainingData, targetData;
 	cv::Mat image;

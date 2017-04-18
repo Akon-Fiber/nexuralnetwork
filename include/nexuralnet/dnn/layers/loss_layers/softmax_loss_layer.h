@@ -37,7 +37,7 @@ namespace nexural {
 
 		virtual void Setup(const LayerShape& prevLayerShape) {
 			if (prevLayerShape.GetK() != 1 || prevLayerShape.GetNR() != 1) {
-				throw std::runtime_error("Previous layer don't have a correct shape!");
+				throw std::runtime_error("Softmax layer error: Previous layer don't have a correct shape!");
 			}
 			_inputShape.Resize(prevLayerShape.GetNumSamples(), 1, 1, prevLayerShape.GetNC());
 			_outputShape.Resize(_inputShape);
@@ -54,7 +54,7 @@ namespace nexural {
 
 		virtual void CalculateError(const Tensor& targetData) {
 			if (_outputData.GetShape() != targetData.GetShape()) {
-				throw std::runtime_error("The output and target data should have the same size!");
+				throw std::runtime_error("Softmax layer error: The output and target data should have the same size!");
 			}
 
 			Tensor aux, mask(targetData.GetShape());
@@ -82,7 +82,7 @@ namespace nexural {
 
 		virtual void CalculateTotalError(const Tensor& targetData) {
 			if (_outputData.GetShape() != targetData.GetShape()) {
-				throw std::runtime_error("The output and target data should have the same size!");
+				throw std::runtime_error("Softmax layer error: The output and target data should have the same size!");
 			}
 
 			long totalTargetNumSamples = targetData.GetNumSamples();

@@ -12,7 +12,7 @@
     {
       "type": "convolutional",
       "params": {
-        "num_of_filters": "5",
+        "num_of_filters": "6",
         "kernel_width": "5",
         "kernel_height": "5",
         "padding_width": "0",
@@ -22,18 +22,24 @@
       }
     },
     {
-      "type": "max_pooling",
+      "type": "average_pooling",
       "params": {
         "kernel_width": "2",
         "kernel_height": "2"
       }
     },
     {
+      "type": "tanh",
+      "params": {
+
+      }
+    },
+    {
       "type": "convolutional",
       "params": {
         "num_of_filters": "16",
-        "kernel_width": "3",
-        "kernel_height": "3",
+        "kernel_width": "5",
+        "kernel_height": "5",
         "padding_width": "0",
         "padding_height": "0",
         "stride_width": "1",
@@ -41,32 +47,26 @@
       }
     },
     {
-      "type": "leaky_relu",
-      "params": {
-
-      }
-    },
-    {
-      "type": "max_pooling",
+      "type": "average_pooling",
       "params": {
         "kernel_width": "2",
         "kernel_height": "2"
       }
     },
     {
-      "type": "fully_connected",
-      "params": {
-        "neurons": "100"
-      }
-    },
-    {
-      "type": "dropout",
+      "type": "tanh",
       "params": {
 
       }
     },
     {
-      "type": "leaky_relu",
+      "type": "fully_connected",
+      "params": {
+        "neurons": "120"
+      }
+    },
+    {
+      "type": "tanh",
       "params": {
 
       }

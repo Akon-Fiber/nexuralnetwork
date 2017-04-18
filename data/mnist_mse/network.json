@@ -1,0 +1,44 @@
+{
+  "network_layers": [
+    {
+      "type": "tensor_input",
+      "params": {
+        "num_samples": "1",
+        "k": "1",
+        "nr": "28",
+        "nc": "28"
+      }
+    },
+    {
+      "type": "max_pooling",
+      "params": {
+        "kernel_width": "2",
+        "kernel_height": "2"
+      }
+    },
+    {
+      "type": "fully_connected",
+      "params": {
+        "neurons": "20"
+      }
+    },
+    {
+      "type": "leaky_relu",
+      "params": {
+
+      }
+    },
+    {
+      "type": "fully_connected",
+      "params": {
+        "neurons": "1"
+      }
+    },
+    {
+      "type": "mse",
+      "params": {
+
+      }
+    }
+  ]
+}

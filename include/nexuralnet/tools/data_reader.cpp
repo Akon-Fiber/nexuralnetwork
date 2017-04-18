@@ -109,7 +109,7 @@ namespace nexural {
 					{
 						unsigned char temp = 0;
 						file.read((char*)&temp, sizeof(temp));
-						tensor[numSamples] = 1;
+						tensor[numSamples] = static_cast<int>(temp);
 					}
 				}
 			}

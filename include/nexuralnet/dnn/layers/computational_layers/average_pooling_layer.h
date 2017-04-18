@@ -38,7 +38,7 @@ namespace nexural {
 		
 		virtual void Setup(const LayerShape& prevLayerShape, const size_t layerIndex) {
 			if ((prevLayerShape.GetNR() % _kernel_height != 0) || (prevLayerShape.GetNC() % _kernel_width != 0)) {
-				throw std::runtime_error("Cannot apply average pooling to the input layer!");
+				throw std::runtime_error("Average pooling layer error: Cannot apply average pooling to the input layer!");
 			}
 			
 			_inputShape.Resize(prevLayerShape);
