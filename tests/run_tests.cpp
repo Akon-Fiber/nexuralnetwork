@@ -25,6 +25,7 @@ OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 int main(int argc, char* argv[]) {
 	testing::InitGoogleTest(&argc, argv);
 	RUN_ALL_TESTS();
+	std::cout << std::endl << "Press any key to continue..." << std::endl;
 	std::getchar();
 	return 0;
 }

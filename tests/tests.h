@@ -21,3 +21,4 @@ OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
 // Layers tests
 #include "layers_tests\average_pooling_layer_test.h"
+#include "layers_tests\max_pooling_layer_test.h"

@@ -20,10 +20,10 @@ OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 */
 
 #include "../stdafx.h"
-#include <nexuralnet\dnn\layers\computational_layers\average_pooling_layer.h>
+#include <nexuralnet\dnn\layers\computational_layers\max_pooling_layer.h>
 using namespace nexural;
 
-TEST(LAYERS_TESTS, AVERAGE_POOLING_LAYER_TESTS)
+TEST(LAYERS_TESTS, MAX_POOLING_LAYER_TESTS)
 {
 	// Init data for testing
 	Params layerParams { { "kernel_width", "2" }, { "kernel_height", "2" } };
@@ -77,29 +77,29 @@ TEST(LAYERS_TESTS, AVERAGE_POOLING_LAYER_TESTS)
 		5, 11, 6, 51, 49, 53 });
 
 	feedForwardExpected.Fill({
-		11.5, 16.5, 24.25, 
-		44.25, 32.25, 22.25, 
-		10.75, 27.5, 24.25,
+		21, 35, 58,
+		90, 51, 77,
+		17, 90, 81,
 	
-		7, 29.25, 52.25,
-		30.5, 19, 21,
-		7, 39.75, 21.5,
+		13, 73, 85,
+		60, 33, 65,
+		11, 81, 70,
 	
-		15.25, 37, 15.5,
-		19, 28, 27.5,
-		12.75, 53.25, 7.5,
-	
-		20, 14.5, 16,
-		14.5, 38.25, 43.25,
-		22.25, 33.25, 18.25,
-	
-		26.75, 44.5, 71.75,
-		19.25, 38.5, 16.25,
-		48.5, 45.5, 4.75,
-	
-		33.25, 74.75, 10.25,
-		24.5, 48.5, 48.5,
-		36.25, 47.75, 49 });
+		30, 85, 31, 
+		33, 90, 40,
+		19, 83, 16,
+
+		50, 30, 40,
+		33, 90, 80,
+		60, 71, 38,
+
+		72, 97, 96,
+		42, 95, 46,
+		91, 64, 9,
+
+		56, 91, 25,
+		40, 93, 97,
+		83, 72, 83 });
 
 
 	prevLayerErrors.Fill({
@@ -128,56 +128,56 @@ TEST(LAYERS_TESTS, AVERAGE_POOLING_LAYER_TESTS)
 		76, 48, 2 });
 
 	layerErrorsExpected.Fill({
-		7.125, 7.125, 22.75, 22.75, 13.75, 13.75,
-		7.125, 7.125, 22.75, 22.75, 13.75, 13.75,
-		6.75, 6.75, 11, 11, 23.5, 23.5,
-		6.75, 6.75, 11, 11, 23.5, 23.5,
-		8.25, 8.25, 14, 14, 17.75, 17.75,
-		8.25, 8.25, 14, 14, 17.75, 17.75,
+		28.5, 0, 0, 91, 0, 0,
+		0, 0, 0, 0, 0, 55,
+		0, 0, 0, 0, 0, 0,
+		27, 0, 0, 44, 0, 94,
+		33, 0, 0, 0, 0, 0,
+		0, 0, 0, 56, 71, 0,
 
-		20.75, 20.75, 15.5, 15.5, 5.75, 5.75,
-		20.75, 20.75, 15.5, 15.5, 5.75, 5.75,
-		10, 10, 8.5, 8.5, 11.5, 11.5,
-		10, 10, 8.5, 8.5, 11.5, 11.5,
-		7, 7, 14, 14, 4.5, 4.5,
-		7, 7, 14, 14, 4.5, 4.5,
+		83, 0, 62, 0, 0, 0,
+		0, 0, 0, 0, 0, 23,
+		0, 0, 0, 0, 0, 0,
+		0, 40, 0, 34, 0, 46,
+		0, 0, 0, 56, 0, 18,
+		28, 0, 0, 0, 0, 0,
 
-		19, 19, 7.75, 7.75, 12.25, 12.25,
-		19, 19, 7.75, 7.75, 12.25, 12.25,
-		5.25, 5.25, 23.25, 23.25, 3, 3,
-		5.25, 5.25, 23.25, 23.25, 3, 3,
-		11, 11, 1.5, 1.5, 2.75, 2.75,
-		11, 11, 1.5, 1.5, 2.75, 2.75,
+		0, 0, 0, 0, 49, 0,
+		76, 0, 31, 0, 0, 0,
+		0, 0, 0, 0, 0, 0,
+		21, 0, 0, 93, 0, 12,
+		44, 0, 0, 6, 0, 11,
+		0, 0, 0, 0, 0, 0,
 
-		2, 2, 18.5, 18.5, 6.25, 6.25,
-		2, 2, 18.5, 18.5, 6.25, 6.25,
-		4.75, 4.75, 7.75, 7.75, 9.5, 9.5,
-		4.75, 4.75, 7.75, 7.75, 9.5, 9.5,
-		9, 9, 24.5, 24.5, 11.25, 11.25,
-		9, 9, 24.5, 24.5, 11.25, 11.25,
+		0, 8, 0, 74, 25, 0,
+		0, 0, 0, 0, 0, 0,
+		19, 0, 31, 0, 0, 0,
+		0, 0, 0, 0, 0, 38,
+		0, 36, 98, 0, 0, 0,
+		0, 0, 0, 0, 45, 0,
 
-		2.5, 2.5, 14, 14, 1.5, 1.5,
-		2.5, 2.5, 14, 14, 1.5, 1.5,
-		7.25, 7.25, 10.75, 10.75, 8.75, 8.75,
-		7.25, 7.25, 10.75, 10.75, 8.75, 8.75,
-		20.25, 20.25, 4.5, 4.5, 15.25, 15.25,
-		20.25, 20.25, 4.5, 4.5, 15.25, 15.25,
+		0, 0, 0, 0, 0, 6,
+		0, 10, 0, 56, 0, 0,
+		0, 29, 0, 0, 0, 0,
+		0, 0, 0, 43, 0, 35,
+		0, 81, 0, 0 , 0, 61,
+		0, 0, 18, 0, 0, 0,
 
-		8, 8, 6, 6, 23.75, 23.75,
-		8, 8, 6, 6, 23.75, 23.75,
-		10.25, 10.25, 14, 14, 2.75, 2.75,
-		10.25, 10.25, 14, 14, 2.75, 2.75,
-		19, 19, 12, 12, 0.5, 0.5,
-		19, 19, 12, 12, 0.5, 0.5 });
+		0, 0, 24, 0, 0, 0,
+		0, 32, 0, 0, 0, 95,
+		0, 0, 56, 0, 0, 0,
+		41, 0, 0, 0, 0, 11,
+		0, 76, 0, 48, 2, 0,
+		0, 0, 0, 0, 0, 0 });
 
 	// Running the code
-	AveragePoolingLayer averagePoolingLayer(layerParams);
-	averagePoolingLayer.Setup(inputShape, 0);
-	averagePoolingLayer.SetupLayerForTraining();
-	averagePoolingLayer.FeedForward(inputData);
-	feedForwardResult = averagePoolingLayer.GetOutput();
-	averagePoolingLayer.BackPropagate(prevLayerErrors);
-	layerErrorsResult = averagePoolingLayer.GetLayerErrors();
+	MaxPoolingLayer maxPoolingLayer(layerParams);
+	maxPoolingLayer.Setup(inputShape, 0);
+	maxPoolingLayer.SetupLayerForTraining();
+	maxPoolingLayer.FeedForward(inputData);
+	feedForwardResult = maxPoolingLayer.GetOutput();
+	maxPoolingLayer.BackPropagate(prevLayerErrors);
+	layerErrorsResult = maxPoolingLayer.GetLayerErrors();
 
 	// Testing the results
 	ASSERT_EQ(*feedForwardResult, feedForwardExpected);
