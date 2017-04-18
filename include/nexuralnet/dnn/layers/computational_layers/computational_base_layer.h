@@ -92,11 +92,11 @@ namespace nexural {
 		}
 
 #ifdef _ENABLE_UNIT_TESTS
-		virtual void SetWeights(std::vector<float_n>& values) {
+		virtual void SetWeights(const std::vector<float_n>& values) {
 			_weights.Fill(values);
 		}
 
-		virtual void SetBiases(std::vector<float_n>& values) {
+		virtual void SetBiases(const std::vector<float_n>& values) {
 			_biases.Fill(values);
 		}
 #endif

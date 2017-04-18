@@ -72,6 +72,17 @@ namespace nexural {
 							}
 						}
 					}
+
+					// =============== DEBUG =====================================
+					float_n rs = neuronCalculatedValue + _biases[n];
+						if (std::isnan(neuronCalculatedValue + _biases[n])) {
+							throw std::runtime_error(" is nan");
+						}
+						else if (std::isinf(neuronCalculatedValue + _biases[n])) {
+							throw std::runtime_error(" is inf");
+						}
+					// =============== DEBUG END ==================================
+
 					_outputData[numSamples * inputData.GetNC() + n] = neuronCalculatedValue + _biases[n];
 				}
 			}
@@ -105,6 +116,15 @@ namespace nexural {
 								float_n value = _internalInputData[(((numSamples * _internalInputData.GetK()) + k) * _internalInputData.GetNR() + nr) * _internalInputData.GetNC() + nc];
 								long indx = (n * _dWeights.GetNC() + ((k * _internalInputData.GetNR() + nr) * _internalInputData.GetNC() + nc));
 								_dWeights[indx] += (value * error);
+
+								// =============== DEBUG =====================================
+								if (std::isnan(value * error)) {
+									throw std::runtime_error(" is nan");
+								}
+								else if (std::isinf(value * error)) {
+									throw std::runtime_error(" is inf");
+								}
+								// =============== DEBUG END ==================================
 							}
 						}
 					}
@@ -126,6 +146,15 @@ namespace nexural {
 								long indx = (n * _weights.GetNC() + ((k * _internalInputData.GetNR() + nr) * _internalInputData.GetNC() + nc));
 								float_n value = _weights[indx];
 								_layerErrors[(((numSamples * _layerErrors.GetK()) + k) * _layerErrors.GetNR() + nr) * _layerErrors.GetNC() + nc] = value * error;
+							
+								// =============== DEBUG =====================================
+								if (std::isnan(value * error)) {
+									throw std::runtime_error(" is nan");
+								}
+								else if (std::isinf(value * error)) {
+									throw std::runtime_error(" is inf");
+								}
+								// =============== DEBUG END ==================================
 							}
 						}
 					}

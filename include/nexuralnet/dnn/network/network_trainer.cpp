@@ -96,6 +96,17 @@ namespace nexural {
 				for (auto it = _net._computationalNetworkLyers.begin(); it < _net._computationalNetworkLyers.end(); it++) {
 					(*it)->FeedForward(*internalNetData);
 					internalNetData = (*it)->GetOutput();
+
+					// =============== DEBUG =====================================
+					for (int i = 0; i < internalNetData->Size(); i++) {
+						if (std::isnan((*(&(*internalNetData)))[i])) {
+							throw std::runtime_error((*it)->GetLayerID() + " is nan in feedforward | Iter: " + std::to_string(trainingDataIterations));
+						}
+						else if (std::isinf((*(&(*internalNetData)))[i])) {
+							throw std::runtime_error((*it)->GetLayerID() + " is inf in feedforward | Iter: " + std::to_string(trainingDataIterations));
+						}
+					}
+					// =============== DEBUG END ==================================
 				}
 
 				_net._lossNetworkLayer->FeedForward(*internalNetData);
@@ -104,9 +115,31 @@ namespace nexural {
 				error = _net._lossNetworkLayer->GetLayerErrors();
 				currentEpochError += _net._lossNetworkLayer->GetTotalError();
 
+				// =============== DEBUG =====================================
+				for (int i = 0; i < error->Size(); i++) {
+					if (std::isnan((*(&(*error)))[i])) {
+						throw std::runtime_error("Loss layer is nan in backprop | Iter: " + std::to_string(trainingDataIterations));
+					}
+					else if (std::isinf((*(&(*error)))[i])) {
+						throw std::runtime_error("Loss layer is inf in backprop | Iter: " + std::to_string(trainingDataIterations));
+					}
+				}
+				// =============== DEBUG END ==================================
+
 				for (auto it = _net._computationalNetworkLyers.rbegin(); it < _net._computationalNetworkLyers.rend(); it++) {
 					(*it)->BackPropagate(*error);
 					error = (*it)->GetLayerErrors();
+
+					// =============== DEBUG =====================================
+					for (int i = 0; i < error->Size(); i++) {
+						if (std::isnan((*(&(*error)))[i])) {
+							throw std::runtime_error((*it)->GetLayerID() + " is nan in backprop | Iter: " + std::to_string(trainingDataIterations));
+						}
+						else if (std::isinf((*(&(*error)))[i])) {
+							throw std::runtime_error((*it)->GetLayerID() + " is inf in backprop | Iter: " + std::to_string(trainingDataIterations));
+						}
+					}
+					// =============== DEBUG END ==================================
 				}
 
 				// Update the weights and biases using the solver (only if the layer has weights and/or biases)
