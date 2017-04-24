@@ -72,17 +72,6 @@ namespace nexural {
 							}
 						}
 					}
-
-					// =============== DEBUG =====================================
-					float_n rs = neuronCalculatedValue + _biases[n];
-						if (std::isnan(neuronCalculatedValue + _biases[n])) {
-							throw std::runtime_error(" is nan");
-						}
-						else if (std::isinf(neuronCalculatedValue + _biases[n])) {
-							throw std::runtime_error(" is inf");
-						}
-					// =============== DEBUG END ==================================
-
 					_outputData[numSamples * inputData.GetNC() + n] = neuronCalculatedValue + _biases[n];
 				}
 			}
@@ -116,15 +105,6 @@ namespace nexural {
 								float_n value = _internalInputData[(((numSamples * _internalInputData.GetK()) + k) * _internalInputData.GetNR() + nr) * _internalInputData.GetNC() + nc];
 								long indx = (n * _dWeights.GetNC() + ((k * _internalInputData.GetNR() + nr) * _internalInputData.GetNC() + nc));
 								_dWeights[indx] += (value * error);
-
-								// =============== DEBUG =====================================
-								if (std::isnan(value * error)) {
-									throw std::runtime_error(" is nan");
-								}
-								else if (std::isinf(value * error)) {
-									throw std::runtime_error(" is inf");
-								}
-								// =============== DEBUG END ==================================
 							}
 						}
 					}
@@ -134,31 +114,25 @@ namespace nexural {
 			// Calculate gradient wrt. input: (prevLayerErrors * _weights)
 			for (long numSamples = 0; numSamples < _layerErrors.GetNumSamples(); numSamples++)
 			{
-				for (long n = 0; n < _numOutputNeurons; n++)
-				{
-					float_n error = prevLayerErrors[numSamples * prevLayerErrors.GetNC() + n];
 					for (long k = 0; k < _layerErrors.GetK(); k++)
 					{
 						for (long nr = 0; nr < _layerErrors.GetNR(); nr++)
 						{
 							for (long nc = 0; nc < _layerErrors.GetNC(); nc++)
 							{
-								long indx = (n * _weights.GetNC() + ((k * _internalInputData.GetNR() + nr) * _internalInputData.GetNC() + nc));
-								float_n value = _weights[indx];
-								_layerErrors[(((numSamples * _layerErrors.GetK()) + k) * _layerErrors.GetNR() + nr) * _layerErrors.GetNC() + nc] = value * error;
-							
-								// =============== DEBUG =====================================
-								if (std::isnan(value * error)) {
-									throw std::runtime_error(" is nan");
+								float_n layerErrorsValue = 0;
+
+								for (long n = 0; n < _numOutputNeurons; n++)
+								{
+									float_n error = prevLayerErrors[numSamples * prevLayerErrors.GetNC() + n];
+									long indx = (n * _weights.GetNC() + ((k * _layerErrors.GetNR() + nr) * _layerErrors.GetNC() + nc));
+									float_n value = _weights[indx];
+									layerErrorsValue += value * error;
 								}
-								else if (std::isinf(value * error)) {
-									throw std::runtime_error(" is inf");
-								}
-								// =============== DEBUG END ==================================
+								_layerErrors[(((numSamples * _layerErrors.GetK()) + k) * _layerErrors.GetNR() + nr) * _layerErrors.GetNC() + nc] = layerErrorsValue;
 							}
 						}
 					}
-				}
 			}
 		}
 

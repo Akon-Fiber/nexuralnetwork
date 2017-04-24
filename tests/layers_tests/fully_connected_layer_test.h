@@ -50,7 +50,7 @@ TEST(LAYERS_TESTS, FULLY_CONNECTED_LAYER_TESTS)
 	});
 
 	layerErrorsExpected.Fill({
-		387, 362, 443, 389
+		387, 362, 443, 393
 	});
 
 	
