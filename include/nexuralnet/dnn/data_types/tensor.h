@@ -89,6 +89,8 @@ namespace nexural {
 		void GetBatch(const Tensor& tensor, const long startIndex, const long batchSize = 1);
 		LayerShape GetShape() const;
 
+		void Flip180(const Tensor& tensor);
+
 		void PrintToConsole() const;
 
 	private:

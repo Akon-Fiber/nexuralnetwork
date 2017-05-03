@@ -222,6 +222,47 @@ namespace nexural {
 		return LayerShape(_numSamples, _k, _nr, _nc);
 	}
 
+	void Tensor::Flip180(const Tensor& tensor) {
+		this->Resize(tensor.GetShape());
+
+		long totalNumSamples = tensor.GetNumSamples();
+		long totalK = tensor.GetK();
+		long totalNC = tensor.GetNC();
+		long totalNR = tensor.GetNR();
+
+		for (long numSample = 0; numSample < totalNumSamples; numSample++) {
+			for (long k = 0; k < totalK; k++) {
+				for (long nc = 0; nc < totalNC / 2; nc++)
+				{
+					for (long nr = 0; nr < totalNR; nr++) {
+						long indexHost = (((numSample * tensor._k) + k) * tensor._nr + nr) * tensor._nc + nc;
+						long indexTensor = (((numSample * tensor._k) + k) * tensor._nr + (totalNR - nr - 1)) * tensor._nc + (totalNC - nc - 1);
+
+						float_n valueHost = tensor[indexHost];
+						float_n valueTensor = tensor[indexTensor];
+
+						_host.get()[indexHost] = valueTensor;
+						_host.get()[indexTensor] = valueHost;
+					}
+				}
+
+				if (totalNC & 1) {
+					// TODO: the center of matrix is calculated twice
+					for (long nc = 0; nc <= totalNR / 2; nc++) {
+						long indexHost = (((numSample * tensor._k) + k) * tensor._nr + nc) * tensor._nc + (totalNC / 2);
+						long indexTensor = (((numSample * tensor._k) + k) * tensor._nr + (totalNR - nc - 1)) * tensor._nc + (totalNC / 2);
+
+						float_n valueHost = tensor[indexHost];
+						float_n valueTensor = tensor[indexTensor];
+
+						_host.get()[indexHost] = valueTensor;
+						_host.get()[indexTensor] = valueHost;
+					}
+				}
+			}
+		}
+	}
+
 	void Tensor::PrintToConsole() const {
 		for (long numSamples = 0; numSamples < _numSamples; numSamples++) {
 			std::cout << "=========== Numsample: " << numSamples << " =============" << std::endl;

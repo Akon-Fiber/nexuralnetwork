@@ -127,24 +127,26 @@ namespace nexural {
 				_dBiases[errorNumSamples] = error;
 			}
 
-			// Calculate gradient wrt. input: (prevLayerErrors * _weights)
-			long paddingWidth = _weights.GetNC() - 1;
-			long paddingHeight = _weights.GetNR() - 1;
+			// Calculate gradient wrt. input: (prevLayerErrors * rotated(_weights))
+			_rotatedWeights.Flip180(_weights);
+
+			long paddingWidth = _rotatedWeights.GetNC() - 1;
+			long paddingHeight = _rotatedWeights.GetNR() - 1;
 			Tensor convPrevLayerErrors;
 			AddPadding(prevLayerErrors, convPrevLayerErrors, paddingWidth, paddingHeight);
 
 			for (long numSamples = 0; numSamples < convPrevLayerErrors.GetNumSamples(); numSamples++) {
-				for (long k = 0; k < _weights.GetK(); k++) {
+				for (long k = 0; k < _rotatedWeights.GetK(); k++) {
 					long nro = 0;
-					for (long nr = 0; nr < convPrevLayerErrors.GetNR() - _weights.GetNR() + 1; nr += _strideHeight) {
+					for (long nr = 0; nr < convPrevLayerErrors.GetNR() - _rotatedWeights.GetNR() + 1; nr += _strideHeight) {
 						long nco = 0;
-						for (long nc = 0; nc < convPrevLayerErrors.GetNC() - _weights.GetNC() + 1; nc += _strideWidth) {
+						for (long nc = 0; nc < convPrevLayerErrors.GetNC() - _rotatedWeights.GetNC() + 1; nc += _strideWidth) {
 							float_n error = 0;
-							for (long i = 0; i < _weights.GetNR(); i++) {
-								for (long j = 0; j < _weights.GetNC(); j++) {
+							for (long i = 0; i < _rotatedWeights.GetNR(); i++) {
+								for (long j = 0; j < _rotatedWeights.GetNC(); j++) {
 									for (long numOfFilters = 0; numOfFilters < convPrevLayerErrors.GetK(); numOfFilters++) {
 										error += convPrevLayerErrors[(((numSamples * convPrevLayerErrors.GetK()) + numOfFilters) * convPrevLayerErrors.GetNR() + (nr + i)) * convPrevLayerErrors.GetNC() + (nc + j)]
-											* _weights[(((numOfFilters * _weights.GetK()) + k) * _weights.GetNR() + i) * _weights.GetNC() + j];
+											* _rotatedWeights[(((numOfFilters * _rotatedWeights.GetK()) + k) * _rotatedWeights.GetNR() + i) * _rotatedWeights.GetNC() + j];
 									}
 								}
 							}
@@ -209,6 +211,7 @@ namespace nexural {
 
 	private:
 		Tensor _internalInputData;
+		Tensor _rotatedWeights;
 		long _numOfFilters;
 		long _kernelWidth;
 		long _kernelHeight;

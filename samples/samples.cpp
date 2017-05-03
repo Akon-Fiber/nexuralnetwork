@@ -53,7 +53,24 @@ void Menu() {
 }
 
 void Experimental(const std::string& dataFolderPath) {
+	nexural::Tensor testTensor;
+	testTensor.Resize(1, 1, 3, 3);
+	/*testTensor.Fill({
+		2, 5, 7, 3,
+		4, 9, 14, 15,
+		8, 11, 13, 10,
+		1, 12, 6, 16
+	});*/
 
+	testTensor.Fill({
+		2, 5, 7,
+		4, 9, 14,
+		8, 11, 13
+	});
+
+	nexural::Tensor testFlip;
+	testFlip.Flip180(testTensor);
+	testFlip.PrintToConsole();
 }
 
 void DoTests(const int option, const std::string& dataFolderPath) {
