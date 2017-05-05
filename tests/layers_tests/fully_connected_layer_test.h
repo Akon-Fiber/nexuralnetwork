@@ -20,44 +20,50 @@ OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 */
 
 #include "../stdafx.h"
-#include <nexuralnet\dnn\layers\computational_layers\fully_connected_layer.h>
+#include <nexuralnet/dnn/layers/computational_layers/fully_connected_layer.h>
 using namespace nexural;
 
 TEST(LAYERS_TESTS, FULLY_CONNECTED_LAYER_TESTS)
 {
 	// Init data for testing
-	Params layerParams { { "neurons", "5" } };
-	LayerShape inputShape(1, 1, 2, 2);
+	Params layerParams{ { "neurons", "5" } };
+	LayerShape inputShape(2, 1, 2, 2);
 	Tensor inputData(inputShape);
-	Tensor *feedForwardResult, feedForwardExpected(1, 1, 1, 5);
-	Tensor *layerErrorsResult, layerErrorsExpected(inputShape), prevLayerErrors(1, 1, 1, 5);
+	Tensor *feedForwardResult, feedForwardExpected(2, 1, 1, 5);
+	Tensor *layerErrorsResult, layerErrorsExpected(inputShape), prevLayerErrors(2, 1, 1, 5);
 	FullyConnectedLayer fullyConnectedLayer(layerParams);
 	fullyConnectedLayer.Setup(inputShape, 0);
 	fullyConnectedLayer.SetupLayerForTraining();
 
 	// Fill data for testing
-	inputData.Fill({ 
-		5, 9, 3, 6
+	inputData.Fill({
+		5, 9, 3, 6,
+		12, 7, 11, 9
 	});
 
 	feedForwardExpected.Fill({
-		129, 194, 188, 294, 208
+		129, 194, 188, 294, 208,
+		186, 350, 225, 576, 393
 	});
 
 
 	prevLayerErrors.Fill({
-		6, 8, 9, 15, 3
+		6, 8, 9, 15, 3,
+		5, 18, 3, 7, 21
 	});
 
 	layerErrorsExpected.Fill({
-		387, 362, 443, 393
+		387, 362, 443, 393,
+		628, 414, 538, 397
 	});
 
-	
+
 	fullyConnectedLayer.SetWeights({
-		3, 8, 5, 4, 9, 10, 13,
-		3, 1, 11, 2, 12, 16, 8,
-		18, 14, 16, 5, 7, 9
+		3, 8, 5, 4,
+		9, 10, 13, 3,
+		1, 11, 2, 12,
+		16, 8, 18, 14,
+		16, 5, 7, 9
 	});
 
 	fullyConnectedLayer.SetBiases({

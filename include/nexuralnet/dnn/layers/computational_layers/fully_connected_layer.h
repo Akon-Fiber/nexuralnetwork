@@ -64,15 +64,16 @@ namespace nexural {
 						{
 							for (long nc = 0; nc < inputData.GetNC(); nc++)
 							{
-								float_n inputValue = inputData[(((numSamples * inputData.GetK()) + k) * inputData.GetNR() + nr) * inputData.GetNC() + nc];
+								long inputIdx = (((numSamples * inputData.GetK()) + k) * inputData.GetNR() + nr) * inputData.GetNC() + nc;
+								float_n inputValue = inputData[inputIdx];
 								
-								long indx = (n * _weights.GetNC() + ((k * inputData.GetNR() + nr) * inputData.GetNC() + nc));
-								float_n weightValue = _weights[indx];
+								long weightsIdx = (n * _weights.GetNC() + ((k * inputData.GetNR() + nr) * inputData.GetNC() + nc));
+								float_n weightValue = _weights[weightsIdx];
 								neuronCalculatedValue += (inputValue * weightValue);
 							}
 						}
 					}
-					_outputData[numSamples * inputData.GetNC() + n] = neuronCalculatedValue + _biases[n];
+					_outputData[numSamples * _outputData.GetNC() + n] = neuronCalculatedValue + _biases[n];
 				}
 			}
 		}
@@ -94,7 +95,8 @@ namespace nexural {
 				for (long n = 0; n < _numOutputNeurons; n++)
 				{
 					float_n error = prevLayerErrors[numSamples * prevLayerErrors.GetNC() + n];
-					_dBiases[numSamples * prevLayerErrors.GetNC() + n] += error;
+					//_dBiases[numSamples * prevLayerErrors.GetNC() + n] += error;
+					_dBiases[n] += error;
 
 					for (long k = 0; k < _internalInputData.GetK(); k++)
 					{
