@@ -48,6 +48,17 @@ namespace nexural {
 			{
 				float_n value = inputData[i];
 				_outputData[i] = std::tanh(value);
+
+				// =============== DEBUG =====================================
+#ifdef _ENABLE_NUMERICALLY_STABLE_DEBUG
+				if (std::isnan(_outputData[i])) {
+					throw std::runtime_error("Detected nan value in tanh layer (feedforward) | Value: " + std::to_string(_outputData[i]));
+				}
+				else if (std::isinf(_outputData[i])) {
+					throw std::runtime_error("Detected inf value in tanh layer (feedforward) | Value: " + std::to_string(_outputData[i]));
+				}
+#endif
+				// =============== DEBUG END ==================================
 			}
 		}
 
@@ -61,6 +72,17 @@ namespace nexural {
 				float_n error = prevLayerErrors[i];
 				float_n value = _internalInputData[i];
 				_layerErrors[i] = static_cast<float_n>(error * (1.0 - std::tanh(value) * std::tanh(value)));
+
+				// =============== DEBUG =====================================
+#ifdef _ENABLE_NUMERICALLY_STABLE_DEBUG
+				if (std::isnan(_layerErrors[i])) {
+					throw std::runtime_error("Detected nan value in tanh layer (backprop - calculating error) | Input value: " + std::to_string(value) + " Error value: " + std::to_string(error));
+				}
+				else if (std::isinf(_layerErrors[i])) {
+					throw std::runtime_error("Detected inf value in tanh layer (backprop - calculating error) | Input value: " + std::to_string(value) + " Error value: " + std::to_string(error));
+				}
+#endif
+				// =============== DEBUG END ==================================
 			}
 		}
 

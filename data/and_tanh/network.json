@@ -28,12 +28,6 @@
       }
     },
     {
-      "type": "tanh",
-      "params": {
-
-      }
-    },
-    {
       "type": "mse",
       "params": {
 

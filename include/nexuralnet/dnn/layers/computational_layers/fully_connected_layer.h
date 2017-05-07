@@ -66,14 +66,36 @@ namespace nexural {
 							{
 								long inputIdx = (((numSamples * inputData.GetK()) + k) * inputData.GetNR() + nr) * inputData.GetNC() + nc;
 								float_n inputValue = inputData[inputIdx];
-								
+
 								long weightsIdx = (n * _weights.GetNC() + ((k * inputData.GetNR() + nr) * inputData.GetNC() + nc));
 								float_n weightValue = _weights[weightsIdx];
 								neuronCalculatedValue += (inputValue * weightValue);
+
+								// =============== DEBUG =====================================
+#ifdef _ENABLE_NUMERICALLY_STABLE_DEBUG
+								if (std::isnan(neuronCalculatedValue)) {
+									throw std::runtime_error("Detected nan value in fully connected layer (feedforward) | Input value: " + std::to_string(inputValue) + " Weight value: " + std::to_string(weightValue));
+								}
+								else if (std::isinf(neuronCalculatedValue)) {
+									throw std::runtime_error("Detected inf value in fully connected layer (feedforward) | Input value: " + std::to_string(inputValue) + " Weight value: " + std::to_string(weightValue));
+								}
+#endif
+								// =============== DEBUG END ==================================
 							}
 						}
 					}
 					_outputData[numSamples * _outputData.GetNC() + n] = neuronCalculatedValue + _biases[n];
+
+					// =============== DEBUG =====================================
+#ifdef _ENABLE_NUMERICALLY_STABLE_DEBUG
+					if (std::isnan(_outputData[numSamples * _outputData.GetNC() + n])) {
+						throw std::runtime_error("Detected nan value in fully connected layer (feedforward) | Neuron value: " + std::to_string(neuronCalculatedValue) + " Bias value: " + std::to_string(_biases[n]));
+					}
+					else if (std::isinf(_outputData[numSamples * _outputData.GetNC() + n])) {
+						throw std::runtime_error("Detected inf value in fully connected layer (feedforward) | Neuron value: " + std::to_string(neuronCalculatedValue) + " Bias value: " + std::to_string(_biases[n]));
+					}
+#endif
+					// =============== DEBUG END ==================================
 				}
 			}
 		}
@@ -95,8 +117,18 @@ namespace nexural {
 				for (long n = 0; n < _numOutputNeurons; n++)
 				{
 					float_n error = prevLayerErrors[numSamples * prevLayerErrors.GetNC() + n];
-					//_dBiases[numSamples * prevLayerErrors.GetNC() + n] += error;
 					_dBiases[n] += error;
+
+					// =============== DEBUG =====================================
+#ifdef _ENABLE_NUMERICALLY_STABLE_DEBUG
+					if (std::isnan(_dBiases[n])) {
+						throw std::runtime_error("Detected nan value in fully connected layer (backprop - calculating bias delta) | dBias value: " + std::to_string(_dBiases[n]));
+					}
+					else if (std::isinf(_dBiases[n])) {
+						throw std::runtime_error("Detected inf value in fully connected layer (backprop - calculating bias delta) | dBias value: " + std::to_string(_dBiases[n]));
+					}
+#endif
+					// =============== DEBUG END ==================================
 
 					for (long k = 0; k < _internalInputData.GetK(); k++)
 					{
@@ -107,6 +139,17 @@ namespace nexural {
 								float_n value = _internalInputData[(((numSamples * _internalInputData.GetK()) + k) * _internalInputData.GetNR() + nr) * _internalInputData.GetNC() + nc];
 								long indx = (n * _dWeights.GetNC() + ((k * _internalInputData.GetNR() + nr) * _internalInputData.GetNC() + nc));
 								_dWeights[indx] += (value * error);
+
+								// =============== DEBUG =====================================
+#ifdef _ENABLE_NUMERICALLY_STABLE_DEBUG
+								if (std::isnan(_dWeights[indx])) {
+									throw std::runtime_error("Detected nan value in fully connected layer (backprop - calculating weight delta) | Input value: " + std::to_string(value) + " Error value: " + std::to_string(error));
+								}
+								else if (std::isinf(_dWeights[indx])) {
+									throw std::runtime_error("Detected inf value in fully connected layer (backprop - calculating weight delta) | Input value: " + std::to_string(value) + " Error value: " + std::to_string(error));
+								}
+#endif
+								// =============== DEBUG END ==================================
 							}
 						}
 					}
@@ -130,8 +173,31 @@ namespace nexural {
 									long indx = (n * _weights.GetNC() + ((k * _layerErrors.GetNR() + nr) * _layerErrors.GetNC() + nc));
 									float_n value = _weights[indx];
 									layerErrorsValue += value * error;
+
+									// =============== DEBUG =====================================
+#ifdef _ENABLE_NUMERICALLY_STABLE_DEBUG
+									if (std::isnan(layerErrorsValue)) {
+										throw std::runtime_error("Detected nan value in fully connected layer (backprop - calculating error) | Error value: " + std::to_string(error) + " Weight value: " + std::to_string(value));
+									}
+									else if (std::isinf(layerErrorsValue)) {
+										throw std::runtime_error("Detected inf value in fully connected layer (backprop - calculating error) | Error value: " + std::to_string(error) + " Weight value: " + std::to_string(value));
+									}
+#endif
+									// =============== DEBUG END ==================================
 								}
+
 								_layerErrors[(((numSamples * _layerErrors.GetK()) + k) * _layerErrors.GetNR() + nr) * _layerErrors.GetNC() + nc] = layerErrorsValue;
+								
+								// =============== DEBUG =====================================
+#ifdef _ENABLE_NUMERICALLY_STABLE_DEBUG
+								if (std::isnan(layerErrorsValue)) {
+									throw std::runtime_error("Detected nan value in fully connected layer (backprop - setting error)");
+								}
+								else if (std::isinf(layerErrorsValue)) {
+									throw std::runtime_error("Detected inf value in fully connected layer (backprop - setting error)");
+								}
+#endif
+								// =============== DEBUG END ==================================
 							}
 						}
 					}

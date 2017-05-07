@@ -11,7 +11,7 @@
     },
     "solver": {
       "algorithm": "sgd_momentum",
-      "learning_rate": "0.01",
+      "learning_rate": "0.1",
       "weight_decay": "0.00005",
       "momentum": "0.9"
     }
