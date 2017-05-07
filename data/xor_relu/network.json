@@ -12,7 +12,19 @@
     {
       "type": "fully_connected",
       "params": {
-        "neurons": "4"
+        "neurons": "7"
+      }
+    },
+    {
+      "type": "leaky_relu",
+      "params": {
+
+      }
+    },
+    {
+      "type": "fully_connected",
+      "params": {
+        "neurons": "9"
       }
     },
     {
@@ -25,12 +37,6 @@
       "type": "fully_connected",
       "params": {
         "neurons": "1"
-      }
-    },
-    {
-      "type": "leaky_relu",
-      "params": {
-
       }
     },
     {

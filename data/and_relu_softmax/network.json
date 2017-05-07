@@ -28,12 +28,6 @@
       }
     },
     {
-      "type": "leaky_relu",
-      "params": {
-
-      }
-    },
-    {
       "type": "softmax",
       "params": {
 
