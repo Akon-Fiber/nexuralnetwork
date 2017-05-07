@@ -43,10 +43,10 @@
         "num_of_filters": "5",
         "kernel_width": "2",
         "kernel_height": "2",
-        "padding_width": "2",
-        "padding_height": "2",
-        "stride_width": "2",
-        "stride_height": "2"
+        "padding_width": "0",
+        "padding_height": "0",
+        "stride_width": "1",
+        "stride_height": "1"
       }
     },
     {
