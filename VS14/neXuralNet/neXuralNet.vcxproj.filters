@@ -196,12 +196,6 @@
     <ClInclude Include="..\..\include\nexuralnet\tools\converter.h">
       <Filter>src\tools</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\include\neXuralNet\dnn\layers\computational_layers\dynamic_average_pooling_layer.h">
-      <Filter>src\nexural\dnn\layers\computational_layers</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\include\neXuralNet\dnn\layers\computational_layers\dynamic_max_pooling_layer.h">
-      <Filter>src\nexural\dnn\layers\computational_layers</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\include\nexuralnet\dnn\layers\computational_layers\average_pooling_layer.h">
       <Filter>src\nexural\dnn\layers\computational_layers</Filter>
     </ClInclude>
