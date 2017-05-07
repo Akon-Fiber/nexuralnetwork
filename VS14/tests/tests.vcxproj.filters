@@ -47,6 +47,9 @@
     <ClInclude Include="..\..\tests\layers_tests\leaky_layer_test.h">
       <Filter>src\layers_tests</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\tests\layers_tests\softmax_loss_layer_test.h">
+      <Filter>src\layers_tests</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

@@ -155,6 +155,7 @@
     <ClInclude Include="..\..\tests\layers_tests\leaky_layer_test.h" />
     <ClInclude Include="..\..\tests\layers_tests\max_pooling_layer_test.h" />
     <ClInclude Include="..\..\tests\layers_tests\relu_layer_test.h" />
+    <ClInclude Include="..\..\tests\layers_tests\softmax_loss_layer_test.h" />
     <ClInclude Include="..\..\tests\stdafx.h" />
     <ClInclude Include="..\..\tests\tests.h" />
   </ItemGroup>
