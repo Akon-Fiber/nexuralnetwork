@@ -20,10 +20,10 @@ OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 */
 
 #include "../stdafx.h"
-#include <nexuralnet/dnn/layers/computational_layers/relu_layer.h>
+#include <nexuralnet/dnn/layers/computational_layers/leaky_relu_layer.h>
 using namespace nexural;
 
-TEST(LAYERS_TESTS, RELU_LAYER_TESTS)
+TEST(LAYERS_TESTS, LEAKY_RELU_LAYER_TESTS)
 {
 	// Init layer
 	Params layerParams;
@@ -31,9 +31,9 @@ TEST(LAYERS_TESTS, RELU_LAYER_TESTS)
 	Tensor inputData(inputShape);
 	Tensor *feedForwardResult, feedForwardExpected(3, 2, 3, 2);
 	Tensor *layerErrorsResult, layerErrorsExpected(inputShape), prevLayerErrors(3, 2, 3, 2);
-	ReluLayer reluLayer(layerParams);
-	reluLayer.Setup(inputShape, 0);
-	reluLayer.SetupLayerForTraining();
+	LeakyReluLayer leakyReluLayer(layerParams);
+	leakyReluLayer.Setup(inputShape, 0);
+	leakyReluLayer.SetupLayerForTraining();
 
 	// Fill data for testing
 	inputData.Fill({
@@ -43,29 +43,29 @@ TEST(LAYERS_TESTS, RELU_LAYER_TESTS)
 	});
 
 	feedForwardExpected.Fill({
-		5, 9, 0, 6, 0, 7, 11, 0, 14, 21, 30, 0,
-		0, 14, 22, 47, 35, 32, 0, 7, 0, 5, 33, 40,
-		6, 0, 1, 0, 50, 3, 0, 9, 16, 0, 37, 0
+		5, 9, -0.03, 6, -0.12, 7, 11, -0.09, 14, 21, 30, -0.42,
+		0, 14, 22, 47, 35, 32, 0, 7, -0.29, 5, 33, 40,
+		6, -0.17, 1, -0.24, 50, 3, -0.07, 9, 16, -0.2, 37, 0
 	});
 
 	prevLayerErrors.Fill({
 		23, 19, -54, 15, -22, 35, 72, -91, 4, 15, 88, -2,
 		10, 98, 12, 3, 25, 42, 0, 12, -91, 2, 9, 14,
-		4, -37, 11, -14, 32, 30, -13, 49, 23, -40, 87, 10
+		4, -37, 11, -14, 32, 30, -13, 49, 23, -4, 87, 10
 	});
 
 	layerErrorsExpected.Fill({
-		23, 19, 0, 15, 0, 35, 72, 0, 4, 15, 88, 0,
-		0, 98, 12, 3, 25, 42, 0, 12, 0, 2, 9, 14,
-		4, 0, 11, 0, 32, 30, 0, 49, 23, 0, 87, 0
+		23, 19, -0.54, 15, -0.22, 35, 72, -0.91, 4, 15, 88, -0.02,
+		0.1, 98, 12, 3, 25, 42, 0, 12, -0.91, 2, 9, 14,
+		4, -0.37, 11, -0.14, 32, 30, -0.13, 49, 23, -0.04, 87, 0.1
 	});
 
 
 	// Running the code
-	reluLayer.FeedForward(inputData);
-	feedForwardResult = reluLayer.GetOutput();
-	reluLayer.BackPropagate(prevLayerErrors);
-	layerErrorsResult = reluLayer.GetLayerErrors();
+	leakyReluLayer.FeedForward(inputData);
+	feedForwardResult = leakyReluLayer.GetOutput();
+	leakyReluLayer.BackPropagate(prevLayerErrors);
+	layerErrorsResult = leakyReluLayer.GetLayerErrors();
 
 	// Testing the results
 	ASSERT_EQ(*feedForwardResult, feedForwardExpected);

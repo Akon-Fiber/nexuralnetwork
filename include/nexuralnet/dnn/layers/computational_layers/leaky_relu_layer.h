@@ -60,7 +60,7 @@ namespace nexural {
 			{
 				float_n error = prevLayerErrors[i];
 				float_n value = _internalInputData[i];
-				_layerErrors[i] = value < 0 ? (float_n)0.01 * error : error;
+				_layerErrors[i] = value <= 0 ? (float_n)0.01 * error : error;
 			}
 		}
 
