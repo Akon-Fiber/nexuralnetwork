@@ -202,6 +202,9 @@
     <ClInclude Include="..\..\include\nexuralnet\dnn\layers\computational_layers\max_pooling_layer.h">
       <Filter>src\nexural\dnn\layers\computational_layers</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\include\nexuralnet\dnn\utility\filler.h">
+      <Filter>src\nexural\utility</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\include\neXuralNet\dnn\data_types\tensor.cpp">

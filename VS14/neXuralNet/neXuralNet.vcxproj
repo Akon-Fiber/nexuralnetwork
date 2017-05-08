@@ -187,6 +187,7 @@
     <ClInclude Include="..\..\include\neXuralNet\dnn\solvers\solvers.h" />
     <ClInclude Include="..\..\include\nexuralnet\dnn\utility\config_reader\config_reader.h" />
     <ClInclude Include="..\..\include\nexuralnet\dnn\utility\config_reader\json_config_reader.h" />
+    <ClInclude Include="..\..\include\nexuralnet\dnn\utility\filler.h" />
     <ClInclude Include="..\..\include\neXuralNet\dnn\utility\helper.h" />
     <ClInclude Include="..\..\include\neXuralNet\dnn\utility\params_parser.h" />
     <ClInclude Include="..\..\include\neXuralNet\dnn\utility\serializer\base_serializer.h" />
