@@ -118,16 +118,19 @@ namespace nexural {
 			}
 
 			// Calculate gradient wrt. biases: (prevLayerErrors * 1)
-			long numberOfElementsPerSample = prevLayerErrors.GetK() * prevLayerErrors.GetNR() * prevLayerErrors.GetNC();
-			for (long errorNumSamples = 0; errorNumSamples < prevLayerErrors.GetNumSamples(); errorNumSamples++) {
+			for (long numFilters = 0; numFilters < prevLayerErrors.GetK(); numFilters++) {
 				float_n error = 0;
-				for (long index = 0; index < numberOfElementsPerSample; index++) {
-					error += prevLayerErrors[(errorNumSamples * numberOfElementsPerSample) + index];
+				for (long nr = 0; nr < prevLayerErrors.GetNR(); nr++) {
+					for (long nc = 0; nc < prevLayerErrors.GetNC(); nc++) {
+						for (long numSamples = 0; numSamples < prevLayerErrors.GetNumSamples(); numSamples++) {
+							error += prevLayerErrors[(((numSamples * prevLayerErrors.GetK()) + numFilters) * prevLayerErrors.GetNR() + nr) * prevLayerErrors.GetNC() + nc];
+						}
+					}
 				}
-				_dBiases[errorNumSamples] = error;
+				_dBiases[numFilters] = error;
 			}
 
-			// Calculate gradient wrt. input: (prevLayerErrors * rotated(_weights))
+			// Calculate gradient wrt. input: (prevLayerErrors * rotated180(_weights))
 			_rotatedWeights.Flip180(_weights);
 
 			long paddingWidth = _rotatedWeights.GetNC() - 1;
