@@ -1,17 +1,17 @@
 {
   	"trainer_settings": {
     	"max_num_epochs": "10000",
-    	"min_learning_rate_threshold": "0.000000001",
-    	"min_validation_error_threshold": "0.001",
-    	"max_epochs_without_progress": "50",
-  		"update_learning_rate_threshold": "0.001",
-  		"learning_rate_decay": "0.0003",
+    	"min_learning_rate_threshold": "0.00000001",
+    	"min_validation_error_threshold": "0.078",
+    	"max_epochs_without_progress": "100",
+  		"update_learning_rate_threshold": "0.0001",
+  		"learning_rate_decay": "0.00003",
     	"batch_size": "1",
     	"be_verbose": "true"
   	},
     "solver": {
       "algorithm": "sgd_momentum",
-      "learning_rate": "0.1",
+      "learning_rate": "0.003",
       "weight_decay": "0.0005",
       "momentum": "0.9"
     }

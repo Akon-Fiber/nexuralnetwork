@@ -75,7 +75,7 @@ void Test_MNIST_Softmax(const std::string& dataFolderPath) {
 	std::cout << "Target: 5" << std::endl;
 	net.Run(inputData);
 	std::cout << std::endl;
-	image = cv::imread(testDataPath + "6.jpg", cv::IMREAD_GRAYSCALE);
+	image = cv::imread(testDataPath + "6b.jpg", cv::IMREAD_GRAYSCALE);
 	nexural::converter::ConvertToTensor(image, inputData);
 	std::cout << "Target: 6" << std::endl;
 	net.Run(inputData);
