@@ -60,28 +60,62 @@ void Test_MNIST_Softmax(const std::string& dataFolderPath) {
 	net.Deserialize(exampleRoot + "mnist.json");
 
 	std::cout << "Test the trained network: " << std::endl;
-	image = cv::imread(testDataPath + "0.jpg", cv::IMREAD_GRAYSCALE);
+	image = cv::imread(testDataPath + "0-a.jpg", cv::IMREAD_GRAYSCALE);
 	nexural::converter::ConvertToTensor(image, inputData);
 	std::cout << "Target: 0" << std::endl;
 	net.Run(inputData);
 	std::cout << std::endl;
-	image = cv::imread(testDataPath + "2.jpg", cv::IMREAD_GRAYSCALE);
+
+	image = cv::imread(testDataPath + "1-a.jpg", cv::IMREAD_GRAYSCALE);
+	nexural::converter::ConvertToTensor(image, inputData);
+	std::cout << "Target: 1" << std::endl;
+	net.Run(inputData);
+	std::cout << std::endl;
+
+	image = cv::imread(testDataPath + "2-a.jpg", cv::IMREAD_GRAYSCALE);
 	nexural::converter::ConvertToTensor(image, inputData);
 	std::cout << "Target: 2" << std::endl;
 	net.Run(inputData);
 	std::cout << std::endl;
-	image = cv::imread(testDataPath + "5.jpg", cv::IMREAD_GRAYSCALE);
+
+	image = cv::imread(testDataPath + "3-a.jpg", cv::IMREAD_GRAYSCALE);
+	nexural::converter::ConvertToTensor(image, inputData);
+	std::cout << "Target: 3" << std::endl;
+	net.Run(inputData);
+	std::cout << std::endl;
+
+	image = cv::imread(testDataPath + "4-a.jpg", cv::IMREAD_GRAYSCALE);
+	nexural::converter::ConvertToTensor(image, inputData);
+	std::cout << "Target: 4" << std::endl;
+	net.Run(inputData);
+	std::cout << std::endl;
+
+	image = cv::imread(testDataPath + "5-a.jpg", cv::IMREAD_GRAYSCALE);
 	nexural::converter::ConvertToTensor(image, inputData);
 	std::cout << "Target: 5" << std::endl;
 	net.Run(inputData);
 	std::cout << std::endl;
-	image = cv::imread(testDataPath + "6b.jpg", cv::IMREAD_GRAYSCALE);
+
+	image = cv::imread(testDataPath + "6-a.jpg", cv::IMREAD_GRAYSCALE);
 	nexural::converter::ConvertToTensor(image, inputData);
 	std::cout << "Target: 6" << std::endl;
 	net.Run(inputData);
 	std::cout << std::endl;
-	image = cv::imread(testDataPath + "8.jpg", cv::IMREAD_GRAYSCALE);
+
+	image = cv::imread(testDataPath + "7-a.jpg", cv::IMREAD_GRAYSCALE);
+	nexural::converter::ConvertToTensor(image, inputData);
+	std::cout << "Target: 7" << std::endl;
+	net.Run(inputData);
+	std::cout << std::endl;
+
+	image = cv::imread(testDataPath + "8-a.jpg", cv::IMREAD_GRAYSCALE);
 	nexural::converter::ConvertToTensor(image, inputData);
 	std::cout << "Target: 8" << std::endl;
+	net.Run(inputData);
+	std::cout << std::endl;
+
+	image = cv::imread(testDataPath + "9-a.jpg", cv::IMREAD_GRAYSCALE);
+	nexural::converter::ConvertToTensor(image, inputData);
+	std::cout << "Target: 9" << std::endl;
 	net.Run(inputData);
 }
