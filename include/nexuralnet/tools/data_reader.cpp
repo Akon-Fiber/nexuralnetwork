@@ -140,7 +140,7 @@ namespace nexural {
 				images.push_back(image);
 			}
 
-			converter::ConvertToTensor(images, tensor);
+			converter::CvtVecOfMatToTensor(images, tensor);
 		}
 
 		void DataReader::ReadTensorFromFile(const std::string filePath, Tensor& tensor) {

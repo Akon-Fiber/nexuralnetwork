@@ -30,8 +30,10 @@ namespace cv {
 
 namespace nexural {
 	namespace converter {
-		void ConvertToTensor(const cv::Mat& sourceImage, Tensor& outputData);
-		void ConvertToTensor(const std::vector<cv::Mat>& sourceImages, Tensor& outputData);
+		void CvtMatToTensor(const cv::Mat& sourceImage, Tensor& outputData);
+		void CvtVecOfMatToTensor(const std::vector<cv::Mat>& sourceImages, Tensor& outputData);
+		void CvtTensorToMat(const Tensor& inputData, cv::Mat& outputImage);
+		void CvtTensorToVecOfMat(const Tensor& outputData, std::vector<cv::Mat>& outputImage);
 	}
 }
 #endif

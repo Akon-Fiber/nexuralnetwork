@@ -24,7 +24,7 @@ OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
 namespace nexural {
 	namespace converter {
-		void ConvertToTensor(const cv::Mat& sourceImage, Tensor& outputData) {
+		void CvtMatToTensor(const cv::Mat& sourceImage, Tensor& outputData) {
 			outputData.Resize(1, sourceImage.channels(), sourceImage.rows, sourceImage.cols);
 
 			if (sourceImage.channels() == 1) {
@@ -55,7 +55,7 @@ namespace nexural {
 			}
 		}
 
-		void ConvertToTensor(const std::vector<cv::Mat>& sourceImages, Tensor& outputData) {
+		void CvtVecOfMatToTensor(const std::vector<cv::Mat>& sourceImages, Tensor& outputData) {
 			if (sourceImages.size() == 0) {
 				return;
 			}
@@ -88,6 +88,14 @@ namespace nexural {
 					}
 				}
 			}
+		}
+
+		void CvtTensorToMat(const Tensor& inputData, cv::Mat& outputImage) {
+
+		}
+
+		void CvtTensorToVecOfMat(const Tensor& outputData, std::vector<cv::Mat>& outputImage) {
+
 		}
 	}
 }
