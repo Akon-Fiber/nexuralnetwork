@@ -19,9 +19,6 @@ TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE
 OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 */
 
-//#include <opencv2/highgui/highgui.hpp>
-//#include <opencv2/core/mat.hpp>
-
 #include <stdlib.h>
 #include <conio.h>
 
@@ -31,7 +28,7 @@ OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 #include "xor_gate_with_relu_softmax.h"
 #include "and_gate_with_relu_softmax.h"
 #include "mnist_softmax.h"
-#include "mnist_mse.h"
+#include "../include/nexuralnet/experimental/core.h"
 
 void Menu() {
 	std::cout << "--------------------------MENU--------------------------" << std::endl;
@@ -47,72 +44,45 @@ void Menu() {
 	std::cout << "| 8 - AND gate with RELU and Softmax" << std::endl;
 	std::cout << "| 9 - XOR gate with RELU and Softmax" << std::endl;
 	std::cout << "| 10 - MNIST with Softmax" << std::endl;
-	std::cout << "| 11 - MNIST with MSE" << std::endl;
-	std::cout << "| 12 - Experminetal" << std::endl;
+	std::cout << "| e - Experminetal" << std::endl;
 	std::cout << "--------------------------------------------------------" << std::endl << std::endl;
 }
 
-void Experimental(const std::string& dataFolderPath) {
-	nexural::Tensor testTensor;
-	testTensor.Resize(1, 1, 3, 3);
-	/*testTensor.Fill({
-		2, 5, 7, 3,
-		4, 9, 14, 15,
-		8, 11, 13, 10,
-		1, 12, 6, 16
-	});*/
-
-	testTensor.Fill({
-		2, 5, 7,
-		4, 9, 14,
-		8, 11, 13
-	});
-
-	nexural::Tensor testFlip;
-	testFlip.Flip180(testTensor);
-	testFlip.PrintToConsole();
-}
-
-void DoTests(const int option, const std::string& dataFolderPath) {
-	switch (option) {
-	case 1:
+void DoTests(const std::string& option, const std::string& dataFolderPath) {
+	if (option == "1") {
 		GenerateTestData(tools::TestDataType::AND_SOFTMAX);
-		break;
-	case 2:
+	}
+	else if (option == "2") {
 		GenerateTestData(tools::TestDataType::XOR_SOFTMAX);
-		break;
-	case 3:
+	}
+	else if (option == "3") {
 		GenerateTestData(tools::TestDataType::AND);
-		break;
-	case 4:
+	}
+	else if (option == "4") {
 		GenerateTestData(tools::TestDataType::XOR);
-		break;
-	case 5:
+	}
+	else if (option == "5") {
 		Test_AND_Gate_With_TanH(dataFolderPath);
-		break;
-	case 6:
+	}
+	else if (option == "6") {
 		Test_AND_Gate_With_RELU(dataFolderPath);
-		break;
-	case 7:
+	}
+	else if (option == "7") {
 		Test_XOR_Gate_With_RELU(dataFolderPath);
-		break;
-	case 8:
+	}
+	else if (option == "8") {
 		Test_AND_Gate_With_RELU_Softmax(dataFolderPath);
-		break;
-	case 9:
+	}
+	else if (option == "9") {
 		Test_XOR_Gate_With_RELU_Softmax(dataFolderPath);
-		break;
-	case 10:
+	}
+	else if (option == "10") {
 		Test_MNIST_Softmax(dataFolderPath);
-		break;
-	case 11:
-		Test_MNIST_MSE(dataFolderPath);
-		break;
-	case 12:
-		Experimental(dataFolderPath);
-		break;
-	default:
-		break;
+	}
+	else if (option == "e") {
+		nexural::experimental::TestDemo();
+	} else {
+		std::cout << "Option inserted isn't correct! Please, try again!" << std::endl;
 	}
 }
 
@@ -125,9 +95,9 @@ int main(int argc, char* argv[]) {
 	}
 
 	std::string dataFolderPath = argv[1];
-	int option = 1;
+	std::string option = "1";
 
-	while (option != 0) {
+	while (option != "0") {
 		try {
 			Menu();
 			std::cout << "Chose an option:" << std::endl;

@@ -27,6 +27,7 @@ using namespace nexural;
 
 void Test_MNIST_Softmax(const std::string& dataFolderPath) {
 	Tensor inputData, trainingData, targetData;
+	Tensor testingData, testingTargetData;
 	cv::Mat image;
 
 	std::string exampleRoot = dataFolderPath + "\\mnist_softmax\\";
@@ -34,6 +35,8 @@ void Test_MNIST_Softmax(const std::string& dataFolderPath) {
 	std::string trainerConfigPath = exampleRoot + "trainer.json";
 	std::string trainingDataPath = exampleRoot + "train-images.idx3-ubyte";
 	std::string targetDataPath = exampleRoot + "train-labels.idx1-ubyte";
+	std::string testingDataPath = exampleRoot + "t10k-images.idx3-ubyte";
+	std::string testingTargetDataPath = exampleRoot + "t10k-labels.idx1-ubyte";
 	std::string testDataPath = exampleRoot + "test_images\\";
 
 	int option = 0, numOfSamples = 0;
@@ -60,7 +63,25 @@ void Test_MNIST_Softmax(const std::string& dataFolderPath) {
 	net.Deserialize(exampleRoot + "mnist.json");
 
 	std::cout << "Test the trained network: " << std::endl;
-	image = cv::imread(testDataPath + "0-a.jpg", cv::IMREAD_GRAYSCALE);
+
+
+	std::cout << "Reading the testing dataset..." << std::endl;
+	tools::DataReader::ReadMNISTData(testingDataPath, testingData, 20);
+	std::cout << "Reading the labels for the testing dataset..." << std::endl << std::endl;
+	tools::DataReader::ReadMNISTLabels(testingTargetDataPath, testingTargetData, 20);
+
+	Tensor currentTestingData, currentTestingLabel;
+	for (long numSamples = 0; numSamples < testingData.GetNumSamples(); numSamples++) {
+		currentTestingData.GetBatch(testingData, numSamples);
+		currentTestingLabel.GetBatch(testingTargetData, numSamples);
+		std::cout << "Target:" << std::endl;
+		currentTestingLabel.PrintToConsole();
+		net.Run(currentTestingData);
+		std::cout << std::endl;
+	}
+
+
+	/*image = cv::imread(testDataPath + "0-a.jpg", cv::IMREAD_GRAYSCALE);
 	nexural::converter::ConvertToTensor(image, inputData);
 	std::cout << "Target: 0" << std::endl;
 	net.Run(inputData);
@@ -117,5 +138,5 @@ void Test_MNIST_Softmax(const std::string& dataFolderPath) {
 	image = cv::imread(testDataPath + "9-a.jpg", cv::IMREAD_GRAYSCALE);
 	nexural::converter::ConvertToTensor(image, inputData);
 	std::cout << "Target: 9" << std::endl;
-	net.Run(inputData);
+	net.Run(inputData);*/
 }

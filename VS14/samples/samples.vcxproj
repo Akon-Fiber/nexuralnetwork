@@ -146,7 +146,6 @@
     <ClInclude Include="..\..\samples\and_gate_with_relu.h" />
     <ClInclude Include="..\..\samples\and_gate_with_relu_softmax.h" />
     <ClInclude Include="..\..\samples\and_gate_with_tanh.h" />
-    <ClInclude Include="..\..\samples\mnist_mse.h" />
     <ClInclude Include="..\..\samples\mnist_softmax.h" />
     <ClInclude Include="..\..\samples\stdafx.h" />
     <ClInclude Include="..\..\samples\xor_gate_with_relu.h" />

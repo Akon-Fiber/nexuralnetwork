@@ -193,6 +193,8 @@
     <ClInclude Include="..\..\include\neXuralNet\dnn\utility\serializer\base_serializer.h" />
     <ClInclude Include="..\..\include\neXuralNet\dnn\utility\serializer\serializer.h" />
     <ClInclude Include="..\..\include\neXuralNet\dnn\utility\serializer\json_serializer.h" />
+    <ClInclude Include="..\..\include\nexuralnet\experimental.h" />
+    <ClInclude Include="..\..\include\nexuralnet\experimental\core.h" />
     <ClInclude Include="..\..\include\neXuralNet\tools.h" />
     <ClInclude Include="..\..\include\nexuralnet\tools\converter.h" />
     <ClInclude Include="..\..\include\neXuralNet\tools\data_reader.h" />

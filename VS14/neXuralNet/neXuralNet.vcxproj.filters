@@ -59,6 +59,9 @@
     <Filter Include="src\nexural\utility\config_reader">
       <UniqueIdentifier>{f0206211-1372-46ad-8cfc-f2d9a7bc8e2a}</UniqueIdentifier>
     </Filter>
+    <Filter Include="src\experimental">
+      <UniqueIdentifier>{eee59b2d-d048-421a-8ddb-2a8bdf924b25}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\include\neXuralNet\tools\data_reader.h">
@@ -204,6 +207,12 @@
     </ClInclude>
     <ClInclude Include="..\..\include\nexuralnet\dnn\utility\filler.h">
       <Filter>src\nexural\utility</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\nexuralnet\experimental.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\nexuralnet\experimental\core.h">
+      <Filter>src\experimental</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
