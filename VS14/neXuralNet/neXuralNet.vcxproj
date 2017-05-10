@@ -1,7 +1,7 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project DefaultTargets="Build" ToolsVersion="14.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="..\packages\rapidjson.1.1.0\build\native\rapidjson.props" Condition="Exists('..\packages\rapidjson.1.1.0\build\native\rapidjson.props')" />
   <Import Project="..\packages\OpenCV_VS2015_3.2.0_NoContribs.1.0.1\build\native\OpenCV_VS2015_3.2.0_NoContribs.props" Condition="Exists('..\packages\OpenCV_VS2015_3.2.0_NoContribs.1.0.1\build\native\OpenCV_VS2015_3.2.0_NoContribs.props')" />
-  <Import Project="..\packages\RapidJson.1.1.0.0\build\native\RapidJson.props" Condition="Exists('..\packages\RapidJson.1.1.0.0\build\native\RapidJson.props')" />
   <ItemGroup Label="ProjectConfigurations">
     <ProjectConfiguration Include="Debug|Win32">
       <Configuration>Debug</Configuration>
@@ -214,16 +214,16 @@
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
-    <Import Project="..\packages\RapidJson.1.1.0.0\build\native\RapidJson.targets" Condition="Exists('..\packages\RapidJson.1.1.0.0\build\native\RapidJson.targets')" />
     <Import Project="..\packages\OpenCV_VS2015_3.2.0_NoContribs.1.0.1\build\native\OpenCV_VS2015_3.2.0_NoContribs.targets" Condition="Exists('..\packages\OpenCV_VS2015_3.2.0_NoContribs.1.0.1\build\native\OpenCV_VS2015_3.2.0_NoContribs.targets')" />
+    <Import Project="..\packages\rapidjson.1.1.0\build\native\rapidjson.targets" Condition="Exists('..\packages\rapidjson.1.1.0\build\native\rapidjson.targets')" />
   </ImportGroup>
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
     <PropertyGroup>
       <ErrorText>This project references NuGet package(s) that are missing on this computer. Use NuGet Package Restore to download them.  For more information, see http://go.microsoft.com/fwlink/?LinkID=322105. The missing file is {0}.</ErrorText>
     </PropertyGroup>
-    <Error Condition="!Exists('..\packages\RapidJson.1.1.0.0\build\native\RapidJson.props')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\RapidJson.1.1.0.0\build\native\RapidJson.props'))" />
-    <Error Condition="!Exists('..\packages\RapidJson.1.1.0.0\build\native\RapidJson.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\RapidJson.1.1.0.0\build\native\RapidJson.targets'))" />
     <Error Condition="!Exists('..\packages\OpenCV_VS2015_3.2.0_NoContribs.1.0.1\build\native\OpenCV_VS2015_3.2.0_NoContribs.props')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\OpenCV_VS2015_3.2.0_NoContribs.1.0.1\build\native\OpenCV_VS2015_3.2.0_NoContribs.props'))" />
     <Error Condition="!Exists('..\packages\OpenCV_VS2015_3.2.0_NoContribs.1.0.1\build\native\OpenCV_VS2015_3.2.0_NoContribs.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\OpenCV_VS2015_3.2.0_NoContribs.1.0.1\build\native\OpenCV_VS2015_3.2.0_NoContribs.targets'))" />
+    <Error Condition="!Exists('..\packages\rapidjson.1.1.0\build\native\rapidjson.props')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\rapidjson.1.1.0\build\native\rapidjson.props'))" />
+    <Error Condition="!Exists('..\packages\rapidjson.1.1.0\build\native\rapidjson.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\rapidjson.1.1.0\build\native\rapidjson.targets'))" />
   </Target>
 </Project>

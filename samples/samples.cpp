@@ -49,7 +49,10 @@ void Menu() {
 }
 
 void DoTests(const std::string& option, const std::string& dataFolderPath) {
-	if (option == "1") {
+	if (option == "0") {
+
+	}
+	else if (option == "1") {
 		GenerateTestData(tools::TestDataType::AND_SOFTMAX);
 	}
 	else if (option == "2") {
