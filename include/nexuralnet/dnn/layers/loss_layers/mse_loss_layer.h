@@ -20,6 +20,7 @@ OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 */
 
 #include "loss_base_layer.h"
+#include "regression_result.h"
 
 #ifndef _NEXURALNET_DNN_LAYERS_MSE_LOSS_LAYER
 #define _NEXURALNET_DNN_LAYERS_MSE_LOSS_LAYER
@@ -105,8 +106,22 @@ namespace nexural {
 			}
 		}
 
-	private:
+		virtual void SetResult() {
+			// TODO: Support multiple samples
+			if (_outputData.Size() == 1) {
+				_netResult.result = _outputData[0];
+			}
+			else {
+				throw std::runtime_error("Can't set mse result values for tensors with multiple samples!");
+			}
+		}
 
+		virtual DNNBaseResult* GetResult() {
+			return &_netResult;
+		}
+
+	private:
+		RegressionResult _netResult;
 	};
 }
 #endif

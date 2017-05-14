@@ -19,22 +19,19 @@ TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE
 OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 */
 
-#include "../../data_types/tensor.h"
 #include "dnn_base_result.h"
 
-#ifndef _NEXURALNET_DNN_I_LOSS_LAYER
-#define _NEXURALNET_DNN_I_LOSS_LAYER
+#ifndef _NEXURALNET_DNN_REGRESSION_RESULT
+#define _NEXURALNET_DNN_REGRESSION_RESULT
 
 namespace nexural {
-	class ILossLayer {
+	class RegressionResult : public DNNBaseResult {
 	public:
-		virtual ~ILossLayer() { }
-		virtual void Setup(const LayerShape& prevLayerShape) = 0;
-		virtual void CalculateError(const Tensor& targetData) = 0;
-		virtual void CalculateTotalError(const Tensor& targetData) = 0;
-		virtual const float_n GetTotalError() = 0;
-		virtual void SetResult() = 0;
-		virtual DNNBaseResult* GetResult() = 0;
+		RegressionResult() { }
+		~RegressionResult() { }
+
+	public:
+		float_n result;
 	};
 }
-#endif
+#endif 

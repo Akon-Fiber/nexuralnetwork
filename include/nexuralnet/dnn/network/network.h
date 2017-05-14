@@ -47,6 +47,7 @@ namespace nexural {
 		~Network();
 
 		void Run(Tensor& inputData);
+		DNNBaseResult* GetResult();
 		void Deserialize(const std::string& dataPath);
 
 	private:

@@ -85,7 +85,7 @@
       <Optimization>Disabled</Optimization>
       <SDLCheck>true</SDLCheck>
       <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
-      <PreprocessorDefinitions>_ENABLE_NUMERICALLY_STABLE_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>%(PreprocessorDefinitions)</PreprocessorDefinitions>
     </ClCompile>
     <Link />
     <PostBuildEvent>
@@ -99,7 +99,7 @@
       <Optimization>Disabled</Optimization>
       <SDLCheck>false</SDLCheck>
       <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
-      <PreprocessorDefinitions>_ENABLE_NUMERICALLY_STABLE_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>%(PreprocessorDefinitions)</PreprocessorDefinitions>
     </ClCompile>
     <Link />
     <PostBuildEvent>
@@ -118,7 +118,7 @@
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <SDLCheck>true</SDLCheck>
       <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
-      <PreprocessorDefinitions>_ENABLE_NUMERICALLY_STABLE_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>%(PreprocessorDefinitions)</PreprocessorDefinitions>
     </ClCompile>
     <Link>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
@@ -137,7 +137,7 @@
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <SDLCheck>true</SDLCheck>
       <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
-      <PreprocessorDefinitions>_ENABLE_NUMERICALLY_STABLE_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>%(PreprocessorDefinitions)</PreprocessorDefinitions>
     </ClCompile>
     <Link>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
@@ -177,6 +177,8 @@
     <ClInclude Include="..\..\include\neXuralNet\dnn\layers\loss_layers\loss_functions.h" />
     <ClInclude Include="..\..\include\neXuralNet\dnn\layers\loss_layers\loss_layers.h" />
     <ClInclude Include="..\..\include\neXuralNet\dnn\layers\loss_layers\mse_loss_layer.h" />
+    <ClInclude Include="..\..\include\nexuralnet\dnn\layers\loss_layers\multi_class_classification_result.h" />
+    <ClInclude Include="..\..\include\nexuralnet\dnn\layers\loss_layers\regression_result.h" />
     <ClInclude Include="..\..\include\neXuralNet\dnn\layers\loss_layers\softmax_loss_layer.h" />
     <ClInclude Include="..\..\include\neXuralNet\dnn\network\network.h" />
     <ClInclude Include="..\..\include\neXuralNet\dnn\network\network_trainer.h" />
@@ -203,6 +205,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\include\neXuralNet\dnn\data_types\tensor.cpp" />
+    <ClCompile Include="..\..\include\nexuralnet\dnn\layers\loss_layers\dnn_base_result.h" />
     <ClCompile Include="..\..\include\neXuralNet\dnn\network\network.cpp" />
     <ClCompile Include="..\..\include\neXuralNet\dnn\network\network_trainer.cpp" />
     <ClCompile Include="..\..\include\nexuralnet\dnn\utility\config_reader\json_config_reader.cpp" />

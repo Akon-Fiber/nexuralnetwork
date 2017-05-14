@@ -25,6 +25,7 @@ using namespace nexural;
 
 void Test_XOR_Gate_With_RELU(const std::string& dataFolderPath) {
 	Tensor inputData, trainingData, targetData;
+	RegressionResult* netResult;
 
 	std::string exampleRoot = dataFolderPath + "\\xor_relu\\";
 	std::string networkConfigPath = exampleRoot + "network.json";
@@ -50,22 +51,30 @@ void Test_XOR_Gate_With_RELU(const std::string& dataFolderPath) {
 
 	net.Deserialize(exampleRoot + "xor_relu.json");
 
-	std::cout << "Test the trained network: " << std::endl;
+	std::cout << std::endl << "Test the trained network: " << std::endl << std::endl;
 	inputData.Resize(1, 1, 1, 2);
-	std::cout << "Input: 1 1 | Target: 0" << std::endl;
+	std::cout << "Input: 1 1 " << std::endl << "Target: 0" << std::endl;
 	inputData[0] = 1.0;
 	inputData[1] = 1.0;
 	net.Run(inputData);
-	std::cout << "Input: 1 0 | Target: 1" << std::endl;
+	netResult = dynamic_cast<RegressionResult*>(net.GetResult());
+	std::cout << "Result: " << netResult->result << std::endl << std::endl;
+	std::cout << "Input: 1 0 " << std::endl << "Target: 1" << std::endl;
 	inputData[0] = 1.0;
 	inputData[1] = 0.0;
 	net.Run(inputData);
-	std::cout << "Input: 0 1 | Target: 1" << std::endl;
+	netResult = dynamic_cast<RegressionResult*>(net.GetResult());
+	std::cout << "Result: " << netResult->result << std::endl << std::endl;
+	std::cout << "Input: 0 1 " << std::endl << "Target: 1" << std::endl;
 	inputData[0] = 0.0;
 	inputData[1] = 1.0;
 	net.Run(inputData);
-	std::cout << "Input: 0 0 | Target: 0" << std::endl;
+	netResult = dynamic_cast<RegressionResult*>(net.GetResult());
+	std::cout << "Result: " << netResult->result << std::endl << std::endl;
+	std::cout << "Input: 0 0 " << std::endl << "Target: 0" << std::endl;
 	inputData[0] = 0.0;
 	inputData[1] = 0.0;
 	net.Run(inputData);
+	netResult = dynamic_cast<RegressionResult*>(net.GetResult());
+	std::cout << "Result: " << netResult->result << std::endl << std::endl;
 }
