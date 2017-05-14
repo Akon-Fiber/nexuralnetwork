@@ -24,28 +24,28 @@ OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
 namespace nexural {
 	namespace converter {
-		void CvtMatToTensor(const cv::Mat& sourceImage, Tensor& outputData) {
-			outputData.Resize(1, sourceImage.channels(), sourceImage.rows, sourceImage.cols);
+		void CvtMatToTensor(const cv::Mat& inputImage, Tensor& outputData) {
+			outputData.Resize(1, inputImage.channels(), inputImage.rows, inputImage.cols);
 
-			if (sourceImage.channels() == 1) {
+			if (inputImage.channels() == 1) {
 				for (long nr = 0; nr < outputData.GetNR(); nr++)
 				{
 					for (long nc = 0; nc < outputData.GetNC(); nc++)
 					{
 						for (long k = 0; k < outputData.GetK(); k++) {
-							float_n value = (float_n)sourceImage.at<uchar>(nr, nc);
+							float_n value = (float_n)inputImage.at<uchar>(nr, nc);
 							outputData[(k * outputData.GetNR() + nr) * outputData.GetNC() + nc] = value;
 						}
 					}
 				}
 			}
-			else if (sourceImage.channels() == 3)
+			else if (inputImage.channels() == 3)
 			{
 				for (long nr = 0; nr < outputData.GetNR(); nr++)
 				{
 					for (long nc = 0; nc < outputData.GetNC(); nc++)
 					{
-						cv::Vec3b intensity = sourceImage.at<cv::Vec3b>(nr, nc);
+						cv::Vec3b intensity = inputImage.at<cv::Vec3b>(nr, nc);
 						for (long k = 0; k < outputData.GetK(); k++) {
 							float_n value = (float_n)intensity.val[k];
 							outputData[(k * outputData.GetNR() + nr) * outputData.GetNC() + nc] = value;
@@ -55,22 +55,22 @@ namespace nexural {
 			}
 		}
 
-		void CvtVecOfMatToTensor(const std::vector<cv::Mat>& sourceImages, Tensor& outputData) {
-			if (sourceImages.size() == 0) {
+		void CvtVecOfMatToTensor(const std::vector<cv::Mat>& inputImages, Tensor& outputData) {
+			if (inputImages.size() == 0) {
 				return;
 			}
 
-			long numSamples = static_cast<long>(sourceImages.size());
-			long channels = static_cast<long>(sourceImages[0].channels());
-			long nr = sourceImages[0].rows;
-			long nc = sourceImages[0].cols;
+			long numSamples = static_cast<long>(inputImages.size());
+			long channels = static_cast<long>(inputImages[0].channels());
+			long nr = inputImages[0].rows;
+			long nc = inputImages[0].cols;
 
 			outputData.Resize(numSamples, channels, nr, nc);
 
 			for (long imageNumber = 0; imageNumber < numSamples; imageNumber++) {
-				int currentChannels = sourceImages[0].channels();
-				long currentNr = sourceImages[0].rows;
-				long currentNc = sourceImages[0].cols;
+				int currentChannels = inputImages[0].channels();
+				long currentNr = inputImages[0].rows;
+				long currentNc = inputImages[0].cols;
 
 				if (currentChannels != channels || currentNr != nr || currentNc != nc) {
 					throw std::runtime_error("All the samples inside a tensor shoud have the same size!");
@@ -80,7 +80,7 @@ namespace nexural {
 				{
 					for (long nc = 0; nc < outputData.GetNC(); nc++)
 					{
-						cv::Vec3b intensity = sourceImages[imageNumber].at<cv::Vec3b>(nr, nc);
+						cv::Vec3b intensity = inputImages[imageNumber].at<cv::Vec3b>(nr, nc);
 						for (long k = 0; k < outputData.GetK(); k++) {
 							float_n col = (float_n)intensity.val[k];
 							outputData[(k * outputData.GetNR() + nr) * outputData.GetNC() + nc] = col;
@@ -94,8 +94,35 @@ namespace nexural {
 
 		}
 
-		void CvtTensorToVecOfMat(const Tensor& outputData, std::vector<cv::Mat>& outputImage) {
+		void CvtTensorToVecOfMat(const Tensor& inputData, std::vector<cv::Mat>& outputImages) {
+			outputImages.clear();
 
+			long kTotal = inputData.GetK();
+			long ncTotal = inputData.GetNC();
+			long nrTotal = inputData.GetNR();
+
+			for (long numSamples = 0; numSamples < inputData.GetNumSamples(); numSamples++) {
+				if (kTotal == 1) {
+					cv::Mat tempImage(cv::Size(ncTotal, nrTotal), CV_8UC1);
+					for (long nr = 0; nr < nrTotal; nr++) {
+						for (long nc = 0; nc < ncTotal; nc++) {
+							tempImage.at<uchar>(nr, nc) = (uchar)inputData[((numSamples*inputData.GetK())*inputData.GetNR() + nr)*inputData.GetNC() + nc];
+						}
+					}
+					outputImages.push_back(tempImage);
+				}
+				else if (kTotal == 3) {
+					cv::Mat tempImage(cv::Size(ncTotal, nrTotal), CV_8U);
+					for (long nr = 0; nr < nrTotal; nr++) {
+						for (long nc = 0; nc < ncTotal; nc++) {
+							for (long k = 0; k < kTotal; k++) {
+								tempImage.at<uchar>(nr, nc) = (uchar)inputData[((numSamples*inputData.GetK() + k)*inputData.GetNR() + nr)*inputData.GetNC() + nc];
+							}
+						}
+					}
+					outputImages.push_back(tempImage);
+				}
+			}
 		}
 	}
 }

@@ -214,6 +214,9 @@
     <ClInclude Include="..\..\include\nexuralnet\experimental\core.h">
       <Filter>src\experimental</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\include\nexuralnet\tools\data_writer.h">
+      <Filter>src\tools</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\include\neXuralNet\dnn\data_types\tensor.cpp">

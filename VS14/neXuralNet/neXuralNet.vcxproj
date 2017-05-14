@@ -198,6 +198,7 @@
     <ClInclude Include="..\..\include\neXuralNet\tools.h" />
     <ClInclude Include="..\..\include\nexuralnet\tools\converter.h" />
     <ClInclude Include="..\..\include\neXuralNet\tools\data_reader.h" />
+    <ClInclude Include="..\..\include\nexuralnet\tools\data_writer.h" />
     <ClInclude Include="..\..\include\neXuralNet\tools\generate_test_data.h" />
   </ItemGroup>
   <ItemGroup>

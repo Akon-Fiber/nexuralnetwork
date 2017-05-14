@@ -20,20 +20,27 @@ OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 */
 
 #include "../dnn/data_types/tensor.h"
+#include "converter.h"
+#include <opencv2\highgui.hpp>
 
-#ifndef _NEXURALNET_TOOLS_CONVERTER_H
-#define _NEXURALNET_TOOLS_CONVERTER_H
-
-namespace cv { 
-	class Mat; 
-}
+#ifndef _NEXURALNET_TOOLS_DATA_WRITER_H
+#define _NEXURALNET_TOOLS_DATA_WRITER_H
 
 namespace nexural {
-	namespace converter {
-		void CvtMatToTensor(const cv::Mat& inputImage, Tensor& outputData);
-		void CvtVecOfMatToTensor(const std::vector<cv::Mat>& inputImages, Tensor& outputData);
-		void CvtTensorToMat(const Tensor& inputData, cv::Mat& outputImage);
-		void CvtTensorToVecOfMat(const Tensor& inputData, std::vector<cv::Mat>& outputImages);
+	namespace tools {
+		class DataWriter {
+		public:
+			// TODO: This implementation is not safe
+			static void WriteTensorImages(const std::string& outputFolder, Tensor& tensor) {
+				std::vector<cv::Mat> images;
+				converter::CvtTensorToVecOfMat(tensor, images);
+				
+				for (size_t idx = 0; idx < images.size(); idx++) {
+					std::string imageName = outputFolder + "//image" + std::to_string(idx) + ".jpg";
+					cv::imwrite(imageName, images[idx]);
+				}
+			}
+		};
 	}
 }
 #endif
