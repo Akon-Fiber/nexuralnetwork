@@ -20,6 +20,7 @@ OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 */
 
 #include "loss_base_layer.h"
+#include "multi_class_classification_result.h"
 
 #ifndef _NEXURALNET_DNN_LAYERS_SOFTMAX_LOSS_LAYER
 #define _NEXURALNET_DNN_LAYERS_SOFTMAX_LOSS_LAYER
@@ -119,6 +120,15 @@ namespace nexural {
 			}
 		}
 
+		virtual void SetResult() {
+			helper::BestClassClassification(_outputData, _netResult.resultClass);
+			_netResult.classesWithProbabilities.Clone(_outputData);
+		}
+
+		virtual DNNBaseResult* GetResult() {
+			return &_netResult;
+		}
+
 	private:
 		void Softmax(const Tensor& inputData, Tensor& outputData) {
 			long totalInputNumSamples = inputData.GetNumSamples();
@@ -163,7 +173,7 @@ namespace nexural {
 		}
 
 	private:
-
+		MultiClassClassificationResult _netResult;
 	};
 }
 #endif

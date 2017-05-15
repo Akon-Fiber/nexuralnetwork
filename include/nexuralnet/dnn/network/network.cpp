@@ -44,13 +44,12 @@ namespace nexural {
 		}
 
 		_lossNetworkLayer->FeedForward(*internalNetData);
-		internalNetData = _lossNetworkLayer->GetOutput();
+		_lossNetworkLayer->SetResult();
+		//internalNetData = _lossNetworkLayer->GetOutput();
+	}
 
-		// TODO: Delete this 
-		std::cout << "Result: " << std::endl;
-		for (int i = 0; i < internalNetData->Size(); i++) {
-			std::cout << (*(&(*internalNetData)))[i] << std::endl;
-		}
+	DNNBaseResult* Network::GetResult() {
+		return _lossNetworkLayer->GetResult();
 	}
 
 	void Network::SetInputLayer(InputBaseLayerPtr inputLayer) {

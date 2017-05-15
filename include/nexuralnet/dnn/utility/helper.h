@@ -71,6 +71,29 @@ namespace nexural {
 				foldNumOfSamples++;
 			}
 		}
+
+		static void BestClassClassification(const Tensor& tensor, size_t& bestClass) {
+			// TODO: Support multiple samples
+			if (tensor.GetNumSamples() == 1) {
+
+				long tensorSize = tensor.Size();
+				if (tensorSize > 0) {
+					float_n maxValue = tensor[0];
+					size_t maxIndex = 0;
+
+					for (long idx = 1; idx < tensorSize; idx++) {
+						float_n value = tensor[idx];
+						if (value > maxValue) {
+							maxValue = value;
+							maxIndex = idx;
+						}
+					}
+					bestClass = maxIndex;
+				}
+			} else {
+				throw std::runtime_error("Can't use best class finder for tensors with multiple samples!");
+			}
+		}
 	}
 }
 #endif

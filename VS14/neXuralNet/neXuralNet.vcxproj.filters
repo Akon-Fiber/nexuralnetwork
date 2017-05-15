@@ -62,6 +62,9 @@
     <Filter Include="src\experimental">
       <UniqueIdentifier>{eee59b2d-d048-421a-8ddb-2a8bdf924b25}</UniqueIdentifier>
     </Filter>
+    <Filter Include="src\nexural\dnn\layers\loss_layers\results">
+      <UniqueIdentifier>{5f36b22e-d029-4c68-ba8d-8b9701b15904}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\include\neXuralNet\tools\data_reader.h">
@@ -217,6 +220,12 @@
     <ClInclude Include="..\..\include\nexuralnet\tools\data_writer.h">
       <Filter>src\tools</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\include\nexuralnet\dnn\layers\loss_layers\multi_class_classification_result.h">
+      <Filter>src\nexural\dnn\layers\loss_layers\results</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\nexuralnet\dnn\layers\loss_layers\regression_result.h">
+      <Filter>src\nexural\dnn\layers\loss_layers\results</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\include\neXuralNet\dnn\data_types\tensor.cpp">
@@ -239,6 +248,9 @@
     </ClCompile>
     <ClCompile Include="..\..\include\nexuralnet\tools\converter.cpp">
       <Filter>src\tools</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\include\nexuralnet\dnn\layers\loss_layers\dnn_base_result.h">
+      <Filter>src\nexural\dnn\layers\loss_layers\common</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
