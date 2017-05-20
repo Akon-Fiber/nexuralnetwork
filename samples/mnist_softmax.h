@@ -20,7 +20,6 @@ OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 */
 
 #include "stdafx.h"
-#include <nexuralnet\tools.h>
 #include <opencv2\imgcodecs.hpp>
 
 using namespace nexural;

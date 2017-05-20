@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 14
-VisualStudioVersion = 14.0.25420.1
+# Visual Studio 15
+VisualStudioVersion = 15.0.26430.6
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "nexuralnet", "neXuralNet\neXuralNet.vcxproj", "{36C931FD-0B6B-4512-95CF-562C06122972}"
 EndProject
@@ -16,6 +16,9 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "tests", "tests\tests.vcxpro
 	EndProjectSection
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "python", "python\python.vcxproj", "{E91F2CE1-93FC-49ED-ADDF-8477064AAC65}"
+	ProjectSection(ProjectDependencies) = postProject
+		{36C931FD-0B6B-4512-95CF-562C06122972} = {36C931FD-0B6B-4512-95CF-562C06122972}
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

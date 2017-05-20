@@ -28,7 +28,7 @@ OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 #include "xor_gate_with_relu_softmax.h"
 #include "and_gate_with_relu_softmax.h"
 #include "mnist_softmax.h"
-#include "../include/nexuralnet/experimental/core.h"
+#include "nexuralnet/experimental/core.h"
 
 void Menu() {
 	std::cout << "--------------------------MENU--------------------------" << std::endl;
