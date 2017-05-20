@@ -4,8 +4,8 @@
 [submodule "thirdparty/pybind11"]
 	path = thirdparty/pybind11
 	url = https://github.com/pybind/pybind11.git
-[submodule "thirdparty/gtest"]
-	path = thirdparty/gtest
+[submodule "thirdparty/googletest"]
+	path = thirdparty/googletest
 	url = https://github.com/google/googletest.git
 [submodule "thirdparty/opencv"]
 	path = thirdparty/opencv
