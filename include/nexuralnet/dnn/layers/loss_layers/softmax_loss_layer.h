@@ -78,17 +78,6 @@ namespace nexural {
 			for (long index = 0; index < _outputData.Size(); index++)
 			{
 				_layerErrors[index] = _outputData[index] - mask[index];
-
-				// =============== DEBUG =====================================
-#ifdef _ENABLE_NUMERICALLY_STABLE_DEBUG
-				if (std::isnan(_layerErrors[index])) {
-					throw std::runtime_error("Detected nan value in mse loss layer (backprop - calculating error) | Error value: " + std::to_string(_layerErrors[index]));
-				}
-				else if (std::isinf(_layerErrors[index])) {
-					throw std::runtime_error("Detected inf value in mse loss layer (backprop - calculating error) | Error value: " + std::to_string(_layerErrors[index]));
-				}
-#endif
-				// =============== DEBUG END ==================================
 			}
 		}
 

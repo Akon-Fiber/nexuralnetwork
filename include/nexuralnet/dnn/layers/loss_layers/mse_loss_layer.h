@@ -71,17 +71,6 @@ namespace nexural {
 						targetData[numSamples * _outputData.GetNC() + nc]);
 					
 					_layerErrors[numSamples * _outputData.GetNC() + nc] = error;
-
-					// =============== DEBUG =====================================
-#ifdef _ENABLE_NUMERICALLY_STABLE_DEBUG
-					if (std::isnan(_layerErrors[numSamples * _outputData.GetNC() + nc])) {
-						throw std::runtime_error("Detected nan value in mse loss layer (backprop - calculating error) | Error value: " + std::to_string(error));
-					}
-					else if (std::isinf(_layerErrors[numSamples * _outputData.GetNC() + nc])) {
-						throw std::runtime_error("Detected inf value in mse loss layer (backprop - calculating error) | Error value: " + std::to_string(error));
-					}
-#endif
-					// =============== DEBUG END ==================================
 				}
 			}
 		}
