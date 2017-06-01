@@ -1,4 +1,4 @@
-# neXuralNetwork (neXt neural network) - another Deep Neural Network #
+# neXuralNetwork (neXt neural network) #
 This toolbox has been written as a part of my bachelor degree project, but it started as my ambition to study machine learning and related algorithms. It contains the implementation of a convolitional neural network that it's written in C++.
 
 ## Compiling neXuralNet C++ example programs ##
