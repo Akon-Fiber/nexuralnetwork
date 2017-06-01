@@ -89,10 +89,12 @@ void DoTests(const std::string& option, const std::string& dataFolderPath) {
 }
 
 int main(int argc, char* argv[]) {
+	std::string userInput;
+
 	if (argc != 2) {
 		std::cout << "Error: Firstly, specify the data folder!" << std::endl;
-		std::cout << "Press any key to continue..." << std::endl;
-		std::getchar();
+		std::cout << "Press any alphanumeric key and enter to exit..." << std::endl;
+		std::cin >> userInput;
 		return -1;
 	}
 
@@ -112,8 +114,8 @@ int main(int argc, char* argv[]) {
 		catch (...) {
 			std::cout << "Something unexpected happened while running the network!" << std::endl;
 		}
-		std::cout << "Press any key to continue..." << std::endl;
-		std::getchar();
+		std::cout << "Press any alphanumeric key and enter to continue..." << std::endl;
+		std::cin >> userInput;
 		system("cls");
 	}
 	return 0;
