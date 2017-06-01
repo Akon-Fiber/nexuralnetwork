@@ -41,10 +41,8 @@ namespace nexural {
 		virtual std::string GetLayerID() const = 0;
 		virtual void Serialize(Serializer& serializer) = 0;
 		virtual void Deserialize(Serializer& serializer) = 0;
-#ifdef _ENABLE_UNIT_TESTS
 		virtual void SetWeights(const std::vector<float_n>& values) = 0;
 		virtual void SetBiases(const std::vector<float_n>& values) = 0;
-#endif
 	};
 }
 #endif

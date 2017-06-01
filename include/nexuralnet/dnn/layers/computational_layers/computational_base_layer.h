@@ -91,7 +91,6 @@ namespace nexural {
 
 		}
 
-#ifdef _ENABLE_UNIT_TESTS
 		virtual void SetWeights(const std::vector<float_n>& values) {
 			_weights.Fill(values);
 		}
@@ -99,7 +98,6 @@ namespace nexural {
 		virtual void SetBiases(const std::vector<float_n>& values) {
 			_biases.Fill(values);
 		}
-#endif
 
 	protected:
 		Params _layerParams;

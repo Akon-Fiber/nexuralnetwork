@@ -32,10 +32,7 @@ namespace nexural {
 		py::module m("nexuralNet", "neXt neural network");
 
 		py::class_<Network>(m, "Network")
-			.def(py::init<const std::string &>())
-			.def("deserialize", &Network::Deserialize)
-			.def("run", &Network::Run)
-			.def("getResult", &Network::GetResult);
+			.def(py::init<const std::string &>());
 
 		return m.ptr();
 	}
