@@ -20,7 +20,7 @@ OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 */
 
 #include <stdlib.h>
-#include <conio.h>
+#include <nexuralnet/experimental.h>
 
 #include "and_gate_with_tanh.h"
 #include "and_gate_with_relu.h"
@@ -28,7 +28,6 @@ OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 #include "xor_gate_with_relu_softmax.h"
 #include "and_gate_with_relu_softmax.h"
 #include "mnist_softmax.h"
-#include "nexuralnet/experimental/core.h"
 
 void Menu() {
 	std::cout << "--------------------------MENU--------------------------" << std::endl;
@@ -93,7 +92,7 @@ int main(int argc, char* argv[]) {
 	if (argc != 2) {
 		std::cout << "Error: Firstly, specify the data folder!" << std::endl;
 		std::cout << "Press any key to continue..." << std::endl;
-		_getch();
+		std::getchar();
 		return -1;
 	}
 
@@ -114,7 +113,7 @@ int main(int argc, char* argv[]) {
 			std::cout << "Something unexpected happened while running the network!" << std::endl;
 		}
 		std::cout << "Press any key to continue..." << std::endl;
-		_getch();
+		std::getchar();
 		system("cls");
 	}
 	return 0;

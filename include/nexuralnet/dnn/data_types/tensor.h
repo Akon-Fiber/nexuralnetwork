@@ -26,7 +26,7 @@ OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 #define _NEXURALNET_DATA_TYPES_TENSOR_H
 
 namespace nexural {
-	typedef double_t float_n;
+	typedef double float_n;
 	class Tensor {
 		/*!
 		WHAT THIS OBJECT REPRESENTS

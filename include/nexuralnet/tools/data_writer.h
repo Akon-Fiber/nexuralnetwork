@@ -21,7 +21,7 @@ OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
 #include "../dnn/data_types/tensor.h"
 #include "converter.h"
-#include <opencv2\highgui.hpp>
+#include <opencv2/highgui.hpp>
 
 #ifndef _NEXURALNET_TOOLS_DATA_WRITER_H
 #define _NEXURALNET_TOOLS_DATA_WRITER_H
