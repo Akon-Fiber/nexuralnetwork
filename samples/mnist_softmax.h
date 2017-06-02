@@ -66,24 +66,6 @@ void Test_MNIST_Softmax(const std::string& dataFolderPath) {
 
 	std::cout << std::endl << "Test the trained network: " << std::endl << std::endl;
 
-	std::cout << "Reading the testing dataset..." << std::endl;
-	tools::DataReader::ReadMNISTData(testingDataPath, testingData, 50);
-	std::cout << "Reading the labels for the testing dataset..." << std::endl << std::endl;
-	tools::DataReader::ReadMNISTLabels(testingTargetDataPath, testingTargetData, 50);
-
-	Tensor currentTestingData, currentTestingLabel;
-	for (long numSamples = 0; numSamples < testingData.GetNumSamples(); numSamples++) {
-		currentTestingData.GetBatch(testingData, numSamples);
-		currentTestingLabel.GetBatch(testingTargetData, numSamples);
-		size_t resultIndex;
-		helper::BestClassClassification(currentTestingLabel, resultIndex);
-		std::cout << "Target: " << resultIndex << std::endl;
-		net.Run(currentTestingData);
-		netResult = dynamic_cast<MultiClassClassificationResult*>(net.GetResult());
-		std::cout << "Result: " << netResult->resultClass << std::endl;
-		std::cout << std::endl;
-	}
-
 	image = cv::imread(testDataPath + "image0.jpg", cv::IMREAD_GRAYSCALE);
 	nexural::converter::CvtMatToTensor(image, inputData);
 	std::cout << "Target: 7" << std::endl;
@@ -128,4 +110,23 @@ void Test_MNIST_Softmax(const std::string& dataFolderPath) {
 	netResult = dynamic_cast<MultiClassClassificationResult*>(net.GetResult());
 	std::cout << "Result: " << netResult->resultClass << std::endl;
 	std::cout << std::endl;
+
+
+	std::cout << "Reading the testing dataset..." << std::endl;
+	tools::DataReader::ReadMNISTData(testingDataPath, testingData, 50);
+	std::cout << "Reading the labels for the testing dataset..." << std::endl << std::endl;
+	tools::DataReader::ReadMNISTLabels(testingTargetDataPath, testingTargetData, 50);
+
+	Tensor currentTestingData, currentTestingLabel;
+	for (long numSamples = 0; numSamples < testingData.GetNumSamples(); numSamples++) {
+		currentTestingData.GetBatch(testingData, numSamples);
+		currentTestingLabel.GetBatch(testingTargetData, numSamples);
+		size_t resultIndex;
+		helper::BestClassClassification(currentTestingLabel, resultIndex);
+		std::cout << "Target: " << resultIndex << std::endl;
+		net.Run(currentTestingData);
+		netResult = dynamic_cast<MultiClassClassificationResult*>(net.GetResult());
+		std::cout << "Result: " << netResult->resultClass << std::endl;
+		std::cout << std::endl;
+	}
 }

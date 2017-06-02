@@ -226,6 +226,9 @@
     <ClInclude Include="..\..\include\nexuralnet\dnn\layers\loss_layers\regression_result.h">
       <Filter>src\nexural\dnn\layers\loss_layers\results</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\include\nexuralnet\dnn\data_types\image_extensions.h">
+      <Filter>src\nexural\data_types</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\include\neXuralNet\dnn\data_types\tensor.cpp">

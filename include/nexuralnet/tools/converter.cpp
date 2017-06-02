@@ -33,8 +33,7 @@ namespace nexural {
 					for (long nc = 0; nc < outputData.GetNC(); nc++)
 					{
 						for (long k = 0; k < outputData.GetK(); k++) {
-							float_n value = (float_n)inputImage.at<uchar>(nr, nc);
-							outputData[(k * outputData.GetNR() + nr) * outputData.GetNC() + nc] = value;
+							outputData[(k * outputData.GetNR() + nr) * outputData.GetNC() + nc] = (float_n)inputImage.at<uchar>(nr, nc);;
 						}
 					}
 				}
@@ -47,8 +46,7 @@ namespace nexural {
 					{
 						cv::Vec3b intensity = inputImage.at<cv::Vec3b>(nr, nc);
 						for (long k = 0; k < outputData.GetK(); k++) {
-							float_n value = (float_n)intensity.val[k];
-							outputData[(k * outputData.GetNR() + nr) * outputData.GetNC() + nc] = value;
+							outputData[(k * outputData.GetNR() + nr) * outputData.GetNC() + nc] = (float_n)intensity.val[k];
 						}
 					}
 				}
@@ -82,8 +80,7 @@ namespace nexural {
 						for (long nc = 0; nc < outputData.GetNC(); nc++)
 						{
 							for (long k = 0; k < outputData.GetK(); k++) {
-								float_n value = (float_n)inputImages[imageNumber].at<uchar>(nr, nc);
-								outputData[(k * outputData.GetNR() + nr) * outputData.GetNC() + nc] = value;
+								outputData[(k * outputData.GetNR() + nr) * outputData.GetNC() + nc] = (float_n)inputImages[imageNumber].at<uchar>(nr, nc);
 							}
 						}
 					}
@@ -96,8 +93,7 @@ namespace nexural {
 						{
 							cv::Vec3b intensity = inputImages[imageNumber].at<cv::Vec3b>(nr, nc);
 							for (long k = 0; k < outputData.GetK(); k++) {
-								float_n value = (float_n)intensity.val[k];
-								outputData[(k * outputData.GetNR() + nr) * outputData.GetNC() + nc] = value;
+								outputData[(k * outputData.GetNR() + nr) * outputData.GetNC() + nc] = (float_n)intensity.val[k];
 							}
 						}
 					}
@@ -112,34 +108,35 @@ namespace nexural {
 			long ncTotal = inputData.GetNC();
 			long nrTotal = inputData.GetNR();
 
-			inputData.PrintToConsole();
-
 			for (long numSamples = 0; numSamples < inputData.GetNumSamples(); numSamples++) {
 				if (kTotal == 1 || channelsAsImage == true) {
 					for (long k = 0; k < kTotal; k++) {
-						cv::Mat tempImage(cv::Size(ncTotal, nrTotal), CV_32F);
+						cv::Mat tempFloatImage(cv::Size(ncTotal, nrTotal), CV_32F);
 						for (long nr = 0; nr < nrTotal; nr++) {
 							for (long nc = 0; nc < ncTotal; nc++) {
 								float value = (float)inputData[((numSamples*inputData.GetK() + k)*inputData.GetNR() + nr)*inputData.GetNC() + nc];
-								tempImage.at<float>(nr, nc) = value;
+								tempFloatImage.at<float>(nr, nc) = value;
 							}
 						}
-						cv::normalize(tempImage, tempImage, 255, 0, cv::NORM_MINMAX);
-						cv::Mat img;
-						tempImage.convertTo(img, CV_8U);
-						outputImages.push_back(img);
+						cv::normalize(tempFloatImage, tempFloatImage, 255, 0, cv::NORM_MINMAX);
+						cv::Mat tempStandardizedImage;
+						tempFloatImage.convertTo(tempStandardizedImage, CV_8U);
+						outputImages.push_back(tempStandardizedImage);
 					}
 				}
 				else if (kTotal == 3) {
-					cv::Mat tempImage(cv::Size(ncTotal, nrTotal), CV_8UC3);
+					cv::Mat tempFloatImage(cv::Size(ncTotal, nrTotal), CV_32F);
 					for (long nr = 0; nr < nrTotal; nr++) {
 						for (long nc = 0; nc < ncTotal; nc++) {
 							for (long k = 0; k < kTotal; k++) {
-								tempImage.at<uchar>(nr, nc) = (uchar)inputData[((numSamples*inputData.GetK() + k)*inputData.GetNR() + nr)*inputData.GetNC() + nc];
+								tempFloatImage.at<float>(nr, nc) = (float)inputData[((numSamples*inputData.GetK() + k)*inputData.GetNR() + nr)*inputData.GetNC() + nc];
 							}
 						}
 					}
-					outputImages.push_back(tempImage);
+					cv::normalize(tempFloatImage, tempFloatImage, 255, 0, cv::NORM_MINMAX);
+					cv::Mat tempStandardizedImage;
+					tempFloatImage.convertTo(tempStandardizedImage, CV_8U);
+					outputImages.push_back(tempStandardizedImage);
 				}
 				else {
 					throw std::runtime_error("The tensor has more than 3 channels and the converter can't assign an image type for this. Please use channelsAsImage option in order to treat all channels as images!");

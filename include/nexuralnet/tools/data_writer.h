@@ -22,6 +22,7 @@ OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 #include <filesystem>
 #include <opencv2/highgui.hpp>
 #include "converter.h"
+#include "../dnn/data_types/image_extensions.h"
 #include "../dnn/data_types/tensor.h"
 namespace fs = std::experimental::filesystem;
 
@@ -32,7 +33,8 @@ namespace nexural {
 	namespace tools {
 		class DataWriter {
 		public:
-			static void WriteTensorImages(const std::string& outputFolderPath, Tensor& tensor, const std::string baseImageName = "image", const bool channelsAsImage = false) {
+			static void WriteTensorImages(const std::string& outputFolderPath, Tensor& tensor, const std::string baseImageName = "image", 
+				const bool channelsAsImage = false, const ImageExtension imgExtension = ImageExtension::JPG) {
 				if (!fs::is_directory(outputFolderPath)) {
 					throw std::runtime_error("Specified directory for writing tensor images doesn't exists!");
 				}
@@ -42,9 +44,31 @@ namespace nexural {
 				
 				for (size_t idx = 0; idx < images.size(); idx++) {
 					fs::path dir(outputFolderPath);
-					fs::path file(baseImageName + "-" + std::to_string(idx) + ".jpg");
+					fs::path file(baseImageName + "-" + std::to_string(idx) + GetExtension(imgExtension));
 					fs::path fullPath = dir / file;
 					cv::imwrite(fullPath.string(), images[idx]);
+				}
+			}
+
+		private:
+			static std::string GetExtension(const ImageExtension imgExtension) {
+				switch (imgExtension)
+				{
+				case ImageExtension::JPEG:
+					return ".jpeg";
+					break;
+				case ImageExtension::JPG:
+					return ".jpg";
+					break;
+				case ImageExtension::PNG:
+					return ".png";
+					break;
+				case ImageExtension::BMP:
+					return ".bmp";
+					break;
+				default:
+					throw std::runtime_error("You need to specify a supported extension!");
+					break;
 				}
 			}
 		};

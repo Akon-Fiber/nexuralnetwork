@@ -147,6 +147,7 @@
   <ItemGroup>
     <ClInclude Include="..\..\include\neXuralNet\dnn.h" />
     <ClInclude Include="..\..\include\neXuralNet\dnn\data_types\general_data_types.h" />
+    <ClInclude Include="..\..\include\nexuralnet\dnn\data_types\image_extensions.h" />
     <ClInclude Include="..\..\include\neXuralNet\dnn\data_types\layer_settings.h" />
     <ClInclude Include="..\..\include\neXuralNet\dnn\data_types\layer_shape.h" />
     <ClInclude Include="..\..\include\neXuralNet\dnn\data_types\tensor.h" />
