@@ -32,8 +32,7 @@ namespace nexural {
 	namespace converter {
 		void CvtMatToTensor(const cv::Mat& inputImage, Tensor& outputData);
 		void CvtVecOfMatToTensor(const std::vector<cv::Mat>& inputImages, Tensor& outputData);
-		void CvtTensorToMat(const Tensor& inputData, cv::Mat& outputImage);
-		void CvtTensorToVecOfMat(const Tensor& inputData, std::vector<cv::Mat>& outputImages);
+		void CvtTensorToVecOfMat(const Tensor& inputData, std::vector<cv::Mat>& outputImages, const bool channelsAsImage = false);
 	}
 }
 #endif

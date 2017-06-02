@@ -21,6 +21,7 @@ OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
 #include <iostream>
 #include "network.h"
+#include "../../tools/data_writer.h"
 
 namespace nexural {
 	Network::Network() { }
@@ -45,7 +46,6 @@ namespace nexural {
 
 		_lossNetworkLayer->FeedForward(*internalNetData);
 		_lossNetworkLayer->SetResult();
-		//internalNetData = _lossNetworkLayer->GetOutput();
 	}
 
 	DNNBaseResult* Network::GetResult() {
@@ -137,5 +137,16 @@ namespace nexural {
 			_computationalNetworkLyers[i]->Deserialize(serializer);
 		}
 	}
-}
 
+	void Network::SaveFiltersImages(const std::string& outputFolderPath) {
+		Tensor* currentTensor;
+		std::string convLayer = "convolutional_layer";
+		for (size_t i = 0; i < _computationalNetworkLyers.size(); i++) {
+			std::string layerID = _computationalNetworkLyers[i]->GetLayerID();
+			if (layerID.find(convLayer) != std::string::npos) {
+				currentTensor = _computationalNetworkLyers[i]->GetOutput();
+				tools::DataWriter::WriteTensorImages(outputFolderPath, *currentTensor, layerID, true);
+			}
+		}
+	}
+}

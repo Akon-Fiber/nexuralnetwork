@@ -49,6 +49,7 @@ namespace nexural {
 		void Run(Tensor& inputData);
 		DNNBaseResult* GetResult();
 		void Deserialize(const std::string& dataPath);
+		void SaveFiltersImages(const std::string& outputFolderPath);
 
 	private:
 		Network();

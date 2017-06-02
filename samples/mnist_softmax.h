@@ -38,13 +38,20 @@ void Test_MNIST_Softmax(const std::string& dataFolderPath) {
 	std::string testingDataPath = exampleRoot + "t10k-images.idx3-ubyte";
 	std::string testingTargetDataPath = exampleRoot + "t10k-labels.idx1-ubyte";
 	std::string testDataPath = exampleRoot + "test_images\\";
+	std::string filtersImagesPath = exampleRoot + "filters_images\\";
 
 	int option = 0, numOfSamples = 0;
 	std::cout << "1 - Train and test" << std::endl;
 	std::cout << "2 - Test a pretrained network" << std::endl;
+	std::cout << "3 - Save filters images" << std::endl;
 	std::cin >> option;
 
 	Network net(networkConfigPath);
+
+	if (option == 3) {
+		net.SaveFiltersImages(filtersImagesPath);
+		return;
+	}
 
 	if (option == 1) {
 		std::cout << "Num of samples from dataset:" << std::endl;
