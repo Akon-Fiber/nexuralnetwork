@@ -21,6 +21,7 @@ OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
 #include <vector>
 #include <string>
+#include <cmath>
 
 #ifndef _NEXURALNET_UTILITY_HELPER_H
 #define _NEXURALNET_UTILITY_HELPER_H

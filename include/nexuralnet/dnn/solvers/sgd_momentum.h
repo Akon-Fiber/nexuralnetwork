@@ -48,7 +48,7 @@ namespace nexural {
 			else {
 				v.Resize(weights.GetShape());
 				v.Fill(0);
-				_weightsVelocity.insert(std::pair<std::string, Tensor>(layerID, std::ref(v)));
+				_weightsVelocity.insert({layerID, std::ref(v)});
 			}
 			
 			// Momentum update
@@ -69,7 +69,7 @@ namespace nexural {
 			else {
 				v.Resize(baises.GetShape());
 				v.Fill(0);
-				_biasesVelocity.insert(std::pair<std::string, Tensor>(layerID, std::ref(v)));
+				_biasesVelocity.insert({layerID, std::ref(v)});
 			}
 
 			for (int i = 0; i < baises.Size(); i++) {

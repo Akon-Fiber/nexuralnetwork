@@ -20,5 +20,5 @@ OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 */
 
 #include <iostream>
-#include "nexuralnet/dnn.h"
-#include "neXuralNet/tools.h"
+#include <nexuralnet/dnn.h>
+#include <nexuralnet/tools.h>

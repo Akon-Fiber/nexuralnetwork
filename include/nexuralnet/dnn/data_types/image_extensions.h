@@ -19,4 +19,16 @@ TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE
 OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 */
 
-#include "experimental/core.h"
+#ifndef _NEXURALNET_DATA_TYPES_IMAGE_EXTENSIONS_H
+#define _NEXURALNET_DATA_TYPES_IMAGE_EXTENSIONS_H
+
+namespace nexural {
+	enum class ImageExtension
+	{
+		JPG = 0,
+		JPEG = 1,
+		PNG = 2,
+		BMP = 3
+	};
+}
+#endif
