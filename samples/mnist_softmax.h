@@ -48,11 +48,6 @@ void Test_MNIST_Softmax(const std::string& dataFolderPath) {
 
 	Network net(networkConfigPath);
 
-	if (option == 3) {
-		net.SaveFiltersImages(filtersImagesPath);
-		return;
-	}
-
 	if (option == 1) {
 		std::cout << "Num of samples from dataset:" << std::endl;
 		std::cin >> numOfSamples;
@@ -96,6 +91,11 @@ void Test_MNIST_Softmax(const std::string& dataFolderPath) {
 	netResult = dynamic_cast<MultiClassClassificationResult*>(net.GetResult());
 	std::cout << "Result: " << netResult->resultClass << std::endl;
 	std::cout << std::endl;
+
+	if (option == 3) {
+		net.SaveFiltersImages(filtersImagesPath);
+		return;
+	}
 
 	image = cv::imread(testDataPath + "image1.jpg", cv::IMREAD_GRAYSCALE);
 	nexural::converter::CvtMatToTensor(image, inputData);

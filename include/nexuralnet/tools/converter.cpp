@@ -112,6 +112,8 @@ namespace nexural {
 			long ncTotal = inputData.GetNC();
 			long nrTotal = inputData.GetNR();
 
+			inputData.PrintToConsole();
+
 			for (long numSamples = 0; numSamples < inputData.GetNumSamples(); numSamples++) {
 				if (kTotal == 1 || channelsAsImage == true) {
 					for (long k = 0; k < kTotal; k++) {
@@ -122,8 +124,10 @@ namespace nexural {
 								tempImage.at<float>(nr, nc) = value;
 							}
 						}
-						//cv::normalize(tempImage, tempImage, 255, 0);
-						outputImages.push_back(tempImage);
+						cv::normalize(tempImage, tempImage, 255, 0, cv::NORM_MINMAX);
+						cv::Mat img;
+						tempImage.convertTo(img, CV_8U);
+						outputImages.push_back(img);
 					}
 				}
 				else if (kTotal == 3) {
