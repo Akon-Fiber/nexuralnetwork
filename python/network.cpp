@@ -28,8 +28,8 @@ namespace py = pybind11;
 #define _NEXURALNET_TOOLS_CONVERTER_H
 
 namespace nexural {
-	PYBIND11_PLUGIN(nexuralNet) {
-		py::module m("nexuralNet", "neXt neural network");
+	PYBIND11_PLUGIN(nexuralnet) {
+		py::module m("nexuralnet", "neXt neural network");
 
 		py::class_<Network>(m, "Network")
 			.def(py::init<const std::string &>());
