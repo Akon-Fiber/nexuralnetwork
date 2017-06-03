@@ -1,5 +1,7 @@
 cmake_minimum_required(VERSION 3.7)
 
+list(APPEND CMAKE_MODULE_PATH "${CMAKE_CURRENT_LIST_DIR}/cmake")
+
 project(neXuralNet)
 
 set(CMAKE_CXX_STANDARD 14)
@@ -9,6 +11,8 @@ set(CMAKE_POSITION_INDEPENDENT_CODE ON)
 if (CMAKE_INSTALL_PREFIX_INITIALIZED_TO_DEFAULT)
     set (CMAKE_INSTALL_PREFIX "${CMAKE_BINARY_DIR}/install" CACHE PATH "default install path" FORCE )
 endif()
+
+add_definitions(-D_CRT_SECURE_NO_WARNINGS)
 
 find_package(OpenCV REQUIRED opencv_world)
 
@@ -36,8 +40,15 @@ target_link_libraries(samples nexural ${OpenCV_LIBS})
 
 
 add_subdirectory(thirdparty/pybind11)
-pybind11_add_module(nexuralnet python/network.cpp)
+find_package(PythonInterp)
+find_package(NumPy)
+pybind11_add_module(nexuralnet python/network.cpp 
+	thirdparty/pybind11_opencv_numpy/ndarray_converter.h 
+	thirdparty/pybind11_opencv_numpy/ndarray_converter.cpp)
 target_link_libraries(nexuralnet PRIVATE nexural ${OpenCV_LIBS})
 target_include_directories(nexuralnet PUBLIC ${nexural_INCLUDE_DIRS})
+target_include_directories(nexuralnet PRIVATE 
+	./thirdparty/pybind11_opencv_numpy
+	${PYTHON_NUMPY_INCLUDE_DIR})
 
 install(TARGETS nexuralnet LIBRARY DESTINATION py_module)

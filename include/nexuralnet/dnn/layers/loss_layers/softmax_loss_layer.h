@@ -118,6 +118,14 @@ namespace nexural {
 			return &_netResult;
 		}
 
+		virtual const std::string GetResultJSON() {
+			std::string resultJSON = u8"{ \
+				\"result_type\": \"classification\", \
+				\"best_class\" : \"" + std::to_string(_netResult.resultClass) + "\" \
+		}";
+			return resultJSON;
+		}
+
 	private:
 		void Softmax(const Tensor& inputData, Tensor& outputData) {
 			long totalInputNumSamples = inputData.GetNumSamples();

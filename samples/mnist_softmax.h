@@ -67,9 +67,8 @@ void Test_MNIST_Softmax(const std::string& dataFolderPath) {
 	std::cout << std::endl << "Test the trained network: " << std::endl << std::endl;
 
 	image = cv::imread(testDataPath + "image0.jpg", cv::IMREAD_GRAYSCALE);
-	nexural::converter::CvtMatToTensor(image, inputData);
 	std::cout << "Target: 7" << std::endl;
-	net.Run(inputData);
+	net.Run(image);
 	netResult = dynamic_cast<MultiClassClassificationResult*>(net.GetResult());
 	std::cout << "Result: " << netResult->resultClass << std::endl;
 	std::cout << std::endl;
@@ -82,31 +81,28 @@ void Test_MNIST_Softmax(const std::string& dataFolderPath) {
 	image = cv::imread(testDataPath + "image1.jpg", cv::IMREAD_GRAYSCALE);
 	nexural::converter::CvtMatToTensor(image, inputData);
 	std::cout << "Target: 2" << std::endl;
-	net.Run(inputData);
+	net.Run(image);
 	netResult = dynamic_cast<MultiClassClassificationResult*>(net.GetResult());
 	std::cout << "Result: " << netResult->resultClass << std::endl;
 	std::cout << std::endl;
 
 	image = cv::imread(testDataPath + "image2.jpg", cv::IMREAD_GRAYSCALE);
-	nexural::converter::CvtMatToTensor(image, inputData);
 	std::cout << "Target: 1" << std::endl;
-	net.Run(inputData);
+	net.Run(image);
 	netResult = dynamic_cast<MultiClassClassificationResult*>(net.GetResult());
 	std::cout << "Result: " << netResult->resultClass << std::endl;
 	std::cout << std::endl;
 
 	image = cv::imread(testDataPath + "image3.jpg", cv::IMREAD_GRAYSCALE);
-	nexural::converter::CvtMatToTensor(image, inputData);
 	std::cout << "Target: 0" << std::endl;
-	net.Run(inputData);
+	net.Run(image);
 	netResult = dynamic_cast<MultiClassClassificationResult*>(net.GetResult());
 	std::cout << "Result: " << netResult->resultClass << std::endl;
 	std::cout << std::endl;
 
 	image = cv::imread(testDataPath + "image4.jpg", cv::IMREAD_GRAYSCALE);
-	nexural::converter::CvtMatToTensor(image, inputData);
 	std::cout << "Target: 4" << std::endl;
-	net.Run(inputData);
+	net.Run(image);
 	netResult = dynamic_cast<MultiClassClassificationResult*>(net.GetResult());
 	std::cout << "Result: " << netResult->resultClass << std::endl;
 	std::cout << std::endl;

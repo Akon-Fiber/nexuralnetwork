@@ -35,6 +35,7 @@ namespace nexural {
 		virtual const float_n GetTotalError() = 0;
 		virtual void SetResult() = 0;
 		virtual DNNBaseResult* GetResult() = 0;
+		virtual const std::string GetResultJSON() = 0;
 	};
 }
 #endif
