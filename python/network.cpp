@@ -21,6 +21,7 @@ OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
 #include "../include/nexuralnet/dnn.h"
 #include <pybind11/pybind11.h>
+#include "ndarray_converter.h"
 
 namespace py = pybind11;
 
@@ -29,10 +30,22 @@ namespace py = pybind11;
 
 namespace nexural {
 	PYBIND11_PLUGIN(nexuralnet) {
+
+		NDArrayConverter::init_numpy();
+
 		py::module m("nexuralnet", "neXt neural network");
 
-		py::class_<Network>(m, "Network")
-			.def(py::init<const std::string &>());
+		py::class_<Network>(m, "network")
+			.def(py::init<const std::string &>())
+
+			.def("run", (void (Network::*)(cv::Mat &)) &Network::Run, "Run the network")
+
+			.def("deserialize", &Network::Deserialize, "Deserialize a trained network file")
+
+			.def("saveFiltersImages", &Network::SaveFiltersImages, "Save filters images")
+
+			.def("getResultJSON", &Network::GetResultJSON, "Get network result as JSON")
+			;
 
 		return m.ptr();
 	}

@@ -21,6 +21,7 @@ OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
 #include <vector>
 #include <algorithm>
+#include <opencv2\core\mat.hpp>
 
 #include "../layers/input_layers/input_layers.h"
 #include "../layers/computational_layers/computational_layers.h"
@@ -47,7 +48,9 @@ namespace nexural {
 		~Network();
 
 		void Run(Tensor& inputData);
+		void Run(cv::Mat& inputImage);
 		DNNBaseResult* GetResult();
+		const std::string& GetResultJSON();
 		void Deserialize(const std::string& dataPath);
 		void SaveFiltersImages(const std::string& outputFolderPath);
 

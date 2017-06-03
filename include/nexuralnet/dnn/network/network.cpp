@@ -22,6 +22,7 @@ OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 #include <iostream>
 #include "network.h"
 #include "../../tools/data_writer.h"
+#include "../../tools/converter.h"
 
 namespace nexural {
 	Network::Network() { }
@@ -48,8 +49,18 @@ namespace nexural {
 		_lossNetworkLayer->SetResult();
 	}
 
+	void Network::Run(cv::Mat& inputImage) {
+		Tensor auxTensor;
+		converter::CvtMatToTensor(inputImage, auxTensor);
+		Run(auxTensor);
+	}
+
 	DNNBaseResult* Network::GetResult() {
 		return _lossNetworkLayer->GetResult();
+	}
+
+	const std::string& Network::GetResultJSON() {
+		return _lossNetworkLayer->GetResultJSON();
 	}
 
 	void Network::SetInputLayer(InputBaseLayerPtr inputLayer) {

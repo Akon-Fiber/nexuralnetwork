@@ -7,3 +7,6 @@
 [submodule "thirdparty/googletest"]
 	path = thirdparty/googletest
 	url = https://github.com/google/googletest.git
+[submodule "thirdparty/pybind11_opencv_numpy"]
+	path = thirdparty/pybind11_opencv_numpy
+	url = https://github.com/virtuald/pybind11_opencv_numpy.git

@@ -109,6 +109,14 @@ namespace nexural {
 			return &_netResult;
 		}
 
+		virtual const std::string GetResultJSON() {
+			std::string resultJSON = u8"{ \
+				\"result_type\": \"regression\", \
+				\"result\" : \"" + std::to_string(_netResult.result) + "\" \
+		}";
+			return resultJSON;
+		}
+
 	private:
 		RegressionResult _netResult;
 	};

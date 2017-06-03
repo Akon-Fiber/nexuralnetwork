@@ -60,7 +60,6 @@ namespace nexural {
 
 			Tensor aux, mask(targetData.GetShape());
 			mask.Fill(0);
-			//Softmax(_outputData, aux);
 
 			long totalTargetNumSamples = targetData.GetNumSamples();
 			for (long numSamples = 0; numSamples < totalTargetNumSamples; numSamples++)
@@ -116,6 +115,14 @@ namespace nexural {
 
 		virtual DNNBaseResult* GetResult() {
 			return &_netResult;
+		}
+
+		virtual const std::string GetResultJSON() {
+			std::string resultJSON = u8"{ \
+				\"result_type\": \"classification\", \
+				\"best_class\" : \"" + std::to_string(_netResult.resultClass) + "\" \
+		}";
+			return resultJSON;
 		}
 
 	private:
