@@ -60,7 +60,6 @@ namespace nexural {
 
 			Tensor aux, mask(targetData.GetShape());
 			mask.Fill(0);
-			//Softmax(_outputData, aux);
 
 			long totalTargetNumSamples = targetData.GetNumSamples();
 			for (long numSamples = 0; numSamples < totalTargetNumSamples; numSamples++)

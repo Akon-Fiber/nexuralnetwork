@@ -12,6 +12,10 @@ if (CMAKE_INSTALL_PREFIX_INITIALIZED_TO_DEFAULT)
     set (CMAKE_INSTALL_PREFIX "${CMAKE_BINARY_DIR}/install" CACHE PATH "default install path" FORCE )
 endif()
 
+if(CMAKE_COMPILER_IS_GNUCXX)
+    SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall -lstdc++fs")
+endif()
+
 add_definitions(-D_CRT_SECURE_NO_WARNINGS)
 
 find_package(OpenCV REQUIRED opencv_world)

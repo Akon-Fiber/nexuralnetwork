@@ -8,7 +8,7 @@ Firstly you need to install the following softwares:
  * Python - you need to have a Python distribution installed in your machine for building the python module (preferable [Anaconda](https://www.continuum.io/downloads));
  
  neXuralNet uses following libraries as its dependencies:
-  * [OpenCV](https://github.com/opencv/opencv) - because this library is huge, it isn't included with this project (you need to download/build it)
+  * [OpenCV](https://github.com/opencv/opencv) - because this library is huge, it isn't included with this project (you need to download/build it). For VS2017 you can download and use the OpenCV from [here](https://drive.google.com/open?id=0B4fA8oSTAEXCX1MyLXZ5VHVoUGM)
   * RapidJSON - included as submodule (no action required)
   * pybind11 - included as submodule (no action required)
   * GTest - included as submodule (no action required)
