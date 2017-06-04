@@ -188,6 +188,7 @@
     <ClInclude Include="..\..\include\nexuralnet\dnn\utility\config_reader\json_config_reader.h" />
     <ClInclude Include="..\..\include\nexuralnet\dnn\utility\filler.h" />
     <ClInclude Include="..\..\include\neXuralNet\dnn\utility\helper.h" />
+    <ClInclude Include="..\..\include\nexuralnet\dnn\utility\network_info_writer\network_info_writer.h" />
     <ClInclude Include="..\..\include\neXuralNet\dnn\utility\params_parser.h" />
     <ClInclude Include="..\..\include\neXuralNet\dnn\utility\serializer\base_serializer.h" />
     <ClInclude Include="..\..\include\neXuralNet\dnn\utility\serializer\serializer.h" />
@@ -206,6 +207,7 @@
     <ClCompile Include="..\..\include\neXuralNet\dnn\network\network.cpp" />
     <ClCompile Include="..\..\include\neXuralNet\dnn\network\network_trainer.cpp" />
     <ClCompile Include="..\..\include\nexuralnet\dnn\utility\config_reader\json_config_reader.cpp" />
+    <ClCompile Include="..\..\include\nexuralnet\dnn\utility\network_info_writer\network_info_writer.cpp" />
     <ClCompile Include="..\..\include\nexuralnet\dnn\utility\serializer\json_serializer.cpp" />
     <ClCompile Include="..\..\include\nexuralnet\tools\converter.cpp" />
     <ClCompile Include="..\..\include\nexuralnet\tools\data_reader.cpp" />

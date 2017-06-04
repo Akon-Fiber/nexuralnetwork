@@ -19,35 +19,25 @@ TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE
 OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 */
 
-#include "../include/nexuralnet/dnn.h"
-#include <pybind11/pybind11.h>
-#include "ndarray_converter.h"
+#include <memory>
+#include <string>
 
-namespace py = pybind11;
-
-#ifndef _NEXURALNET_TOOLS_CONVERTER_H
-#define _NEXURALNET_TOOLS_CONVERTER_H
+#ifndef _NEXURALNET_UTILITY_NETWORK_INFO_WRITER_H
+#define _NEXURALNET_UTILITY_NETWORK_INFO_WRITER_H
 
 namespace nexural {
-	PYBIND11_PLUGIN(nexuralnet) {
+	class NetworkInfoWriter {
+	public:
+		NetworkInfoWriter();
+		NetworkInfoWriter(const std::string dataPath);
+		~NetworkInfoWriter();
 
-		NDArrayConverter::init_numpy();
+		void AddParentNode(const std::string& parentNodeName);
+		void Save(const std::string& outputFilePath);
 
-		py::module m("nexuralnet", "neXt neural network");
-
-		py::class_<Network>(m, "network")
-			.def(py::init<const std::string &>())
-
-			.def("run", (void (Network::*)(cv::Mat &)) &Network::Run, "Run the network")
-
-			.def("deserialize", &Network::Deserialize, "Deserialize a trained network file")
-
-			.def("saveFiltersImages", &Network::SaveFiltersImages, "Save filters images")
-
-			.def("getResultJSON", &Network::GetResultJSON, "Get network result as JSON")
-			;
-
-		return m.ptr();
-	}
+	private:
+		struct impl;
+		std::unique_ptr<impl> _impl;
+	};
 }
 #endif

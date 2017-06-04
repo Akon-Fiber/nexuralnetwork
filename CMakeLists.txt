@@ -46,7 +46,7 @@ target_link_libraries(samples nexural ${OpenCV_LIBS})
 add_subdirectory(thirdparty/pybind11)
 find_package(PythonInterp)
 find_package(NumPy)
-pybind11_add_module(nexuralnet python/network.cpp 
+pybind11_add_module(nexuralnet python/py_nexuralnet.cpp 
 	thirdparty/pybind11_opencv_numpy/ndarray_converter.h 
 	thirdparty/pybind11_opencv_numpy/ndarray_converter.cpp)
 target_link_libraries(nexuralnet PRIVATE nexural ${OpenCV_LIBS})

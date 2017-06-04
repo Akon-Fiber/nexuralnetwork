@@ -19,9 +19,10 @@ TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE
 OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 */
 
+#include <iostream>
 #include "network_trainer.h"
 #include "network.h"
-#include <iostream>
+#include "../../tools/data_reader.h"
 
 namespace nexural {
 	NetworkTrainer::NetworkTrainer(const std::string& networkConfigSource, const std::string& trainerConfigSource, const ConfigSourceType& configSourceType) {
@@ -218,6 +219,40 @@ namespace nexural {
 				std::cout << std::endl << "[STOP CONDITION] The trainer has reached the minim learning rate threshold!" << std::endl << std::endl;
 			}
 		}
+	}
+
+	void NetworkTrainer::Train(const std::string& dataFolderPath, const std::string& labelsFilePath, const TrainingDataSource trainingDataSource, const TargetDataSource targetDataSource, const bool saveNetworkInfo, const std::string& networkInfoFilePath) {
+		Tensor data, labels;
+
+		_saveNetworkInfo = saveNetworkInfo;
+		_networkInfoFilePath = networkInfoFilePath;
+
+		switch (trainingDataSource) {
+		case TrainingDataSource::IMAGES_DIRECTORY:
+			tools::DataReader::ReadImagesFromDirectory(dataFolderPath, data);
+			break;
+		case TrainingDataSource::TXT_DATA_FILE:
+			tools::DataReader::ReadTensorFromFile(dataFolderPath, data);
+			break;
+		case TrainingDataSource::MNIST_DATA_FILE:
+			tools::DataReader::ReadMNISTData(dataFolderPath, data);
+			break;
+		default:
+			break;
+		}
+
+		switch (targetDataSource) {
+		case TargetDataSource::TXT_DATA_FILE:
+			tools::DataReader::ReadTensorFromFile(labelsFilePath, labels);
+			break;
+		case TargetDataSource::MNIST_DATA_FILE:
+			tools::DataReader::ReadMNISTLabels(labelsFilePath, labels);
+			break;
+		default:
+			break;
+		}
+
+		Train(data, labels);
 	}
 
 	void NetworkTrainer::Serialize(const std::string& dataPath) {
