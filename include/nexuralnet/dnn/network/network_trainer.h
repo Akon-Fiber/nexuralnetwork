@@ -32,9 +32,23 @@ namespace nexural {
 		typedef BaseSolverPtr NetSolver;
 
 	public:
+		enum class TrainingDataSource {
+			IMAGES_DIRECTORY = 0,
+			TXT_DATA_FILE = 1,
+			MNIST_DATA_FILE = 2
+		};
+
+		enum class TargetDataSource {
+			TXT_DATA_FILE = 0,
+			MNIST_DATA_FILE = 1
+		};
+
+	public:
 		NetworkTrainer(const std::string& networkConfigSource, const std::string& trainerConfigSource, const ConfigSourceType& configSourceType = ConfigSourceType::FROM_FILE);
 		~NetworkTrainer();
 		void Train(Tensor& data, Tensor& labels);
+		void Train(const std::string& dataFolderPath, const std::string& labelsFilePath, const TrainingDataSource trainingDataSource, const TargetDataSource targetDataSource, const bool saveNetworkInfo, const std::string& networkInfoFilePath);
+			
 		void Serialize(const std::string& dataPath);
 
 	private:
@@ -56,6 +70,8 @@ namespace nexural {
 		Tensor *error, *weights, *dWeights, *biases, *dBiases;
 		NetSolver _solver;
 		bool _beVerbose;
+		std::string _networkInfoFilePath;
+		bool _saveNetworkInfo;
 	};
 }
 #endif
