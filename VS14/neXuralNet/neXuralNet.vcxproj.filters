@@ -65,7 +65,7 @@
     <Filter Include="src\nexural\dnn\layers\loss_layers\results">
       <UniqueIdentifier>{5f36b22e-d029-4c68-ba8d-8b9701b15904}</UniqueIdentifier>
     </Filter>
-    <Filter Include="src\nexural\utility\network_info_writer">
+    <Filter Include="src\nexural\utility\trainer_info_writer">
       <UniqueIdentifier>{4510835a-8d81-493f-9e3a-1c5cc1ce0adf}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
@@ -232,8 +232,8 @@
     <ClInclude Include="..\..\include\nexuralnet\dnn\data_types\image_extensions.h">
       <Filter>src\nexural\data_types</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\include\nexuralnet\dnn\utility\network_info_writer\network_info_writer.h">
-      <Filter>src\nexural\utility\network_info_writer</Filter>
+    <ClInclude Include="..\..\include\nexuralnet\dnn\utility\trainer_info_writer\trainer_info_writer.h">
+      <Filter>src\nexural\utility\trainer_info_writer</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -261,8 +261,8 @@
     <ClCompile Include="..\..\include\nexuralnet\dnn\layers\loss_layers\dnn_base_result.h">
       <Filter>src\nexural\dnn\layers\loss_layers\common</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\include\nexuralnet\dnn\utility\network_info_writer\network_info_writer.cpp">
-      <Filter>src\nexural\utility\network_info_writer</Filter>
+    <ClCompile Include="..\..\include\nexuralnet\dnn\utility\trainer_info_writer\trainer_info_writer.cpp">
+      <Filter>src\nexural\utility\trainer_info_writer</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

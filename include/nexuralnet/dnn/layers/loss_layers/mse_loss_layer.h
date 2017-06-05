@@ -29,7 +29,7 @@ namespace nexural {
 	class MSELossLayer : public LossBaseLayer {
 	public:
 		MSELossLayer(const Params& layerParams) : LossBaseLayer(layerParams) {
-
+			_resultType = "regression";
 		}
 
 		~MSELossLayer() {
@@ -111,7 +111,7 @@ namespace nexural {
 
 		virtual const std::string GetResultJSON() {
 			std::string resultJSON = u8"{ \
-				\"result_type\": \"regression\", \
+				\"result_type\": \"" + _resultType + "\", \
 				\"result\" : \"" + std::to_string(_netResult.result) + "\" \
 		}";
 			return resultJSON;
