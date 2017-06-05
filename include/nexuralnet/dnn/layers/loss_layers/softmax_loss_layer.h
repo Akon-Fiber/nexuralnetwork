@@ -119,7 +119,7 @@ namespace nexural {
 
 		virtual const std::string GetResultJSON() {
 			std::string resultJSON = u8"{ \
-				\"result_type\": \"classification\", \
+				\"result_type\": \"" + _resultType + "\", \
 				\"best_class\" : \"" + std::to_string(_netResult.resultClass) + "\" \
 		}";
 			return resultJSON;
