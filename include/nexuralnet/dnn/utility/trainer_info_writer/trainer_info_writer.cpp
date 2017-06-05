@@ -25,36 +25,47 @@ OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 #include <rapidjson/writer.h>
 #include <fstream>
 
-#include "network_info_writer.h"
+#include "trainer_info_writer.h"
 
 namespace nexural {
-	struct NetworkInfoWriter::impl {
+	struct TrainerInfoWriter::impl {
 		rapidjson::Document document;
 	};
 
-	NetworkInfoWriter::NetworkInfoWriter() : _impl(std::make_unique<impl>()) {
+	TrainerInfoWriter::TrainerInfoWriter() : _impl(std::make_unique<impl>()) {
 		_impl->document.SetObject();
+		AddNode("epochs");
 	}
 
-	NetworkInfoWriter::NetworkInfoWriter(const std::string dataPath) : _impl(std::make_unique<impl>()) {
-		std::ifstream ifs(dataPath);
-		rapidjson::IStreamWrapper isw(ifs);
-
-		if (_impl->document.ParseStream(isw).HasParseError()) {
-			throw std::runtime_error("The JSON source is not valid!");
-		}
-	}
-
-	NetworkInfoWriter::~NetworkInfoWriter() {
+	TrainerInfoWriter::~TrainerInfoWriter() {
 
 	}
 
-	void NetworkInfoWriter::AddParentNode(const std::string& parentNodeName) {
-		_impl->document.AddMember(rapidjson::Value().SetString(parentNodeName.c_str(), _impl->document.GetAllocator()), rapidjson::Value().SetObject(), _impl->document.GetAllocator());
+	void TrainerInfoWriter::AddNode(const std::string& nodeName) {
+		_impl->document.AddMember(rapidjson::Value().SetString(nodeName.c_str(), _impl->document.GetAllocator()), rapidjson::Value().SetObject(), _impl->document.GetAllocator());
+	}
+
+	void TrainerInfoWriter::AddEpoch(const long epochNumber) {
+		std::string epoch = "epochs" + std::to_string(epochNumber);
+		_impl->document["epochs"].AddMember(rapidjson::Value().SetString(epoch.c_str(), _impl->document.GetAllocator()), rapidjson::Value().SetObject(), _impl->document.GetAllocator());
+	}
+
+	void TrainerInfoWriter::WriteEpochDetails(const long epochNumber, const std::string& key, const std::string& value) {
+		std::string epoch = "epochs" + std::to_string(epochNumber);
+		_impl->document["epochs"].GetObject()[epoch.c_str()].AddMember(
+			rapidjson::Value(key.c_str(), _impl->document.GetAllocator()).Move(),
+			rapidjson::Value(value.c_str(), _impl->document.GetAllocator()).Move(),
+			_impl->document.GetAllocator());
 	}
 	
+	void TrainerInfoWriter::Write(const std::string& key, const std::string& value) {
+		_impl->document.AddMember(
+			rapidjson::Value(key.c_str(), _impl->document.GetAllocator()).Move(),
+			rapidjson::Value(value.c_str(), _impl->document.GetAllocator()).Move(),
+			_impl->document.GetAllocator());
+	}
 
-	void NetworkInfoWriter::Save(const std::string& outputFilePath) {
+	void TrainerInfoWriter::Save(const std::string& outputFilePath) {
 		std::ofstream ofs(outputFilePath);
 		rapidjson::OStreamWrapper osw(ofs);
 		rapidjson::Writer<rapidjson::OStreamWrapper> writer(osw);

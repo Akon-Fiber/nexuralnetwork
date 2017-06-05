@@ -20,6 +20,7 @@ OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 */
 
 #include "../solvers/solvers.h"
+#include "../utility/trainer_info_writer/trainer_info_writer.h"
 
 #ifndef _NEXURALNET_DNN_NETWORK_NETWORK_TRAINNER
 #define _NEXURALNET_DNN_NETWORK_NETWORK_TRAINNER
@@ -46,9 +47,8 @@ namespace nexural {
 	public:
 		NetworkTrainer(const std::string& networkConfigSource, const std::string& trainerConfigSource, const ConfigSourceType& configSourceType = ConfigSourceType::FROM_FILE);
 		~NetworkTrainer();
-		void Train(Tensor& data, Tensor& labels);
-		void Train(const std::string& dataFolderPath, const std::string& labelsFilePath, const TrainingDataSource trainingDataSource, const TargetDataSource targetDataSource, const bool saveNetworkInfo, const std::string& networkInfoFilePath);
-			
+		void Train(Tensor& data, Tensor& labels, const bool saveNetworkInfo, const std::string& trainerInfoFilePath);
+		void Train(const std::string& dataFolderPath, const std::string& labelsFilePath, const TrainingDataSource trainingDataSource, const TargetDataSource targetDataSource, const bool saveNetworkInfo, const std::string& trainerInfoFilePath);
 		void Serialize(const std::string& dataPath);
 
 	private:
@@ -70,8 +70,9 @@ namespace nexural {
 		Tensor *error, *weights, *dWeights, *biases, *dBiases;
 		NetSolver _solver;
 		bool _beVerbose;
-		std::string _networkInfoFilePath;
+		std::string _trainerInfoFilePath;
 		bool _saveNetworkInfo;
+		TrainerInfoWriter _trainerInfoWriter;
 	};
 }
 #endif

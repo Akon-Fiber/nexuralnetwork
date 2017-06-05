@@ -22,17 +22,19 @@ OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 #include <memory>
 #include <string>
 
-#ifndef _NEXURALNET_UTILITY_NETWORK_INFO_WRITER_H
-#define _NEXURALNET_UTILITY_NETWORK_INFO_WRITER_H
+#ifndef _NEXURALNET_UTILITY_TRAINER_INFO_WRITER_H
+#define _NEXURALNET_UTILITY_TRAINER_INFO_WRITER_H
 
 namespace nexural {
-	class NetworkInfoWriter {
+	class TrainerInfoWriter {
 	public:
-		NetworkInfoWriter();
-		NetworkInfoWriter(const std::string dataPath);
-		~NetworkInfoWriter();
+		TrainerInfoWriter();
+		~TrainerInfoWriter();
 
-		void AddParentNode(const std::string& parentNodeName);
+		void AddNode(const std::string& nodeName);
+		void AddEpoch(const long epochName);
+		void WriteEpochDetails(const long epochNumber, const std::string& key, const std::string& value);
+		void Write(const std::string& key, const std::string& value);
 		void Save(const std::string& outputFilePath);
 
 	private:

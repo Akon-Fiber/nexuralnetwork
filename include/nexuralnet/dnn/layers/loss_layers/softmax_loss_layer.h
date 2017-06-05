@@ -29,7 +29,7 @@ namespace nexural {
 	class SoftmaxLossLayer : public LossBaseLayer {
 	public:
 		SoftmaxLossLayer(const Params& layerParams) : LossBaseLayer(layerParams) {
-
+			_resultType = "multiclassclassification";
 		}
 
 		~SoftmaxLossLayer() {

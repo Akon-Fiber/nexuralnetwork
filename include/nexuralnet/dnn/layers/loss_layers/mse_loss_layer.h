@@ -29,7 +29,7 @@ namespace nexural {
 	class MSELossLayer : public LossBaseLayer {
 	public:
 		MSELossLayer(const Params& layerParams) : LossBaseLayer(layerParams) {
-
+			_resultType = "regression";
 		}
 
 		~MSELossLayer() {

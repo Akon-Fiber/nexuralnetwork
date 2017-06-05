@@ -30,11 +30,12 @@ namespace nexural {
 	class LossBaseLayer : public ILayer, public ILossLayer {
 	public:
 		LossBaseLayer() { 
-		
+			_resultType = "unknown";
 		}
 
 		LossBaseLayer(const Params& layerParams) {
 			_layerParams = layerParams;
+			_resultType = "unknown";
 		}
 
 		virtual ~LossBaseLayer() { 
@@ -57,6 +58,10 @@ namespace nexural {
 			return _totalError;
 		}
 
+		virtual const std::string GetResultType() {
+			return _resultType;
+		}
+
 	protected:
 		Params _layerParams;
 		LayerShape _inputShape;
@@ -64,6 +69,7 @@ namespace nexural {
 		Tensor _outputData;
 		Tensor _layerErrors;
 		float_n _totalError;
+		std::string _resultType;
 	};
 	typedef std::shared_ptr<LossBaseLayer> LossBaseLayerPtr;
 }
