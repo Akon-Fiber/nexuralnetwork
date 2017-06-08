@@ -51,7 +51,7 @@ namespace nexural {
 	}
 
 	void TrainerInfoWriter::WriteEpochDetails(const long epochNumber, const std::string& key, const std::string& value) {
-		std::string epoch = "epochs" + std::to_string(epochNumber);
+		std::string epoch = "epoch" + std::to_string(epochNumber);
 		_impl->document["epochs"].GetObject()[epoch.c_str()].AddMember(
 			rapidjson::Value(key.c_str(), _impl->document.GetAllocator()).Move(),
 			rapidjson::Value(value.c_str(), _impl->document.GetAllocator()).Move(),
