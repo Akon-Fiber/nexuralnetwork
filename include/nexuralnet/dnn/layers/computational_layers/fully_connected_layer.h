@@ -51,7 +51,7 @@ namespace nexural {
 			_layerID = "fully_connected_layer" + std::to_string(layerIndex);
 		}
 
-		virtual void FeedForward(const Tensor& inputData) {
+		virtual void FeedForward(const Tensor& inputData, const FeedForwardType feedForwardType = FeedForwardType::RUN) {
 			_internalInputData.ShareTensor(inputData);
 			for (long numSamples = 0; numSamples < inputData.GetNumSamples(); numSamples++)
 			{

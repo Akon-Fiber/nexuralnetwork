@@ -25,10 +25,16 @@ OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 #define _NEXURALNET_DNN_I_LAYER
 
 namespace nexural {
+	enum class FeedForwardType {
+		RUN = 0,
+		TRAINING = 1,
+		VALIDATION = 2
+	};
+
 	class ILayer {
 	public:
 		virtual ~ILayer() { }
-		virtual void FeedForward(const Tensor& inputData) = 0;
+		virtual void FeedForward(const Tensor& inputData, const FeedForwardType feedForwardType) = 0;
 		virtual Tensor* GetOutput() = 0;
 		virtual Tensor* GetLayerErrors() = 0;
 		virtual LayerShape GetOutputShape() = 0;

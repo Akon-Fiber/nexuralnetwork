@@ -39,7 +39,8 @@ void Test_MNIST_Softmax(const std::string& dataFolderPath) {
 	std::string testingTargetDataPath = exampleRoot + "t10k-labels.idx1-ubyte";
 	std::string testDataPath = exampleRoot + "test_images\\";
 	std::string filtersImagesPath = exampleRoot + "filters_images\\";
-	std::string trainerInfoDataPath = exampleRoot + "trainerInfo.txt";
+	std::string trainerInfoDataPath = exampleRoot + "trainerInfo.json";
+	std::string trainedDataFilePath = exampleRoot + "trainedData.json";
 
 	int option = 0, numOfSamples = 0;
 	std::cout << "1 - Train and test" << std::endl;
@@ -59,11 +60,10 @@ void Test_MNIST_Softmax(const std::string& dataFolderPath) {
 		tools::DataReader::ReadMNISTLabels(targetDataPath, targetData, numOfSamples);
 
 		NetworkTrainer netTrainer(networkConfigPath, trainerConfigPath);
-		netTrainer.Train(trainingData, targetData, true, trainerInfoDataPath);
-		netTrainer.Serialize(exampleRoot + "mnist.json");
+		netTrainer.Train(trainingData, targetData, trainerInfoDataPath, trainedDataFilePath);
 	}
 
-	net.Deserialize(exampleRoot + "mnist.json");
+	net.Deserialize(trainedDataFilePath);
 
 	std::cout << std::endl << "Test the trained network: " << std::endl << std::endl;
 

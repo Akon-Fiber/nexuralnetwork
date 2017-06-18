@@ -50,7 +50,7 @@ namespace nexural {
 			_layerID = "max_pooling_layer" + std::to_string(layerIndex);
 		}
 
-		virtual void FeedForward(const Tensor& inputData) {
+		virtual void FeedForward(const Tensor& inputData, const FeedForwardType feedForwardType = FeedForwardType::RUN) {
 			for (long numSamples = 0; numSamples < inputData.GetNumSamples(); numSamples++)
 			{
 				for (long k = 0; k < inputData.GetK(); k++)

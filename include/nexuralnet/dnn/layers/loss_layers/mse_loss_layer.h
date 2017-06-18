@@ -45,7 +45,7 @@ namespace nexural {
 			_outputData.Resize(_outputShape);
 		}
 
-		virtual void FeedForward(const Tensor& inputData) {
+		virtual void FeedForward(const Tensor& inputData, const FeedForwardType = FeedForwardType::RUN) {
 			for (long index = 0; index < inputData.Size(); index++) {
 				_outputData[index] = inputData[index];
 			}

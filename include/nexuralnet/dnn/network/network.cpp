@@ -41,11 +41,11 @@ namespace nexural {
 		Tensor *internalNetData = _inputNetworkLayer->GetOutput();
 
 		for (size_t i = 0; i < _computationalNetworkLyers.size(); i++) {
-			_computationalNetworkLyers[i]->FeedForward(*internalNetData);
+			_computationalNetworkLyers[i]->FeedForward(*internalNetData, FeedForwardType::RUN);
 			internalNetData = _computationalNetworkLyers[i]->GetOutput();
 		}
 
-		_lossNetworkLayer->FeedForward(*internalNetData);
+		_lossNetworkLayer->FeedForward(*internalNetData, FeedForwardType::RUN);
 		_lossNetworkLayer->SetResult();
 	}
 

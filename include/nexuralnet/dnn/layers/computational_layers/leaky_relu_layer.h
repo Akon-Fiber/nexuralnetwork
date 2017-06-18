@@ -42,7 +42,7 @@ namespace nexural {
 			_layerID = "leaky_relu_layer" + std::to_string(layerIndex);
 		}
 
-		virtual void FeedForward(const Tensor& inputData) {
+		virtual void FeedForward(const Tensor& inputData, const FeedForwardType feedForwardType = FeedForwardType::RUN) {
 			_internalInputData.ShareTensor(inputData);
 			for (long i = 0; i < inputData.Size(); i++)
 			{

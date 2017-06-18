@@ -45,7 +45,7 @@ namespace nexural {
 			_outputData.Resize(_outputShape);
 		}
 
-		virtual void FeedForward(const Tensor& inputData) {
+		virtual void FeedForward(const Tensor& inputData, const FeedForwardType = FeedForwardType::RUN) {
 			Softmax(inputData, _outputData);
 		}
 

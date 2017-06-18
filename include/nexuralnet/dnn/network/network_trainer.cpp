@@ -45,10 +45,10 @@ namespace nexural {
 		_updateLRThreshold = parser::ParseFloat(trainerParams, "update_learning_rate_threshold");
 		_learningRateDecay = parser::ParseFloat(trainerParams, "learning_rate_decay");
 		_batchSize = parser::ParseLong(trainerParams, "batch_size");
-		_beVerbose = parser::ParseBool(trainerParams, "be_verbose");
+		_trainingDatasetPercentage = parser::ParseFloat(trainerParams, "training_dataset_percentage");
+		_autosaveTrainingNumEpochs = parser::ParseLong(trainerParams, "autosave_training_num_epochs");
 
 		// Init general parameters
-		_saveNetworkInfo = true;
 		_trainerInfoFilePath = "trainer_info.json";
 
 		// Init the solver
@@ -65,17 +65,16 @@ namespace nexural {
 		InitLayersForTraining();
 	}
 
-	void NetworkTrainer::Train(Tensor& data, Tensor& labels, const bool saveNetworkInfo, const std::string& trainerInfoFilePath) {
-		_saveNetworkInfo = saveNetworkInfo;
+	void NetworkTrainer::Train(Tensor& data, Tensor& labels, const std::string& trainerInfoFilePath, const std::string& trainedDataFilePath) {
 		_trainerInfoFilePath = trainerInfoFilePath;
 
 		float_n prevEpochError = std::numeric_limits<float_n>::max(), currentEpochError, validationError;
 		long currentEpoch = 0, stepsWithoutAnyProgress = 0;
 		bool doTraining = true;
 
-		// Splitting data in training and validation datasets (default 90% - 10%)
-		helper::SplitData(data, _trainingData, _validationData);
-		helper::SplitData(labels, _trainingTargetData, _validationTargetData);
+		// Splitting data in training and validation datasets
+		helper::SplitData(data, _trainingData, _validationData, _trainingDatasetPercentage);
+		helper::SplitData(labels, _trainingTargetData, _validationTargetData, _trainingDatasetPercentage);
 		data.Reset();
 		labels.Reset();
 
@@ -102,7 +101,7 @@ namespace nexural {
 				Tensor *internalNetData = _net._inputNetworkLayer->GetOutput();
 
 				for (auto it = _net._computationalNetworkLyers.begin(); it < _net._computationalNetworkLyers.end(); it++) {
-					(*it)->FeedForward(*internalNetData);
+					(*it)->FeedForward(*internalNetData, FeedForwardType::TRAINING);
 					internalNetData = (*it)->GetOutput();
 
 #ifdef _DEBUG_NEXURAL_TRAINER
@@ -117,10 +116,10 @@ namespace nexural {
 #endif
 				}
 
-				_net._lossNetworkLayer->FeedForward(*internalNetData);
+				_net._lossNetworkLayer->FeedForward(*internalNetData, FeedForwardType::TRAINING);
 				_net._lossNetworkLayer->CalculateError(_subTrainingTargetData);
 				_net._lossNetworkLayer->CalculateTotalError(_subTrainingTargetData);
-				error = _net._lossNetworkLayer->GetLayerErrors();
+				_error = _net._lossNetworkLayer->GetLayerErrors();
 				currentEpochError += _net._lossNetworkLayer->GetTotalError();
 
 #ifdef _DEBUG_NEXURAL_TRAINER
@@ -135,8 +134,8 @@ namespace nexural {
 #endif
 
 				for (auto it = _net._computationalNetworkLyers.rbegin(); it < _net._computationalNetworkLyers.rend(); it++) {
-					(*it)->BackPropagate(*error);
-					error = (*it)->GetLayerErrors();
+					(*it)->BackPropagate(*_error);
+					_error = (*it)->GetLayerErrors();
 
 #ifdef _DEBUG_NEXURAL_TRAINER
 					for (int i = 0; i < error->Size(); i++) {
@@ -154,14 +153,14 @@ namespace nexural {
 				// TODO: For each layer add weight_decay_multiplier
 				for (auto it = _net._computationalNetworkLyers.rbegin(); it < _net._computationalNetworkLyers.rend(); it++) {
 					if ((*it)->HasWeights()) {
-						weights = (*it)->GetLayerWeights();
-						dWeights = (*it)->GetLayerDWeights();
-						_solver->UpdateWeights(*weights, *dWeights, (*it)->GetLayerID());
+						_weights = (*it)->GetLayerWeights();
+						_dWeights = (*it)->GetLayerDWeights();
+						_solver->UpdateWeights(*_weights, *_dWeights, (*it)->GetLayerID());
 					}
 					if ((*it)->HasBiases()) {
-						biases = (*it)->GetLayerBiases();
-						dBiases = (*it)->GetLayerDBiases();
-						_solver->UpdateWeights(*biases, *dBiases, (*it)->GetLayerID());
+						_biases = (*it)->GetLayerBiases();
+						_dBiases = (*it)->GetLayerDBiases();
+						_solver->UpdateWeights(*_biases, *_dBiases, (*it)->GetLayerID());
 					}
 				}
 			}
@@ -178,10 +177,10 @@ namespace nexural {
 				_net._inputNetworkLayer->LoadData(_subValidationData);
 				Tensor *internalNetData = _net._inputNetworkLayer->GetOutput();
 				for (auto it = _net._computationalNetworkLyers.begin(); it < _net._computationalNetworkLyers.end(); it++) {
-					(*it)->FeedForward(*internalNetData);
+					(*it)->FeedForward(*internalNetData, FeedForwardType::VALIDATION);
 					internalNetData = (*it)->GetOutput();
 				}
-				_net._lossNetworkLayer->FeedForward(*internalNetData);
+				_net._lossNetworkLayer->FeedForward(*internalNetData, FeedForwardType::VALIDATION);
 				_net._lossNetworkLayer->CalculateTotalError(_subValidationTargetData);
 				validationError += _net._lossNetworkLayer->GetTotalError();
 			}
@@ -226,10 +225,15 @@ namespace nexural {
 
 			// Write progress on disk
 			_trainerInfoWriter.Save(_trainerInfoFilePath);
+
+			// Save training
+			if (currentEpoch % _autosaveTrainingNumEpochs == 0) {
+				_net.Serialize(trainedDataFilePath);
+			}
 		}
 	}
 
-	void NetworkTrainer::Train(const std::string& dataFolderPath, const std::string& labelsFilePath, const TrainingDataSource trainingDataSource, const TargetDataSource targetDataSource, const bool saveNetworkInfo, const std::string& trainerInfoFilePath) {
+	void NetworkTrainer::Train(const std::string& dataFolderPath, const std::string& labelsFilePath, const std::string& trainerInfoFilePath, const std::string& trainedDataFilePath, const TrainingDataSource trainingDataSource, const TargetDataSource targetDataSource) {
 		Tensor data, labels;
 
 		switch (trainingDataSource) {
@@ -257,11 +261,11 @@ namespace nexural {
 			break;
 		}
 
-		Train(data, labels, saveNetworkInfo, trainerInfoFilePath);
+		Train(data, labels, trainerInfoFilePath, trainedDataFilePath);
 	}
 
-	void NetworkTrainer::Serialize(const std::string& dataPath) {
-		_net.Serialize(dataPath);
+	void NetworkTrainer::Serialize(const std::string& trainedDataFilePath) {
+		_net.Serialize(trainedDataFilePath);
 	}
 
 	void NetworkTrainer::InitLayersForTraining() {

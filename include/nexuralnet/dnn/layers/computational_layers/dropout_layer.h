@@ -43,14 +43,27 @@ namespace nexural {
 			_layerID = "dropout_layer" + std::to_string(layerIndex);
 		}
 
-		virtual void FeedForward(const Tensor& inputData) {
-			_dropoutIndexes.FillRandomBinomialDistribution();
+		virtual void FeedForward(const Tensor& inputData, const FeedForwardType feedForwardType = FeedForwardType::RUN) {
+			if (feedForwardType == FeedForwardType::RUN) {
+				for (long i = 0; i < inputData.Size(); i++)
+				{
+					_outputData[i] = inputData[i];
+				}
+			}
+			else if (feedForwardType == FeedForwardType::TRAINING) {
+				_dropoutIndexes.FillRandomBinomialDistribution();
 
-			for (long i = 0; i < inputData.Size(); i++)
-			{
-				float_n value = inputData[i];
-				float_n drop = _dropoutIndexes[i];
-				_outputData[i] = value * drop;
+				for (long i = 0; i < inputData.Size(); i++)
+				{
+					float_n value = inputData[i];
+					float_n drop = _dropoutIndexes[i];
+					_outputData[i] = value * drop;
+				}
+			} else if (feedForwardType == FeedForwardType::VALIDATION) {
+				for (long i = 0; i < inputData.Size(); i++)
+				{
+					_outputData[i] = inputData[i] * 0.5;
+				}
 			}
 		}
 
