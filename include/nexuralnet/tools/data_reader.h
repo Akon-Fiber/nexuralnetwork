@@ -42,6 +42,7 @@ namespace nexural {
 			static void ReadMNISTLabels(const std::string& filename, Tensor& tensor, long limit = 60000, ReadMNISTLabelsType labelsType = ReadMNISTLabelsType::FOR_CLASSIFICATION);
 			static void ReadImagesFromDirectory(const std::string directoryPath, Tensor& tensor, ReadImageType imagesType = ReadImageType::COLOR);
 			static void ReadTensorFromFile(const std::string filePath, Tensor& tensor);
+			static void ReadATTData(const std::string& directoryPath, Tensor& training, Tensor& labels);
 
 		private:
 			static int ReverseInt(int i);

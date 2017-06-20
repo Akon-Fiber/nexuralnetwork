@@ -48,9 +48,6 @@ namespace nexural {
 		_trainingDatasetPercentage = parser::ParseFloat(trainerParams, "training_dataset_percentage");
 		_autosaveTrainingNumEpochs = parser::ParseLong(trainerParams, "autosave_training_num_epochs");
 
-		// Init general parameters
-		_trainerInfoFilePath = "trainer_info.json";
-
 		// Init the solver
 		std::string solverAlgorithm = parser::ParseString(solverParams, "algorithm");
 		if (solverAlgorithm == "sgd") {
@@ -65,8 +62,10 @@ namespace nexural {
 		InitLayersForTraining();
 	}
 
-	void NetworkTrainer::Train(Tensor& data, Tensor& labels, const std::string& trainerInfoFilePath, const std::string& trainedDataFilePath) {
-		_trainerInfoFilePath = trainerInfoFilePath;
+	void NetworkTrainer::Train(Tensor& data, Tensor& labels, const std::string& outputTrainedDataFilePath, const std::string& outputTrainerInfoFolderPath) {
+		_trainerInfoFilePath = outputTrainerInfoFolderPath + "trainerInfo.json";
+		_trainerWeightsInfoFilePath = outputTrainerInfoFolderPath + "trainerWeightsInfo.json";
+		_trainerActivationsInfoFilePath = outputTrainerInfoFolderPath + "trainerActivationsInfo.json";
 
 		float_n prevEpochError = std::numeric_limits<float_n>::max(), currentEpochError, validationError;
 		long currentEpoch = 0, stepsWithoutAnyProgress = 0;
@@ -82,7 +81,6 @@ namespace nexural {
 		long validationDataIterations = _validationData.GetNumSamples();
 
 		while (doTraining) {
-			currentEpochError = 0;
 			_trainerInfoWriter.AddEpoch(currentEpoch);
 
 			// Shuffle the training dataset
@@ -118,9 +116,9 @@ namespace nexural {
 
 				_net._lossNetworkLayer->FeedForward(*internalNetData, FeedForwardType::TRAINING);
 				_net._lossNetworkLayer->CalculateError(_subTrainingTargetData);
-				_net._lossNetworkLayer->CalculateTotalError(_subTrainingTargetData);
 				_error = _net._lossNetworkLayer->GetLayerErrors();
-				currentEpochError += _net._lossNetworkLayer->GetTotalError();
+				_net._lossNetworkLayer->CalculateTrainingMetrics(_subTrainingTargetData);
+				
 
 #ifdef _DEBUG_NEXURAL_TRAINER
 				for (int i = 0; i < error->Size(); i++) {
@@ -150,7 +148,6 @@ namespace nexural {
 				}
 
 				// Update the weights and biases using the solver (only if the layer has weights and/or biases)
-				// TODO: For each layer add weight_decay_multiplier
 				for (auto it = _net._computationalNetworkLyers.rbegin(); it < _net._computationalNetworkLyers.rend(); it++) {
 					if ((*it)->HasWeights()) {
 						_weights = (*it)->GetLayerWeights();
@@ -164,12 +161,15 @@ namespace nexural {
 					}
 				}
 			}
-			currentEpochError /= trainingDataIterations;
-			prevEpochError = currentEpochError;
-			_trainerInfoWriter.WriteEpochDetails(currentEpoch, "epoch_mean_error", std::to_string(currentEpochError));
+
+			// Calculate  mean error, precision and recall for training dataset and reset metrics
+			currentEpochError = _net._lossNetworkLayer->GetTotalError();
+			_trainerInfoWriter.WriteEpochDetails(currentEpoch, "training_mean_error", std::to_string(currentEpochError));
+			//_trainerInfoWriter.WriteEpochDetails(currentEpoch, "training_precision", std::to_string(_net._lossNetworkLayer->GetPrecision()));
+			//_trainerInfoWriter.WriteEpochDetails(currentEpoch, "training_recall", std::to_string(_net._lossNetworkLayer->GetRecall()));
+			_net._lossNetworkLayer->ResetMetricsData();
 
 			// Training validation
-			validationError = 0;
 			for (int validationBatchIndex = 0; validationBatchIndex < validationDataIterations; validationBatchIndex += _batchSize) {
 				_subValidationData.GetBatch(_validationData, validationBatchIndex, _batchSize);
 				_subValidationTargetData.GetBatch(_validationTargetData, validationBatchIndex, _batchSize);
@@ -181,19 +181,20 @@ namespace nexural {
 					internalNetData = (*it)->GetOutput();
 				}
 				_net._lossNetworkLayer->FeedForward(*internalNetData, FeedForwardType::VALIDATION);
-				_net._lossNetworkLayer->CalculateTotalError(_subValidationTargetData);
-				validationError += _net._lossNetworkLayer->GetTotalError();
+				_net._lossNetworkLayer->CalculateTrainingMetrics(_subValidationTargetData);
 			}
-			validationError /= validationDataIterations;
-			_trainerInfoWriter.WriteEpochDetails(currentEpoch, "validation_mean_error", std::to_string(validationError));
 
-			// If there isn't any progress, probably we are jumping over the global minimum
-			// so, we need to reduce the learning rate in order to hit the minimum
+			// Calculate  mean error, precision and recall for validation dataset and reset metrics for the next epoch
+			validationError = _net._lossNetworkLayer->GetTotalError();
+			_trainerInfoWriter.WriteEpochDetails(currentEpoch, "validation_mean_error", std::to_string(validationError));
+			//_trainerInfoWriter.WriteEpochDetails(currentEpoch, "validation_precision", std::to_string(_net._lossNetworkLayer->GetPrecision()));
+			//_trainerInfoWriter.WriteEpochDetails(currentEpoch, "validation_recall", std::to_string(_net._lossNetworkLayer->GetRecall()));
+			_net._lossNetworkLayer->ResetMetricsData();
+
+			// If there isn't any progress, we should reduce the learning rate in order to hit the minimum
 			if (((prevEpochError - prevEpochError * _updateLRThreshold) < currentEpochError) && (currentEpochError < (prevEpochError + prevEpochError * _updateLRThreshold))) {
 				stepsWithoutAnyProgress++;
-				//std::cout << " -! [INFO] Num of steps without any progress: " << stepsWithoutAnyProgress << std::endl;
 				if (stepsWithoutAnyProgress == _maxEpochsWithoutProgress) {
-					//std::cout << " -! [INFO] Reducing the learning rate!" << std::endl;
 					_learningRateDecay += 0.0005;
 					_updateLRThreshold *= 0.1;
 					stepsWithoutAnyProgress = 0;
@@ -208,8 +209,7 @@ namespace nexural {
 			double learningRateStep = 1 / (1 + _learningRateDecay * currentEpoch);
 			_solver->UpdateLearningRate(learningRateStep);
 
-			currentEpoch++;
-
+			// Check for a stop condition
 			if (currentEpoch == _maxNumEpochs) {
 				doTraining = false;
 				_trainerInfoWriter.Write("stop_condition", "reached_max_epochs_number");
@@ -226,14 +226,18 @@ namespace nexural {
 			// Write progress on disk
 			_trainerInfoWriter.Save(_trainerInfoFilePath);
 
-			// Save training
+			// Save training - checkpoint
 			if (currentEpoch % _autosaveTrainingNumEpochs == 0) {
-				_net.Serialize(trainedDataFilePath);
+				_net.Serialize(outputTrainedDataFilePath);
 			}
+
+			// Update internal parameters
+			prevEpochError = currentEpochError;
+			currentEpoch++;
 		}
 	}
 
-	void NetworkTrainer::Train(const std::string& dataFolderPath, const std::string& labelsFilePath, const std::string& trainerInfoFilePath, const std::string& trainedDataFilePath, const TrainingDataSource trainingDataSource, const TargetDataSource targetDataSource) {
+	void NetworkTrainer::Train(const std::string& dataFolderPath, const std::string& labelsFilePath, const std::string& outputTrainedDataFilePath, const std::string& outputTrainerInfoFolderPath, const TrainingDataSource trainingDataSource, const TargetDataSource targetDataSource) {
 		Tensor data, labels;
 
 		switch (trainingDataSource) {
@@ -261,7 +265,7 @@ namespace nexural {
 			break;
 		}
 
-		Train(data, labels, trainerInfoFilePath, trainedDataFilePath);
+		Train(data, labels, outputTrainedDataFilePath, outputTrainerInfoFolderPath);
 	}
 
 	void NetworkTrainer::Serialize(const std::string& trainedDataFilePath) {

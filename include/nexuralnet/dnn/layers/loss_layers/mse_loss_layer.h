@@ -53,6 +53,8 @@ namespace nexural {
 
 		virtual void SetupLayerForTraining() {
 			_layerErrors.Resize(_inputShape);
+			_confusionMatrix.Resize(1, 1, 1, 1);
+			_confusionMatrix.Fill(0);
 		}
 
 		virtual void CalculateError(const Tensor& targetData) {
@@ -75,13 +77,12 @@ namespace nexural {
 			}
 		}
 
-		virtual void CalculateTotalError(const Tensor& targetData) {
+		virtual void CalculateTrainingMetrics(const Tensor& targetData) {
 			if (_outputData.GetShape() != targetData.GetShape()) {
 				throw std::runtime_error("MSE layer error: The output and target data should have the same size!");
 			}
 
 			long n = _outputData.GetNumSamples();
-			_totalError = 0;
 			for (long numSamples = 0; numSamples < n; numSamples++)
 			{
 				for (long nc = 0; nc < _outputData.GetNC(); nc++)
@@ -93,6 +94,8 @@ namespace nexural {
 							targetData[numSamples * _outputData.GetNC() + nc])) / n;
 				}
 			}
+
+			_numOfIterations += n;
 		}
 
 		virtual void SetResult() {

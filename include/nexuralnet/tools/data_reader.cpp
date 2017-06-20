@@ -20,10 +20,15 @@ OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 */
 
 #include <opencv2/highgui/highgui.hpp>
+#include "opencv2/imgproc.hpp"
 #include <fstream>
+#include <experimental/filesystem>
 
 #include "data_reader.h"
 #include "converter.h"
+#include <iostream>
+
+namespace fs = std::experimental::filesystem;
 
 namespace nexural {
 	namespace tools {
@@ -170,6 +175,74 @@ namespace nexural {
 				}
 			}
 		}
+
+		void DataReader::ReadATTData(const std::string& directoryPath, Tensor& training, Tensor& labels) {
+			size_t datasetFolders = 40;
+			Tensor auxTensor, auxLabels;
+			std::vector<cv::Mat> images;
+			std::vector<cv::String> imageNames;
+			auxLabels.Resize(400, 1, 1, datasetFolders);
+			
+			long numSamplesAuxLabels = 0;
+			for (size_t folder = 0; folder < datasetFolders; folder++)
+			{
+				for (size_t image = 0; image < 10; image++) {
+					for (size_t classImage = 0; classImage < datasetFolders; classImage++) {
+						if (folder == classImage) {
+							auxLabels[numSamplesAuxLabels * auxLabels.GetNC() + classImage] = 1;
+						}
+						else
+						{
+							auxLabels[numSamplesAuxLabels * auxLabels.GetNC() + classImage] = 0;
+						}
+					}
+					numSamplesAuxLabels++;
+				}
+			}
+
+			std::vector<cv::String> imageNamesCurrentExtension;
+			for (size_t folders = 1; folders <= datasetFolders; folders++) {
+				imageNamesCurrentExtension.clear();
+					cv::glob(
+						directoryPath + "s" + std::to_string(folders) + "/*.pgm",
+						imageNamesCurrentExtension,
+						true
+					);
+					imageNames.insert(
+						imageNames.end(),
+						imageNamesCurrentExtension.begin(),
+						imageNamesCurrentExtension.end()
+					);
+			}
+			
+
+			for (size_t i = 0; i < imageNames.size(); i++) {
+				cv::Mat image = cv::imread(imageNames[i], cv::IMREAD_GRAYSCALE);
+				cv::Mat resized;
+				cv::resize(image, resized, cv::Size(32, 32));
+				images.push_back(resized);
+			}
+
+			converter::CvtVecOfMatToTensor(images, auxTensor);
+
+			//auxTensor.PrintToConsole();
+
+			for (long idx = 0; idx < auxTensor.Size(); idx++) {
+				auxTensor[idx] = auxTensor[idx] / 255;
+			}
+
+			std::vector<long> tensorIndexes;
+			for (size_t i = 0; i < auxTensor.GetNumSamples(); i++) {
+				tensorIndexes.push_back(i);
+			}
+			std::random_shuffle(tensorIndexes.begin(), tensorIndexes.end());
+
+			training.GetShuffled(auxTensor, tensorIndexes);
+			labels.GetShuffled(auxLabels, tensorIndexes);
+
+			
+		}
+
 
 		int DataReader::ReverseInt(int i)
 		{

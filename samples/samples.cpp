@@ -28,6 +28,7 @@ OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 #include "xor_gate_with_relu_softmax.h"
 #include "and_gate_with_relu_softmax.h"
 #include "mnist_softmax.h"
+#include "att_softmax.h"
 
 void Menu() {
 	std::cout << "--------------------------MENU--------------------------" << std::endl;
@@ -43,6 +44,7 @@ void Menu() {
 	std::cout << "| 8 - AND gate with RELU and Softmax" << std::endl;
 	std::cout << "| 9 - XOR gate with RELU and Softmax" << std::endl;
 	std::cout << "| 10 - MNIST with Softmax" << std::endl;
+	std::cout << "| 11 - ATT with Softmax" << std::endl;
 	std::cout << "| e - Experminetal" << std::endl;
 	std::cout << "--------------------------------------------------------" << std::endl << std::endl;
 }
@@ -80,6 +82,9 @@ void DoTests(const std::string& option, const std::string& dataFolderPath) {
 	}
 	else if (option == "10") {
 		Test_MNIST_Softmax(dataFolderPath);
+	}
+	else if (option == "11") {
+		Test_ATT_Softmax(dataFolderPath);
 	}
 	else if (option == "e") {
 		nexural::experimental::TestDemo();

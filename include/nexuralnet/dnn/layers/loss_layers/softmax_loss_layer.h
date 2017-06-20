@@ -51,6 +51,8 @@ namespace nexural {
 
 		virtual void SetupLayerForTraining() {
 			_layerErrors.Resize(_inputShape);
+			_confusionMatrix.Resize(1, 1, 10, 10);
+			_confusionMatrix.Fill(0);
 		}
 
 		virtual void CalculateError(const Tensor& targetData) {
@@ -80,7 +82,7 @@ namespace nexural {
 			}
 		}
 
-		virtual void CalculateTotalError(const Tensor& targetData) {
+		virtual void CalculateTrainingMetrics(const Tensor& targetData) {
 			if (_outputData.GetShape() != targetData.GetShape()) {
 				throw std::runtime_error("Softmax layer error: The output and target data should have the same size!");
 			}
@@ -100,12 +102,21 @@ namespace nexural {
 			}
 
 			long totalOutputNumSamples = _outputData.GetNumSamples();
-			_totalError = 0;
 			for (long numSamples = 0; numSamples < totalOutputNumSamples; numSamples++)
 			{
 				long idx = numSamples * _outputData.GetNC() + indexes[numSamples];
 				_totalError += -std::log(helper::clip(_outputData[idx], 1e-10, 1.0));
 			}
+
+			size_t targetClass = 1, predictedClass = 1;
+			//helper::BestClassClassification(targetData, targetClass);
+			//helper::BestClassClassification(_outputData, predictedClass);
+			//std::cout << targetClass << "," << predictedClass << std::endl << std::endl;
+			//long confusionMatrixIndex = (_confusionMatrix.GetNR() + static_cast<long>(targetClass)) * _confusionMatrix.GetNC() + static_cast<long>(predictedClass);
+			//float_n value = _confusionMatrix[confusionMatrixIndex];
+			//_confusionMatrix[confusionMatrixIndex] = value + 1;
+
+			_numOfIterations += totalOutputNumSamples;
 		}
 
 		virtual void SetResult() {
@@ -121,7 +132,7 @@ namespace nexural {
 			std::string resultJSON = u8"{ \
 				\"result_type\": \"" + _resultType + "\", \
 				\"best_class\" : \"" + std::to_string(_netResult.resultClass) + "\" \
-		}";
+				}";
 			return resultJSON;
 		}
 
@@ -129,7 +140,6 @@ namespace nexural {
 		void Softmax(const Tensor& inputData, Tensor& outputData) {
 			long totalInputNumSamples = inputData.GetNumSamples();
 			std::vector<float_n> max(totalInputNumSamples);
-			_totalError = 0;
 			for (long numSamples = 0; numSamples < totalInputNumSamples; numSamples++)
 			{
 				max[numSamples] = std::numeric_limits<float_n>::min();

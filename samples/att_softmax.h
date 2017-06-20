@@ -24,25 +24,22 @@ OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
 using namespace nexural;
 
-void Test_MNIST_Softmax(const std::string& dataFolderPath) {
+void Test_ATT_Softmax(const std::string& dataFolderPath) {
 	Tensor inputData, trainingData, targetData;
 	Tensor testingData, testingTargetData;
 	MultiClassClassificationResult* netResult;
 	cv::Mat image;
 
-	std::string exampleRoot = dataFolderPath + "\\mnist_softmax\\";
+	std::string exampleRoot = dataFolderPath + "\\att_softmax\\";
 	std::string networkConfigPath = exampleRoot + "network.json";
 	std::string trainerConfigPath = exampleRoot + "trainer.json";
-	std::string trainingDataPath = exampleRoot + "train-images.idx3-ubyte";
-	std::string targetDataPath = exampleRoot + "train-labels.idx1-ubyte";
-	std::string testingDataPath = exampleRoot + "t10k-images.idx3-ubyte";
-	std::string testingTargetDataPath = exampleRoot + "t10k-labels.idx1-ubyte";
 	std::string testDataPath = exampleRoot + "test_images\\";
 	std::string filtersImagesPath = exampleRoot + "filters_images\\";
 	std::string trainerInfoDataPath = exampleRoot + "trainerInfo.json";
 	std::string trainedDataFilePath = exampleRoot + "trainedData.json";
+	std::string imagesFolderPath = exampleRoot + "images\\";
 
-	int option = 0, numOfSamples = 0;
+	int option = 0;
 	std::cout << "1 - Train and test" << std::endl;
 	std::cout << "2 - Test a pretrained network" << std::endl;
 	std::cout << "3 - Save filters images" << std::endl;
@@ -51,13 +48,8 @@ void Test_MNIST_Softmax(const std::string& dataFolderPath) {
 	Network net(networkConfigPath);
 
 	if (option == 1) {
-		std::cout << "Num of samples from dataset:" << std::endl;
-		std::cin >> numOfSamples;
-
 		std::cout << "Reading the training dataset..." << std::endl;
-		tools::DataReader::ReadMNISTData(trainingDataPath, trainingData, numOfSamples);
-		std::cout << "Reading the labels for the training dataset..." << std::endl << std::endl;
-		tools::DataReader::ReadMNISTLabels(targetDataPath, targetData, numOfSamples);
+		tools::DataReader::ReadATTData(imagesFolderPath, trainingData, targetData);
 
 		NetworkTrainer netTrainer(networkConfigPath, trainerConfigPath);
 		netTrainer.Train(trainingData, targetData, trainedDataFilePath, exampleRoot);
@@ -107,23 +99,4 @@ void Test_MNIST_Softmax(const std::string& dataFolderPath) {
 	netResult = dynamic_cast<MultiClassClassificationResult*>(net.GetResult());
 	std::cout << "Result: " << netResult->resultClass << std::endl;
 	std::cout << std::endl;
-
-
-	std::cout << "Reading the testing dataset..." << std::endl;
-	tools::DataReader::ReadMNISTData(testingDataPath, testingData, 50);
-	std::cout << "Reading the labels for the testing dataset..." << std::endl << std::endl;
-	tools::DataReader::ReadMNISTLabels(testingTargetDataPath, testingTargetData, 50);
-
-	Tensor currentTestingData, currentTestingLabel;
-	for (long numSamples = 0; numSamples < testingData.GetNumSamples(); numSamples++) {
-		currentTestingData.GetBatch(testingData, numSamples);
-		currentTestingLabel.GetBatch(testingTargetData, numSamples);
-		size_t resultIndex;
-		helper::BestClassClassification(currentTestingLabel, resultIndex);
-		std::cout << "Target: " << resultIndex << std::endl;
-		net.Run(currentTestingData);
-		netResult = dynamic_cast<MultiClassClassificationResult*>(net.GetResult());
-		std::cout << "Result: " << netResult->resultClass << std::endl;
-		std::cout << std::endl;
-	}
 }

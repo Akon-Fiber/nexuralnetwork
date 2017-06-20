@@ -47,8 +47,8 @@ namespace nexural {
 	public:
 		NetworkTrainer(const std::string& networkConfigSource, const std::string& trainerConfigSource, const ConfigSourceType& configSourceType = ConfigSourceType::FROM_FILE);
 		~NetworkTrainer();
-		void Train(Tensor& data, Tensor& labels, const std::string& trainerInfoFilePath, const std::string& trainedDataFilePath);
-		void Train(const std::string& dataFolderPath, const std::string& labelsFilePath, const std::string& trainerInfoFilePath, const std::string& trainedDataFilePath, const TrainingDataSource trainingDataSource, const TargetDataSource targetDataSource);
+		void Train(Tensor& data, Tensor& labels, const std::string& outputTrainedDataFilePath, const std::string& outputTrainerInfoFolderPath);
+		void Train(const std::string& dataFolderPath, const std::string& labelsFilePath, const std::string& outputTrainedDataFilePath, const std::string& outputTrainerInfoFolderPath, const TrainingDataSource trainingDataSource, const TargetDataSource targetDataSource);
 		void Serialize(const std::string& trainedDataFilePath);
 
 	private:
@@ -67,13 +67,17 @@ namespace nexural {
 		long _batchSize;
 		float_n _trainingDatasetPercentage;
 		long _autosaveTrainingNumEpochs;
-		std::string _trainerInfoFilePath;
 		Tensor _trainingData, _trainingTargetData, _subTrainingData, _subTrainingTargetData;
 		Tensor _validationData, _validationTargetData, _subValidationData, _subValidationTargetData;
 		Tensor *_error, *_weights, *_dWeights, *_biases, *_dBiases;
-		Tensor _confusionMatrix;
 		NetSolver _solver;
+		// Trainer info
 		TrainerInfoWriter _trainerInfoWriter;
+		std::string _trainerInfoFilePath;
+		TrainerInfoWriter _trainerWeightsInfoWriter;
+		std::string _trainerWeightsInfoFilePath;
+		TrainerInfoWriter _trainerActivationsInfoWriter;
+		std::string _trainerActivationsInfoFilePath;
 	};
 }
 #endif

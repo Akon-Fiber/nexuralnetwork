@@ -31,11 +31,19 @@ namespace nexural {
 	public:
 		LossBaseLayer() { 
 			_resultType = "unknown";
+			_totalError = 0;
+			_precision = 0;
+			_recall = 0;
+			_numOfIterations = 0;
 		}
 
 		LossBaseLayer(const Params& layerParams) {
 			_layerParams = layerParams;
 			_resultType = "unknown";
+			_totalError = 0;
+			_precision = 0;
+			_recall = 0;
+			_numOfIterations = 0;
 		}
 
 		virtual ~LossBaseLayer() { 
@@ -55,7 +63,28 @@ namespace nexural {
 		}
 
 		virtual const float_n GetTotalError() {
-			return _totalError;
+			return _totalError / _numOfIterations;
+		}
+
+		virtual const float_n GetPrecision() {
+			return _precision;
+		}
+
+		virtual const float_n GetRecall() {
+			return _recall;
+		}
+
+		virtual void ResetMetricsData() {
+			_confusionMatrix.Fill(0);
+			_numOfIterations = 0;
+			_totalError = 0;
+			_precision = 0;
+			_recall = 0;
+			_numOfIterations = 0;
+		}
+
+		virtual const LayerShape GetTargetShape() {
+			return _outputShape;
 		}
 
 		virtual const std::string GetResultType() {
@@ -63,13 +92,20 @@ namespace nexural {
 		}
 
 	protected:
+		// General layer params
 		Params _layerParams;
 		LayerShape _inputShape;
 		LayerShape _outputShape;
 		Tensor _outputData;
 		Tensor _layerErrors;
-		float_n _totalError;
 		std::string _resultType;
+
+		// Params for training
+		Tensor _confusionMatrix;
+		float_n _totalError;
+		float_n _precision;
+		float_n _recall;
+		size_t _numOfIterations;
 	};
 	typedef std::shared_ptr<LossBaseLayer> LossBaseLayerPtr;
 }

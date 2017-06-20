@@ -218,6 +218,24 @@ namespace nexural {
 		}
 	}
 
+	void Tensor::GetShuffled(const Tensor& tensor, const std::vector<long>& tensorIndexes) {
+		Resize(tensor._numSamples, tensor._k, tensor._nr, tensor._nc);
+
+		for (long numSample = 0; numSample < tensor._numSamples; numSample++) {
+			for (long k = 0; k < tensor._k; k++)
+			{
+				for (long nr = 0; nr < tensor._nr; nr++)
+				{
+					for (long nc = 0; nc < tensor._nc; nc++)
+					{
+						_host.get()[(((numSample * tensor._k) + k) * tensor._nr + nr) * tensor._nc + nc] =
+							tensor[(((tensorIndexes[numSample] * tensor._k) + k) * tensor._nr + nr) * tensor._nc + nc];
+					}
+				}
+			}
+		}
+	}
+
 	LayerShape Tensor::GetShape() const {
 		return LayerShape(_numSamples, _k, _nr, _nc);
 	}

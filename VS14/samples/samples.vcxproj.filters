@@ -32,6 +32,9 @@
     <ClInclude Include="..\..\samples\stdafx.h">
       <Filter>src</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\samples\att_softmax.h">
+      <Filter>src</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\samples\samples.cpp">
