@@ -150,7 +150,7 @@ namespace nexural {
 		long newSize = numSamples_ * k_ * nr_ * nc_;
 
 		if (newSize != _size) {
-			throw std::runtime_error("Can't reshape the tensor");
+			throw std::runtime_error("Can't reshape the tensor. The total size of the tensor should be the same.");
 		}
 		
 		_numSamples = numSamples_;
@@ -196,43 +196,50 @@ namespace nexural {
 	}
 
 	void Tensor::GetBatch(const Tensor& tensor, const long startIndex, const long batchSize) {
-		// TODO: Check if is the same tensor (this will crash the program)
-		Resize(batchSize, tensor._k, tensor._nr, tensor._nc);
-		
-		long numSampleUpper = (startIndex + batchSize) < tensor._numSamples ? (startIndex + batchSize) : tensor._numSamples;
-		long newNumSample = 0;
+		if (this != &tensor) {
+			Resize(batchSize, tensor._k, tensor._nr, tensor._nc);
 
-		for (long numSample = startIndex; numSample < numSampleUpper; numSample++) {
-			for (long k = 0; k < tensor._k; k++)
-			{
-				for (long nr = 0; nr < tensor._nr; nr++)
+			long numSampleUpper = (startIndex + batchSize) < tensor._numSamples ? (startIndex + batchSize) : tensor._numSamples;
+			long newNumSample = 0;
+
+			for (long numSample = startIndex; numSample < numSampleUpper; numSample++) {
+				for (long k = 0; k < tensor._k; k++)
 				{
-					for (long nc = 0; nc < tensor._nc; nc++)
+					for (long nr = 0; nr < tensor._nr; nr++)
 					{
-						_host.get()[(((newNumSample * tensor._k) + k) * tensor._nr + nr) * tensor._nc + nc] =
-							tensor[(((numSample * tensor._k) + k) * tensor._nr + nr) * tensor._nc + nc];
+						for (long nc = 0; nc < tensor._nc; nc++)
+						{
+							_host.get()[(((newNumSample * tensor._k) + k) * tensor._nr + nr) * tensor._nc + nc] =
+								tensor[(((numSample * tensor._k) + k) * tensor._nr + nr) * tensor._nc + nc];
+						}
 					}
 				}
+				newNumSample++;
 			}
-			newNumSample++;
+		} else {
+			throw std::runtime_error("Can't assign a mini-batch to the same tensor.");
 		}
 	}
 
 	void Tensor::GetShuffled(const Tensor& tensor, const std::vector<long>& tensorIndexes) {
-		Resize(tensor._numSamples, tensor._k, tensor._nr, tensor._nc);
+		if (this != &tensor) {
+			Resize(tensor._numSamples, tensor._k, tensor._nr, tensor._nc);
 
-		for (long numSample = 0; numSample < tensor._numSamples; numSample++) {
-			for (long k = 0; k < tensor._k; k++)
-			{
-				for (long nr = 0; nr < tensor._nr; nr++)
+			for (long numSample = 0; numSample < tensor._numSamples; numSample++) {
+				for (long k = 0; k < tensor._k; k++)
 				{
-					for (long nc = 0; nc < tensor._nc; nc++)
+					for (long nr = 0; nr < tensor._nr; nr++)
 					{
-						_host.get()[(((numSample * tensor._k) + k) * tensor._nr + nr) * tensor._nc + nc] =
-							tensor[(((tensorIndexes[numSample] * tensor._k) + k) * tensor._nr + nr) * tensor._nc + nc];
+						for (long nc = 0; nc < tensor._nc; nc++)
+						{
+							_host.get()[(((numSample * tensor._k) + k) * tensor._nr + nr) * tensor._nc + nc] =
+								tensor[(((tensorIndexes[numSample] * tensor._k) + k) * tensor._nr + nr) * tensor._nc + nc];
+						}
 					}
 				}
 			}
+		} else {
+			throw std::runtime_error("Can't shuffle to the same tensor.");
 		}
 	}
 
@@ -241,43 +248,47 @@ namespace nexural {
 	}
 
 	void Tensor::Flip180(const Tensor& tensor) {
-		this->Resize(tensor.GetShape());
+		if (this != &tensor) {
+			this->Resize(tensor.GetShape());
 
-		long totalNumSamples = tensor.GetNumSamples();
-		long totalK = tensor.GetK();
-		long totalNC = tensor.GetNC();
-		long totalNR = tensor.GetNR();
+			long totalNumSamples = tensor.GetNumSamples();
+			long totalK = tensor.GetK();
+			long totalNC = tensor.GetNC();
+			long totalNR = tensor.GetNR();
 
-		for (long numSample = 0; numSample < totalNumSamples; numSample++) {
-			for (long k = 0; k < totalK; k++) {
-				for (long nc = 0; nc < totalNC / 2; nc++)
-				{
-					for (long nr = 0; nr < totalNR; nr++) {
-						long indexHost = (((numSample * tensor._k) + k) * tensor._nr + nr) * tensor._nc + nc;
-						long indexTensor = (((numSample * tensor._k) + k) * tensor._nr + (totalNR - nr - 1)) * tensor._nc + (totalNC - nc - 1);
+			for (long numSample = 0; numSample < totalNumSamples; numSample++) {
+				for (long k = 0; k < totalK; k++) {
+					for (long nc = 0; nc < totalNC / 2; nc++)
+					{
+						for (long nr = 0; nr < totalNR; nr++) {
+							long indexHost = (((numSample * tensor._k) + k) * tensor._nr + nr) * tensor._nc + nc;
+							long indexTensor = (((numSample * tensor._k) + k) * tensor._nr + (totalNR - nr - 1)) * tensor._nc + (totalNC - nc - 1);
 
-						float_n valueHost = tensor[indexHost];
-						float_n valueTensor = tensor[indexTensor];
+							float_n valueHost = tensor[indexHost];
+							float_n valueTensor = tensor[indexTensor];
 
-						_host.get()[indexHost] = valueTensor;
-						_host.get()[indexTensor] = valueHost;
+							_host.get()[indexHost] = valueTensor;
+							_host.get()[indexTensor] = valueHost;
+						}
 					}
-				}
 
-				if (totalNC & 1) {
-					// TODO: the center of matrix is calculated twice
-					for (long nc = 0; nc <= totalNR / 2; nc++) {
-						long indexHost = (((numSample * tensor._k) + k) * tensor._nr + nc) * tensor._nc + (totalNC / 2);
-						long indexTensor = (((numSample * tensor._k) + k) * tensor._nr + (totalNR - nc - 1)) * tensor._nc + (totalNC / 2);
+					if (totalNC & 1) {
+						// TODO: the center of matrix is calculated twice
+						for (long nc = 0; nc <= totalNR / 2; nc++) {
+							long indexHost = (((numSample * tensor._k) + k) * tensor._nr + nc) * tensor._nc + (totalNC / 2);
+							long indexTensor = (((numSample * tensor._k) + k) * tensor._nr + (totalNR - nc - 1)) * tensor._nc + (totalNC / 2);
 
-						float_n valueHost = tensor[indexHost];
-						float_n valueTensor = tensor[indexTensor];
+							float_n valueHost = tensor[indexHost];
+							float_n valueTensor = tensor[indexTensor];
 
-						_host.get()[indexHost] = valueTensor;
-						_host.get()[indexTensor] = valueHost;
+							_host.get()[indexHost] = valueTensor;
+							_host.get()[indexTensor] = valueHost;
+						}
 					}
 				}
 			}
+		} else {
+			throw std::runtime_error("Can't flip to the same tensor.");
 		}
 	}
 

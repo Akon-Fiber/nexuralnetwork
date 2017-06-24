@@ -20,7 +20,6 @@ OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 */
 
 #include <stdlib.h>
-#include <nexuralnet/experimental.h>
 
 #include "and_gate_with_tanh.h"
 #include "and_gate_with_relu.h"
@@ -87,7 +86,7 @@ void DoTests(const std::string& option, const std::string& dataFolderPath) {
 		Test_ATT_Softmax(dataFolderPath);
 	}
 	else if (option == "e") {
-		nexural::experimental::TestDemo();
+		
 	} else {
 		std::cout << "Option inserted isn't correct! Please, try again!" << std::endl;
 	}
