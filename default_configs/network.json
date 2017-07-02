@@ -92,12 +92,6 @@
       }
     },
     {
-      "type": "rmse",
-      "params": {
-
-      }
-    },
-    {
       "type": "softmax",
       "params": {
 
