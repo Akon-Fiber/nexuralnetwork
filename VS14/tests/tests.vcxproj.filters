@@ -16,9 +16,6 @@
     <Filter Include="src\layers_tests">
       <UniqueIdentifier>{47acd73a-5cc1-4de1-8a64-6204cc339dc7}</UniqueIdentifier>
     </Filter>
-    <Filter Include="src\network_tests">
-      <UniqueIdentifier>{b9724b92-6b51-4b12-b610-1746a7ba6a26}</UniqueIdentifier>
-    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\tests\run_tests.cpp">

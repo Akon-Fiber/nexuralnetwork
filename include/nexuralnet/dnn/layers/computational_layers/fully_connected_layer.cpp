@@ -1,4 +1,4 @@
-/* Copyright (C) 2016-2017 Alexandru-Valentin Musat (alexandruvalentinmusat@gmail.com)
+/* Copyright (C) 2017 Alexandru-Valentin Musat (contact@nexuralsoftware.com)
 
 Permission is hereby granted, free of charge, to any person obtaining
 a copy of this software and associated documentation files (the "Software"),
