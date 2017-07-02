@@ -21,29 +21,13 @@ OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
 #include "../data_types/tensor.h"
 
-#ifndef _NEXURALNET_UTILITY_FILLER_H
-#define _NEXURALNET_UTILITY_FILLER_H
+#ifndef NEXURALNET_UTILITY_FILLER_H
+#define NEXURALNET_UTILITY_FILLER_H
 
 namespace nexural {
 	class Filler {
 	public:
-		static void Set(Tensor& tensor, const std::string& fillType) {
-			if (fillType == "constant") {
-
-			}
-			else if (fillType == "uniform") {
-				
-			}
-			else if (fillType == "xavier") {
-				
-			}
-			else if (fillType == "msra") {
-				
-			}
-			else {
-				throw std::runtime_error("Specified filler type doesn't exists!");
-			}
-		}
+		static void Set(Tensor& tensor, const std::string& fillType);
 
 	private:
 		

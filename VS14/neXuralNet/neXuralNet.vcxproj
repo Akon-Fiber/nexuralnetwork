@@ -145,9 +145,9 @@
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="..\..\include\nexuralnet\api\exports_api.h" />
     <ClInclude Include="..\..\include\neXuralNet\dnn.h" />
     <ClInclude Include="..\..\include\neXuralNet\dnn\data_types\general_data_types.h" />
-    <ClInclude Include="..\..\include\nexuralnet\dnn\data_types\image_extensions.h" />
     <ClInclude Include="..\..\include\neXuralNet\dnn\data_types\layer_settings.h" />
     <ClInclude Include="..\..\include\neXuralNet\dnn\data_types\layer_shape.h" />
     <ClInclude Include="..\..\include\neXuralNet\dnn\data_types\tensor.h" />
@@ -171,7 +171,6 @@
     <ClInclude Include="..\..\include\neXuralNet\dnn\layers\i_layer.h" />
     <ClInclude Include="..\..\include\neXuralNet\dnn\layers\loss_layers\i_loss_layer.h" />
     <ClInclude Include="..\..\include\neXuralNet\dnn\layers\loss_layers\loss_base_layer.h" />
-    <ClInclude Include="..\..\include\neXuralNet\dnn\layers\loss_layers\loss_functions.h" />
     <ClInclude Include="..\..\include\neXuralNet\dnn\layers\loss_layers\loss_layers.h" />
     <ClInclude Include="..\..\include\neXuralNet\dnn\layers\loss_layers\mse_loss_layer.h" />
     <ClInclude Include="..\..\include\nexuralnet\dnn\layers\loss_layers\multi_class_classification_result.h" />
@@ -197,18 +196,47 @@
     <ClInclude Include="..\..\include\nexuralnet\tools\converter.h" />
     <ClInclude Include="..\..\include\neXuralNet\tools\data_reader.h" />
     <ClInclude Include="..\..\include\nexuralnet\tools\data_writer.h" />
-    <ClInclude Include="..\..\include\neXuralNet\tools\generate_test_data.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="..\..\include\nexuralnet\dnn\data_types\layer_settings.cpp" />
+    <ClCompile Include="..\..\include\nexuralnet\dnn\data_types\layer_shape.cpp" />
     <ClCompile Include="..\..\include\neXuralNet\dnn\data_types\tensor.cpp" />
+    <ClCompile Include="..\..\include\nexuralnet\dnn\layers\computational_layers\average_pooling_layer.cpp" />
+    <ClCompile Include="..\..\include\nexuralnet\dnn\layers\computational_layers\computational_base_layer.cpp" />
+    <ClCompile Include="..\..\include\nexuralnet\dnn\layers\computational_layers\convolutional_layer.cpp" />
+    <ClCompile Include="..\..\include\nexuralnet\dnn\layers\computational_layers\dropout_layer.cpp" />
+    <ClCompile Include="..\..\include\nexuralnet\dnn\layers\computational_layers\fully_connected_layer.cpp" />
+    <ClCompile Include="..\..\include\nexuralnet\dnn\layers\computational_layers\leaky_relu_layer.cpp" />
+    <ClCompile Include="..\..\include\nexuralnet\dnn\layers\computational_layers\max_pooling_layer.cpp" />
+    <ClCompile Include="..\..\include\nexuralnet\dnn\layers\computational_layers\relu_layer.cpp" />
+    <ClCompile Include="..\..\include\nexuralnet\dnn\layers\computational_layers\tanh_layerh.cpp" />
+    <ClCompile Include="..\..\include\nexuralnet\dnn\layers\input_layers\bgr_image_input_layer.cpp" />
+    <ClCompile Include="..\..\include\nexuralnet\dnn\layers\input_layers\gray_image_input_layer.cpp" />
+    <ClCompile Include="..\..\include\nexuralnet\dnn\layers\input_layers\input_base_class.cpp" />
+    <ClCompile Include="..\..\include\nexuralnet\dnn\layers\input_layers\tensor_input_layer.cpp" />
+    <ClCompile Include="..\..\include\nexuralnet\dnn\layers\loss_layers\dnn_base_result.cpp" />
     <ClCompile Include="..\..\include\nexuralnet\dnn\layers\loss_layers\dnn_base_result.h" />
+    <ClCompile Include="..\..\include\nexuralnet\dnn\layers\loss_layers\loss_base_layer.cpp" />
+    <ClCompile Include="..\..\include\nexuralnet\dnn\layers\loss_layers\mse_loss_layer.cpp" />
+    <ClCompile Include="..\..\include\nexuralnet\dnn\layers\loss_layers\multi_class_classification_result.cpp" />
+    <ClCompile Include="..\..\include\nexuralnet\dnn\layers\loss_layers\regression_result.cpp" />
+    <ClCompile Include="..\..\include\nexuralnet\dnn\layers\loss_layers\softmax_loss_layer.cpp" />
     <ClCompile Include="..\..\include\neXuralNet\dnn\network\network.cpp" />
     <ClCompile Include="..\..\include\neXuralNet\dnn\network\network_trainer.cpp" />
+    <ClCompile Include="..\..\include\nexuralnet\dnn\solvers\base_solver.h.cpp" />
+    <ClCompile Include="..\..\include\nexuralnet\dnn\solvers\sgd.cpp" />
+    <ClCompile Include="..\..\include\nexuralnet\dnn\solvers\sgd_momentum.cpp" />
+    <ClCompile Include="..\..\include\nexuralnet\dnn\utility\config_reader\config_reader.cpp" />
     <ClCompile Include="..\..\include\nexuralnet\dnn\utility\config_reader\json_config_reader.cpp" />
+    <ClCompile Include="..\..\include\nexuralnet\dnn\utility\filler.cpp" />
+    <ClCompile Include="..\..\include\nexuralnet\dnn\utility\helper.cpp" />
+    <ClCompile Include="..\..\include\nexuralnet\dnn\utility\params_parser.cpp" />
     <ClCompile Include="..\..\include\nexuralnet\dnn\utility\serializer\json_serializer.cpp" />
+    <ClCompile Include="..\..\include\nexuralnet\dnn\utility\serializer\serializer.cpp" />
     <ClCompile Include="..\..\include\nexuralnet\dnn\utility\trainer_info_writer\trainer_info_writer.cpp" />
     <ClCompile Include="..\..\include\nexuralnet\tools\converter.cpp" />
     <ClCompile Include="..\..\include\nexuralnet\tools\data_reader.cpp" />
+    <ClCompile Include="..\..\include\nexuralnet\tools\data_writer.cpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

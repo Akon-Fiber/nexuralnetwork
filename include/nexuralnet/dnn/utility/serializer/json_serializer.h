@@ -23,8 +23,8 @@ OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
 #include "base_serializer.h" 
 
-#ifndef _NEXURALNET_UTILITY_JSON_SERIALIZER_H
-#define _NEXURALNET_UTILITY_JSON_SERIALIZER_H
+#ifndef NEXURALNET_UTILITY_JSON_SERIALIZER_H
+#define NEXURALNET_UTILITY_JSON_SERIALIZER_H
 
 namespace nexural {
 	class JSONSerializer : public BaseSerializer {

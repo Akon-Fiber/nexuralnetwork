@@ -21,83 +21,33 @@ OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
 #include "../i_layer.h"
 #include "i_computational_layer.h"
-#include "../../utility/params_parser.h"
 
-#ifndef _NEXURALNET_DNN_LAYERS_COMPUTATIONAL_BASE_LAYER
-#define _NEXURALNET_DNN_LAYERS_COMPUTATIONAL_BASE_LAYER
+#ifndef NEXURALNET_DNN_LAYERS_COMPUTATIONAL_BASE_LAYER
+#define NEXURALNET_DNN_LAYERS_COMPUTATIONAL_BASE_LAYER
 
 namespace nexural {
 	class ComputationalBaseLayer : public ILayer, public IComputationalLayer {
 	public:
-		ComputationalBaseLayer() { 
-		
-		}
+		ComputationalBaseLayer();
+		ComputationalBaseLayer(const Params &layerParams);
+		virtual ~ComputationalBaseLayer();
 
-		ComputationalBaseLayer(const Params &layerParams) {
-			_layerParams = layerParams;
-			_hasWeights = false;
-			_hasBiases = false;
-		}
+		virtual Tensor* GetOutput();
+		virtual Tensor* GetLayerErrors();
+		virtual LayerShape GetOutputShape();
+		virtual Tensor* GetLayerWeights();
+		virtual Tensor* GetLayerDWeights();
+		virtual Tensor* GetLayerBiases();
+		virtual Tensor* GetLayerDBiases();
 
-		virtual ~ComputationalBaseLayer() { 
-		
-		}
+		virtual bool HasWeights();
+		virtual bool HasBiases();
 
-		virtual Tensor* GetOutput() {
-			return &_outputData;
-		}
-
-		virtual Tensor* GetLayerErrors() {
-			return &_layerErrors;
-		}
-
-		virtual LayerShape GetOutputShape() {
-			return _outputShape;
-		}
-
-		virtual Tensor* GetLayerWeights() {
-			return &_weights;
-		}
-
-		virtual Tensor* GetLayerDWeights() {
-			return &_dWeights;
-		}
-
-		virtual Tensor* GetLayerBiases() {
-			return &_biases;
-		}
-
-		virtual Tensor* GetLayerDBiases() {
-			return &_dBiases;
-		}
-
-		virtual bool HasWeights() {
-			return _hasWeights;
-		}
-
-		virtual bool HasBiases() {
-			return _hasBiases;
-		}
-
-		virtual std::string GetLayerID() const {
-			return _layerID;
-		}
-
-		virtual void Serialize(Serializer& serializer) {
-
-		}
-
-		virtual void Deserialize(Serializer& serializer) {
-
-		}
-
-		virtual void SetWeights(const std::vector<float_n>& values) {
-			_weights.Fill(values);
-		}
-
-		virtual void SetBiases(const std::vector<float_n>& values) {
-			_biases.Fill(values);
-		}
+		virtual std::string GetLayerID() const;
+		virtual void Serialize(Serializer& serializer);
+		virtual void Deserialize(Serializer& serializer);
+		virtual void SetWeights(const std::vector<float_n>& values);
+		virtual void SetBiases(const std::vector<float_n>& values);
 
 	protected:
 		Params _layerParams;

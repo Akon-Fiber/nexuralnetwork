@@ -21,32 +21,15 @@ OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
 #include "input_base_class.h"
 
-#ifndef _NEXURALNET_DNN_LAYERS_TENSOR_INPUT_LAYER
-#define _NEXURALNET_DNN_LAYERS_TENSOR_INPUT_LAYER
+#ifndef NEXURALNET_DNN_LAYERS_TENSOR_INPUT_LAYER
+#define NEXURALNET_DNN_LAYERS_TENSOR_INPUT_LAYER
 
 namespace nexural {
 	class TensorInputLayer : public InputBaseLayer {
 	public:
-		TensorInputLayer(const Params &layerParams) : InputBaseLayer(layerParams) {
-			long numSamples = parser::ParseLong(_layerParams, "num_samples");
-			long k = parser::ParseLong(_layerParams, "k");
-			long nr = parser::ParseLong(_layerParams, "nr");
-			long nc = parser::ParseLong(_layerParams, "nc");
-			_inputShape.Resize(numSamples, k, nr, nc);
-			_outputShape.Resize(_inputShape);
-			_outputData.Resize(_outputShape);
-		}
-
-		~TensorInputLayer() {
-
-		}
-
-		void LoadData(const Tensor& inputTensor) {
-			if (inputTensor.GetShape() != _outputData.GetShape()) {
-				throw std::runtime_error("The input tensor is not of the same size as the layer!");
-			}
-			_outputData.ShareTensor(inputTensor);
-		}
+		TensorInputLayer(const Params &layerParams);
+		~TensorInputLayer();
+		void LoadData(const Tensor& inputTensor);
 
 	private:
 

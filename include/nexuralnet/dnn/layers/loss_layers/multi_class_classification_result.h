@@ -20,15 +20,16 @@ OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 */
 
 #include "dnn_base_result.h"
+#include "../../data_types/tensor.h"
 
-#ifndef _NEXURALNET_DNN_MULTI_CLASS_CLASSIFICATION_RESULT
-#define _NEXURALNET_DNN_MULTI_CLASS_CLASSIFICATION_RESULT
+#ifndef NEXURALNET_DNN_MULTI_CLASS_CLASSIFICATION_RESULT
+#define NEXURALNET_DNN_MULTI_CLASS_CLASSIFICATION_RESULT
 
 namespace nexural {
-	class MultiClassClassificationResult : public DNNBaseResult{
+	class MultiClassClassificationResult : public DNNBaseResult {
 	public:
-		MultiClassClassificationResult() { }
-		~MultiClassClassificationResult() { }
+		MultiClassClassificationResult();
+		~MultiClassClassificationResult();
 
 	public:
 		size_t resultClass;

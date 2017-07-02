@@ -21,48 +21,19 @@ OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
 #include "computational_base_layer.h"
 
-#ifndef _NEXURALNET_DNN_LAYERS_LEAKY_RELU_LAYER
-#define _NEXURALNET_DNN_LAYERS_LEAKY_RELU_LAYER
+#ifndef NEXURALNET_DNN_LAYERS_LEAKY_RELU_LAYER
+#define NEXURALNET_DNN_LAYERS_LEAKY_RELU_LAYER
 
 namespace nexural {
 	class LeakyReluLayer : public ComputationalBaseLayer {
 	public:
-		LeakyReluLayer(const Params &layerParams) : ComputationalBaseLayer(layerParams) {
+		LeakyReluLayer(const Params &layerParams);
+		~LeakyReluLayer();
 
-		}
-
-		~LeakyReluLayer() {
-
-		}
-
-		virtual void Setup(const LayerShape& prevLayerShape, const size_t layerIndex) {
-			_inputShape.Resize(prevLayerShape);
-			_outputShape.Resize(_inputShape);
-			_outputData.Resize(_outputShape);
-			_layerID = "leaky_relu_layer" + std::to_string(layerIndex);
-		}
-
-		virtual void FeedForward(const Tensor& inputData, const FeedForwardType feedForwardType = FeedForwardType::RUN) {
-			_internalInputData.ShareTensor(inputData);
-			for (long i = 0; i < inputData.Size(); i++)
-			{
-				float_n value = inputData[i];
-				_outputData[i] = value < 0 ? (float_n)0.01 * value : value;
-			}
-		}
-
-		virtual void SetupLayerForTraining() {
-			_layerErrors.Resize(_inputShape);
-		}
-
-		virtual void BackPropagate(const Tensor& prevLayerErrors) {
-			for (long i = 0; i < _internalInputData.Size(); i++)
-			{
-				float_n error = prevLayerErrors[i];
-				float_n value = _internalInputData[i];
-				_layerErrors[i] = value <= 0 ? (float_n)0.01 * error : error;
-			}
-		}
+		virtual void Setup(const LayerShape& prevLayerShape, const size_t layerIndex);
+		virtual void FeedForward(const Tensor& inputData, const FeedForwardType feedForwardType = FeedForwardType::RUN);
+		virtual void SetupLayerForTraining();
+		virtual void BackPropagate(const Tensor& prevLayerErrors);
 
 	private:
 		Tensor _internalInputData;

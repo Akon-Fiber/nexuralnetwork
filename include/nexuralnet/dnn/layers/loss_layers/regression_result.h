@@ -20,15 +20,16 @@ OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 */
 
 #include "dnn_base_result.h"
+#include "../../data_types/general_data_types.h"
 
-#ifndef _NEXURALNET_DNN_REGRESSION_RESULT
-#define _NEXURALNET_DNN_REGRESSION_RESULT
+#ifndef NEXURALNET_DNN_REGRESSION_RESULT
+#define NEXURALNET_DNN_REGRESSION_RESULT
 
 namespace nexural {
 	class RegressionResult : public DNNBaseResult {
 	public:
-		RegressionResult() { }
-		~RegressionResult() { }
+		RegressionResult();
+		~RegressionResult();
 
 	public:
 		float_n result;

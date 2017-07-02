@@ -21,64 +21,19 @@ OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
 #include "computational_base_layer.h"
 
-#ifndef _NEXURALNET_DNN_LAYERS_DROPOUT_LAYER
-#define _NEXURALNET_DNN_LAYERS_DROPOUT_LAYER
+#ifndef NEXURALNET_DNN_LAYERS_DROPOUT_LAYER
+#define NEXURALNET_DNN_LAYERS_DROPOUT_LAYER
 
 namespace nexural {
 	class DropoutLayer : public ComputationalBaseLayer {
 	public:
-		DropoutLayer(const Params &layerParams) : ComputationalBaseLayer(layerParams) {
+		DropoutLayer(const Params &layerParams);
+		~DropoutLayer();
 
-		}
-
-		~DropoutLayer() {
-
-		}
-
-		virtual void Setup(const LayerShape& prevLayerShape, const size_t layerIndex) {
-			_inputShape.Resize(prevLayerShape);
-			_outputShape.Resize(_inputShape);
-			_outputData.Resize(_outputShape);
-			_dropoutIndexes.Resize(_outputShape);
-			_layerID = "dropout_layer" + std::to_string(layerIndex);
-		}
-
-		virtual void FeedForward(const Tensor& inputData, const FeedForwardType feedForwardType = FeedForwardType::RUN) {
-			if (feedForwardType == FeedForwardType::RUN) {
-				for (long i = 0; i < inputData.Size(); i++)
-				{
-					_outputData[i] = inputData[i];
-				}
-			}
-			else if (feedForwardType == FeedForwardType::TRAINING) {
-				_dropoutIndexes.FillRandomBinomialDistribution();
-
-				for (long i = 0; i < inputData.Size(); i++)
-				{
-					float_n value = inputData[i];
-					float_n drop = _dropoutIndexes[i];
-					_outputData[i] = value * drop;
-				}
-			} else if (feedForwardType == FeedForwardType::VALIDATION) {
-				for (long i = 0; i < inputData.Size(); i++)
-				{
-					_outputData[i] = inputData[i] * 0.5;
-				}
-			}
-		}
-
-		virtual void SetupLayerForTraining() {
-			_layerErrors.Resize(_inputShape);
-		}
-
-		virtual void BackPropagate(const Tensor& prevLayerErrors) {
-			for (long i = 0; i < _layerErrors.Size(); i++)
-			{
-				float_n error = prevLayerErrors[i];
-				float_n drop = _dropoutIndexes[i];
-				_layerErrors[i] = error * drop;
-			}
-		}
+		virtual void Setup(const LayerShape& prevLayerShape, const size_t layerIndex);
+		virtual void FeedForward(const Tensor& inputData, const FeedForwardType feedForwardType = FeedForwardType::RUN);
+		virtual void SetupLayerForTraining();
+		virtual void BackPropagate(const Tensor& prevLayerErrors);
 
 	private:
 		Tensor _dropoutIndexes;

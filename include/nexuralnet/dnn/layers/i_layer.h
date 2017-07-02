@@ -20,9 +20,10 @@ OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 */
 
 #include "../data_types/tensor.h"
+#include "../utility/helper.h"
 
-#ifndef _NEXURALNET_DNN_I_LAYER
-#define _NEXURALNET_DNN_I_LAYER
+#ifndef NEXURALNET_DNN_I_LAYER
+#define NEXURALNET_DNN_I_LAYER
 
 namespace nexural {
 	enum class FeedForwardType {

@@ -23,8 +23,8 @@ OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 #include "../../data_types/general_data_types.h"
 #include "../../utility/serializer/serializer.h"
 
-#ifndef _NEXURALNET_DNN_I_COMPUTATIONAL_LAYER
-#define _NEXURALNET_DNN_I_COMPUTATIONAL_LAYER
+#ifndef NEXURALNET_DNN_I_COMPUTATIONAL_LAYER
+#define NEXURALNET_DNN_I_COMPUTATIONAL_LAYER
 
 namespace nexural {
 	class IComputationalLayer {

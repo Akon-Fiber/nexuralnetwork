@@ -21,8 +21,8 @@ OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
 #include "../../data_types/tensor.h"
 
-#ifndef _NEXURALNET_DNN_I_INPUT_LAYER
-#define _NEXURALNET_DNN_I_INPUT_LAYER
+#ifndef NEXURALNET_DNN_I_INPUT_LAYER
+#define NEXURALNET_DNN_I_INPUT_LAYER
 
 namespace nexural {
 	class IInputLayer {

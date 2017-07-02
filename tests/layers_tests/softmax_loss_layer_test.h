@@ -51,22 +51,10 @@ TEST(LAYERS_TESTS, SOFTMAX_LOSS_LAYER_TESTS)
 		0, 0, 0, 0, 0, 0, 1, 0, 0, 0
 	});
 
-	layerErrorsExpected.Fill({
-
-	});
-
-
 	// Running the code
 	softmaxLossLayer.FeedForward(inputData);
 	feedForwardResult = softmaxLossLayer.GetOutput();
-	softmaxLossLayer.CalculateError(targetData);
-	softmaxLossLayer.CalculateTotalError(targetData);
-
-	layerErrorsResult = softmaxLossLayer.GetLayerErrors();
-	float_n totalError = softmaxLossLayer.GetTotalError();
 
 	// Testing the results
-	//ASSERT_EQ(*feedForwardResult, feedForwardExpected);
-	//ASSERT_EQ(*layerErrorsResult, layerErrorsExpected);
-	//ASSERT_EQ(totalError, 32.2);
+	ASSERT_EQ(*feedForwardResult, feedForwardExpected);
 }

@@ -61,12 +61,12 @@
     <Filter Include="src\dnn\utility\trainer_info_writer">
       <UniqueIdentifier>{4510835a-8d81-493f-9e3a-1c5cc1ce0adf}</UniqueIdentifier>
     </Filter>
+    <Filter Include="src\API">
+      <UniqueIdentifier>{051ecff1-f0ca-4104-a0d9-cc03001c1156}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\include\neXuralNet\tools\data_reader.h">
-      <Filter>src\tools</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\include\neXuralNet\tools\generate_test_data.h">
       <Filter>src\tools</Filter>
     </ClInclude>
     <ClInclude Include="..\..\include\neXuralNet\dnn\data_types\general_data_types.h">
@@ -127,9 +127,6 @@
       <Filter>src\dnn\layers\loss_layers\common</Filter>
     </ClInclude>
     <ClInclude Include="..\..\include\neXuralNet\dnn\layers\loss_layers\loss_base_layer.h">
-      <Filter>src\dnn\layers\loss_layers\common</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\include\neXuralNet\dnn\layers\loss_layers\loss_functions.h">
       <Filter>src\dnn\layers\loss_layers\common</Filter>
     </ClInclude>
     <ClInclude Include="..\..\include\neXuralNet\dnn\layers\input_layers\bgr_image_input_layer.h">
@@ -216,11 +213,11 @@
     <ClInclude Include="..\..\include\nexuralnet\dnn\layers\loss_layers\regression_result.h">
       <Filter>src\dnn\layers\loss_layers\results</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\include\nexuralnet\dnn\data_types\image_extensions.h">
-      <Filter>src\dnn\data_types</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\include\nexuralnet\dnn\utility\trainer_info_writer\trainer_info_writer.h">
       <Filter>src\dnn\utility\trainer_info_writer</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\nexuralnet\api\exports_api.h">
+      <Filter>src\API</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -250,6 +247,96 @@
     </ClCompile>
     <ClCompile Include="..\..\include\nexuralnet\dnn\utility\trainer_info_writer\trainer_info_writer.cpp">
       <Filter>src\dnn\utility\trainer_info_writer</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\include\nexuralnet\dnn\data_types\layer_shape.cpp">
+      <Filter>src\dnn\data_types</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\include\nexuralnet\dnn\data_types\layer_settings.cpp">
+      <Filter>src\dnn\data_types</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\include\nexuralnet\tools\data_writer.cpp">
+      <Filter>src\tools</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\include\nexuralnet\dnn\utility\config_reader\config_reader.cpp">
+      <Filter>src\dnn\utility\config_reader</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\include\nexuralnet\dnn\utility\serializer\serializer.cpp">
+      <Filter>src\dnn\utility\serializer</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\include\nexuralnet\dnn\utility\filler.cpp">
+      <Filter>src\dnn\utility</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\include\nexuralnet\dnn\utility\helper.cpp">
+      <Filter>src\dnn\utility</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\include\nexuralnet\dnn\utility\params_parser.cpp">
+      <Filter>src\dnn\utility</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\include\nexuralnet\dnn\solvers\base_solver.h.cpp">
+      <Filter>src\dnn\solvers\common</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\include\nexuralnet\dnn\solvers\sgd.cpp">
+      <Filter>src\dnn\solvers</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\include\nexuralnet\dnn\solvers\sgd_momentum.cpp">
+      <Filter>src\dnn\solvers</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\include\nexuralnet\dnn\layers\input_layers\input_base_class.cpp">
+      <Filter>src\dnn\layers\input_layers\common</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\include\nexuralnet\dnn\layers\input_layers\bgr_image_input_layer.cpp">
+      <Filter>src\dnn\layers\input_layers</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\include\nexuralnet\dnn\layers\input_layers\gray_image_input_layer.cpp">
+      <Filter>src\dnn\layers\input_layers</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\include\nexuralnet\dnn\layers\input_layers\tensor_input_layer.cpp">
+      <Filter>src\dnn\layers\input_layers</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\include\nexuralnet\dnn\layers\loss_layers\loss_base_layer.cpp">
+      <Filter>src\dnn\layers\loss_layers\common</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\include\nexuralnet\dnn\layers\loss_layers\dnn_base_result.cpp">
+      <Filter>src\dnn\layers\loss_layers\common</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\include\nexuralnet\dnn\layers\loss_layers\multi_class_classification_result.cpp">
+      <Filter>src\dnn\layers\loss_layers\results</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\include\nexuralnet\dnn\layers\loss_layers\regression_result.cpp">
+      <Filter>src\dnn\layers\loss_layers\results</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\include\nexuralnet\dnn\layers\loss_layers\mse_loss_layer.cpp">
+      <Filter>src\dnn\layers\loss_layers</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\include\nexuralnet\dnn\layers\loss_layers\softmax_loss_layer.cpp">
+      <Filter>src\dnn\layers\loss_layers</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\include\nexuralnet\dnn\layers\computational_layers\computational_base_layer.cpp">
+      <Filter>src\dnn\layers\computational_layers\common</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\include\nexuralnet\dnn\layers\computational_layers\average_pooling_layer.cpp">
+      <Filter>src\dnn\layers\computational_layers</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\include\nexuralnet\dnn\layers\computational_layers\convolutional_layer.cpp">
+      <Filter>src\dnn\layers\computational_layers</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\include\nexuralnet\dnn\layers\computational_layers\dropout_layer.cpp">
+      <Filter>src\dnn\layers\computational_layers</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\include\nexuralnet\dnn\layers\computational_layers\fully_connected_layer.cpp">
+      <Filter>src\dnn\layers\computational_layers</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\include\nexuralnet\dnn\layers\computational_layers\leaky_relu_layer.cpp">
+      <Filter>src\dnn\layers\computational_layers</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\include\nexuralnet\dnn\layers\computational_layers\max_pooling_layer.cpp">
+      <Filter>src\dnn\layers\computational_layers</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\include\nexuralnet\dnn\layers\computational_layers\relu_layer.cpp">
+      <Filter>src\dnn\layers\computational_layers</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\include\nexuralnet\dnn\layers\computational_layers\tanh_layerh.cpp">
+      <Filter>src\dnn\layers\computational_layers</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

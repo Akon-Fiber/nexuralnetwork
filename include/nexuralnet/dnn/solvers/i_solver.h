@@ -21,8 +21,8 @@ OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
 #include "../data_types/tensor.h"
 
-#ifndef _NEXURALNET_DNN_I_SOLVER
-#define _NEXURALNET_DNN_I_SOLVER
+#ifndef NEXURALNET_DNN_I_SOLVER
+#define NEXURALNET_DNN_I_SOLVER
 
 namespace nexural {
 	class ISolver {

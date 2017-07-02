@@ -21,30 +21,15 @@ OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
 #include "input_base_class.h"
 
-#ifndef _NEXURALNET_DNN_LAYERS_GRAY_IMAGE_INPUT_LAYER
-#define _NEXURALNET_DNN_LAYERS_GRAY_IMAGE_INPUT_LAYER
+#ifndef NEXURALNET_DNN_LAYERS_GRAY_IMAGE_INPUT_LAYER
+#define NEXURALNET_DNN_LAYERS_GRAY_IMAGE_INPUT_LAYER
 
 namespace nexural {
 	class GrayImageInputLayer : public InputBaseLayer {
 	public:
-		GrayImageInputLayer(const Params &layerParams) : InputBaseLayer(layerParams) {
-			long nr = parser::ParseLong(_layerParams, "input_height");
-			long nc = parser::ParseLong(_layerParams, "input_width");
-			_inputShape.Resize(1, 1, nr, nc);
-			_outputShape.Resize(_inputShape);
-			_outputData.Resize(_outputShape);
-		}
-
-		~GrayImageInputLayer() {
-
-		}
-
-		void LoadData(const Tensor& inputTensor) {
-			if (inputTensor.GetShape() != _outputData.GetShape()) {
-				throw std::runtime_error("The input image is not of the same size as the layer!");
-			}
-			_outputData.ShareTensor(inputTensor);
-		}
+		GrayImageInputLayer(const Params &layerParams);
+		~GrayImageInputLayer();
+		void LoadData(const Tensor& inputTensor);
 
 	private:
 

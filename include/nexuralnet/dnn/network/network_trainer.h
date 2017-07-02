@@ -22,8 +22,8 @@ OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 #include "../solvers/solvers.h"
 #include "../utility/trainer_info_writer/trainer_info_writer.h"
 
-#ifndef _NEXURALNET_DNN_NETWORK_NETWORK_TRAINNER
-#define _NEXURALNET_DNN_NETWORK_NETWORK_TRAINNER
+#ifndef NEXURALNET_DNN_NETWORK_NETWORK_TRAINNER
+#define NEXURALNET_DNN_NETWORK_NETWORK_TRAINNER
 
 // Protect the network include
 #include "network.h"

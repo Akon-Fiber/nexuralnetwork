@@ -20,39 +20,19 @@ OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 */
 
 #include "i_input_layer.h"
-#include "../../utility/params_parser.h"
 
-#ifndef _NEXURALNET_DNN_LAYERS_INPUT_BASE_LAYER
-#define _NEXURALNET_DNN_LAYERS_INPUT_BASE_LAYER
+#ifndef NEXURALNET_DNN_LAYERS_INPUT_BASE_LAYER
+#define NEXURALNET_DNN_LAYERS_INPUT_BASE_LAYER
 
 namespace nexural {
 	class InputBaseLayer : public IInputLayer {
 	public:
-		InputBaseLayer() {
-
-		}
-
-		InputBaseLayer(const Params &layerParams) {
-			_layerParams = layerParams;
-		}
-
-		virtual ~InputBaseLayer() {
-
-		}
-
-		virtual void SetInputBatchSize(const long batchSize) {
-			_inputShape.Resize(batchSize, _inputShape.GetK(), _inputShape.GetNR(), _inputShape.GetNC());
-			_outputShape.Resize(_inputShape);
-			_outputData.Resize(_outputShape);
-		}
-
-		virtual Tensor* GetOutput() {
-			return &_outputData;
-		}
-
-		virtual LayerShape GetOutputShape() {
-			return _outputShape;
-		}
+		InputBaseLayer();
+		InputBaseLayer(const Params &layerParams);
+		virtual ~InputBaseLayer();
+		virtual void SetInputBatchSize(const long batchSize);
+		virtual Tensor* GetOutput();
+		virtual LayerShape GetOutputShape();
 
 	protected:
 		Params _layerParams;

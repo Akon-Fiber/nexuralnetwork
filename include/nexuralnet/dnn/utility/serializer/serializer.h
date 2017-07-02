@@ -19,10 +19,10 @@ TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE
 OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 */
 
-#include "json_serializer.h"
+#include "base_serializer.h"
 
-#ifndef _NEXURALNET_UTILITY_SERIALIZER_H
-#define _NEXURALNET_UTILITY_SERIALIZER_H
+#ifndef NEXURALNET_UTILITY_SERIALIZER_H
+#define NEXURALNET_UTILITY_SERIALIZER_H
 
 namespace nexural {
 	enum class SerializerType {
@@ -31,37 +31,14 @@ namespace nexural {
 
 	class Serializer {
 	public:
-		Serializer(const SerializerType serializerType) {
-			if (serializerType == SerializerType::JSON) {
-				_serializer = BaseSerializerPtr(new JSONSerializer());
-			}
-		}
+		Serializer(const SerializerType serializerType);
+		Serializer(const SerializerType serializerType, const std::string& dataPath);
+		~Serializer();
 
-		Serializer(const SerializerType serializerType, const std::string& dataPath) {
-			if (serializerType == SerializerType::JSON) {
-				_serializer = BaseSerializerPtr(new JSONSerializer(dataPath));
-			}
-		}
-
-		~Serializer() {
-
-		}
-
-		void AddParentNode(const std::string& parentNodeName) {
-			_serializer->AddParentNode(parentNodeName);
-		}
-
-		void SerializeTensor(const Tensor& tensor, const std::string& parentNodeName, const std::string& nodeName) {
-			_serializer->SerializeTensor(tensor, parentNodeName, nodeName);
-		}
-
-		void DeserializeTensor(Tensor& tensor, const std::string& parentNodeName, const std::string& nodeName) {
-			_serializer->DeserializeTensor(tensor, parentNodeName, nodeName);
-		}
-
-		void Save(const std::string& outputFilePath) {
-			_serializer->Save(outputFilePath);
-		}
+		void AddParentNode(const std::string& parentNodeName);
+		void SerializeTensor(const Tensor& tensor, const std::string& parentNodeName, const std::string& nodeName);
+		void DeserializeTensor(Tensor& tensor, const std::string& parentNodeName, const std::string& nodeName);
+		void Save(const std::string& outputFilePath);
 
 	private:
 		BaseSerializerPtr _serializer;

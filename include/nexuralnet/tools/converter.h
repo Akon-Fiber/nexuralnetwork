@@ -21,8 +21,8 @@ OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
 #include "../dnn/data_types/tensor.h"
 
-#ifndef _NEXURALNET_TOOLS_CONVERTER_H
-#define _NEXURALNET_TOOLS_CONVERTER_H
+#ifndef NEXURALNET_TOOLS_CONVERTER_H
+#define NEXURALNET_TOOLS_CONVERTER_H
 
 namespace cv { 
 	class Mat; 

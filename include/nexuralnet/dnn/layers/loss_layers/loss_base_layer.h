@@ -21,75 +21,26 @@ OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
 #include "../i_layer.h"
 #include "i_loss_layer.h"
-#include "../../utility/params_parser.h"
 
-#ifndef _NEXURALNET_DNN_LOSS_BASE_LAYER
-#define _NEXURALNET_DNN_LOSS_BASE_LAYER
+#ifndef NEXURALNET_DNN_LOSS_BASE_LAYER
+#define NEXURALNET_DNN_LOSS_BASE_LAYER
 
 namespace nexural {
 	class LossBaseLayer : public ILayer, public ILossLayer {
 	public:
-		LossBaseLayer() { 
-			_resultType = "unknown";
-			_totalError = 0;
-			_precision = 0;
-			_recall = 0;
-			_numOfIterations = 0;
-		}
+		LossBaseLayer();
+		LossBaseLayer(const Params& layerParams);
+		virtual ~LossBaseLayer();
+		virtual Tensor* GetOutput();
+		virtual Tensor* GetLayerErrors();
 
-		LossBaseLayer(const Params& layerParams) {
-			_layerParams = layerParams;
-			_resultType = "unknown";
-			_totalError = 0;
-			_precision = 0;
-			_recall = 0;
-			_numOfIterations = 0;
-		}
-
-		virtual ~LossBaseLayer() { 
-		
-		}
-
-		virtual Tensor* GetOutput() {
-			return &_outputData;
-		}
-
-		virtual Tensor* GetLayerErrors() {
-			return &_layerErrors;
-		}
-
-		virtual LayerShape GetOutputShape() {
-			return _outputShape;
-		}
-
-		virtual const float_n GetTotalError() {
-			return _totalError / _numOfIterations;
-		}
-
-		virtual const float_n GetPrecision() {
-			return _precision;
-		}
-
-		virtual const float_n GetRecall() {
-			return _recall;
-		}
-
-		virtual void ResetMetricsData() {
-			_confusionMatrix.Fill(0);
-			_numOfIterations = 0;
-			_totalError = 0;
-			_precision = 0;
-			_recall = 0;
-			_numOfIterations = 0;
-		}
-
-		virtual const LayerShape GetTargetShape() {
-			return _outputShape;
-		}
-
-		virtual const std::string GetResultType() {
-			return _resultType;
-		}
+		virtual LayerShape GetOutputShape();
+		virtual const float_n GetTotalError();
+		virtual const float_n GetPrecision();
+		virtual const float_n GetRecall();
+		virtual void ResetMetricsData();
+		virtual const LayerShape GetTargetShape();
+		virtual const std::string GetResultType();
 
 	protected:
 		// General layer params

@@ -22,16 +22,15 @@ OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 #include <vector>
 #include "general_data_types.h"
 
-#ifndef _NEXURALNET_DATA_TYPES_LAYER_DETAILS_H
-#define _NEXURALNET_DATA_TYPES_LAYER_DETAILS_H
+#ifndef NEXURALNET_DATA_TYPES_LAYER_DETAILS_H
+#define NEXURALNET_DATA_TYPES_LAYER_DETAILS_H
 
 namespace nexural {
 	struct LayerSettings {
 		LayerSettings() = delete;
-		LayerSettings(std::string layerType_, Params layerParams_) :
-			layerType(layerType_),
-			layerParams(layerParams_) { }
-		~LayerSettings() { }
+		LayerSettings(std::string layerType_, Params layerParams_);
+		~LayerSettings();
+
 		std::string layerType;
 		Params layerParams;
 	};

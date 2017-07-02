@@ -21,7 +21,6 @@ OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
 #include <vector>
 #include <algorithm>
-#include <opencv2\core\mat.hpp>
 
 #include "../layers/input_layers/input_layers.h"
 #include "../layers/computational_layers/computational_layers.h"
@@ -29,8 +28,12 @@ OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 #include "../utility/config_reader/config_reader.h"
 #include "network_trainer.h"
 
-#ifndef _NEXURALNET_DNN_NETWORK_NETWORK
-#define _NEXURALNET_DNN_NETWORK_NETWORK
+#ifndef NEXURALNET_DNN_NETWORK_NETWORK
+#define NEXURALNET_DNN_NETWORK_NETWORK
+
+namespace cv {
+	class Mat;
+}
 
 namespace nexural {
 	class Network {

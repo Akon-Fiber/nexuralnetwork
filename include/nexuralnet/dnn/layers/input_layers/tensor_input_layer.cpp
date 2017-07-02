@@ -19,16 +19,28 @@ TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE
 OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 */
 
-#ifndef _NEXURALNET_DATA_TYPES_IMAGE_EXTENSIONS_H
-#define _NEXURALNET_DATA_TYPES_IMAGE_EXTENSIONS_H
+#include "tensor_input_layer.h"
+#include "../../utility/params_parser.h"
 
 namespace nexural {
-	enum class ImageExtension
-	{
-		JPG = 0,
-		JPEG = 1,
-		PNG = 2,
-		BMP = 3
-	};
+	TensorInputLayer::TensorInputLayer(const Params &layerParams) : InputBaseLayer(layerParams) {
+		long numSamples = parser::ParseLong(_layerParams, "num_samples");
+		long k = parser::ParseLong(_layerParams, "k");
+		long nr = parser::ParseLong(_layerParams, "nr");
+		long nc = parser::ParseLong(_layerParams, "nc");
+		_inputShape.Resize(numSamples, k, nr, nc);
+		_outputShape.Resize(_inputShape);
+		_outputData.Resize(_outputShape);
+	}
+
+	TensorInputLayer::~TensorInputLayer() {
+
+	}
+
+	void TensorInputLayer::LoadData(const Tensor& inputTensor) {
+		if (inputTensor.GetShape() != _outputData.GetShape()) {
+			throw std::runtime_error("The input tensor is not of the same size as the layer!");
+		}
+		_outputData.ShareTensor(inputTensor);
+	}
 }
-#endif

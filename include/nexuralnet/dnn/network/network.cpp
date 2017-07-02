@@ -20,6 +20,7 @@ OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 */
 
 #include <iostream>
+#include <opencv2\core\mat.hpp>
 #include "network.h"
 #include "../../tools/data_writer.h"
 #include "../../tools/converter.h"

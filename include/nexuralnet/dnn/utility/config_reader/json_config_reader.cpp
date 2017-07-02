@@ -39,12 +39,12 @@ namespace nexural {
 			rapidjson::IStreamWrapper isw(ifs);
 
 			if (_impl->document.ParseStream(isw).HasParseError()) {
-				throw std::runtime_error("The JSON source is not valid!");
+				throw std::runtime_error("JSON Config Reader error: The JSON source is not valid!");
 			}
 		}
 		else if (configSourceType == ConfigSourceType::FROM_STRING) {
 			if (_impl->document.Parse<0>(configSource.c_str()).HasParseError()) {
-				throw std::runtime_error("The JSON source is not valid!");
+				throw std::runtime_error("JSON Config Reader error: The JSON source is not valid!");
 			}
 		}
 	}
@@ -55,7 +55,7 @@ namespace nexural {
 
 	void JSONConfigReader::DecodeNetConfigInternal(LayerSettingsCollection& layerSettingsCollection) {
 		if (!_impl->document.HasMember("network_layers")) {
-			throw std::runtime_error("network_layers member is missing from the config file!");
+			throw std::runtime_error("JSON Config Reader error: network_layers member is missing from the config file!");
 		}
 
 		const rapidjson::Value& netLayers = _impl->document["network_layers"];
@@ -65,10 +65,10 @@ namespace nexural {
 			const rapidjson::Value& currentLayer = netLayers[i];
 
 			if (!currentLayer.HasMember("type")) {
-				throw std::runtime_error("type member is missing from the config file!");
+				throw std::runtime_error("JSON Config Reader error: type member is missing from the config file!");
 			}
 			if (!currentLayer.HasMember("params")) {
-				throw std::runtime_error("params member is missing from the config file!");
+				throw std::runtime_error("JSON Config Reader error: params member is missing from the config file!");
 			}
 
 			Params layerParams;
@@ -85,11 +85,11 @@ namespace nexural {
 
 	void JSONConfigReader::DecodeTrainerConfigInternal(Params& trainerParams, Params& solverParams) {
 		if (!_impl->document.HasMember("trainer_settings")) {
-			throw std::runtime_error("trainer_settings member is missing from the config file!");
+			throw std::runtime_error("JSON Config Reader error: trainer_settings member is missing from the config file!");
 		}
 
 		if (!_impl->document.HasMember("solver")) {
-			throw std::runtime_error("solver member is missing from the config file!");
+			throw std::runtime_error("JSON Config Reader error: solver member is missing from the config file!");
 		}
 
 		const rapidjson::Value& trainerSettings = _impl->document["trainer_settings"];

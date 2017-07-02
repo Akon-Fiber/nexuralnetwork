@@ -19,14 +19,14 @@ TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE
 OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 */
 
-#ifndef _NEXURALNET_DNN_BASE_RESULT
-#define _NEXURALNET_DNN_BASE_RESULT
+#ifndef NEXURALNET_DNN_BASE_RESULT
+#define NEXURALNET_DNN_BASE_RESULT
 
 namespace nexural {
 	class DNNBaseResult {
 	public:
-		DNNBaseResult() { }
-		virtual ~DNNBaseResult() { }
+		DNNBaseResult();
+		virtual ~DNNBaseResult();
 	};
 }
 #endif 

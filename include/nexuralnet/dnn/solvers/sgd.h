@@ -21,31 +21,18 @@ OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
 #include "base_solver.h"
 
-#ifndef _NEXURALNET_DNN_SOLVERS_SGD
-#define _NEXURALNET_DNN_SOLVERS_SGD
+#ifndef NEXURALNET_DNN_SOLVERS_SGD
+#define NEXURALNET_DNN_SOLVERS_SGD
 
 namespace nexural {
 	class SGD : public BaseSolver {
 	public:
-		SGD() : BaseSolver() { }
-
-		SGD(Params &solverParams) : BaseSolver(solverParams) { }
-
-		~SGD() {
-
-		}
+		SGD();
+		SGD(Params &solverParams);
+		~SGD();
 		
-		virtual void UpdateWeights(Tensor& weights, const Tensor& dWeights, const std::string& layerID) {
-			for (int i = 0; i < weights.Size(); i++) {
-				weights[i] -= _learningRate * (dWeights[i] + _weightDecay * weights[i]);
-			}
-		}
-
-		virtual void UpdateBiases(Tensor& baises, const Tensor& dBiases, const std::string& layerID) {
-			for (int i = 0; i < baises.Size(); i++) {
-				baises[i] -= _learningRate * dBiases[i];
-			}
-		}
+		virtual void UpdateWeights(Tensor& weights, const Tensor& dWeights, const std::string& layerID);
+		virtual void UpdateBiases(Tensor& baises, const Tensor& dBiases, const std::string& layerID);
 
 	private:
 

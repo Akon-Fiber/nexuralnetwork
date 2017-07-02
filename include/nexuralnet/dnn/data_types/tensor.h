@@ -20,13 +20,15 @@ OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 */
 
 #include <memory>
+#include <vector>
+#include "general_data_types.h"
 #include "layer_shape.h"
 
-#ifndef _NEXURALNET_DATA_TYPES_TENSOR_H
-#define _NEXURALNET_DATA_TYPES_TENSOR_H
+
+#ifndef NEXURALNET_DATA_TYPES_TENSOR_H
+#define NEXURALNET_DATA_TYPES_TENSOR_H
 
 namespace nexural {
-	typedef double float_n;
 	class Tensor {
 		/*!
 		WHAT THIS OBJECT REPRESENTS

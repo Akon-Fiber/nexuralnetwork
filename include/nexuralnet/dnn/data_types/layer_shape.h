@@ -19,69 +19,31 @@ TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE
 OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 */
 
-#include <vector>
-#include "general_data_types.h"
-
-#ifndef _NEXURALNET_DATA_TYPES_LAYER_SHAPE_H
-#define _NEXURALNET_DATA_TYPES_LAYER_SHAPE_H
+#ifndef NEXURALNET_DATA_TYPES_LAYER_SHAPE_H
+#define NEXURALNET_DATA_TYPES_LAYER_SHAPE_H
 
 namespace nexural {
 	struct LayerShape {
-		LayerShape() :
-			_numSamples(0),
-			_k(0),
-			_nr(0),
-			_nc(0) { }
+		LayerShape();
+		LayerShape(long numSamples, long k, long nr, long nc);
+		LayerShape(const LayerShape &other);
+		LayerShape& operator=(const LayerShape other);
 
-		LayerShape(long numSamples, long k, long nr, long nc) :
-			_numSamples(numSamples),
-			_k(k),
-			_nr(nr),
-			_nc(nc) { }
+		bool operator==(const LayerShape& other);
+		bool operator!=(const LayerShape& other);
+		void Resize(long numSamples, long k, long nr, long nc);
+		void Resize(const LayerShape &other);
+		long Size() const;
 
-		LayerShape(const LayerShape &other) {
-			this->Resize(other.GetNumSamples(), other.GetK(), other.GetNR(), other.GetNC());
-		}
+		void SetNumSamples(long numSamples);
+		void SetK(long k);
+		void SetNR(long nr);
+		void SetNC(long nc);
 
-		LayerShape& operator=(const LayerShape other)
-		{
-			this->Resize(other.GetNumSamples(), other.GetK(), other.GetNR(), other.GetNC());
-			return *this;
-		}
-
-		bool operator==(const LayerShape& other) {
-			return (this->_numSamples == other._numSamples &&
-				this->_k == other._k && 
-				this->_nr == other._nr && 
-				this->_nc == other._nc);
-		}
-
-		bool operator!=(const LayerShape& other) {
-			return !(*this == other);
-		}
-
-		void Resize(long numSamples, long k, long nr, long nc) {
-			_numSamples = numSamples;
-			_k = k;
-			_nr = nr;
-			_nc = nc;
-		}
-
-		void Resize(const LayerShape &other) {
-			this->Resize(other.GetNumSamples(), other.GetK(), other.GetNR(), other.GetNC());
-		}
-
-		long Size() const { return _numSamples * _k * _nr * _nc; }
-
-		void SetNumSamples(long numSamples) { _numSamples = numSamples; }
-		void SetK(long k) { _k = k; }
-		void SetNR(long nr) { _nr = nr; }
-		void SetNC(long nc) { _nc = nc; }
-
-		long GetNumSamples() const { return _numSamples; }
-		long GetK() const { return _k; }
-		long GetNR() const { return _nr; }
-		long GetNC() const { return _nc; }
+		long GetNumSamples() const;
+		long GetK() const;
+		long GetNR() const;
+		long GetNC() const;
 
 	private:
 		long _numSamples;

@@ -22,8 +22,8 @@ OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 #include "../../data_types/layer_settings.h"
 #include "json_config_reader.h"
 
-#ifndef _NEXURALNET_UTILITY_CONFIG_READER_H
-#define _NEXURALNET_UTILITY_CONFIG_READER_H
+#ifndef NEXURALNET_UTILITY_CONFIG_READER_H
+#define NEXURALNET_UTILITY_CONFIG_READER_H
 
 namespace nexural {
 	enum class ConfigReaderType {
@@ -32,19 +32,8 @@ namespace nexural {
 
 	class ConfigReader {
 	public:
-		static void DecodeNetCongif(const std::string& networkConfigSource, LayerSettingsCollection& layerSettingsCollection, const ConfigSourceType& configSourceType, const ConfigReaderType& readerType = ConfigReaderType::JSON) {
-			if (readerType == ConfigReaderType::JSON) {
-				JSONConfigReader jsonReader(networkConfigSource, configSourceType);
-				jsonReader.DecodeNetConfigInternal(layerSettingsCollection);
-			}
-		}
-
-		static void DecodeTrainerCongif(const std::string& trainerConfigPath, Params& trainerParams, Params& solverParams, const ConfigSourceType& configSourceType, const ConfigReaderType& readerType = ConfigReaderType::JSON) {
-			if (readerType == ConfigReaderType::JSON) {
-				JSONConfigReader jsonReader(trainerConfigPath, configSourceType);
-				jsonReader.DecodeTrainerConfigInternal(trainerParams, solverParams);
-			}
-		}
+		static void DecodeNetCongif(const std::string& networkConfigSource, LayerSettingsCollection& layerSettingsCollection, const ConfigSourceType& configSourceType, const ConfigReaderType& readerType = ConfigReaderType::JSON);
+		static void DecodeTrainerCongif(const std::string& trainerConfigPath, Params& trainerParams, Params& solverParams, const ConfigSourceType& configSourceType, const ConfigReaderType& readerType = ConfigReaderType::JSON);
 	};
 }
 #endif

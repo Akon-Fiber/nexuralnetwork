@@ -25,8 +25,8 @@ OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 #include "../../data_types/general_data_types.h"
 #include "../../data_types/layer_settings.h"
 
-#ifndef _NEXURALNET_UTILITY_JSON_CONFIG_READER_H
-#define _NEXURALNET_UTILITY_JSON_CONFIG_READER_H
+#ifndef NEXURALNET_UTILITY_JSON_CONFIG_READER_H
+#define NEXURALNET_UTILITY_JSON_CONFIG_READER_H
 
 namespace nexural {
 	enum class ConfigSourceType {

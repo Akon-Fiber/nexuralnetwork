@@ -21,10 +21,20 @@ OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
 #include <map>
 
-#ifndef _NEXURALNET_DATA_TYPES_GENERAL_DATA_TYPES_H
-#define _NEXURALNET_DATA_TYPES_GENERAL_DATA_TYPES_H
+#ifndef NEXURALNET_DATA_TYPES_GENERAL_DATA_TYPES_H
+#define NEXURALNET_DATA_TYPES_GENERAL_DATA_TYPES_H
 
 namespace nexural {
+	typedef double float_n;
+
 	typedef std::map<std::string, std::string> Params;
+
+	enum class ImageExtension
+	{
+		JPG = 0,
+		JPEG = 1,
+		PNG = 2,
+		BMP = 3
+	};
 }
 #endif
