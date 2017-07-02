@@ -3,7 +3,7 @@ This toolbox has been written as a part of my bachelor degree project and contai
 
 ## Compiling neXuralNet on Windows ##
 Firstly you need to install the following softwares:
- * [CMake](https://cmake.org/) 
+ * [CMake](https://cmake.org/) (version 3.7.0 or newer)
  * [Visual Studio](https://www.visualstudio.com/vs/community/) - only Visual Studio 2015 and newer are supported since pybind11 relies on various C++11 language features that break older versions of Visual Studio;
  * Python - needed for building the python module (we recomand [Anaconda](https://www.continuum.io/downloads) environment);
  
