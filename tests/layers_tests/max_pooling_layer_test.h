@@ -20,7 +20,7 @@ OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 */
 
 #include "../stdafx.h"
-#include <nexuralnet\dnn\layers\computational_layers\max_pooling_layer.h>
+#include <nexuralnet/dnn/layers/computational_layers/max_pooling_layer.h>
 using namespace nexural;
 
 TEST(LAYERS_TESTS, MAX_POOLING_LAYER_TESTS)

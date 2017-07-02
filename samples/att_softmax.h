@@ -30,14 +30,14 @@ void Test_ATT_Softmax(const std::string& dataFolderPath) {
 	MultiClassClassificationResult* netResult;
 	cv::Mat image;
 
-	std::string exampleRoot = dataFolderPath + "\\att_softmax\\";
+	std::string exampleRoot = dataFolderPath + "/att_softmax/";
 	std::string networkConfigPath = exampleRoot + "network.json";
 	std::string trainerConfigPath = exampleRoot + "trainer.json";
-	std::string testDataPath = exampleRoot + "test_images\\";
-	std::string filtersImagesPath = exampleRoot + "filters_images\\";
+	std::string testDataPath = exampleRoot + "test_images/";
+	std::string filtersImagesPath = exampleRoot + "filters_images/";
 	std::string trainerInfoDataPath = exampleRoot + "trainerInfo.json";
 	std::string trainedDataFilePath = exampleRoot + "trainedData.json";
-	std::string imagesFolderPath = exampleRoot + "images\\";
+	std::string imagesFolderPath = exampleRoot + "images/";
 
 	int option = 0;
 	std::cout << "1 - Train and test" << std::endl;

@@ -22,8 +22,8 @@ find_package(OpenCV REQUIRED opencv_world)
 
 
 file(GLOB_RECURSE nexuralnet_library_src
-	"include/nexuralnet/*.h"
-	"include/nexuralnet/*.cpp"
+	"src/nexuralnet/*.h"
+	"src/nexuralnet/*.cpp"
 	)
 add_library(nexural STATIC ${nexuralnet_library_src})
 include_directories(${OpenCV_INCLUDE_DIRS})

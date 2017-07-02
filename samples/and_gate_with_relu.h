@@ -27,7 +27,7 @@ void Test_AND_Gate_With_RELU(const std::string& dataFolderPath) {
 	Tensor inputData, trainingData, targetData;
 	RegressionResult* netResult;
 
-	std::string exampleRoot = dataFolderPath + "\\and_relu\\";
+	std::string exampleRoot = dataFolderPath + "/and_relu/";
 	std::string networkConfigPath = exampleRoot + "network.json";
 	std::string trainerConfigPath = exampleRoot + "trainer.json";
 	std::string trainingDataPath = exampleRoot + "trainingData.txt";
