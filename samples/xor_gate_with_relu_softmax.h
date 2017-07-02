@@ -1,4 +1,4 @@
-/* Copyright (C) 2016-2017 Alexandru-Valentin Musat (alexandruvalentinmusat@gmail.com)
+/* Copyright (C) 2017 Alexandru-Valentin Musat (contact@nexuralsoftware.com)
 
 Permission is hereby granted, free of charge, to any person obtaining
 a copy of this software and associated documentation files (the "Software"),
@@ -27,12 +27,13 @@ void Test_XOR_Gate_With_RELU_Softmax(const std::string& dataFolderPath) {
 	Tensor inputData, trainingData, targetData;
 	MultiClassClassificationResult* netResult;
 
-	std::string exampleRoot = dataFolderPath + "\\xor_relu_softmax\\";
+	std::string exampleRoot = dataFolderPath + "/xor_relu_softmax/";
 	std::string networkConfigPath = exampleRoot + "network.json";
 	std::string trainerConfigPath = exampleRoot + "trainer.json";
 	std::string trainingDataPath = exampleRoot + "trainingData.txt";
 	std::string targetDataPath = exampleRoot + "targetData.txt";
-	std::string trainerInfoDataPath = exampleRoot + "trainerInfo.txt";
+	std::string trainerInfoDataPath = exampleRoot + "trainerInfo.json";
+	std::string trainedDataFilePath = exampleRoot + "trainedData.json";
 
 	int option = 0;
 	std::cout << "1 - Train and test" << std::endl;
@@ -43,11 +44,10 @@ void Test_XOR_Gate_With_RELU_Softmax(const std::string& dataFolderPath) {
 
 	if (option == 1) {
 		NetworkTrainer netTrainer(networkConfigPath, trainerConfigPath);
-		netTrainer.Train(trainingDataPath, targetDataPath, NetworkTrainer::TrainingDataSource::TXT_DATA_FILE, NetworkTrainer::TargetDataSource::TXT_DATA_FILE, true, trainerInfoDataPath);
-		netTrainer.Serialize(exampleRoot + "xor_relu_softmax.json");
+		netTrainer.Train(trainingDataPath, targetDataPath, trainerInfoDataPath, trainedDataFilePath, NetworkTrainer::TrainingDataSource::TXT_DATA_FILE, NetworkTrainer::TargetDataSource::TXT_DATA_FILE);
 	}
 
-	net.Deserialize(exampleRoot + "xor_relu_softmax.json");
+	net.Deserialize(trainedDataFilePath);
 
 	std::cout << std::endl << "Test the trained network: " << std::endl << std::endl;
 	inputData.Resize(1, 1, 1, 2);

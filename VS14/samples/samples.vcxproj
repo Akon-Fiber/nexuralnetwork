@@ -71,20 +71,20 @@
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
-    <IncludePath>../../include;$(IncludePath)</IncludePath>
+    <IncludePath>../../src;$(IncludePath)</IncludePath>
     <OutDir>$(SolutionDir)$(Platform)\$(Configuration)\</OutDir>
     <IntDir>$(Platform)\$(Configuration)\</IntDir>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
-    <IncludePath>../../include;$(IncludePath)</IncludePath>
+    <IncludePath>../../src;$(IncludePath)</IncludePath>
     <OutDir>$(SolutionDir)$(Platform)\$(Configuration)\</OutDir>
     <IntDir>$(Platform)\$(Configuration)\</IntDir>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
-    <IncludePath>../../include;$(IncludePath)</IncludePath>
+    <IncludePath>../../src;$(IncludePath)</IncludePath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
-    <IncludePath>../../include;$(IncludePath)</IncludePath>
+    <IncludePath>../../src;$(IncludePath)</IncludePath>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <ClCompile>
@@ -146,6 +146,7 @@
     <ClInclude Include="..\..\samples\and_gate_with_relu.h" />
     <ClInclude Include="..\..\samples\and_gate_with_relu_softmax.h" />
     <ClInclude Include="..\..\samples\and_gate_with_tanh.h" />
+    <ClInclude Include="..\..\samples\att_softmax.h" />
     <ClInclude Include="..\..\samples\mnist_softmax.h" />
     <ClInclude Include="..\..\samples\stdafx.h" />
     <ClInclude Include="..\..\samples\xor_gate_with_relu.h" />

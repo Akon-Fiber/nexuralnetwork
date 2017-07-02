@@ -1,4 +1,4 @@
-/* Copyright (C) 2016-2017 Alexandru-Valentin Musat (alexandruvalentinmusat@gmail.com)
+/* Copyright (C) 2017 Alexandru-Valentin Musat (contact@nexuralsoftware.com)
 
 Permission is hereby granted, free of charge, to any person obtaining
 a copy of this software and associated documentation files (the "Software"),
@@ -20,7 +20,6 @@ OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 */
 
 #include <stdlib.h>
-#include <nexuralnet/experimental.h>
 
 #include "and_gate_with_tanh.h"
 #include "and_gate_with_relu.h"
@@ -28,21 +27,19 @@ OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 #include "xor_gate_with_relu_softmax.h"
 #include "and_gate_with_relu_softmax.h"
 #include "mnist_softmax.h"
+#include "att_softmax.h"
 
 void Menu() {
 	std::cout << "--------------------------MENU--------------------------" << std::endl;
 	std::cout << "| Available options:" << std::endl;
 	std::cout << "| 0 - EXIT" << std::endl;
-	std::cout << "| 1 - Random data for AND gate with Softmax" << std::endl;
-	std::cout << "| 1 - Random data for XOR gate with Softmax" << std::endl;
-	std::cout << "| 3 - Random data for AND gate" << std::endl;
-	std::cout << "| 4 - Random data for XOR gate" << std::endl;
-	std::cout << "| 5 - AND gate with TanH with MSE" << std::endl;
-	std::cout << "| 6 - AND gate with RELU with MSE" << std::endl;
-	std::cout << "| 7 - XOR gate with RELU with MSE" << std::endl;
-	std::cout << "| 8 - AND gate with RELU and Softmax" << std::endl;
-	std::cout << "| 9 - XOR gate with RELU and Softmax" << std::endl;
-	std::cout << "| 10 - MNIST with Softmax" << std::endl;
+	std::cout << "| 1 - AND gate with TanH with MSE" << std::endl;
+	std::cout << "| 2 - AND gate with RELU with MSE" << std::endl;
+	std::cout << "| 3 - XOR gate with RELU with MSE" << std::endl;
+	std::cout << "| 4 - AND gate with RELU and Softmax" << std::endl;
+	std::cout << "| 5 - XOR gate with RELU and Softmax" << std::endl;
+	std::cout << "| 6 - MNIST with Softmax" << std::endl;
+	std::cout << "| 7 - ATT with Softmax" << std::endl;
 	std::cout << "| e - Experminetal" << std::endl;
 	std::cout << "--------------------------------------------------------" << std::endl << std::endl;
 }
@@ -52,37 +49,28 @@ void DoTests(const std::string& option, const std::string& dataFolderPath) {
 
 	}
 	else if (option == "1") {
-		GenerateTestData(tools::TestDataType::AND_SOFTMAX);
-	}
-	else if (option == "2") {
-		GenerateTestData(tools::TestDataType::XOR_SOFTMAX);
-	}
-	else if (option == "3") {
-		GenerateTestData(tools::TestDataType::AND);
-	}
-	else if (option == "4") {
-		GenerateTestData(tools::TestDataType::XOR);
-	}
-	else if (option == "5") {
 		Test_AND_Gate_With_TanH(dataFolderPath);
 	}
-	else if (option == "6") {
+	else if (option == "2") {
 		Test_AND_Gate_With_RELU(dataFolderPath);
 	}
-	else if (option == "7") {
+	else if (option == "3") {
 		Test_XOR_Gate_With_RELU(dataFolderPath);
 	}
-	else if (option == "8") {
+	else if (option == "4") {
 		Test_AND_Gate_With_RELU_Softmax(dataFolderPath);
 	}
-	else if (option == "9") {
+	else if (option == "5") {
 		Test_XOR_Gate_With_RELU_Softmax(dataFolderPath);
 	}
-	else if (option == "10") {
+	else if (option == "6") {
 		Test_MNIST_Softmax(dataFolderPath);
 	}
+	else if (option == "7") {
+		Test_ATT_Softmax(dataFolderPath);
+	}
 	else if (option == "e") {
-		nexural::experimental::TestDemo();
+		
 	} else {
 		std::cout << "Option inserted isn't correct! Please, try again!" << std::endl;
 	}

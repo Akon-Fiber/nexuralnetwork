@@ -1,11 +1,9 @@
-cmake_minimum_required(VERSION 3.7)
+cmake_minimum_required(VERSION 3.6)
 
 list(APPEND CMAKE_MODULE_PATH "${CMAKE_CURRENT_LIST_DIR}/cmake")
 
-project(neXuralNet)
+project(neXuralNetwork)
 
-set(CMAKE_CXX_STANDARD 14)
-set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_POSITION_INDEPENDENT_CODE ON)
 
 if (CMAKE_INSTALL_PREFIX_INITIALIZED_TO_DEFAULT)
@@ -22,14 +20,14 @@ find_package(OpenCV REQUIRED opencv_world)
 
 
 file(GLOB_RECURSE nexuralnet_library_src
-	"include/nexuralnet/*.h"
-	"include/nexuralnet/*.cpp"
+	"src/nexuralnet/*.h"
+	"src/nexuralnet/*.cpp"
 	)
-add_library(nexural STATIC ${nexuralnet_library_src})
+add_library(nexural_static STATIC ${nexuralnet_library_src})
 include_directories(${OpenCV_INCLUDE_DIRS})
 set(RapidJSON_INCLUDE_DIRS ${CMAKE_CURRENT_SOURCE_DIR}/thirdparty/rapidjson/include CACHE PATH "RapidSJSON include directory")
-target_include_directories(nexural PUBLIC ${RapidJSON_INCLUDE_DIRS})
-target_link_libraries(nexural ${OpenCV_LIBS})
+target_include_directories(nexural_static PUBLIC ${RapidJSON_INCLUDE_DIRS})
+target_link_libraries(nexural_static ${OpenCV_LIBS})
 
 
 file(GLOB_RECURSE nexuralnet_samples_src
@@ -37,9 +35,9 @@ file(GLOB_RECURSE nexuralnet_samples_src
 	"samples/*.cpp"
 	)
 add_executable(samples ${nexuralnet_samples_src})
-set(nexural_INCLUDE_DIRS ${CMAKE_CURRENT_SOURCE_DIR}/include CACHE PATH "nexural include directory")
+set(nexural_INCLUDE_DIRS ${CMAKE_CURRENT_SOURCE_DIR}/src CACHE PATH "nexural include directory")
 target_include_directories(samples PUBLIC ${nexural_INCLUDE_DIRS})
-target_link_libraries(samples nexural ${OpenCV_LIBS})
+target_link_libraries(samples nexural_static ${OpenCV_LIBS})
 
 
 
@@ -49,7 +47,7 @@ find_package(NumPy)
 pybind11_add_module(nexuralnet python/py_nexuralnet.cpp 
 	thirdparty/pybind11_opencv_numpy/ndarray_converter.h 
 	thirdparty/pybind11_opencv_numpy/ndarray_converter.cpp)
-target_link_libraries(nexuralnet PRIVATE nexural ${OpenCV_LIBS})
+target_link_libraries(nexuralnet PRIVATE nexural_static ${OpenCV_LIBS})
 target_include_directories(nexuralnet PUBLIC ${nexural_INCLUDE_DIRS})
 target_include_directories(nexuralnet PRIVATE 
 	./thirdparty/pybind11_opencv_numpy

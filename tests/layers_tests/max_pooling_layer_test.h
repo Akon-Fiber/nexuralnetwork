@@ -1,4 +1,4 @@
-/* Copyright (C) 2016-2017 Alexandru-Valentin Musat (alexandruvalentinmusat@gmail.com)
+/* Copyright (C) 2017 Alexandru-Valentin Musat (contact@nexuralsoftware.com)
 
 Permission is hereby granted, free of charge, to any person obtaining
 a copy of this software and associated documentation files (the "Software"),
@@ -20,7 +20,7 @@ OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 */
 
 #include "../stdafx.h"
-#include <nexuralnet\dnn\layers\computational_layers\max_pooling_layer.h>
+#include <nexuralnet/dnn/layers/computational_layers/max_pooling_layer.h>
 using namespace nexural;
 
 TEST(LAYERS_TESTS, MAX_POOLING_LAYER_TESTS)

@@ -1,4 +1,4 @@
-/* Copyright (C) 2016-2017 Alexandru-Valentin Musat (alexandruvalentinmusat@gmail.com)
+/* Copyright (C) 2017 Alexandru-Valentin Musat (contact@nexuralsoftware.com)
 
 Permission is hereby granted, free of charge, to any person obtaining
 a copy of this software and associated documentation files (the "Software"),
@@ -30,16 +30,17 @@ void Test_MNIST_Softmax(const std::string& dataFolderPath) {
 	MultiClassClassificationResult* netResult;
 	cv::Mat image;
 
-	std::string exampleRoot = dataFolderPath + "\\mnist_softmax\\";
+	std::string exampleRoot = dataFolderPath + "/mnist_softmax/";
 	std::string networkConfigPath = exampleRoot + "network.json";
 	std::string trainerConfigPath = exampleRoot + "trainer.json";
 	std::string trainingDataPath = exampleRoot + "train-images.idx3-ubyte";
 	std::string targetDataPath = exampleRoot + "train-labels.idx1-ubyte";
 	std::string testingDataPath = exampleRoot + "t10k-images.idx3-ubyte";
 	std::string testingTargetDataPath = exampleRoot + "t10k-labels.idx1-ubyte";
-	std::string testDataPath = exampleRoot + "test_images\\";
-	std::string filtersImagesPath = exampleRoot + "filters_images\\";
-	std::string trainerInfoDataPath = exampleRoot + "trainerInfo.txt";
+	std::string testDataPath = exampleRoot + "test_images/";
+	std::string filtersImagesPath = exampleRoot + "filters_images/";
+	std::string trainerInfoDataPath = exampleRoot + "trainerInfo.json";
+	std::string trainedDataFilePath = exampleRoot + "trainedData.json";
 
 	int option = 0, numOfSamples = 0;
 	std::cout << "1 - Train and test" << std::endl;
@@ -59,11 +60,10 @@ void Test_MNIST_Softmax(const std::string& dataFolderPath) {
 		tools::DataReader::ReadMNISTLabels(targetDataPath, targetData, numOfSamples);
 
 		NetworkTrainer netTrainer(networkConfigPath, trainerConfigPath);
-		netTrainer.Train(trainingData, targetData, true, trainerInfoDataPath);
-		netTrainer.Serialize(exampleRoot + "mnist.json");
+		netTrainer.Train(trainingData, targetData, trainedDataFilePath, exampleRoot);
 	}
 
-	net.Deserialize(exampleRoot + "mnist.json");
+	net.Deserialize(trainedDataFilePath);
 
 	std::cout << std::endl << "Test the trained network: " << std::endl << std::endl;
 
