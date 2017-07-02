@@ -1,4 +1,4 @@
-/* Copyright (C) 2016-2017 Alexandru-Valentin Musat (alexandruvalentinmusat@gmail.com)
+/* Copyright (C) 2017 Alexandru-Valentin Musat (contact@nexuralsoftware.com)
 
 Permission is hereby granted, free of charge, to any person obtaining
 a copy of this software and associated documentation files (the "Software"),
@@ -19,7 +19,7 @@ TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE
 OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 */
 
-#include "../include/nexuralnet/dnn.h"
+#include "../src/nexuralnet/dnn.h"
 #include <pybind11/pybind11.h>
 #include "ndarray_converter.h"
 
@@ -50,7 +50,7 @@ namespace nexural {
 		py::class_<NetworkTrainer> networkTrainer(m, "trainer");
 		networkTrainer.def(py::init<const std::string &, const std::string &>())
 
-			.def("train", (void (NetworkTrainer::*)(const std::string &, const std::string &, NetworkTrainer::TrainingDataSource, NetworkTrainer::TargetDataSource, const bool, const std::string &)) &NetworkTrainer::Train, "Train the network")
+			.def("train", (void (NetworkTrainer::*)(const std::string &, const std::string &, const std::string &, const std::string &, NetworkTrainer::TrainingDataSource, NetworkTrainer::TargetDataSource)) &NetworkTrainer::Train, "Train the network")
 
 			.def("serialize", &NetworkTrainer::Serialize, "Serialize a trained network file");
 
