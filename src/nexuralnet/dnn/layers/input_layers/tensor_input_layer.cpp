@@ -39,7 +39,7 @@ namespace nexural {
 
 	void TensorInputLayer::LoadData(const Tensor& inputTensor) {
 		if (inputTensor.GetShape() != _outputData.GetShape()) {
-			throw std::runtime_error("The input tensor is not of the same size as the layer!");
+			throw std::runtime_error("Tensor Input layer error: The input tensor is not of the same size as the layer!");
 		}
 		_outputData.ShareTensor(inputTensor);
 	}

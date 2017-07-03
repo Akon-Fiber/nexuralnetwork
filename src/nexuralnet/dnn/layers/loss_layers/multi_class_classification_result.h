@@ -19,6 +19,7 @@ TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE
 OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 */
 
+#include <vector>
 #include "dnn_base_result.h"
 #include "../../data_types/tensor.h"
 
@@ -32,8 +33,8 @@ namespace nexural {
 		~MultiClassClassificationResult();
 
 	public:
-		size_t resultClass;
-		Tensor classesWithProbabilities;
+		std::vector<size_t> resultClass;
+		std::vector<Tensor> classesWithProbabilities;
 	};
 }
 #endif 

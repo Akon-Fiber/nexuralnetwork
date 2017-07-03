@@ -39,7 +39,7 @@ void Test_MNIST_Softmax(const std::string& dataFolderPath) {
 	std::string testingTargetDataPath = exampleRoot + "t10k-labels.idx1-ubyte";
 	std::string testDataPath = exampleRoot + "test_images/";
 	std::string filtersImagesPath = exampleRoot + "filters_images/";
-	std::string trainerInfoDataPath = exampleRoot + "trainerInfo.json";
+	std::string trainerInfoDataPath = exampleRoot + "info/";
 	std::string trainedDataFilePath = exampleRoot + "trainedData.json";
 
 	int option = 0, numOfSamples = 0;
@@ -59,19 +59,21 @@ void Test_MNIST_Softmax(const std::string& dataFolderPath) {
 		std::cout << "Reading the labels for the training dataset..." << std::endl << std::endl;
 		tools::DataReader::ReadMNISTLabels(targetDataPath, targetData, numOfSamples);
 
+		std::cout << "Starting training..." << std::endl;
 		NetworkTrainer netTrainer(networkConfigPath, trainerConfigPath);
-		netTrainer.Train(trainingData, targetData, trainedDataFilePath, exampleRoot);
+		netTrainer.Train(trainingData, targetData, trainedDataFilePath, trainerInfoDataPath);
+		std::cout << "Finished training and saved the training file!" << std::endl;
 	}
 
+	std::cout << "Load training file..." << std::endl;
 	net.Deserialize(trainedDataFilePath);
 
 	std::cout << std::endl << "Test the trained network: " << std::endl << std::endl;
-
 	image = cv::imread(testDataPath + "image0.jpg", cv::IMREAD_GRAYSCALE);
 	std::cout << "Target: 7" << std::endl;
 	net.Run(image);
 	netResult = dynamic_cast<MultiClassClassificationResult*>(net.GetResult());
-	std::cout << "Result: " << netResult->resultClass << std::endl;
+	std::cout << "Result: " << netResult->resultClass[0] << std::endl;
 	std::cout << std::endl;
 
 	if (option == 3) {
@@ -84,28 +86,28 @@ void Test_MNIST_Softmax(const std::string& dataFolderPath) {
 	std::cout << "Target: 2" << std::endl;
 	net.Run(image);
 	netResult = dynamic_cast<MultiClassClassificationResult*>(net.GetResult());
-	std::cout << "Result: " << netResult->resultClass << std::endl;
+	std::cout << "Result: " << netResult->resultClass[0] << std::endl;
 	std::cout << std::endl;
 
 	image = cv::imread(testDataPath + "image2.jpg", cv::IMREAD_GRAYSCALE);
 	std::cout << "Target: 1" << std::endl;
 	net.Run(image);
 	netResult = dynamic_cast<MultiClassClassificationResult*>(net.GetResult());
-	std::cout << "Result: " << netResult->resultClass << std::endl;
+	std::cout << "Result: " << netResult->resultClass[0] << std::endl;
 	std::cout << std::endl;
 
 	image = cv::imread(testDataPath + "image3.jpg", cv::IMREAD_GRAYSCALE);
 	std::cout << "Target: 0" << std::endl;
 	net.Run(image);
 	netResult = dynamic_cast<MultiClassClassificationResult*>(net.GetResult());
-	std::cout << "Result: " << netResult->resultClass << std::endl;
+	std::cout << "Result: " << netResult->resultClass[0] << std::endl;
 	std::cout << std::endl;
 
 	image = cv::imread(testDataPath + "image4.jpg", cv::IMREAD_GRAYSCALE);
 	std::cout << "Target: 4" << std::endl;
 	net.Run(image);
 	netResult = dynamic_cast<MultiClassClassificationResult*>(net.GetResult());
-	std::cout << "Result: " << netResult->resultClass << std::endl;
+	std::cout << "Result: " << netResult->resultClass[0] << std::endl;
 	std::cout << std::endl;
 
 
@@ -123,7 +125,8 @@ void Test_MNIST_Softmax(const std::string& dataFolderPath) {
 		std::cout << "Target: " << resultIndex << std::endl;
 		net.Run(currentTestingData);
 		netResult = dynamic_cast<MultiClassClassificationResult*>(net.GetResult());
-		std::cout << "Result: " << netResult->resultClass << std::endl;
+		std::cout << "Result: " << netResult->resultClass[0] << std::endl;
 		std::cout << std::endl;
 	}
+	std::cout << "Finished testing!" << std::endl;
 }

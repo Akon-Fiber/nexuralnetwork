@@ -34,7 +34,7 @@ namespace nexural {
 		if (prevLayerShape.GetK() != 1 || prevLayerShape.GetNR() != 1 || prevLayerShape.GetNC() != 1) {
 			throw std::runtime_error("MSE layer error: Previous layer don't have a correct shape!");
 		}
-		_inputShape.Resize(prevLayerShape.GetNumSamples(), 1, 1, prevLayerShape.GetNC());
+		_inputShape.Resize(prevLayerShape.GetNumSamples(), 1, 1, 1);
 		_outputShape.Resize(_inputShape);
 		_outputData.Resize(_outputShape);
 	}
@@ -61,13 +61,8 @@ namespace nexural {
 
 		for (long numSamples = 0; numSamples < n; numSamples++)
 		{
-			for (long nc = 0; nc < _outputData.GetNC(); nc++)
-			{
-				float_n error = factor * (_outputData[numSamples * _outputData.GetNC() + nc] -
-					targetData[numSamples * _outputData.GetNC() + nc]);
-
-				_layerErrors[numSamples * _outputData.GetNC() + nc] = error;
-			}
+				float_n error = factor * (_outputData[numSamples ] - targetData[numSamples]);
+				_layerErrors[numSamples] = error;
 		}
 	}
 
@@ -79,26 +74,17 @@ namespace nexural {
 		long n = _outputData.GetNumSamples();
 		for (long numSamples = 0; numSamples < n; numSamples++)
 		{
-			for (long nc = 0; nc < _outputData.GetNC(); nc++)
-			{
-				long idx = numSamples * _outputData.GetNC() + nc;
-				_totalError += ((_outputData[numSamples * _outputData.GetNC() + nc] -
-					targetData[numSamples * _outputData.GetNC() + nc]) *
-					(_outputData[numSamples * _outputData.GetNC() + nc] -
-						targetData[numSamples * _outputData.GetNC() + nc])) / n;
-			}
+				_totalError += ((_outputData[numSamples] - targetData[numSamples]) *
+					(_outputData[numSamples] - targetData[numSamples])) / n;
 		}
 
 		_numOfIterations += n;
 	}
 
 	void MSELossLayer::SetResult() {
-		// TODO: Support multiple samples
-		if (_outputData.Size() == 1) {
-			_netResult.result = _outputData[0];
-		}
-		else {
-			throw std::runtime_error("Can't set mse result values for tensors with multiple samples!");
+		_netResult.result.clear();
+		for (long numSamples = 0; numSamples < _outputData.GetNumSamples(); numSamples++) {
+			_netResult.result.push_back(_outputData[numSamples]);
 		}
 	}
 
@@ -107,10 +93,11 @@ namespace nexural {
 	}
 
 	const std::string MSELossLayer::GetResultJSON() {
-		std::string resultJSON = u8"{ \
-				\"result_type\": \"" + helper::NetworkResultTypeToString(_resultType) + "\", \
-				\"result\" : \"" + std::to_string(_netResult.result) + "\" \
-		}";
+		std::string resultJSON = u8"{ \"result_type\": \"" + helper::NetworkResultTypeToString(_resultType) + "\",";
+		for (long numSamples = 0; numSamples < _netResult.result.size(); numSamples++) {
+			resultJSON += "result_" + std::to_string(numSamples) + "\" : \"" + std::to_string(_netResult.result[numSamples]) + "\"";
+		}
+		resultJSON += "}";
 		return resultJSON;
 	}
 }
