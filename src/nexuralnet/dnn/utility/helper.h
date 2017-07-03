@@ -31,6 +31,7 @@ namespace nexural {
 		std::vector<std::string> TokenizeString(const std::string& str, const std::string& delimiters);
 		void SplitData(const Tensor& data, Tensor &firstFold, Tensor &secondFold, const float_n firstFoldPercentage = 90);
 		void BestClassClassification(const Tensor& tensor, size_t& bestClass);
+		std::string NetworkResultTypeToString(const NetworkResultType netResultType);
 		float_n clip(const float_n& n, const float_n& lower, const float_n& upper);
 	}
 }

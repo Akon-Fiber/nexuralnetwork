@@ -23,7 +23,7 @@ OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
 namespace nexural {
 	MSELossLayer::MSELossLayer(const Params& layerParams) : LossBaseLayer(layerParams) {
-		_resultType = "regression";
+		_resultType = NetworkResultType::REGRESSION;
 	}
 
 	MSELossLayer::~MSELossLayer() {
@@ -31,7 +31,7 @@ namespace nexural {
 	}
 
 	void MSELossLayer::Setup(const LayerShape& prevLayerShape) {
-		if (prevLayerShape.GetK() != 1 || prevLayerShape.GetNR() != 1) {
+		if (prevLayerShape.GetK() != 1 || prevLayerShape.GetNR() != 1 || prevLayerShape.GetNC() != 1) {
 			throw std::runtime_error("MSE layer error: Previous layer don't have a correct shape!");
 		}
 		_inputShape.Resize(prevLayerShape.GetNumSamples(), 1, 1, prevLayerShape.GetNC());
@@ -108,7 +108,7 @@ namespace nexural {
 
 	const std::string MSELossLayer::GetResultJSON() {
 		std::string resultJSON = u8"{ \
-				\"result_type\": \"" + _resultType + "\", \
+				\"result_type\": \"" + helper::NetworkResultTypeToString(_resultType) + "\", \
 				\"result\" : \"" + std::to_string(_netResult.result) + "\" \
 		}";
 		return resultJSON;

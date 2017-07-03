@@ -26,12 +26,6 @@ OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 #define NEXURALNET_DNN_I_LAYER
 
 namespace nexural {
-	enum class FeedForwardType {
-		RUN = 0,
-		TRAINING = 1,
-		VALIDATION = 2
-	};
-
 	class ILayer {
 	public:
 		virtual ~ILayer() { }

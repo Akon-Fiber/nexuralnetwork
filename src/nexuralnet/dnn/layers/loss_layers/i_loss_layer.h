@@ -40,7 +40,7 @@ namespace nexural {
 		virtual DNNBaseResult* GetResult() = 0;
 		virtual const LayerShape GetTargetShape() = 0;
 		virtual const std::string GetResultJSON() = 0;
-		virtual const std::string GetResultType() = 0;
+		virtual const NetworkResultType GetResultType() = 0;
 	};
 }
 #endif

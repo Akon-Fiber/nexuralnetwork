@@ -40,7 +40,7 @@ namespace nexural {
 		virtual const float_n GetRecall();
 		virtual void ResetMetricsData();
 		virtual const LayerShape GetTargetShape();
-		virtual const std::string GetResultType();
+		virtual const NetworkResultType GetResultType();
 
 	protected:
 		// General layer params
@@ -49,7 +49,7 @@ namespace nexural {
 		LayerShape _outputShape;
 		Tensor _outputData;
 		Tensor _layerErrors;
-		std::string _resultType;
+		NetworkResultType _resultType;
 
 		// Params for training
 		Tensor _confusionMatrix;

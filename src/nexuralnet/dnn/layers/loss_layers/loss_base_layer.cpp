@@ -24,7 +24,7 @@ OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
 namespace nexural {
 	LossBaseLayer::LossBaseLayer() {
-		_resultType = "unknown";
+		_resultType = NetworkResultType::UNKNOWN;
 		_totalError = 0;
 		_precision = 0;
 		_recall = 0;
@@ -33,7 +33,7 @@ namespace nexural {
 
 	LossBaseLayer::LossBaseLayer(const Params& layerParams) {
 		_layerParams = layerParams;
-		_resultType = "unknown";
+		_resultType = NetworkResultType::UNKNOWN;
 		_totalError = 0;
 		_precision = 0;
 		_recall = 0;
@@ -81,7 +81,7 @@ namespace nexural {
 		return _outputShape;
 	}
 
-	const std::string LossBaseLayer::GetResultType() {
+	const NetworkResultType LossBaseLayer::GetResultType() {
 		return _resultType;
 	}
 }

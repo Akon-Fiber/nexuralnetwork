@@ -23,7 +23,7 @@ OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
 namespace nexural {
 	SoftmaxLossLayer::SoftmaxLossLayer(const Params& layerParams) : LossBaseLayer(layerParams) {
-		_resultType = "multiclassclassification";
+		_resultType = NetworkResultType::MULTICLASS_CLASSIFICATION;
 	}
 
 	SoftmaxLossLayer::~SoftmaxLossLayer() {
@@ -124,7 +124,7 @@ namespace nexural {
 
 	const std::string SoftmaxLossLayer::GetResultJSON() {
 		std::string resultJSON = u8"{ \
-				\"result_type\": \"" + _resultType + "\", \
+				\"result_type\": \"" + helper::NetworkResultTypeToString(_resultType) + "\", \
 				\"best_class\" : \"" + std::to_string(_netResult.resultClass) + "\" \
 				}";
 		return resultJSON;

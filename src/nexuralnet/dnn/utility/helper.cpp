@@ -87,6 +87,29 @@ namespace nexural {
 			}
 		}
 
+		std::string NetworkResultTypeToString(const NetworkResultType netResultType) {
+			switch (netResultType) {
+			case NetworkResultType::UNKNOWN:
+				return "unknown";
+				break;
+			case NetworkResultType::REGRESSION:
+				return "regression";
+				break;
+			case NetworkResultType::BINARY_CLASSIFICATION:
+				return "binary_classification";
+				break;
+			case NetworkResultType::MULTICLASS_CLASSIFICATION:
+				return "multiclass_classification";
+				break;
+			case NetworkResultType::DETECTION:
+				return "detection";
+				break;
+			default:
+				return "unknown";
+				break;
+			}
+		}
+
 		// TODO: If the project is updated to use c++17, change with the new std::clamp method
 		float_n clip(const float_n& n, const float_n& lower, const float_n& upper) {
 			return std::max(lower, std::min(n, upper));

@@ -29,6 +29,26 @@ namespace nexural {
 
 	typedef std::map<std::string, std::string> Params;
 
+	enum class NetworkResultType
+	{
+		UNKNOWN = 0,
+		REGRESSION = 1,
+		BINARY_CLASSIFICATION = 2,
+		MULTICLASS_CLASSIFICATION = 3,
+		DETECTION = 4
+	};
+
+	enum class FeedForwardType {
+		RUN = 0,
+		TRAINING = 1,
+		VALIDATION = 2
+	};
+
+	enum class ConfigSourceType {
+		FROM_FILE = 0,
+		FROM_STRING = 1
+	};
+
 	enum class ImageExtension
 	{
 		JPG = 0,
