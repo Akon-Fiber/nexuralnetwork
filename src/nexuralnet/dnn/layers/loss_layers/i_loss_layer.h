@@ -33,9 +33,6 @@ namespace nexural {
 		virtual void CalculateError(const Tensor& targetData) = 0;
 		virtual void CalculateTrainingMetrics(const Tensor& targetData) = 0;
 		virtual const float_n GetTotalError() = 0;
-		virtual const float_n GetPrecision() = 0;
-		virtual const float_n GetRecall() = 0;
-		virtual void ResetMetricsData() = 0;
 		virtual void SetResult() = 0;
 		virtual DNNBaseResult* GetResult() = 0;
 		virtual const LayerShape GetTargetShape() = 0;

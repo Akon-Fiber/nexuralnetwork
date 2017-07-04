@@ -1,13 +1,11 @@
 {
   	"trainer_settings": {
     	"max_num_epochs": "10000",
-      	"autosave_training_num_epochs": "10",
+      "autosave_training_num_epochs": "10",
     	"min_learning_rate_threshold": "0.001",
     	"min_validation_error_threshold": "0.05",
-    	"max_epochs_without_progress": "10",
-  		"update_learning_rate_threshold": "0.001",
   		"learning_rate_decay": "0.00004",
-      	"training_dataset_percentage": "90",
+      "training_dataset_percentage": "90",
     	"batch_size": "1"
   	},
     "solver": {

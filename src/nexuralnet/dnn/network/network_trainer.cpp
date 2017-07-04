@@ -39,10 +39,8 @@ namespace nexural {
 
 		// Init parameters from config
 		_maxNumEpochs = parser::ParseLong(trainerParams, "max_num_epochs");
-		_maxEpochsWithoutProgress = parser::ParseLong(trainerParams, "max_epochs_without_progress");
 		_minLearningRateThreshold = parser::ParseFloat(trainerParams, "min_learning_rate_threshold");
 		_minValidationErrorThreshold = parser::ParseFloat(trainerParams, "min_validation_error_threshold");
-		_updateLRThreshold = parser::ParseFloat(trainerParams, "update_learning_rate_threshold");
 		_learningRateDecay = parser::ParseFloat(trainerParams, "learning_rate_decay");
 		_batchSize = parser::ParseLong(trainerParams, "batch_size");
 		_trainingDatasetPercentage = parser::ParseFloat(trainerParams, "training_dataset_percentage");
@@ -64,12 +62,12 @@ namespace nexural {
 
 	void NetworkTrainer::Train(Tensor& data, Tensor& labels, const std::string& outputTrainedDataFilePath, const std::string& outputTrainerInfoFolderPath) {
 		_trainerInfoFilePath = outputTrainerInfoFolderPath + "trainerInfo.json";
-		_trainerWeightsInfoFilePath = outputTrainerInfoFolderPath + "trainerWeightsInfo.json";
-		_trainerActivationsInfoFilePath = outputTrainerInfoFolderPath + "trainerActivationsInfo.json";
 
-		float_n prevEpochError = std::numeric_limits<float_n>::max(), currentEpochError, validationError;
-		long currentEpoch = 0, stepsWithoutAnyProgress = 0;
+		float_n prevEpochError = std::numeric_limits<float_n>::max();
+		long currentEpoch = 0;
 		bool doTraining = true;
+		
+		InitConfusionMatrices();
 
 		// Splitting data in training and validation datasets
 		helper::SplitData(data, _trainingData, _validationData, _trainingDatasetPercentage);
@@ -80,7 +78,10 @@ namespace nexural {
 		long trainingDataIterations = _trainingData.GetNumSamples();
 		long validationDataIterations = _validationData.GetNumSamples();
 
+		_net.Serialize(outputTrainerInfoFolderPath + "initial_weights.json");
+
 		while (doTraining) {
+			float_n currentEpochError = 0, validationError = 0;
 			_trainerInfoWriter.AddEpoch(currentEpoch);
 
 			// Shuffle the training dataset
@@ -91,7 +92,8 @@ namespace nexural {
 			std::random_shuffle(batchesIndexes.begin(), batchesIndexes.end());
 
 			// Split in batches (if needed) and start learning
-			for (size_t batchIndex = 0; batchIndex < batchesIndexes.size(); batchIndex ++) {
+			size_t iterationsDone = 0;
+			for (size_t batchIndex = 0; batchIndex < batchesIndexes.size(); batchIndex++) {
 				_subTrainingData.GetBatch(_trainingData, batchesIndexes[batchIndex], _batchSize);
 				_subTrainingTargetData.GetBatch(_trainingTargetData, batchesIndexes[batchIndex], _batchSize);
 
@@ -118,6 +120,9 @@ namespace nexural {
 				_net._lossNetworkLayer->CalculateError(_subTrainingTargetData);
 				_error = _net._lossNetworkLayer->GetLayerErrors();
 				_net._lossNetworkLayer->CalculateTrainingMetrics(_subTrainingTargetData);
+				currentEpochError += _net._lossNetworkLayer->GetTotalError();
+				iterationsDone++;
+				UpdateTrainingConfusionMatrix();
 				
 
 #ifdef _DEBUG_NEXURAL_TRAINER
@@ -162,14 +167,11 @@ namespace nexural {
 				}
 			}
 
-			// Calculate  mean error, precision and recall for training dataset and reset metrics
-			currentEpochError = _net._lossNetworkLayer->GetTotalError();
-			_trainerInfoWriter.WriteEpochDetails(currentEpoch, "training_mean_error", std::to_string(currentEpochError));
-			//_trainerInfoWriter.WriteEpochDetails(currentEpoch, "training_precision", std::to_string(_net._lossNetworkLayer->GetPrecision()));
-			//_trainerInfoWriter.WriteEpochDetails(currentEpoch, "training_recall", std::to_string(_net._lossNetworkLayer->GetRecall()));
-			_net._lossNetworkLayer->ResetMetricsData();
+			// Calculate mean error
+			_currentEpochError = currentEpochError / iterationsDone;
 
 			// Training validation
+			iterationsDone = 0;
 			for (int validationBatchIndex = 0; validationBatchIndex < validationDataIterations; validationBatchIndex += _batchSize) {
 				_subValidationData.GetBatch(_validationData, validationBatchIndex, _batchSize);
 				_subValidationTargetData.GetBatch(_validationTargetData, validationBatchIndex, _batchSize);
@@ -182,27 +184,15 @@ namespace nexural {
 				}
 				_net._lossNetworkLayer->FeedForward(*internalNetData, FeedForwardType::VALIDATION);
 				_net._lossNetworkLayer->CalculateTrainingMetrics(_subValidationTargetData);
+				validationError += _net._lossNetworkLayer->GetTotalError();
+				iterationsDone++;
+				UpdateValidationConfusionMatrix();
 			}
 
-			// Calculate  mean error, precision and recall for validation dataset and reset metrics for the next epoch
-			validationError = _net._lossNetworkLayer->GetTotalError();
-			_trainerInfoWriter.WriteEpochDetails(currentEpoch, "validation_mean_error", std::to_string(validationError));
-			//_trainerInfoWriter.WriteEpochDetails(currentEpoch, "validation_precision", std::to_string(_net._lossNetworkLayer->GetPrecision()));
-			//_trainerInfoWriter.WriteEpochDetails(currentEpoch, "validation_recall", std::to_string(_net._lossNetworkLayer->GetRecall()));
-			_net._lossNetworkLayer->ResetMetricsData();
+			// Calculate validation mean error
+			_validationError = validationError / iterationsDone;
 
-			// If there isn't any progress, we should reduce the learning rate in order to hit the minimum
-			if (((prevEpochError - prevEpochError * _updateLRThreshold) < currentEpochError) && (currentEpochError < (prevEpochError + prevEpochError * _updateLRThreshold))) {
-				stepsWithoutAnyProgress++;
-				if (stepsWithoutAnyProgress == _maxEpochsWithoutProgress) {
-					_learningRateDecay += 0.0005;
-					_updateLRThreshold *= 0.1;
-					stepsWithoutAnyProgress = 0;
-				}
-			}
-			else {
-				stepsWithoutAnyProgress = 0;
-			}
+			WriteEpochStats(currentEpoch);
 
 			// Update the learning rate: at each epoch decrease the learning rate
 			_trainerInfoWriter.WriteEpochDetails(currentEpoch, "learning_rate", std::to_string(_solver->GetLearningRate()));
@@ -214,7 +204,7 @@ namespace nexural {
 				doTraining = false;
 				_trainerInfoWriter.Write("stop_condition", "reached_max_epochs_number");
 			}
-			else if (validationError < _minValidationErrorThreshold) {
+			else if (_validationError < _minValidationErrorThreshold) {
 				doTraining = false;
 				_trainerInfoWriter.Write("stop_condition", "reached_min_validation_threshold");
 			}
@@ -222,18 +212,24 @@ namespace nexural {
 				doTraining = false;
 				_trainerInfoWriter.Write("stop_condition", "reached_min_learning_rate_threshold");
 			}
+			else 
+			{
+				// TODO: Add stop condition from commands file
+			}
 
-			// Write progress on disk
+			// Write progress on disk and save epoch's weights
 			_trainerInfoWriter.Save(_trainerInfoFilePath);
+			_net.Serialize(outputTrainerInfoFolderPath + "weights-epoch_" + std::to_string(currentEpoch) + ".json");
 
 			// Save training - checkpoint
 			if (currentEpoch % _autosaveTrainingNumEpochs == 0) {
 				_net.Serialize(outputTrainedDataFilePath);
 			}
 
-			// Update internal parameters
-			prevEpochError = currentEpochError;
+			// Update or reset internal parameters
+			prevEpochError = _currentEpochError;
 			currentEpoch++;
+			ResetConfusionMatrices();
 		}
 	}
 
@@ -281,5 +277,56 @@ namespace nexural {
 
 	void NetworkTrainer::SetInputBatchSize(const long batchSize) {
 		_net._inputNetworkLayer->SetInputBatchSize(batchSize);
+	}
+
+	void NetworkTrainer::InitConfusionMatrices() {
+		NetworkResultType netType = _net._lossNetworkLayer->GetResultType();
+		if (netType == NetworkResultType::REGRESSION) {
+			_trainingConfusionMatrix.Resize(1, 1, 2, 2);
+			_validationConfusionMatrix.Resize(1, 1, 2, 2);
+			_trainingConfusionMatrix.Fill(0);
+			_validationConfusionMatrix.Fill(0);
+		}
+		else if (netType == NetworkResultType::MULTICLASS_CLASSIFICATION) {
+			long confusionMatrixSize = _net._lossNetworkLayer->GetOutputShape().GetNC();
+			_trainingConfusionMatrix.Resize(1, 1, confusionMatrixSize, confusionMatrixSize);
+			_validationConfusionMatrix.Resize(1, 1, confusionMatrixSize, confusionMatrixSize);
+			_trainingConfusionMatrix.Fill(0);
+			_validationConfusionMatrix.Fill(0);
+		}
+		else if (netType == NetworkResultType::BINARY_CLASSIFICATION) {
+			throw std::runtime_error("Network trainer error: Can't init the confusion matrix because the BINARY_CLASSIFICATION result type is not implemented!");
+		}
+		else if (netType == NetworkResultType::DETECTION) {
+			throw std::runtime_error("Network trainer error: Can't init the confusion matrix because the DETECTION result type is not implemented!");
+		}
+		else if (netType == NetworkResultType::UNKNOWN) {
+			throw std::runtime_error("Network trainer error: Can't init the confusion matrix because the result type is unknown!");
+		}
+	}
+
+	void NetworkTrainer::UpdateTrainingConfusionMatrix() {
+
+
+	}
+
+	void NetworkTrainer::UpdateValidationConfusionMatrix() {
+
+
+	}
+
+	void NetworkTrainer::ResetConfusionMatrices() {
+		_trainingConfusionMatrix.Fill(0);
+		_validationConfusionMatrix.Fill(0);
+	}
+
+	void NetworkTrainer::WriteEpochStats(const long currentEpoch) {
+		_trainerInfoWriter.WriteEpochDetails(currentEpoch, "training_mean_error", std::to_string(_currentEpochError));
+		_trainerInfoWriter.WriteEpochDetails(currentEpoch, "validation_mean_error", std::to_string(_validationError));
+		//_trainerInfoWriter.WriteEpochDetails(currentEpoch, "training_precision", std::to_string(_net._lossNetworkLayer->GetPrecision()));
+		//_trainerInfoWriter.WriteEpochDetails(currentEpoch, "training_recall", std::to_string(_net._lossNetworkLayer->GetRecall()));
+
+		//_trainerInfoWriter.WriteEpochDetails(currentEpoch, "validation_precision", std::to_string(_net._lossNetworkLayer->GetPrecision()));
+		//_trainerInfoWriter.WriteEpochDetails(currentEpoch, "validation_recall", std::to_string(_net._lossNetworkLayer->GetRecall()));
 	}
 }

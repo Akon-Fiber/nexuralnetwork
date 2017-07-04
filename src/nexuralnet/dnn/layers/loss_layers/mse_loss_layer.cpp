@@ -47,8 +47,6 @@ namespace nexural {
 
 	void MSELossLayer::SetupLayerForTraining() {
 		_layerErrors.Resize(_inputShape);
-		_confusionMatrix.Resize(1, 1, 1, 1);
-		_confusionMatrix.Fill(0);
 	}
 
 	void MSELossLayer::CalculateError(const Tensor& targetData) {
@@ -70,15 +68,16 @@ namespace nexural {
 		if (_outputData.GetShape() != targetData.GetShape()) {
 			throw std::runtime_error("MSE layer error: The output and target data should have the same size!");
 		}
-
+		
+		float_n totalError = 0;
 		long n = _outputData.GetNumSamples();
 		for (long numSamples = 0; numSamples < n; numSamples++)
 		{
-				_totalError += ((_outputData[numSamples] - targetData[numSamples]) *
+			totalError += ((_outputData[numSamples] - targetData[numSamples]) *
 					(_outputData[numSamples] - targetData[numSamples])) / n;
 		}
 
-		_numOfIterations += n;
+		_totalError = totalError;
 	}
 
 	void MSELossLayer::SetResult() {

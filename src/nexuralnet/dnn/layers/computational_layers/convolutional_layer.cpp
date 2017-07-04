@@ -51,7 +51,7 @@ namespace nexural {
 		float_n weightRange = (float_n)(std::sqrt(2. / (double)_inputShape.Size()));
 		float_n biasRange = (float_n)(std::sqrt(2. / (double)_biases.Size()));
 		_weights.FillRandom(weightRange);
-		_biases.Fill(0);
+		_biases.Fill(biasRange);
 		_layerID = "convolutional_layer" + std::to_string(layerIndex);
 	}
 

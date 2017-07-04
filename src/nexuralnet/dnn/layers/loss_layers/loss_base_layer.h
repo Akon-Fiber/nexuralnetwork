@@ -36,27 +36,17 @@ namespace nexural {
 
 		virtual LayerShape GetOutputShape();
 		virtual const float_n GetTotalError();
-		virtual const float_n GetPrecision();
-		virtual const float_n GetRecall();
-		virtual void ResetMetricsData();
 		virtual const LayerShape GetTargetShape();
 		virtual const NetworkResultType GetResultType();
 
 	protected:
-		// General layer params
 		Params _layerParams;
 		LayerShape _inputShape;
 		LayerShape _outputShape;
 		Tensor _outputData;
 		Tensor _layerErrors;
-		NetworkResultType _resultType;
-
-		// Params for training
-		Tensor _confusionMatrix;
 		float_n _totalError;
-		float_n _precision;
-		float_n _recall;
-		size_t _numOfIterations;
+		NetworkResultType _resultType;
 	};
 	typedef std::shared_ptr<LossBaseLayer> LossBaseLayerPtr;
 }

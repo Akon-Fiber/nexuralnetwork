@@ -45,8 +45,6 @@ namespace nexural {
 
 	void SoftmaxLossLayer::SetupLayerForTraining() {
 		_layerErrors.Resize(_inputShape);
-		_confusionMatrix.Resize(1, 1, 10, 10);
-		_confusionMatrix.Fill(0);
 	}
 
 	void SoftmaxLossLayer::CalculateError(const Tensor& targetData) {
@@ -81,6 +79,7 @@ namespace nexural {
 			throw std::runtime_error("Softmax layer error: The output and target data should have the same size!");
 		}
 
+		float_n totalError = 0;
 		long totalTargetNumSamples = targetData.GetNumSamples();
 		std::vector<int> indexes(totalTargetNumSamples);
 		for (long numSamples = 0; numSamples < totalTargetNumSamples; numSamples++)
@@ -99,18 +98,10 @@ namespace nexural {
 		for (long numSamples = 0; numSamples < totalOutputNumSamples; numSamples++)
 		{
 			long idx = numSamples * _outputData.GetNC() + indexes[numSamples];
-			_totalError += -std::log(helper::clip(_outputData[idx], 1e-10, 1.0));
+			totalError += -std::log(helper::clip(_outputData[idx], 1e-10, 1.0));
 		}
 
-		size_t targetClass = 1, predictedClass = 1;
-		//helper::BestClassClassification(targetData, targetClass);
-		//helper::BestClassClassification(_outputData, predictedClass);
-		//std::cout << targetClass << "," << predictedClass << std::endl << std::endl;
-		//long confusionMatrixIndex = (_confusionMatrix.GetNR() + static_cast<long>(targetClass)) * _confusionMatrix.GetNC() + static_cast<long>(predictedClass);
-		//float_n value = _confusionMatrix[confusionMatrixIndex];
-		//_confusionMatrix[confusionMatrixIndex] = value + 1;
-
-		_numOfIterations += totalOutputNumSamples;
+		_totalError = totalError;
 	}
 
 	void SoftmaxLossLayer::SetResult() {
