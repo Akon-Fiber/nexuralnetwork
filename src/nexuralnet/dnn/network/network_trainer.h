@@ -55,14 +55,15 @@ namespace nexural {
 		void InitTrainer(const std::string& networkConfigPath, const std::string& trainerConfigPath, const ConfigSourceType& configSourceType);
 		void InitLayersForTraining();
 		void SetInputBatchSize(const long batchSize);
+		void InitConfusionMatrices();
+		void ResetConfusionMatrices();
+		void WriteEpochStats(const long currentEpoch);
 
 	private:
 		Network _net;
 		long _maxNumEpochs; 
-		long _maxEpochsWithoutProgress;
 		float_n _minLearningRateThreshold;
 		float_n _minValidationErrorThreshold;
-		float_n _updateLRThreshold;
 		float_n _learningRateDecay;
 		long _batchSize;
 		float_n _trainingDatasetPercentage;
@@ -71,13 +72,17 @@ namespace nexural {
 		Tensor _validationData, _validationTargetData, _subValidationData, _subValidationTargetData;
 		Tensor *_error, *_weights, *_dWeights, *_biases, *_dBiases;
 		NetSolver _solver;
+
 		// Trainer info
 		TrainerInfoWriter _trainerInfoWriter;
 		std::string _trainerInfoFilePath;
-		TrainerInfoWriter _trainerWeightsInfoWriter;
-		std::string _trainerWeightsInfoFilePath;
-		TrainerInfoWriter _trainerActivationsInfoWriter;
-		std::string _trainerActivationsInfoFilePath;
+
+		// Params for stats
+		Tensor _trainingConfusionMatrix;
+		Tensor _validationConfusionMatrix;
+		float_n _currentEpochError;
+		float_n _validationError;
+		size_t _numOfIterations;
 	};
 }
 #endif

@@ -158,6 +158,11 @@
   <ItemGroup>
     <None Include="packages.config" />
   </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\neXuralNet\neXuralNet.vcxproj">
+      <Project>{36c931fd-0b6b-4512-95cf-562c06122972}</Project>
+    </ProjectReference>
+  </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
     <Import Project="..\packages\OpenCV_VS2015_3.2.0_NoContribs.1.0.1\build\native\OpenCV_VS2015_3.2.0_NoContribs.targets" Condition="Exists('..\packages\OpenCV_VS2015_3.2.0_NoContribs.1.0.1\build\native\OpenCV_VS2015_3.2.0_NoContribs.targets')" />

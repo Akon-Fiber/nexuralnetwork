@@ -57,7 +57,24 @@ namespace nexural {
 			rapidjson::Value(value.c_str(), _impl->document.GetAllocator()).Move(),
 			_impl->document.GetAllocator());
 	}
-	
+
+	void TrainerInfoWriter::WriteEpochConfusionMatrix(const long epochNumber, const std::string& key, const Tensor& confusionMatrix) {
+		std::string epoch = "epoch" + std::to_string(epochNumber);
+
+		rapidjson::Value matrixData(rapidjson::kArrayType);
+		for (long nr = 0; nr < confusionMatrix.GetNR(); nr++) {
+			rapidjson::Value matrixRows(rapidjson::kArrayType);
+			for (long nc = 0; nc < confusionMatrix.GetNC(); nc++) {
+				matrixRows.PushBack(rapidjson::Value().SetDouble(confusionMatrix[nr * confusionMatrix.GetNC() + nc]), _impl->document.GetAllocator());
+			}
+			matrixData.PushBack(matrixRows, _impl->document.GetAllocator());
+		}
+
+		_impl->document["epochs"].GetObject()[epoch.c_str()].AddMember(
+			rapidjson::Value(key.c_str(), _impl->document.GetAllocator()).Move(),
+			matrixData,
+			_impl->document.GetAllocator());
+	}
 	void TrainerInfoWriter::Write(const std::string& key, const std::string& value) {
 		_impl->document.AddMember(
 			rapidjson::Value(key.c_str(), _impl->document.GetAllocator()).Move(),

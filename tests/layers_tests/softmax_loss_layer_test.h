@@ -30,7 +30,7 @@ TEST(LAYERS_TESTS, SOFTMAX_LOSS_LAYER_TESTS)
 	LayerShape inputShape(2, 1, 1, 10);
 	Tensor inputData(inputShape);
 	Tensor *feedForwardResult, feedForwardExpected(2, 1, 1, 10);
-	Tensor *layerErrorsResult, layerErrorsExpected(inputShape), targetData(2, 1, 1, 10);
+	Tensor layerErrorsExpected(inputShape), targetData(2, 1, 1, 10);
 	SoftmaxLossLayer softmaxLossLayer(layerParams);
 	softmaxLossLayer.Setup(inputShape);
 	softmaxLossLayer.SetupLayerForTraining();

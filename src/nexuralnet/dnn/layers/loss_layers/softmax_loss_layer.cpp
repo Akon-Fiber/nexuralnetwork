@@ -23,7 +23,7 @@ OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
 namespace nexural {
 	SoftmaxLossLayer::SoftmaxLossLayer(const Params& layerParams) : LossBaseLayer(layerParams) {
-		_resultType = "multiclassclassification";
+		_resultType = NetworkResultType::MULTICLASS_CLASSIFICATION;
 	}
 
 	SoftmaxLossLayer::~SoftmaxLossLayer() {
@@ -45,8 +45,6 @@ namespace nexural {
 
 	void SoftmaxLossLayer::SetupLayerForTraining() {
 		_layerErrors.Resize(_inputShape);
-		_confusionMatrix.Resize(1, 1, 10, 10);
-		_confusionMatrix.Fill(0);
 	}
 
 	void SoftmaxLossLayer::CalculateError(const Tensor& targetData) {
@@ -76,11 +74,12 @@ namespace nexural {
 		}
 	}
 
-	void SoftmaxLossLayer::CalculateTrainingMetrics(const Tensor& targetData) {
+	void SoftmaxLossLayer::CalculateTrainingMetrics(const Tensor& targetData, Tensor& confusionMatrix) {
 		if (_outputData.GetShape() != targetData.GetShape()) {
 			throw std::runtime_error("Softmax layer error: The output and target data should have the same size!");
 		}
 
+		float_n totalError = 0;
 		long totalTargetNumSamples = targetData.GetNumSamples();
 		std::vector<int> indexes(totalTargetNumSamples);
 		for (long numSamples = 0; numSamples < totalTargetNumSamples; numSamples++)
@@ -99,23 +98,27 @@ namespace nexural {
 		for (long numSamples = 0; numSamples < totalOutputNumSamples; numSamples++)
 		{
 			long idx = numSamples * _outputData.GetNC() + indexes[numSamples];
-			_totalError += -std::log(helper::clip(_outputData[idx], 1e-10, 1.0));
+			totalError += -std::log(helper::clip(_outputData[idx], 1e-10, 1.0));
+			long nr, nc;
+			helper::BestClassClassification(_outputData, nc);
+			helper::BestClassClassification(targetData, nr);
+			confusionMatrix[nr * confusionMatrix.GetNC() + nc] += 1;
 		}
 
-		size_t targetClass = 1, predictedClass = 1;
-		//helper::BestClassClassification(targetData, targetClass);
-		//helper::BestClassClassification(_outputData, predictedClass);
-		//std::cout << targetClass << "," << predictedClass << std::endl << std::endl;
-		//long confusionMatrixIndex = (_confusionMatrix.GetNR() + static_cast<long>(targetClass)) * _confusionMatrix.GetNC() + static_cast<long>(predictedClass);
-		//float_n value = _confusionMatrix[confusionMatrixIndex];
-		//_confusionMatrix[confusionMatrixIndex] = value + 1;
-
-		_numOfIterations += totalOutputNumSamples;
+		_totalError = totalError;
 	}
 
 	void SoftmaxLossLayer::SetResult() {
-		helper::BestClassClassification(_outputData, _netResult.resultClass);
-		_netResult.classesWithProbabilities.Clone(_outputData);
+		_netResult.classesWithProbabilities.clear();
+		_netResult.resultClass.clear();
+		for (long numSamples = 0; numSamples < _outputData.GetNumSamples(); numSamples++) {
+			long bestClass;
+			Tensor aux;
+			helper::BestClassClassification(_outputData, bestClass);
+			aux.Clone(_outputData);
+			_netResult.classesWithProbabilities.push_back(aux);
+			_netResult.resultClass.push_back(bestClass);
+		}
 	}
 
 	DNNBaseResult* SoftmaxLossLayer::GetResult() {
@@ -123,10 +126,11 @@ namespace nexural {
 	}
 
 	const std::string SoftmaxLossLayer::GetResultJSON() {
-		std::string resultJSON = u8"{ \
-				\"result_type\": \"" + _resultType + "\", \
-				\"best_class\" : \"" + std::to_string(_netResult.resultClass) + "\" \
-				}";
+		std::string resultJSON = u8"{ \"result_type\": \"" + helper::NetworkResultTypeToString(_resultType) + "\",";
+		for (long numSamples = 0; numSamples < _netResult.resultClass.size(); numSamples++) {
+			resultJSON += "best_class_" + std::to_string(numSamples) + "\" : \"" + std::to_string(_netResult.resultClass[numSamples]) + "\"";
+		}
+		resultJSON += "}";
 		return resultJSON;
 	}
 

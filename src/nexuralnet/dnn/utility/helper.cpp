@@ -63,14 +63,14 @@ namespace nexural {
 			}
 		}
 
-		void BestClassClassification(const Tensor& tensor, size_t& bestClass) {
+		void BestClassClassification(const Tensor& tensor, long& bestClass) {
 			// TODO: Support multiple samples
 			if (tensor.GetNumSamples() == 1) {
 
 				long tensorSize = tensor.Size();
 				if (tensorSize > 0) {
 					float_n maxValue = tensor[0];
-					size_t maxIndex = 0;
+					long maxIndex = 0;
 
 					for (long idx = 1; idx < tensorSize; idx++) {
 						float_n value = tensor[idx];
@@ -84,6 +84,29 @@ namespace nexural {
 			}
 			else {
 				throw std::runtime_error("Can't use best class finder for tensors with multiple samples!");
+			}
+		}
+
+		std::string NetworkResultTypeToString(const NetworkResultType netResultType) {
+			switch (netResultType) {
+			case NetworkResultType::UNKNOWN:
+				return "unknown";
+				break;
+			case NetworkResultType::REGRESSION:
+				return "regression";
+				break;
+			case NetworkResultType::BINARY_CLASSIFICATION:
+				return "binary_classification";
+				break;
+			case NetworkResultType::MULTICLASS_CLASSIFICATION:
+				return "multiclass_classification";
+				break;
+			case NetworkResultType::DETECTION:
+				return "detection";
+				break;
+			default:
+				return "unknown";
+				break;
 			}
 		}
 

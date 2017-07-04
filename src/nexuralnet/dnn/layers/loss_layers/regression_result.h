@@ -19,6 +19,7 @@ TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE
 OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 */
 
+#include <vector>
 #include "dnn_base_result.h"
 #include "../../data_types/general_data_types.h"
 
@@ -32,7 +33,7 @@ namespace nexural {
 		~RegressionResult();
 
 	public:
-		float_n result;
+		std::vector<float_n> result;
 	};
 }
 #endif 

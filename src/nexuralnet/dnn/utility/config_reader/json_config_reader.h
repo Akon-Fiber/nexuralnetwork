@@ -29,11 +29,6 @@ OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 #define NEXURALNET_UTILITY_JSON_CONFIG_READER_H
 
 namespace nexural {
-	enum class ConfigSourceType {
-		FROM_FILE = 0,
-		FROM_STRING = 1
-	};
-
 	class JSONConfigReader {
 	public:
 		JSONConfigReader(const std::string& configSource, const ConfigSourceType& configSourceType);

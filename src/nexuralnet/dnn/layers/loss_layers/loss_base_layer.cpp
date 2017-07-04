@@ -24,20 +24,11 @@ OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
 namespace nexural {
 	LossBaseLayer::LossBaseLayer() {
-		_resultType = "unknown";
-		_totalError = 0;
-		_precision = 0;
-		_recall = 0;
-		_numOfIterations = 0;
+		_resultType = NetworkResultType::UNKNOWN;
 	}
 
 	LossBaseLayer::LossBaseLayer(const Params& layerParams) {
 		_layerParams = layerParams;
-		_resultType = "unknown";
-		_totalError = 0;
-		_precision = 0;
-		_recall = 0;
-		_numOfIterations = 0;
 	}
 
 	LossBaseLayer::~LossBaseLayer() {
@@ -57,31 +48,14 @@ namespace nexural {
 	}
 
 	const float_n LossBaseLayer::GetTotalError() {
-		return _totalError / _numOfIterations;
-	}
-
-	const float_n LossBaseLayer::GetPrecision() {
-		return _precision;
-	}
-
-	const float_n LossBaseLayer::GetRecall() {
-		return _recall;
-	}
-
-	void LossBaseLayer::ResetMetricsData() {
-		_confusionMatrix.Fill(0);
-		_numOfIterations = 0;
-		_totalError = 0;
-		_precision = 0;
-		_recall = 0;
-		_numOfIterations = 0;
+		return _totalError;
 	}
 
 	const LayerShape LossBaseLayer::GetTargetShape() {
 		return _outputShape;
 	}
 
-	const std::string LossBaseLayer::GetResultType() {
+	const NetworkResultType LossBaseLayer::GetResultType() {
 		return _resultType;
 	}
 }

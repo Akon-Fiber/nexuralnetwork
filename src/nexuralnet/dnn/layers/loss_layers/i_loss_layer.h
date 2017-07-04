@@ -31,16 +31,13 @@ namespace nexural {
 		virtual ~ILossLayer() { }
 		virtual void Setup(const LayerShape& prevLayerShape) = 0;
 		virtual void CalculateError(const Tensor& targetData) = 0;
-		virtual void CalculateTrainingMetrics(const Tensor& targetData) = 0;
+		virtual void CalculateTrainingMetrics(const Tensor& targetData, Tensor& confusionMatrix) = 0;
 		virtual const float_n GetTotalError() = 0;
-		virtual const float_n GetPrecision() = 0;
-		virtual const float_n GetRecall() = 0;
-		virtual void ResetMetricsData() = 0;
 		virtual void SetResult() = 0;
 		virtual DNNBaseResult* GetResult() = 0;
 		virtual const LayerShape GetTargetShape() = 0;
 		virtual const std::string GetResultJSON() = 0;
-		virtual const std::string GetResultType() = 0;
+		virtual const NetworkResultType GetResultType() = 0;
 	};
 }
 #endif

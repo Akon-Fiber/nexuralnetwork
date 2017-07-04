@@ -32,7 +32,7 @@ void Test_AND_Gate_With_TanH(const std::string& dataFolderPath) {
 	std::string trainerConfigPath = exampleRoot + "trainer.json";
 	std::string trainingDataPath = exampleRoot + "trainingData.txt";
 	std::string targetDataPath = exampleRoot + "targetData.txt";
-	std::string trainerInfoDataPath = exampleRoot + "trainerInfo.json";
+	std::string trainerInfoDataPath = exampleRoot + "info/";
 	std::string trainedDataFilePath = exampleRoot + "trainedData.json";
 
 	int option = 0;
@@ -43,13 +43,16 @@ void Test_AND_Gate_With_TanH(const std::string& dataFolderPath) {
 	Network net(networkConfigPath);
 
 	if (option == 1) {
+		std::cout << "Starting training..." << std::endl;
 		tools::DataReader::ReadTensorFromFile(trainingDataPath, trainingData);
 		tools::DataReader::ReadTensorFromFile(targetDataPath, targetData);
 
 		NetworkTrainer netTrainer(networkConfigPath, trainerConfigPath);
-		netTrainer.Train(trainingData, targetData, trainerInfoDataPath, trainedDataFilePath);
+		netTrainer.Train(trainingData, targetData, trainedDataFilePath, trainerInfoDataPath);
+		std::cout << "Finished training and saved the training file!" << std::endl;
 	}
 
+	std::cout << "Load training file..." << std::endl;
 	net.Deserialize(trainedDataFilePath);
 
 	std::cout << std::endl << "Test the trained network: " << std::endl << std::endl;
@@ -59,23 +62,24 @@ void Test_AND_Gate_With_TanH(const std::string& dataFolderPath) {
 	inputData[1] = 1.0;
 	net.Run(inputData);
 	netResult = dynamic_cast<RegressionResult*>(net.GetResult());
-	std::cout << "Result: " << netResult->result << std::endl << std::endl;
+	std::cout << "Result: " << netResult->result[0] << std::endl << std::endl;
 	std::cout << "Input: 1 0 " << std::endl << "Target: 0" << std::endl;
 	inputData[0] = 1.0;
 	inputData[1] = 0.0;
 	net.Run(inputData);
 	netResult = dynamic_cast<RegressionResult*>(net.GetResult());
-	std::cout << "Result: " << netResult->result << std::endl << std::endl;
+	std::cout << "Result: " << netResult->result[0] << std::endl << std::endl;
 	std::cout << "Input: 0 1 " << std::endl << "Target: 0" << std::endl;
 	inputData[0] = 0.0;
 	inputData[1] = 1.0;
 	net.Run(inputData);
 	netResult = dynamic_cast<RegressionResult*>(net.GetResult());
-	std::cout << "Result: " << netResult->result << std::endl << std::endl;
+	std::cout << "Result: " << netResult->result[0] << std::endl << std::endl;
 	std::cout << "Input: 0 0 " << std::endl << "Target: 0" << std::endl;
 	inputData[0] = 0.0;
 	inputData[1] = 0.0;
 	net.Run(inputData);
 	netResult = dynamic_cast<RegressionResult*>(net.GetResult());
-	std::cout << "Result: " << netResult->result << std::endl << std::endl;
+	std::cout << "Result: " << netResult->result[0] << std::endl << std::endl;
+	std::cout << "Finished testing!" << std::endl;
 }

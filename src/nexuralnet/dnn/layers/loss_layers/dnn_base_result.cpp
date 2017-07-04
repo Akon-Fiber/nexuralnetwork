@@ -24,4 +24,4 @@ OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 namespace nexural {
 	DNNBaseResult::DNNBaseResult() { }
 	DNNBaseResult::~DNNBaseResult() { }
-} 
+}

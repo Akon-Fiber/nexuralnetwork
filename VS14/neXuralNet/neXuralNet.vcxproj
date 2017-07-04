@@ -169,6 +169,7 @@
     <ClInclude Include="..\..\src\neXuralNet\dnn\layers\input_layers\i_input_layer.h" />
     <ClInclude Include="..\..\src\neXuralNet\dnn\layers\input_layers\tensor_input_layer.h" />
     <ClInclude Include="..\..\src\neXuralNet\dnn\layers\i_layer.h" />
+    <ClInclude Include="..\..\src\nexuralnet\dnn\layers\loss_layers\dnn_base_result.h" />
     <ClInclude Include="..\..\src\neXuralNet\dnn\layers\loss_layers\i_loss_layer.h" />
     <ClInclude Include="..\..\src\neXuralNet\dnn\layers\loss_layers\loss_base_layer.h" />
     <ClInclude Include="..\..\src\neXuralNet\dnn\layers\loss_layers\loss_layers.h" />
@@ -215,7 +216,6 @@
     <ClCompile Include="..\..\src\nexuralnet\dnn\layers\input_layers\input_base_class.cpp" />
     <ClCompile Include="..\..\src\nexuralnet\dnn\layers\input_layers\tensor_input_layer.cpp" />
     <ClCompile Include="..\..\src\nexuralnet\dnn\layers\loss_layers\dnn_base_result.cpp" />
-    <ClCompile Include="..\..\src\nexuralnet\dnn\layers\loss_layers\dnn_base_result.h" />
     <ClCompile Include="..\..\src\nexuralnet\dnn\layers\loss_layers\loss_base_layer.cpp" />
     <ClCompile Include="..\..\src\nexuralnet\dnn\layers\loss_layers\mse_loss_layer.cpp" />
     <ClCompile Include="..\..\src\nexuralnet\dnn\layers\loss_layers\multi_class_classification_result.cpp" />
