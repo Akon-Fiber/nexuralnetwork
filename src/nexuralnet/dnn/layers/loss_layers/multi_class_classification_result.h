@@ -33,7 +33,7 @@ namespace nexural {
 		~MultiClassClassificationResult();
 
 	public:
-		std::vector<size_t> resultClass;
+		std::vector<long> resultClass;
 		std::vector<Tensor> classesWithProbabilities;
 	};
 }

@@ -22,6 +22,8 @@ OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 #include <memory>
 #include <string>
 
+#include "../../data_types/tensor.h"
+
 #ifndef NEXURALNET_UTILITY_TRAINER_INFO_WRITER_H
 #define NEXURALNET_UTILITY_TRAINER_INFO_WRITER_H
 
@@ -34,6 +36,7 @@ namespace nexural {
 		void AddNode(const std::string& nodeName);
 		void AddEpoch(const long epochName);
 		void WriteEpochDetails(const long epochNumber, const std::string& key, const std::string& value);
+		void WriteEpochConfusionMatrix(const long epochNumber, const std::string& key, const Tensor& confusionMatrix);
 		void Write(const std::string& key, const std::string& value);
 		void Save(const std::string& outputFilePath);
 

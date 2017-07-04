@@ -56,8 +56,6 @@ namespace nexural {
 		void InitLayersForTraining();
 		void SetInputBatchSize(const long batchSize);
 		void InitConfusionMatrices();
-		void UpdateTrainingConfusionMatrix();
-		void UpdateValidationConfusionMatrix();
 		void ResetConfusionMatrices();
 		void WriteEpochStats(const long currentEpoch);
 

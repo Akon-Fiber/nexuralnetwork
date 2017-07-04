@@ -64,7 +64,7 @@ namespace nexural {
 		}
 	}
 
-	void MSELossLayer::CalculateTrainingMetrics(const Tensor& targetData) {
+	void MSELossLayer::CalculateTrainingMetrics(const Tensor& targetData, Tensor& confusionMatrix) {
 		if (_outputData.GetShape() != targetData.GetShape()) {
 			throw std::runtime_error("MSE layer error: The output and target data should have the same size!");
 		}

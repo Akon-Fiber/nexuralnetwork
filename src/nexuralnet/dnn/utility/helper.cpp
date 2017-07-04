@@ -63,14 +63,14 @@ namespace nexural {
 			}
 		}
 
-		void BestClassClassification(const Tensor& tensor, size_t& bestClass) {
+		void BestClassClassification(const Tensor& tensor, long& bestClass) {
 			// TODO: Support multiple samples
 			if (tensor.GetNumSamples() == 1) {
 
 				long tensorSize = tensor.Size();
 				if (tensorSize > 0) {
 					float_n maxValue = tensor[0];
-					size_t maxIndex = 0;
+					long maxIndex = 0;
 
 					for (long idx = 1; idx < tensorSize; idx++) {
 						float_n value = tensor[idx];

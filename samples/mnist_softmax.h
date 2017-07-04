@@ -120,7 +120,7 @@ void Test_MNIST_Softmax(const std::string& dataFolderPath) {
 	for (long numSamples = 0; numSamples < testingData.GetNumSamples(); numSamples++) {
 		currentTestingData.GetBatch(testingData, numSamples);
 		currentTestingLabel.GetBatch(testingTargetData, numSamples);
-		size_t resultIndex;
+		long resultIndex;
 		helper::BestClassClassification(currentTestingLabel, resultIndex);
 		std::cout << "Target: " << resultIndex << std::endl;
 		net.Run(currentTestingData);

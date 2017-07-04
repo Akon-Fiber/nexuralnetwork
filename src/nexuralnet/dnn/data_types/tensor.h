@@ -40,7 +40,7 @@ namespace nexural {
 		Also, while this class does not specify a memory layout, the convention is to
 		assume that indexing into an element at coordinates (sample,k,nr,nc) can be
 		accomplished via:
-		host()[((sample*t.k() + k)*t.nr() + nr)*t.nc() + nc]
+		host()[((sample * tensor.GetK() + k) * tensor.GetNR() + nr) * tensor.GetNC() + nc]
 
 		THREAD SAFETY
 		Instances of this object are not thread-safe.  So don't touch one from

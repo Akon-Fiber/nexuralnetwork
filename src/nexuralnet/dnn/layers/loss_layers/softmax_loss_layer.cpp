@@ -74,7 +74,7 @@ namespace nexural {
 		}
 	}
 
-	void SoftmaxLossLayer::CalculateTrainingMetrics(const Tensor& targetData) {
+	void SoftmaxLossLayer::CalculateTrainingMetrics(const Tensor& targetData, Tensor& confusionMatrix) {
 		if (_outputData.GetShape() != targetData.GetShape()) {
 			throw std::runtime_error("Softmax layer error: The output and target data should have the same size!");
 		}
@@ -99,6 +99,10 @@ namespace nexural {
 		{
 			long idx = numSamples * _outputData.GetNC() + indexes[numSamples];
 			totalError += -std::log(helper::clip(_outputData[idx], 1e-10, 1.0));
+			long nr, nc;
+			helper::BestClassClassification(_outputData, nc);
+			helper::BestClassClassification(targetData, nr);
+			confusionMatrix[nr * confusionMatrix.GetNC() + nc] += 1;
 		}
 
 		_totalError = totalError;
@@ -108,7 +112,7 @@ namespace nexural {
 		_netResult.classesWithProbabilities.clear();
 		_netResult.resultClass.clear();
 		for (long numSamples = 0; numSamples < _outputData.GetNumSamples(); numSamples++) {
-			size_t bestClass;
+			long bestClass;
 			Tensor aux;
 			helper::BestClassClassification(_outputData, bestClass);
 			aux.Clone(_outputData);

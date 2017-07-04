@@ -31,7 +31,7 @@ namespace nexural {
 		virtual ~ILossLayer() { }
 		virtual void Setup(const LayerShape& prevLayerShape) = 0;
 		virtual void CalculateError(const Tensor& targetData) = 0;
-		virtual void CalculateTrainingMetrics(const Tensor& targetData) = 0;
+		virtual void CalculateTrainingMetrics(const Tensor& targetData, Tensor& confusionMatrix) = 0;
 		virtual const float_n GetTotalError() = 0;
 		virtual void SetResult() = 0;
 		virtual DNNBaseResult* GetResult() = 0;

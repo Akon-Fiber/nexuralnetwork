@@ -36,7 +36,7 @@ namespace nexural {
 		virtual void SetupLayerForTraining();
 
 		virtual void CalculateError(const Tensor& targetData);
-		virtual void CalculateTrainingMetrics(const Tensor& targetData);
+		virtual void CalculateTrainingMetrics(const Tensor& targetData, Tensor& confusionMatrix);
 		virtual void SetResult();
 		virtual DNNBaseResult* GetResult();
 		virtual const std::string GetResultJSON();

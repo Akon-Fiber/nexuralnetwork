@@ -79,6 +79,7 @@ namespace nexural {
 		long validationDataIterations = _validationData.GetNumSamples();
 
 		_net.Serialize(outputTrainerInfoFolderPath + "initial_weights.json");
+		_trainerInfoWriter.Write("result_type", helper::NetworkResultTypeToString(_net._lossNetworkLayer->GetResultType()));
 
 		while (doTraining) {
 			float_n currentEpochError = 0, validationError = 0;
@@ -119,10 +120,9 @@ namespace nexural {
 				_net._lossNetworkLayer->FeedForward(*internalNetData, FeedForwardType::TRAINING);
 				_net._lossNetworkLayer->CalculateError(_subTrainingTargetData);
 				_error = _net._lossNetworkLayer->GetLayerErrors();
-				_net._lossNetworkLayer->CalculateTrainingMetrics(_subTrainingTargetData);
+				_net._lossNetworkLayer->CalculateTrainingMetrics(_subTrainingTargetData, _trainingConfusionMatrix);
 				currentEpochError += _net._lossNetworkLayer->GetTotalError();
 				iterationsDone++;
-				UpdateTrainingConfusionMatrix();
 				
 
 #ifdef _DEBUG_NEXURAL_TRAINER
@@ -183,10 +183,9 @@ namespace nexural {
 					internalNetData = (*it)->GetOutput();
 				}
 				_net._lossNetworkLayer->FeedForward(*internalNetData, FeedForwardType::VALIDATION);
-				_net._lossNetworkLayer->CalculateTrainingMetrics(_subValidationTargetData);
+				_net._lossNetworkLayer->CalculateTrainingMetrics(_subValidationTargetData, _validationConfusionMatrix);
 				validationError += _net._lossNetworkLayer->GetTotalError();
 				iterationsDone++;
-				UpdateValidationConfusionMatrix();
 			}
 
 			// Calculate validation mean error
@@ -305,16 +304,6 @@ namespace nexural {
 		}
 	}
 
-	void NetworkTrainer::UpdateTrainingConfusionMatrix() {
-
-
-	}
-
-	void NetworkTrainer::UpdateValidationConfusionMatrix() {
-
-
-	}
-
 	void NetworkTrainer::ResetConfusionMatrices() {
 		_trainingConfusionMatrix.Fill(0);
 		_validationConfusionMatrix.Fill(0);
@@ -323,10 +312,24 @@ namespace nexural {
 	void NetworkTrainer::WriteEpochStats(const long currentEpoch) {
 		_trainerInfoWriter.WriteEpochDetails(currentEpoch, "training_mean_error", std::to_string(_currentEpochError));
 		_trainerInfoWriter.WriteEpochDetails(currentEpoch, "validation_mean_error", std::to_string(_validationError));
-		//_trainerInfoWriter.WriteEpochDetails(currentEpoch, "training_precision", std::to_string(_net._lossNetworkLayer->GetPrecision()));
-		//_trainerInfoWriter.WriteEpochDetails(currentEpoch, "training_recall", std::to_string(_net._lossNetworkLayer->GetRecall()));
 
-		//_trainerInfoWriter.WriteEpochDetails(currentEpoch, "validation_precision", std::to_string(_net._lossNetworkLayer->GetPrecision()));
-		//_trainerInfoWriter.WriteEpochDetails(currentEpoch, "validation_recall", std::to_string(_net._lossNetworkLayer->GetRecall()));
+		NetworkResultType netType = _net._lossNetworkLayer->GetResultType();
+		if (netType == NetworkResultType::REGRESSION) {
+			
+		}
+		else if (netType == NetworkResultType::MULTICLASS_CLASSIFICATION) {
+
+			_trainerInfoWriter.WriteEpochConfusionMatrix(currentEpoch, "training_confusion_matrix", _trainingConfusionMatrix);
+			_trainerInfoWriter.WriteEpochConfusionMatrix(currentEpoch, "validation_confusion_matrix", _validationConfusionMatrix);
+		}
+		else if (netType == NetworkResultType::BINARY_CLASSIFICATION) {
+			throw std::runtime_error("Network trainer error: Can't init the confusion matrix because the BINARY_CLASSIFICATION result type is not implemented!");
+		}
+		else if (netType == NetworkResultType::DETECTION) {
+			throw std::runtime_error("Network trainer error: Can't init the confusion matrix because the DETECTION result type is not implemented!");
+		}
+		else if (netType == NetworkResultType::UNKNOWN) {
+			throw std::runtime_error("Network trainer error: Can't init the confusion matrix because the result type is unknown!");
+		}
 	}
 }
