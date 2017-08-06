@@ -1,6 +1,6 @@
 {
   	"trainer_settings": {
-    	"max_num_epochs": "10000",
+    	"max_num_epochs": "1000",
       "autosave_training_num_epochs": "10",
     	"min_learning_rate_threshold": "0.001",
     	"min_validation_error_threshold": "0.05",
