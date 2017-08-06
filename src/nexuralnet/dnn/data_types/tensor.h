@@ -87,7 +87,7 @@ namespace nexural {
 		void Fill(const float_n value);
 		void Fill(const std::vector<float_n>& values);
 		void FillRandom(const float_n range);
-		void FillRandomBinomialDistribution();
+		void FillRandomBinomialDistribution(const float_n threshold);
 		void GetBatch(const Tensor& tensor, const long startIndex, const long batchSize = 1);
 		void GetShuffled(const Tensor& tensor, const std::vector<long>& tensorIndexes);
 		LayerShape GetShape() const;

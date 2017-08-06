@@ -29,7 +29,7 @@ namespace nexural {
 	class ILayer {
 	public:
 		virtual ~ILayer() { }
-		virtual void FeedForward(const Tensor& inputData, const FeedForwardType feedForwardType) = 0;
+		virtual void FeedForward(const Tensor& inputData, const NetworkState networkState) = 0;
 		virtual Tensor* GetOutput() = 0;
 		virtual Tensor* GetLayerErrors() = 0;
 		virtual LayerShape GetOutputShape() = 0;

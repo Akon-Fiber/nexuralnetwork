@@ -55,7 +55,7 @@ namespace nexural {
 		_layerID = "convolutional_layer" + std::to_string(layerIndex);
 	}
 
-	void ConvolutionalLayer::FeedForward(const Tensor& inputData, const FeedForwardType feedForwardType) {
+	void ConvolutionalLayer::FeedForward(const Tensor& inputData, const NetworkState networkState) {
 		_internalInputData.ShareTensor(inputData);
 		for (long numSamples = 0; numSamples < inputData.GetNumSamples(); numSamples++) {
 			for (long numFilters = 0; numFilters < _weights.GetNumSamples(); numFilters++) {

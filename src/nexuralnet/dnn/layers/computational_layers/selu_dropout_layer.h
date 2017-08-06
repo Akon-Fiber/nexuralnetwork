@@ -19,13 +19,28 @@ TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE
 OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 */
 
-#include "average_pooling_layer.h"
-#include "max_pooling_layer.h"
-#include "relu_layer.h"
-#include "leaky_relu_layer.h"
-#include "selu_layer.h"
-#include "tanh_layerh.h"
-#include "dropout_layer.h"
-#include "selu_dropout_layer.h"
-#include "convolutional_layer.h"
-#include "fully_connected_layer.h"
+#include "computational_base_layer.h"
+
+#ifndef NEXURALNET_DNN_LAYERS_SELU_DROPOUT_LAYER
+#define NEXURALNET_DNN_LAYERS_SELU_DROPOUT_LAYER
+
+namespace nexural {
+	class SeluDropoutLayer : public ComputationalBaseLayer {
+	public:
+		SeluDropoutLayer(const Params &layerParams);
+		~SeluDropoutLayer();
+
+		virtual void Setup(const LayerShape& prevLayerShape, const size_t layerIndex);
+		virtual void FeedForward(const Tensor& inputData, const NetworkState networkState = NetworkState::RUN);
+		virtual void SetupLayerForTraining();
+		virtual void BackPropagate(const Tensor& prevLayerErrors);
+
+	private:
+		Tensor _dropoutIndexes;
+		float_n _threshold;
+		float_n _alpha;
+		float_n _a;
+		float_n _b;
+	};
+}
+#endif

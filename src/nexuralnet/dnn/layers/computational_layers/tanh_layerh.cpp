@@ -38,7 +38,7 @@ namespace nexural {
 		_layerID = "tanh_layerh" + std::to_string(layerIndex);
 	}
 
-	void TanHLayer::FeedForward(const Tensor& inputData, const FeedForwardType feedForwardType) {
+	void TanHLayer::FeedForward(const Tensor& inputData, const NetworkState networkState) {
 		_internalInputData.ShareTensor(inputData);
 		for (long i = 0; i < inputData.Size(); i++)
 		{

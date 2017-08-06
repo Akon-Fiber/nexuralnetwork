@@ -39,7 +39,7 @@ namespace nexural {
 		_outputData.Resize(_outputShape);
 	}
 
-	void SoftmaxLossLayer::FeedForward(const Tensor& inputData, const FeedForwardType) {
+	void SoftmaxLossLayer::FeedForward(const Tensor& inputData, const NetworkState) {
 		Softmax(inputData, _outputData);
 	}
 

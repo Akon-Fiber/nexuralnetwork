@@ -38,7 +38,7 @@ namespace nexural {
 		_layerID = "leaky_relu_layer" + std::to_string(layerIndex);
 	}
 
-	void LeakyReluLayer::FeedForward(const Tensor& inputData, const FeedForwardType feedForwardType) {
+	void LeakyReluLayer::FeedForward(const Tensor& inputData, const NetworkState networkState) {
 		_internalInputData.ShareTensor(inputData);
 		for (long i = 0; i < inputData.Size(); i++)
 		{

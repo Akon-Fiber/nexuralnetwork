@@ -222,6 +222,12 @@
     <ClInclude Include="..\..\src\nexuralnet\dnn\layers\loss_layers\dnn_base_result.h">
       <Filter>src\dnn\layers\loss_layers\common</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\src\nexuralnet\dnn\layers\computational_layers\selu_dropout_layer.h">
+      <Filter>src\dnn\layers\computational_layers</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\nexuralnet\dnn\layers\computational_layers\selu_layer.h">
+      <Filter>src\dnn\layers\computational_layers</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\src\neXuralNet\dnn\data_types\tensor.cpp">
@@ -337,6 +343,12 @@
     </ClCompile>
     <ClCompile Include="..\..\src\nexuralnet\dnn\layers\loss_layers\dnn_base_result.cpp">
       <Filter>src\dnn\layers\loss_layers\common</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\nexuralnet\dnn\layers\computational_layers\selu_dropout_layer.cpp">
+      <Filter>src\dnn\layers\computational_layers</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\nexuralnet\dnn\layers\computational_layers\selu_layer.cpp">
+      <Filter>src\dnn\layers\computational_layers</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

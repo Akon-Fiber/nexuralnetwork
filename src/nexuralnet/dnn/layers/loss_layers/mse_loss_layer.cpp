@@ -39,7 +39,7 @@ namespace nexural {
 		_outputData.Resize(_outputShape);
 	}
 
-	void MSELossLayer::FeedForward(const Tensor& inputData, const FeedForwardType) {
+	void MSELossLayer::FeedForward(const Tensor& inputData, const NetworkState) {
 		for (long index = 0; index < inputData.Size(); index++) {
 			_outputData[index] = inputData[index];
 		}
