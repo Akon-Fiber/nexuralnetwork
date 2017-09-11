@@ -64,7 +64,7 @@ namespace nexural {
 		_trainerInfoFilePath = outputTrainerInfoFolderPath + "trainerInfo.json";
 
 		float_n prevEpochError = std::numeric_limits<float_n>::max();
-		long currentEpoch = 0;
+		long currentEpoch = 1;
 		bool doTraining = true;
 		
 		InitConfusionMatrices();
