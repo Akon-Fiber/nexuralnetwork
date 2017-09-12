@@ -31,7 +31,7 @@ namespace nexural {
 		~FullyConnectedLayer();
 
 		virtual void Setup(const LayerShape& prevLayerShape, const size_t layerIndex);
-		virtual void FeedForward(const Tensor& inputData, const FeedForwardType feedForwardType = FeedForwardType::RUN);
+		virtual void FeedForward(const Tensor& inputData, const NetworkState networkState = NetworkState::RUN);
 		virtual void SetupLayerForTraining();
 		virtual void BackPropagate(const Tensor& prevLayerErrors);
 		virtual void Serialize(Serializer& serializer);

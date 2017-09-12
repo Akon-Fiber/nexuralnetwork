@@ -39,7 +39,7 @@ namespace nexural {
 		_outputData.Resize(_outputShape);
 	}
 
-	void SoftmaxLossLayer::FeedForward(const Tensor& inputData, const FeedForwardType) {
+	void SoftmaxLossLayer::FeedForward(const Tensor& inputData, const NetworkState) {
 		Softmax(inputData, _outputData);
 	}
 
@@ -126,9 +126,9 @@ namespace nexural {
 	}
 
 	const std::string SoftmaxLossLayer::GetResultJSON() {
-		std::string resultJSON = u8"{ \"result_type\": \"" + helper::NetworkResultTypeToString(_resultType) + "\",";
+		std::string resultJSON = u8"{ \"result_type\": \"" + helper::NetworkResultTypeToString(_resultType) + "\"";
 		for (long numSamples = 0; numSamples < _netResult.resultClass.size(); numSamples++) {
-			resultJSON += "best_class_" + std::to_string(numSamples) + "\" : \"" + std::to_string(_netResult.resultClass[numSamples]) + "\"";
+			resultJSON += ",\"best_class_" + std::to_string(numSamples) + "\" : \"" + std::to_string(_netResult.resultClass[numSamples]) + "\"";
 		}
 		resultJSON += "}";
 		return resultJSON;

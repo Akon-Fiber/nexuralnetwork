@@ -39,7 +39,7 @@ namespace nexural {
 		_outputData.Resize(_outputShape);
 	}
 
-	void MSELossLayer::FeedForward(const Tensor& inputData, const FeedForwardType) {
+	void MSELossLayer::FeedForward(const Tensor& inputData, const NetworkState) {
 		for (long index = 0; index < inputData.Size(); index++) {
 			_outputData[index] = inputData[index];
 		}
@@ -92,9 +92,9 @@ namespace nexural {
 	}
 
 	const std::string MSELossLayer::GetResultJSON() {
-		std::string resultJSON = u8"{ \"result_type\": \"" + helper::NetworkResultTypeToString(_resultType) + "\",";
+		std::string resultJSON = u8"{ \"result_type\": \"" + helper::NetworkResultTypeToString(_resultType) + "\"";
 		for (long numSamples = 0; numSamples < _netResult.result.size(); numSamples++) {
-			resultJSON += "result_" + std::to_string(numSamples) + "\" : \"" + std::to_string(_netResult.result[numSamples]) + "\"";
+			resultJSON += ",\"result_" + std::to_string(numSamples) + "\" : \"" + std::to_string(_netResult.result[numSamples]) + "\"";
 		}
 		resultJSON += "}";
 		return resultJSON;

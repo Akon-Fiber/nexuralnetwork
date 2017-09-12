@@ -47,7 +47,7 @@ namespace nexural {
 		_layerID = "fully_connected_layer" + std::to_string(layerIndex);
 	}
 
-	void FullyConnectedLayer::FeedForward(const Tensor& inputData, const FeedForwardType feedForwardType) {
+	void FullyConnectedLayer::FeedForward(const Tensor& inputData, const NetworkState networkState) {
 		_internalInputData.ShareTensor(inputData);
 		for (long numSamples = 0; numSamples < inputData.GetNumSamples(); numSamples++)
 		{

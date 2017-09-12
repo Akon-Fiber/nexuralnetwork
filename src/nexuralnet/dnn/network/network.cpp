@@ -42,11 +42,11 @@ namespace nexural {
 		Tensor *internalNetData = _inputNetworkLayer->GetOutput();
 
 		for (size_t i = 0; i < _computationalNetworkLyers.size(); i++) {
-			_computationalNetworkLyers[i]->FeedForward(*internalNetData, FeedForwardType::RUN);
+			_computationalNetworkLyers[i]->FeedForward(*internalNetData, NetworkState::RUN);
 			internalNetData = _computationalNetworkLyers[i]->GetOutput();
 		}
 
-		_lossNetworkLayer->FeedForward(*internalNetData, FeedForwardType::RUN);
+		_lossNetworkLayer->FeedForward(*internalNetData, NetworkState::RUN);
 		_lossNetworkLayer->SetResult();
 	}
 
@@ -102,6 +102,9 @@ namespace nexural {
 			else if (type_member == "relu") {
 				AddComputationalLayer(ComputationalBaseLayerPtr(new nexural::ReluLayer(layerParams)));
 			}
+			else if (type_member == "selu") {
+				AddComputationalLayer(ComputationalBaseLayerPtr(new nexural::SeluLayer(layerParams)));
+			}
 			else if (type_member == "leaky_relu") {
 				AddComputationalLayer(ComputationalBaseLayerPtr(new nexural::LeakyReluLayer(layerParams)));
 			}
@@ -110,6 +113,9 @@ namespace nexural {
 			}
 			else if (type_member == "dropout") {
 				AddComputationalLayer(ComputationalBaseLayerPtr(new nexural::DropoutLayer(layerParams)));
+			}
+			else if (type_member == "selu_dropout") {
+				AddComputationalLayer(ComputationalBaseLayerPtr(new nexural::SeluDropoutLayer(layerParams)));
 			}
 			else if (type_member == "convolutional") {
 				AddComputationalLayer(ComputationalBaseLayerPtr(new nexural::ConvolutionalLayer(layerParams)));

@@ -38,7 +38,7 @@ namespace nexural {
 		DETECTION = 4
 	};
 
-	enum class FeedForwardType {
+	enum class NetworkState {
 		RUN = 0,
 		TRAINING = 1,
 		VALIDATION = 2

@@ -19,34 +19,33 @@ TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE
 OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 */
 
-#include "dropout_layer.h"
+#include "selu_dropout_layer.h"
 #include "../../utility/params_parser.h"
 
 namespace nexural {
-	DropoutLayer::DropoutLayer(const Params &layerParams) : ComputationalBaseLayer(layerParams) {
+	SeluDropoutLayer::SeluDropoutLayer(const Params &layerParams) : ComputationalBaseLayer(layerParams) {
 		_threshold = parser::ParseFloat(_layerParams, "dropout_ratio");
+		_alpha = parser::ParseFloat(_layerParams, "alpha");
+		auto q = float_n(1) - _threshold;
+		auto tmp = q * (float_n(1) + _alpha * _alpha * (float_n(1) - q));
+		_a = std::pow(tmp, -0.5);
+		_b = -_a * (1 - q) * _alpha;
 	}
 
-	DropoutLayer::~DropoutLayer() {
+	SeluDropoutLayer::~SeluDropoutLayer() {
 
 	}
 
-	void DropoutLayer::Setup(const LayerShape& prevLayerShape, const size_t layerIndex) {
+	void SeluDropoutLayer::Setup(const LayerShape& prevLayerShape, const size_t layerIndex) {
 		_inputShape.Resize(prevLayerShape);
 		_outputShape.Resize(_inputShape);
 		_outputData.Resize(_outputShape);
 		_dropoutIndexes.Resize(_outputShape);
-		_layerID = "dropout_layer" + std::to_string(layerIndex);
+		_layerID = "selu_dropout_layer" + std::to_string(layerIndex);
 	}
 
-	void DropoutLayer::FeedForward(const Tensor& inputData, const NetworkState networkState) {
-		if (networkState == NetworkState::RUN) {
-			for (long i = 0; i < inputData.Size(); i++)
-			{
-				_outputData[i] = inputData[i];
-			}
-		}
-		else if (networkState == NetworkState::TRAINING) {
+	void SeluDropoutLayer::FeedForward(const Tensor& inputData, const NetworkState networkState) {
+		if (networkState == NetworkState::TRAINING) {
 			_dropoutIndexes.FillRandomBinomialDistribution(_threshold);
 
 			for (long i = 0; i < inputData.Size(); i++)
@@ -54,26 +53,27 @@ namespace nexural {
 				float_n value = inputData[i];
 				float_n drop = _dropoutIndexes[i];
 				_outputData[i] = value * drop;
+				_outputData[i] = _a * (drop == 1 ? value : _alpha) + _b;
 			}
 		}
-		else if (networkState == NetworkState::VALIDATION) {
+		else {
 			for (long i = 0; i < inputData.Size(); i++)
 			{
-				_outputData[i] = inputData[i] * _threshold;
+				_outputData[i] = inputData[i];
 			}
 		}
 	}
 
-	void DropoutLayer::SetupLayerForTraining() {
+	void SeluDropoutLayer::SetupLayerForTraining() {
 		_layerErrors.Resize(_inputShape);
 	}
 
-	void DropoutLayer::BackPropagate(const Tensor& prevLayerErrors) {
+	void SeluDropoutLayer::BackPropagate(const Tensor& prevLayerErrors) {
 		for (long i = 0; i < _layerErrors.Size(); i++)
 		{
 			float_n error = prevLayerErrors[i];
 			float_n drop = _dropoutIndexes[i];
-			_layerErrors[i] = error * drop;
+			_layerErrors[i] = error * drop * _a;
 		}
 	}
 }

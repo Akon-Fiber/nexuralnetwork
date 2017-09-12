@@ -45,7 +45,7 @@ namespace nexural {
 		_layerID = "average_pooling_layer" + std::to_string(layerIndex);
 	}
 
-	void AveragePoolingLayer::FeedForward(const Tensor& inputData, const FeedForwardType feedForwardType) {
+	void AveragePoolingLayer::FeedForward(const Tensor& inputData, const NetworkState networkState) {
 		for (long numSamples = 0; numSamples < inputData.GetNumSamples(); numSamples++)
 		{
 			for (long k = 0; k < inputData.GetK(); k++)

@@ -19,44 +19,45 @@ TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE
 OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 */
 
-#include "relu_layer.h"
+#include "selu_layer.h"
 #include "../../utility/params_parser.h"
 
 namespace nexural {
-	ReluLayer::ReluLayer(const Params &layerParams) : ComputationalBaseLayer(layerParams) {
+	SeluLayer::SeluLayer(const Params &layerParams) : ComputationalBaseLayer(layerParams) {
+		_alpha = parser::ParseFloat(_layerParams, "alpha");
+		_lambda = parser::ParseFloat(_layerParams, "lambda");
+	}
+
+	SeluLayer::~SeluLayer() {
 
 	}
 
-	ReluLayer::~ReluLayer() {
-
-	}
-
-	void ReluLayer::Setup(const LayerShape& prevLayerShape, const size_t layerIndex) {
+	void SeluLayer::Setup(const LayerShape& prevLayerShape, const size_t layerIndex) {
 		_inputShape.Resize(prevLayerShape);
 		_outputShape.Resize(_inputShape);
 		_outputData.Resize(_outputShape);
-		_layerID = "relu_layer" + std::to_string(layerIndex);
+		_layerID = "selu_layer" + std::to_string(layerIndex);
 	}
 
-	void ReluLayer::FeedForward(const Tensor& inputData, const NetworkState networkState) {
+	void SeluLayer::FeedForward(const Tensor& inputData, const NetworkState networkState) {
 		_internalInputData.ShareTensor(inputData);
 		for (long i = 0; i < inputData.Size(); i++)
 		{
 			float_n value = inputData[i];
-			_outputData[i] = value < 0 ? (float_n)0.0 : value;
+			_outputData[i] = _lambda * (value > float_n(0) ? value : _alpha * (std::exp(value) - float_n(1)));
 		}
 	}
 
-	void ReluLayer::SetupLayerForTraining() {
+	void SeluLayer::SetupLayerForTraining() {
 		_layerErrors.Resize(_inputShape);
 	}
 
-	void ReluLayer::BackPropagate(const Tensor& prevLayerErrors) {
+	void SeluLayer::BackPropagate(const Tensor& prevLayerErrors) {
 		for (long i = 0; i < _internalInputData.Size(); i++)
 		{
 			float_n error = prevLayerErrors[i];
 			float_n value = _internalInputData[i];
-			_layerErrors[i] = value <= 0 ? (float_n)0.0 : error;
+			_layerErrors[i] = value > 0 ? _lambda * error : _lambda * _alpha * error * std::exp(value);
 		}
 	}
 }

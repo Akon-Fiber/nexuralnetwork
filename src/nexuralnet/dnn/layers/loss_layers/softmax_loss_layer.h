@@ -32,7 +32,7 @@ namespace nexural {
 		~SoftmaxLossLayer();
 
 		virtual void Setup(const LayerShape& prevLayerShape);
-		virtual void FeedForward(const Tensor& inputData, const FeedForwardType = FeedForwardType::RUN);
+		virtual void FeedForward(const Tensor& inputData, const NetworkState = NetworkState::RUN);
 		virtual void SetupLayerForTraining();
 
 		virtual void CalculateError(const Tensor& targetData);

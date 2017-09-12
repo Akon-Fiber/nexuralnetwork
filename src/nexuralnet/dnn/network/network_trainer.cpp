@@ -64,7 +64,7 @@ namespace nexural {
 		_trainerInfoFilePath = outputTrainerInfoFolderPath + "trainerInfo.json";
 
 		float_n prevEpochError = std::numeric_limits<float_n>::max();
-		long currentEpoch = 0;
+		long currentEpoch = 1;
 		bool doTraining = true;
 		
 		InitConfusionMatrices();
@@ -102,7 +102,7 @@ namespace nexural {
 				Tensor *internalNetData = _net._inputNetworkLayer->GetOutput();
 
 				for (auto it = _net._computationalNetworkLyers.begin(); it < _net._computationalNetworkLyers.end(); it++) {
-					(*it)->FeedForward(*internalNetData, FeedForwardType::TRAINING);
+					(*it)->FeedForward(*internalNetData, NetworkState::TRAINING);
 					internalNetData = (*it)->GetOutput();
 
 #ifdef _DEBUG_NEXURAL_TRAINER
@@ -117,7 +117,7 @@ namespace nexural {
 #endif
 				}
 
-				_net._lossNetworkLayer->FeedForward(*internalNetData, FeedForwardType::TRAINING);
+				_net._lossNetworkLayer->FeedForward(*internalNetData, NetworkState::TRAINING);
 				_net._lossNetworkLayer->CalculateError(_subTrainingTargetData);
 				_error = _net._lossNetworkLayer->GetLayerErrors();
 				_net._lossNetworkLayer->CalculateTrainingMetrics(_subTrainingTargetData, _trainingConfusionMatrix);
@@ -179,10 +179,10 @@ namespace nexural {
 				_net._inputNetworkLayer->LoadData(_subValidationData);
 				Tensor *internalNetData = _net._inputNetworkLayer->GetOutput();
 				for (auto it = _net._computationalNetworkLyers.begin(); it < _net._computationalNetworkLyers.end(); it++) {
-					(*it)->FeedForward(*internalNetData, FeedForwardType::VALIDATION);
+					(*it)->FeedForward(*internalNetData, NetworkState::VALIDATION);
 					internalNetData = (*it)->GetOutput();
 				}
-				_net._lossNetworkLayer->FeedForward(*internalNetData, FeedForwardType::VALIDATION);
+				_net._lossNetworkLayer->FeedForward(*internalNetData, NetworkState::VALIDATION);
 				_net._lossNetworkLayer->CalculateTrainingMetrics(_subValidationTargetData, _validationConfusionMatrix);
 				validationError += _net._lossNetworkLayer->GetTotalError();
 				iterationsDone++;
