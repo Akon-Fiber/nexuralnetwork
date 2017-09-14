@@ -52,7 +52,9 @@ namespace nexural {
 
 			.def("train", (void (NetworkTrainer::*)(const std::string &, const std::string &, const std::string &, const std::string &, NetworkTrainer::TrainingDataSource, NetworkTrainer::TargetDataSource)) &NetworkTrainer::Train, "Train the network")
 
-			.def("serialize", &NetworkTrainer::Serialize, "Serialize a trained network file");
+			.def("serialize", &NetworkTrainer::Serialize, "Serialize a trained network file")
+
+			.def("deserialize", &NetworkTrainer::Deserialize, "Deserialize a trained network file");;
 
 		py::enum_<NetworkTrainer::TrainingDataSource>(networkTrainer, "trainingDataSource")
 		    .value("IMAGES_DIRECTORY", NetworkTrainer::TrainingDataSource::IMAGES_DIRECTORY)

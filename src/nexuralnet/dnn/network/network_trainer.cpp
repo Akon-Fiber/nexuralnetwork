@@ -267,6 +267,10 @@ namespace nexural {
 		_net.Serialize(trainedDataFilePath);
 	}
 
+	void NetworkTrainer::Deserialize(const std::string& dataPath) {
+		_net.Deserialize(dataPath);
+	}
+
 	void NetworkTrainer::InitLayersForTraining() {
 		for (size_t i = 0; i < _net._computationalNetworkLyers.size(); i++) {
 			_net._computationalNetworkLyers[i]->SetupLayerForTraining();
