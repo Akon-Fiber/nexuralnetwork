@@ -48,8 +48,8 @@ namespace nexural {
 		_weights.Resize(_numOfFilters, _inputShape.GetK(), _kernelHeight, _kernelWidth);
 		_biases.Resize(1, 1, 1, _numOfFilters);
 
-		float_n weightRange = (float_n)(std::sqrt(2. / (double)_inputShape.Size()));
-		float_n biasRange = (float_n)(std::sqrt(2. / (double)_biases.Size()));
+		float_n weightRange = (float_n)(std::sqrt(1. / (double)_inputShape.Size()));
+		float_n biasRange = (float_n)(std::sqrt(1. / (double)_biases.Size()));
 		_weights.FillRandom(weightRange);
 		_biases.Fill(biasRange);
 		_layerID = "convolutional_layer" + std::to_string(layerIndex);

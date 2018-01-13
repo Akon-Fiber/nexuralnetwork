@@ -57,7 +57,7 @@ namespace nexural {
 		{
 			float_n error = prevLayerErrors[i];
 			float_n value = _internalInputData[i];
-			_layerErrors[i] = value > 0 ? _lambda * error : _lambda * _alpha * error * std::exp(value);
+			_layerErrors[i] = _lambda * error * (value > 0 ? 1.0 : _alpha * std::exp(value));
 		}
 	}
 }
