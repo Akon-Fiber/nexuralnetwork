@@ -50,6 +50,7 @@ namespace nexural {
 		void Train(Tensor& data, Tensor& labels, const std::string& outputTrainedDataFilePath, const std::string& outputTrainerInfoFolderPath);
 		void Train(const std::string& dataFolderPath, const std::string& labelsFilePath, const std::string& outputTrainedDataFilePath, const std::string& outputTrainerInfoFolderPath, const TrainingDataSource trainingDataSource, const TargetDataSource targetDataSource);
 		void Serialize(const std::string& trainedDataFilePath);
+		void Deserialize(const std::string& dataPath);
 
 	private:
 		void InitTrainer(const std::string& networkConfigPath, const std::string& trainerConfigPath, const ConfigSourceType& configSourceType);

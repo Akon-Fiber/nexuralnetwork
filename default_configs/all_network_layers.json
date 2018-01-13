@@ -50,6 +50,25 @@
       }
     },
     {
+      "type": "fully_connected",
+      "params": {
+        "neurons": "10"
+      }
+    },
+    {
+      "type": "dropout",
+      "params": {
+        "dropout_ratio": "0.5"
+      }
+    },
+    {
+      "type": "selu_dropout",
+      "params": {
+        "dropout_ratio": "0.1",
+        "alpha":  "-1.75809934"
+      }
+    },
+    {
       "type": "relu",
       "params": {
 
@@ -72,25 +91,6 @@
       "type": "tanh",
       "params": {
 
-      }
-    },
-    {
-      "type": "dropout",
-      "params": {
-        "dropout_ratio": "0.5"
-      }
-    },
-    {
-      "type": "selu_dropout",
-      "params": {
-        "dropout_ratio": "0.1",
-        "alpha":  "-1.75809934"
-      }
-    },
-    {
-      "type": "fully_connected",
-      "params": {
-        "neurons": "10"
       }
     },
     {

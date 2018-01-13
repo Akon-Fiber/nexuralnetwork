@@ -1,4 +1,4 @@
-/* Copyright (C) 2017 Alexandru-Valentin Musat (contact@nexuralsoftware.com)
+/* Copyright (C) 2017 Alexandru-Valentin Musat (contact@nexural.com)
 
 Permission is hereby granted, free of charge, to any person obtaining
 a copy of this software and associated documentation files (the "Software"),
@@ -25,9 +25,6 @@ OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
 namespace py = pybind11;
 
-#ifndef _NEXURALNET_TOOLS_CONVERTER_H
-#define _NEXURALNET_TOOLS_CONVERTER_H
-
 namespace nexural {
 	PYBIND11_PLUGIN(nexuralnet) {
 
@@ -52,7 +49,9 @@ namespace nexural {
 
 			.def("train", (void (NetworkTrainer::*)(const std::string &, const std::string &, const std::string &, const std::string &, NetworkTrainer::TrainingDataSource, NetworkTrainer::TargetDataSource)) &NetworkTrainer::Train, "Train the network")
 
-			.def("serialize", &NetworkTrainer::Serialize, "Serialize a trained network file");
+			.def("serialize", &NetworkTrainer::Serialize, "Serialize a trained network file")
+
+			.def("deserialize", &NetworkTrainer::Deserialize, "Deserialize a trained network file");;
 
 		py::enum_<NetworkTrainer::TrainingDataSource>(networkTrainer, "trainingDataSource")
 		    .value("IMAGES_DIRECTORY", NetworkTrainer::TrainingDataSource::IMAGES_DIRECTORY)
@@ -68,4 +67,3 @@ namespace nexural {
 		return m.ptr();
 	}
 }
-#endif
