@@ -216,12 +216,16 @@ namespace nexural {
 				// TODO: Add stop condition from commands file
 			}
 
-			// Write progress on disk and save epoch's weights
+			// Write progress on disk
 			_trainerInfoWriter.Save(_trainerInfoFilePath);
-			_net.Serialize(outputTrainerInfoFolderPath + "weights-epoch_" + std::to_string(currentEpoch) + ".json");
 
 			// Save training - checkpoint
 			if (currentEpoch % _autosaveTrainingNumEpochs == 0) {
+				_net.Serialize(outputTrainerInfoFolderPath + "weights-epoch_" + std::to_string(currentEpoch) + ".json");
+			}
+
+			// If training finished, save the final version of weights to disk
+			if (doTraining == false) {
 				_net.Serialize(outputTrainedDataFilePath);
 			}
 
