@@ -1,0 +1,103 @@
+{
+  "network_layers": [
+    {
+      "type": "tensor_input",
+      "params": {
+        "num_samples": "1",
+        "k": "1",
+        "nr": "28",
+        "nc": "28"
+      }
+    },
+    {
+      "type": "convolutional",
+      "params": {
+        "num_of_filters": "6",
+        "kernel_width": "5",
+        "kernel_height": "5",
+        "padding_width": "0",
+        "padding_height": "0",
+        "stride_width": "1",
+        "stride_height": "1"
+      }
+    },
+    {
+      "type": "max_pooling",
+      "params": {
+        "kernel_width": "2",
+        "kernel_height": "2"
+      }
+    },
+    {
+      "type": "selu", 
+      "params": {
+        "alpha": "1.67326324", 
+        "lambda": "1.050700987"
+      }
+    },
+    {
+      "type": "convolutional",
+      "params": {
+        "num_of_filters": "32",
+        "kernel_width": "3",
+        "kernel_height": "3",
+        "padding_width": "0",
+        "padding_height": "0",
+        "stride_width": "1",
+        "stride_height": "1"
+      }
+    },
+    {
+      "type": "average_pooling",
+      "params": {
+        "kernel_width": "2",
+        "kernel_height": "2"
+      }
+    },
+    {
+      "type": "selu", 
+      "params": {
+        "alpha": "1.67326324", 
+        "lambda": "1.050700987"
+      }
+    },
+    {
+      "type": "fully_connected",
+      "params": {
+        "neurons": "260"
+      }
+    },
+    {
+      "type": "selu", 
+      "params": {
+        "alpha": "1.67326324", 
+        "lambda": "1.050700987"
+      }
+    },
+    {
+      "type": "fully_connected",
+      "params": {
+        "neurons": "140"
+      }
+    },
+    {
+      "type": "selu", 
+      "params": {
+        "alpha": "1.67326324", 
+        "lambda": "1.050700987"
+      }
+    },
+     {
+      "type": "fully_connected",
+      "params": {
+        "neurons": "10"
+      }
+    },
+    {
+      "type": "softmax",
+      "params": {
+
+      }
+    }
+  ]
+}
