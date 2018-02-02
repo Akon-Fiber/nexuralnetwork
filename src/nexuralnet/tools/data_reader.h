@@ -38,8 +38,8 @@ namespace nexural {
 				FOR_CLASSIFICATION = 1
 			};
 
-			static void ReadMNISTData(const std::string& filename, Tensor& tensor, long limit = 2000);
-			static void ReadMNISTLabels(const std::string& filename, Tensor& tensor, long limit = 2000, ReadMNISTLabelsType labelsType = ReadMNISTLabelsType::FOR_CLASSIFICATION);
+			static void ReadMNISTData(const std::string& filename, Tensor& tensor, long limit = 1500);
+			static void ReadMNISTLabels(const std::string& filename, Tensor& tensor, long limit = 1500, ReadMNISTLabelsType labelsType = ReadMNISTLabelsType::FOR_CLASSIFICATION);
 			static void ReadImagesFromDirectory(const std::string directoryPath, Tensor& tensor, ReadImageType imagesType = ReadImageType::COLOR);
 			static void ReadTensorFromFile(const std::string filePath, Tensor& tensor);
 			static void ReadATTData(const std::string& directoryPath, Tensor& training, Tensor& labels);

@@ -29,8 +29,17 @@ namespace nexural {
 	Network::Network() { }
 
 	Network::Network(const std::string& networkConfigSource, const ConfigSourceType& configSourceType) {
-		CreateNetworkLayers(networkConfigSource, configSourceType);
-		SetupNetwork();
+		try {
+			CreateNetworkLayers(networkConfigSource, configSourceType);
+			SetupNetwork();
+		}
+		catch (std::exception ex) {
+			throw std::runtime_error(ex.what());
+		}
+		catch (...)
+		{
+			throw std::runtime_error("Initialization network error!");
+		}
 	}
 
 	Network::~Network() {
@@ -38,22 +47,40 @@ namespace nexural {
 	}
 
 	void Network::Run(Tensor& inputData) {
-		_inputNetworkLayer->LoadData(inputData);
-		Tensor *internalNetData = _inputNetworkLayer->GetOutput();
+		try {
+			_inputNetworkLayer->LoadData(inputData);
+			Tensor *internalNetData = _inputNetworkLayer->GetOutput();
 
-		for (size_t i = 0; i < _computationalNetworkLyers.size(); i++) {
-			_computationalNetworkLyers[i]->FeedForward(*internalNetData, NetworkState::RUN);
-			internalNetData = _computationalNetworkLyers[i]->GetOutput();
+			for (size_t i = 0; i < _computationalNetworkLyers.size(); i++) {
+				_computationalNetworkLyers[i]->FeedForward(*internalNetData, NetworkState::RUN);
+				internalNetData = _computationalNetworkLyers[i]->GetOutput();
+			}
+
+			_lossNetworkLayer->FeedForward(*internalNetData, NetworkState::RUN);
+			_lossNetworkLayer->SetResult();
 		}
-
-		_lossNetworkLayer->FeedForward(*internalNetData, NetworkState::RUN);
-		_lossNetworkLayer->SetResult();
+		catch (std::exception ex) {
+			throw std::runtime_error(ex.what());
+		}
+		catch (...)
+		{
+			throw std::runtime_error("Running network error!");
+		}
 	}
 
 	void Network::Run(cv::Mat& inputImage) {
-		Tensor auxTensor;
-		converter::CvtMatToTensor(inputImage, auxTensor);
-		Run(auxTensor);
+		try {
+			Tensor auxTensor;
+			converter::CvtMatToTensor(inputImage, auxTensor);
+			Run(auxTensor);
+		}
+		catch (std::exception ex) {
+			throw std::runtime_error(ex.what());
+		}
+		catch (...)
+		{
+			throw std::runtime_error("Running network error!");
+		}
 	}
 
 	DNNBaseResult* Network::GetResult() {

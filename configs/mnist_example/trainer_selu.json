@@ -1,0 +1,17 @@
+{
+  	"trainer_settings": {
+    	"max_num_epochs": "20",
+      "autosave_training_num_epochs": "2",
+    	"min_learning_rate_threshold": "0.0001",
+    	"min_validation_error_threshold": "0.08",
+  		"learning_rate_decay": "0.00004",
+      "training_dataset_percentage": "80",
+    	"batch_size": "1"
+  	},
+    "solver": {
+      "algorithm": "sgd_momentum",
+      "learning_rate": "0.001",
+      "weight_decay": "0.0005",
+      "momentum": "0.9"
+    }
+}
