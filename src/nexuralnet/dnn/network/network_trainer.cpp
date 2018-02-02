@@ -26,7 +26,16 @@ OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
 namespace nexural {
 	NetworkTrainer::NetworkTrainer(const std::string& networkConfigSource, const std::string& trainerConfigSource, const ConfigSourceType& configSourceType) {
-		InitTrainer(networkConfigSource, trainerConfigSource, configSourceType);
+		try {
+			InitTrainer(networkConfigSource, trainerConfigSource, configSourceType);
+		}
+		catch (std::exception ex) {
+			throw std::runtime_error(ex.what());
+		}
+		catch (...)
+		{
+			throw std::runtime_error("Initialization training error!");
+		}
 	}
 
 	NetworkTrainer::~NetworkTrainer() {
@@ -34,256 +43,316 @@ namespace nexural {
 	}
 
 	void NetworkTrainer::InitTrainer(const std::string& networkConfigSource, const std::string& trainerConfigSource, const ConfigSourceType& configSourceType) {
-		Params trainerParams, solverParams;
-		ConfigReader::DecodeTrainerCongif(trainerConfigSource, trainerParams, solverParams, configSourceType);
+		try {
+			Params trainerParams, solverParams;
+			ConfigReader::DecodeTrainerCongif(trainerConfigSource, trainerParams, solverParams, configSourceType);
 
-		// Init parameters from config
-		_maxNumEpochs = parser::ParseLong(trainerParams, "max_num_epochs");
-		_minLearningRateThreshold = parser::ParseFloat(trainerParams, "min_learning_rate_threshold");
-		_minValidationErrorThreshold = parser::ParseFloat(trainerParams, "min_validation_error_threshold");
-		_learningRateDecay = parser::ParseFloat(trainerParams, "learning_rate_decay");
-		_batchSize = parser::ParseLong(trainerParams, "batch_size");
-		_trainingDatasetPercentage = parser::ParseFloat(trainerParams, "training_dataset_percentage");
-		_autosaveTrainingNumEpochs = parser::ParseLong(trainerParams, "autosave_training_num_epochs");
+			// Init parameters from config
+			_maxNumEpochs = parser::ParseLong(trainerParams, "max_num_epochs");
+			_minLearningRateThreshold = parser::ParseFloat(trainerParams, "min_learning_rate_threshold");
+			_minValidationErrorThreshold = parser::ParseFloat(trainerParams, "min_validation_error_threshold");
+			_learningRateDecay = parser::ParseFloat(trainerParams, "learning_rate_decay");
+			_batchSize = parser::ParseLong(trainerParams, "batch_size");
+			_trainingDatasetPercentage = parser::ParseFloat(trainerParams, "training_dataset_percentage");
+			_autosaveTrainingNumEpochs = parser::ParseLong(trainerParams, "autosave_training_num_epochs");
 
-		// Init the solver
-		std::string solverAlgorithm = parser::ParseString(solverParams, "algorithm");
-		if (solverAlgorithm == "sgd") {
-			_solver.reset(new SGD(solverParams));
-		} else if (solverAlgorithm == "sgd_momentum") {
-			_solver.reset(new SGDMomentum(solverParams));
+			// Init the solver
+			std::string solverAlgorithm = parser::ParseString(solverParams, "algorithm");
+			if (solverAlgorithm == "sgd") {
+				_solver.reset(new SGD(solverParams));
+			}
+			else if (solverAlgorithm == "sgd_momentum") {
+				_solver.reset(new SGDMomentum(solverParams));
+			}
+
+			_net.CreateNetworkLayers(networkConfigSource, configSourceType);
+			SetInputBatchSize(_batchSize);
+			_net.SetupNetwork();
+			InitLayersForTraining();
 		}
-
-		_net.CreateNetworkLayers(networkConfigSource, configSourceType);
-		SetInputBatchSize(_batchSize);
-		_net.SetupNetwork();
-		InitLayersForTraining();
+		catch (std::exception ex) {
+			throw std::runtime_error(ex.what());
+		}
+		catch (...)
+		{
+			throw std::runtime_error("Initialization training error!");
+		}
 	}
 
 	void NetworkTrainer::Train(Tensor& data, Tensor& labels, const std::string& outputTrainedDataFilePath, const std::string& outputTrainerInfoFolderPath) {
-		_trainerInfoFilePath = outputTrainerInfoFolderPath + "trainerInfo.json";
+		try {
+			_trainerInfoFilePath = outputTrainerInfoFolderPath + "trainerInfo.json";
 
-		float_n prevEpochError = std::numeric_limits<float_n>::max();
-		long currentEpoch = 1;
-		bool doTraining = true;
-		
-		InitConfusionMatrices();
+			float_n prevEpochError = std::numeric_limits<float_n>::max();
+			long currentEpoch = 1;
+			bool doTraining = true;
 
-		// Splitting data in training and validation datasets
-		helper::SplitData(data, _trainingData, _validationData, _trainingDatasetPercentage);
-		helper::SplitData(labels, _trainingTargetData, _validationTargetData, _trainingDatasetPercentage);
-		data.Reset();
-		labels.Reset();
+			InitConfusionMatrices();
 
-		long trainingDataIterations = _trainingData.GetNumSamples();
-		long validationDataIterations = _validationData.GetNumSamples();
+			// Splitting data in training and validation datasets
+			helper::SplitData(data, _trainingData, _validationData, _trainingDatasetPercentage);
+			helper::SplitData(labels, _trainingTargetData, _validationTargetData, _trainingDatasetPercentage);
+			data.Reset();
+			labels.Reset();
 
-		_net.Serialize(outputTrainerInfoFolderPath + "initial_weights.json");
-		_trainerInfoWriter.Write("result_type", helper::NetworkResultTypeToString(_net._lossNetworkLayer->GetResultType()));
+			long trainingDataIterations = _trainingData.GetNumSamples();
+			long validationDataIterations = _validationData.GetNumSamples();
 
-		while (doTraining) {
-			float_n currentEpochError = 0, validationError = 0;
-			_trainerInfoWriter.AddEpoch(currentEpoch);
+			_net.Serialize(outputTrainerInfoFolderPath + "initial_weights.json");
+			_trainerInfoWriter.Write("result_type", helper::NetworkResultTypeToString(_net._lossNetworkLayer->GetResultType()));
 
-			// Shuffle the training dataset
-			std::vector<long> batchesIndexes;
-			for (int i = 0; i < trainingDataIterations; i += _batchSize) {
-				batchesIndexes.push_back(i);
-			}
-			std::random_shuffle(batchesIndexes.begin(), batchesIndexes.end());
+			while (doTraining) {
+				float_n currentEpochError = 0, validationError = 0;
+				_trainerInfoWriter.AddEpoch(currentEpoch);
 
-			// Split in batches (if needed) and start learning
-			size_t iterationsDone = 0;
-			for (size_t batchIndex = 0; batchIndex < batchesIndexes.size(); batchIndex++) {
-				_subTrainingData.GetBatch(_trainingData, batchesIndexes[batchIndex], _batchSize);
-				_subTrainingTargetData.GetBatch(_trainingTargetData, batchesIndexes[batchIndex], _batchSize);
+				// Shuffle the training dataset
+				std::vector<long> batchesIndexes;
+				for (int i = 0; i < trainingDataIterations; i += _batchSize) {
+					batchesIndexes.push_back(i);
+				}
+				std::random_shuffle(batchesIndexes.begin(), batchesIndexes.end());
 
-				_net._inputNetworkLayer->LoadData(_subTrainingData);
-				Tensor *internalNetData = _net._inputNetworkLayer->GetOutput();
+				// Split in batches (if needed) and start learning
+				size_t iterationsDone = 0;
+				for (size_t batchIndex = 0; batchIndex < batchesIndexes.size(); batchIndex++) {
+					_subTrainingData.GetBatch(_trainingData, batchesIndexes[batchIndex], _batchSize);
+					_subTrainingTargetData.GetBatch(_trainingTargetData, batchesIndexes[batchIndex], _batchSize);
 
-				for (auto it = _net._computationalNetworkLyers.begin(); it < _net._computationalNetworkLyers.end(); it++) {
-					(*it)->FeedForward(*internalNetData, NetworkState::TRAINING);
-					internalNetData = (*it)->GetOutput();
+					_net._inputNetworkLayer->LoadData(_subTrainingData);
+					Tensor *internalNetData = _net._inputNetworkLayer->GetOutput();
+
+					for (auto it = _net._computationalNetworkLyers.begin(); it < _net._computationalNetworkLyers.end(); it++) {
+						(*it)->FeedForward(*internalNetData, NetworkState::TRAINING);
+						internalNetData = (*it)->GetOutput();
 
 #ifdef _DEBUG_NEXURAL_TRAINER
-					for (int i = 0; i < internalNetData->Size(); i++) {
-						if (std::isnan((*(&(*internalNetData)))[i])) {
-							throw std::runtime_error((*it)->GetLayerID() + " is nan in feedforward | Iter: " + std::to_string(trainingDataIterations));
+						for (int i = 0; i < internalNetData->Size(); i++) {
+							if (std::isnan((*(&(*internalNetData)))[i])) {
+								throw std::runtime_error((*it)->GetLayerID() + " is nan in feedforward | Iter: " + std::to_string(trainingDataIterations));
+							}
+							else if (std::isinf((*(&(*internalNetData)))[i])) {
+								throw std::runtime_error((*it)->GetLayerID() + " is inf in feedforward | Iter: " + std::to_string(trainingDataIterations));
+							}
 						}
-						else if (std::isinf((*(&(*internalNetData)))[i])) {
-							throw std::runtime_error((*it)->GetLayerID() + " is inf in feedforward | Iter: " + std::to_string(trainingDataIterations));
-						}
-					}
 #endif
-				}
-
-				_net._lossNetworkLayer->FeedForward(*internalNetData, NetworkState::TRAINING);
-				_net._lossNetworkLayer->CalculateError(_subTrainingTargetData);
-				_error = _net._lossNetworkLayer->GetLayerErrors();
-				_net._lossNetworkLayer->CalculateTrainingMetrics(_subTrainingTargetData, _trainingConfusionMatrix);
-				currentEpochError += _net._lossNetworkLayer->GetTotalError();
-				iterationsDone++;
-				
-
-#ifdef _DEBUG_NEXURAL_TRAINER
-				for (int i = 0; i < error->Size(); i++) {
-					if (std::isnan((*(&(*error)))[i])) {
-						throw std::runtime_error("Loss layer is nan in backprop | Iter: " + std::to_string(trainingDataIterations));
 					}
-					else if (std::isinf((*(&(*error)))[i])) {
-						throw std::runtime_error("Loss layer is inf in backprop | Iter: " + std::to_string(trainingDataIterations));
-					}
-				}
-#endif
 
-				for (auto it = _net._computationalNetworkLyers.rbegin(); it < _net._computationalNetworkLyers.rend(); it++) {
-					(*it)->BackPropagate(*_error);
-					_error = (*it)->GetLayerErrors();
+					_net._lossNetworkLayer->FeedForward(*internalNetData, NetworkState::TRAINING);
+					_net._lossNetworkLayer->CalculateError(_subTrainingTargetData);
+					_error = _net._lossNetworkLayer->GetLayerErrors();
+					_net._lossNetworkLayer->CalculateTrainingMetrics(_subTrainingTargetData, _trainingConfusionMatrix);
+					currentEpochError += _net._lossNetworkLayer->GetTotalError();
+					iterationsDone++;
+
 
 #ifdef _DEBUG_NEXURAL_TRAINER
 					for (int i = 0; i < error->Size(); i++) {
 						if (std::isnan((*(&(*error)))[i])) {
-							throw std::runtime_error((*it)->GetLayerID() + " is nan in backprop | Iter: " + std::to_string(trainingDataIterations));
+							throw std::runtime_error("Loss layer is nan in backprop | Iter: " + std::to_string(trainingDataIterations));
 						}
 						else if (std::isinf((*(&(*error)))[i])) {
-							throw std::runtime_error((*it)->GetLayerID() + " is inf in backprop | Iter: " + std::to_string(trainingDataIterations));
+							throw std::runtime_error("Loss layer is inf in backprop | Iter: " + std::to_string(trainingDataIterations));
 						}
 					}
 #endif
-				}
 
-				// Update the weights and biases using the solver (only if the layer has weights and/or biases)
-				for (auto it = _net._computationalNetworkLyers.rbegin(); it < _net._computationalNetworkLyers.rend(); it++) {
-					if ((*it)->HasWeights()) {
-						_weights = (*it)->GetLayerWeights();
-						_dWeights = (*it)->GetLayerDWeights();
-						_solver->UpdateWeights(*_weights, *_dWeights, (*it)->GetLayerID());
+					for (auto it = _net._computationalNetworkLyers.rbegin(); it < _net._computationalNetworkLyers.rend(); it++) {
+						(*it)->BackPropagate(*_error);
+						_error = (*it)->GetLayerErrors();
+
+#ifdef _DEBUG_NEXURAL_TRAINER
+						for (int i = 0; i < error->Size(); i++) {
+							if (std::isnan((*(&(*error)))[i])) {
+								throw std::runtime_error((*it)->GetLayerID() + " is nan in backprop | Iter: " + std::to_string(trainingDataIterations));
+							}
+							else if (std::isinf((*(&(*error)))[i])) {
+								throw std::runtime_error((*it)->GetLayerID() + " is inf in backprop | Iter: " + std::to_string(trainingDataIterations));
+							}
+						}
+#endif
 					}
-					if ((*it)->HasBiases()) {
-						_biases = (*it)->GetLayerBiases();
-						_dBiases = (*it)->GetLayerDBiases();
-						_solver->UpdateWeights(*_biases, *_dBiases, (*it)->GetLayerID());
+
+					// Update the weights and biases using the solver (only if the layer has weights and/or biases)
+					for (auto it = _net._computationalNetworkLyers.rbegin(); it < _net._computationalNetworkLyers.rend(); it++) {
+						if ((*it)->HasWeights()) {
+							_weights = (*it)->GetLayerWeights();
+							_dWeights = (*it)->GetLayerDWeights();
+							_solver->UpdateWeights(*_weights, *_dWeights, (*it)->GetLayerID());
+						}
+						if ((*it)->HasBiases()) {
+							_biases = (*it)->GetLayerBiases();
+							_dBiases = (*it)->GetLayerDBiases();
+							_solver->UpdateWeights(*_biases, *_dBiases, (*it)->GetLayerID());
+						}
 					}
 				}
-			}
 
-			// Calculate mean error
-			_currentEpochError = currentEpochError / iterationsDone;
+				// Calculate mean error
+				_currentEpochError = currentEpochError / iterationsDone;
 
-			// Training validation
-			iterationsDone = 0;
-			for (int validationBatchIndex = 0; validationBatchIndex < validationDataIterations; validationBatchIndex += _batchSize) {
-				_subValidationData.GetBatch(_validationData, validationBatchIndex, _batchSize);
-				_subValidationTargetData.GetBatch(_validationTargetData, validationBatchIndex, _batchSize);
+				// Training validation
+				iterationsDone = 0;
+				for (int validationBatchIndex = 0; validationBatchIndex < validationDataIterations; validationBatchIndex += _batchSize) {
+					_subValidationData.GetBatch(_validationData, validationBatchIndex, _batchSize);
+					_subValidationTargetData.GetBatch(_validationTargetData, validationBatchIndex, _batchSize);
 
-				_net._inputNetworkLayer->LoadData(_subValidationData);
-				Tensor *internalNetData = _net._inputNetworkLayer->GetOutput();
-				for (auto it = _net._computationalNetworkLyers.begin(); it < _net._computationalNetworkLyers.end(); it++) {
-					(*it)->FeedForward(*internalNetData, NetworkState::VALIDATION);
-					internalNetData = (*it)->GetOutput();
+					_net._inputNetworkLayer->LoadData(_subValidationData);
+					Tensor *internalNetData = _net._inputNetworkLayer->GetOutput();
+					for (auto it = _net._computationalNetworkLyers.begin(); it < _net._computationalNetworkLyers.end(); it++) {
+						(*it)->FeedForward(*internalNetData, NetworkState::VALIDATION);
+						internalNetData = (*it)->GetOutput();
+					}
+					_net._lossNetworkLayer->FeedForward(*internalNetData, NetworkState::VALIDATION);
+					_net._lossNetworkLayer->CalculateTrainingMetrics(_subValidationTargetData, _validationConfusionMatrix);
+					validationError += _net._lossNetworkLayer->GetTotalError();
+					iterationsDone++;
 				}
-				_net._lossNetworkLayer->FeedForward(*internalNetData, NetworkState::VALIDATION);
-				_net._lossNetworkLayer->CalculateTrainingMetrics(_subValidationTargetData, _validationConfusionMatrix);
-				validationError += _net._lossNetworkLayer->GetTotalError();
-				iterationsDone++;
+
+				// Calculate validation mean error
+				_validationError = validationError / iterationsDone;
+
+				WriteEpochStats(currentEpoch);
+
+				// Update the learning rate: at each epoch decrease the learning rate
+				_trainerInfoWriter.WriteEpochDetails(currentEpoch, "learning_rate", std::to_string(_solver->GetLearningRate()));
+				double learningRateStep = 1 / (1 + _learningRateDecay * currentEpoch);
+				_solver->UpdateLearningRate(learningRateStep);
+
+				// Check for a stop condition
+				if (currentEpoch == _maxNumEpochs) {
+					doTraining = false;
+					_trainerInfoWriter.Write("stop_condition", "reached_max_epochs_number");
+				}
+				else if (_validationError < _minValidationErrorThreshold) {
+					doTraining = false;
+					_trainerInfoWriter.Write("stop_condition", "reached_min_validation_threshold");
+				}
+				else if (_solver->GetLearningRate() < _minLearningRateThreshold) {
+					doTraining = false;
+					_trainerInfoWriter.Write("stop_condition", "reached_min_learning_rate_threshold");
+				}
+				else
+				{
+					// TODO: Add stop condition from commands file
+				}
+
+				// Write progress on disk
+				_trainerInfoWriter.Save(_trainerInfoFilePath);
+
+				// Save training - checkpoint
+				if (currentEpoch % _autosaveTrainingNumEpochs == 0) {
+					_net.Serialize(outputTrainerInfoFolderPath + "weights-epoch_" + std::to_string(currentEpoch) + ".json");
+				}
+
+				// If training finished, save the final version of weights to disk
+				if (doTraining == false) {
+					_net.Serialize(outputTrainedDataFilePath);
+				}
+
+				// Update or reset internal parameters
+				prevEpochError = _currentEpochError;
+				currentEpoch++;
+				ResetConfusionMatrices();
 			}
-
-			// Calculate validation mean error
-			_validationError = validationError / iterationsDone;
-
-			WriteEpochStats(currentEpoch);
-
-			// Update the learning rate: at each epoch decrease the learning rate
-			_trainerInfoWriter.WriteEpochDetails(currentEpoch, "learning_rate", std::to_string(_solver->GetLearningRate()));
-			double learningRateStep = 1 / (1 + _learningRateDecay * currentEpoch);
-			_solver->UpdateLearningRate(learningRateStep);
-
-			// Check for a stop condition
-			if (currentEpoch == _maxNumEpochs) {
-				doTraining = false;
-				_trainerInfoWriter.Write("stop_condition", "reached_max_epochs_number");
-			}
-			else if (_validationError < _minValidationErrorThreshold) {
-				doTraining = false;
-				_trainerInfoWriter.Write("stop_condition", "reached_min_validation_threshold");
-			}
-			else if (_solver->GetLearningRate() < _minLearningRateThreshold) {
-				doTraining = false;
-				_trainerInfoWriter.Write("stop_condition", "reached_min_learning_rate_threshold");
-			}
-			else 
-			{
-				// TODO: Add stop condition from commands file
-			}
-
-			// Write progress on disk
-			_trainerInfoWriter.Save(_trainerInfoFilePath);
-
-			// Save training - checkpoint
-			if (currentEpoch % _autosaveTrainingNumEpochs == 0) {
-				_net.Serialize(outputTrainerInfoFolderPath + "weights-epoch_" + std::to_string(currentEpoch) + ".json");
-			}
-
-			// If training finished, save the final version of weights to disk
-			if (doTraining == false) {
-				_net.Serialize(outputTrainedDataFilePath);
-			}
-
-			// Update or reset internal parameters
-			prevEpochError = _currentEpochError;
-			currentEpoch++;
-			ResetConfusionMatrices();
+		}
+		catch (std::exception ex) {
+			throw std::runtime_error(ex.what());
+		}
+		catch (...)
+		{
+			throw std::runtime_error("Training error!");
 		}
 	}
 
 	void NetworkTrainer::Train(const std::string& dataFolderPath, const std::string& labelsFilePath, const std::string& outputTrainedDataFilePath, const std::string& outputTrainerInfoFolderPath, const TrainingDataSource trainingDataSource, const TargetDataSource targetDataSource) {
-		Tensor data, labels;
+		try {
+			Tensor data, labels;
 
-		switch (trainingDataSource) {
-		case TrainingDataSource::IMAGES_DIRECTORY:
-			tools::DataReader::ReadImagesFromDirectory(dataFolderPath, data);
-			break;
-		case TrainingDataSource::TXT_DATA_FILE:
-			tools::DataReader::ReadTensorFromFile(dataFolderPath, data);
-			break;
-		case TrainingDataSource::MNIST_DATA_FILE:
-			tools::DataReader::ReadMNISTData(dataFolderPath, data);
-			break;
-		default:
-			break;
+			switch (trainingDataSource) {
+			case TrainingDataSource::IMAGES_DIRECTORY:
+				tools::DataReader::ReadImagesFromDirectory(dataFolderPath, data);
+				break;
+			case TrainingDataSource::TXT_DATA_FILE:
+				tools::DataReader::ReadTensorFromFile(dataFolderPath, data);
+				break;
+			case TrainingDataSource::MNIST_DATA_FILE:
+				tools::DataReader::ReadMNISTData(dataFolderPath, data);
+				break;
+			default:
+				break;
+			}
+
+			switch (targetDataSource) {
+			case TargetDataSource::TXT_DATA_FILE:
+				tools::DataReader::ReadTensorFromFile(labelsFilePath, labels);
+				break;
+			case TargetDataSource::MNIST_DATA_FILE:
+				tools::DataReader::ReadMNISTLabels(labelsFilePath, labels);
+				break;
+			default:
+				break;
+			}
+
+			Train(data, labels, outputTrainedDataFilePath, outputTrainerInfoFolderPath);
 		}
-
-		switch (targetDataSource) {
-		case TargetDataSource::TXT_DATA_FILE:
-			tools::DataReader::ReadTensorFromFile(labelsFilePath, labels);
-			break;
-		case TargetDataSource::MNIST_DATA_FILE:
-			tools::DataReader::ReadMNISTLabels(labelsFilePath, labels);
-			break;
-		default:
-			break;
+		catch (std::exception ex) {
+			throw std::runtime_error(ex.what());
 		}
-
-		Train(data, labels, outputTrainedDataFilePath, outputTrainerInfoFolderPath);
+		catch (...)
+		{
+			throw std::runtime_error("Training error!");
+		}
 	}
 
 	void NetworkTrainer::Serialize(const std::string& trainedDataFilePath) {
-		_net.Serialize(trainedDataFilePath);
+		try {
+			_net.Serialize(trainedDataFilePath);
+		}
+		catch (std::exception ex) {
+			throw std::runtime_error(ex.what());
+		}
+		catch (...)
+		{
+			throw std::runtime_error("Serialization error!");
+		}
 	}
 
 	void NetworkTrainer::Deserialize(const std::string& dataPath) {
-		_net.Deserialize(dataPath);
+		try {
+			_net.Deserialize(dataPath);
+		}
+		catch (std::exception ex) {
+			throw std::runtime_error(ex.what());
+		}
+		catch (...)
+		{
+			throw std::runtime_error("Deserialization error!");
+		}
 	}
 
 	void NetworkTrainer::InitLayersForTraining() {
-		for (size_t i = 0; i < _net._computationalNetworkLyers.size(); i++) {
-			_net._computationalNetworkLyers[i]->SetupLayerForTraining();
+		try {
+			for (size_t i = 0; i < _net._computationalNetworkLyers.size(); i++) {
+				_net._computationalNetworkLyers[i]->SetupLayerForTraining();
+			}
+			_net._lossNetworkLayer->SetupLayerForTraining();
 		}
-		_net._lossNetworkLayer->SetupLayerForTraining();
+		catch (std::exception ex) {
+			throw std::runtime_error(ex.what());
+		}
+		catch (...)
+		{
+			throw std::runtime_error("Initialization layers for training error!");
+		}
 	}
 
 	void NetworkTrainer::SetInputBatchSize(const long batchSize) {
-		_net._inputNetworkLayer->SetInputBatchSize(batchSize);
+		if (_net._inputNetworkLayer) {
+			_net._inputNetworkLayer->SetInputBatchSize(batchSize);
+		}
+		else {
+			throw std::runtime_error("The specified network doesn't contain any input layer!");
+		}
 	}
 
 	void NetworkTrainer::InitConfusionMatrices() {
